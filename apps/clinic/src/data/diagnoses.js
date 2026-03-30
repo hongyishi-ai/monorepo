@@ -1,0 +1,32 @@
+const diagnoses = [
+  { value: '上呼吸道感染', label: '上呼吸道感染' },
+  { value: '便秘', label: '便秘' },
+  { value: '风寒感冒', label: '风寒感冒' },
+  { value: '风热感冒', label: '风热感冒' },
+  { value: '咳嗽', label: '咳嗽' },
+  { value: '新兵腿综合征', label: '新兵腿综合征' },
+  { value: '荨麻疹', label: '荨麻疹' },
+  { value: '半月板损伤', label: '半月板损伤' },
+  { value: '腹泻', label: '腹泻' },
+  { value: '神经性皮炎', label: '神经性皮炎' },
+  { value: '湿疹', label: '湿疹' },
+  { value: '牙痛', label: '牙痛' },
+  { value: '真菌感染', label: '真菌感染' },
+  { value: '扁桃体炎', label: '扁桃体炎' },
+  { value: '腰肌劳损', label: '腰肌劳损' },
+  { value: '足底筋膜炎', label: '足底筋膜炎' },
+  { value: '急性腰扭伤', label: '急性腰扭伤' },
+  { value: '耳道流脓', label: '耳道流脓' },
+  { value: '疣', label: '疣' },
+  { value: '虫咬伤', label: '虫咬伤' },
+  { value: '耳鸣', label: '耳鸣' },
+  { value: '肌肉拉伤', label: '肌肉拉伤' },
+  { value: '鸡眼', label: '鸡眼' },
+  { value: '眼睛痒', label: '眼睛痒' },
+  { value: '咽部异物感', label: '咽部异物感' },
+  { value: '咽喉疼痛', label: '咽喉疼痛' },
+  { value: '痔疮', label: '痔疮' },
+  // 添加更多诊断...
+];
+
+export default diagnoses;

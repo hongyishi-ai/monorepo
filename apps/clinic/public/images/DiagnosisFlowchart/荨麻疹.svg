@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1100">
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .title { font-size: 24px; font-weight: bold; }
+    .subtitle { font-size: 18px; font-weight: bold; }
+    .content { font-size: 14px; }
+  </style>
+  
+  <rect width="100%" height="100%" fill="#f0fff0"/>
+  
+  <text x="200" y="40" class="title" text-anchor="middle" fill="#006400">荨麻疹诊断思维链</text>
+  
+  <g transform="translate(20, 80)">
+    <rect width="360" height="160" rx="10" fill="#98fb98" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#006400">症状特征</text>
+    <text x="10" y="60" class="content" fill="#006400">• 皮疹: 红色或粉红色隆起的风团</text>
+    <text x="10" y="80" class="content" fill="#006400">• 瘙痒: 常伴有剧烈瘙痒</text>
+    <text x="10" y="100" class="content" fill="#006400">• 变化: 风团大小形状可变，位置可移动</text>
+    <text x="10" y="120" class="content" fill="#006400">• 持续时间: 单个风团通常&lt;24小时</text>
+    <text x="10" y="140" class="content" fill="#006400">• 其他: 可能伴有血管性水肿</text>
+  </g>
+  
+  <g transform="translate(20, 260)">
+    <rect width="360" height="200" rx="10" fill="#98fb98" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#006400">病因分析</text>
+    <text x="10" y="60" class="content" fill="#006400">1. 过敏原:</text>
+    <text x="10" y="80" class="content" fill="#006400">   • 食物: 海鲜、坚果、蛋、牛奶等</text>
+    <text x="10" y="100" class="content" fill="#006400">   • 药物: 抗生素、解热镇痛药等</text>
+    <text x="10" y="120" class="content" fill="#006400">   • 环境: 花粉、动物皮屑、昆虫叮咬</text>
+    <text x="10" y="140" class="content" fill="#006400">2. 物理因素: 冷热刺激、压力、阳光</text>
+    <text x="10" y="160" class="content" fill="#006400">3. 内部因素: 自身免疫疾病、感染</text>
+    <text x="10" y="180" class="content" fill="#006400">4. 特发性: 原因不明</text>
+  </g>
+  
+  <g transform="translate(20, 480)">
+    <rect width="360" height="140" rx="10" fill="#98fb98" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#006400">诊断要点</text>
+    <text x="10" y="60" class="content" fill="#006400">1. 详细病史询问: 过敏原暴露史</text>
+    <text x="10" y="80" class="content" fill="#006400">2. 体格检查: 观察皮疹特征</text>
+    <text x="10" y="100" class="content" fill="#006400">3. 皮肤测试: 必要时进行过敏原测试</text>
+    <text x="10" y="120" class="content" fill="#006400">4. 血液检查: 排除其他系统性疾病</text>
+  </g>
+  
+  <g transform="translate(20, 640)">
+    <rect width="360" height="200" rx="10" fill="#98fb98" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#006400">治疗方法</text>
+    <text x="10" y="60" class="content" fill="#006400">1. 避免诱因: 识别并避免过敏原</text>
+    <text x="10" y="80" class="content" fill="#006400">2. 药物治疗:</text>
+    <text x="10" y="100" class="content" fill="#006400">   • 抗组胺药: 口服或局部使用</text>
+    <text x="10" y="120" class="content" fill="#006400">   • 糖皮质激素: 严重情况下短期使用</text>
+    <text x="10" y="140" class="content" fill="#006400">   • 免疫抑制剂: 慢性难治性病例</text>
+    <text x="10" y="160" class="content" fill="#006400">3. 症状缓解: 冷敷、润肤、避免搔抓</text>
+    <text x="10" y="180" class="content" fill="#006400">4. 心理支持: 缓解焦虑情绪</text>
+  </g>
+  
+  <g transform="translate(20, 860)">
+    <rect width="360" height="180" rx="10" fill="#98fb98" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#006400">预防和自我管理</text>
+    <text x="10" y="60" class="content" fill="#006400">• 记录饮食和生活习惯，识别潜在诱因</text>
+    <text x="10" y="80" class="content" fill="#006400">• 保持皮肤清洁和保湿</text>
+    <text x="10" y="100" class="content" fill="#006400">• 穿着宽松、透气的衣物</text>
+    <text x="10" y="120" class="content" fill="#006400">• 管理压力，保持良好的情绪状态</text>
+    <text x="10" y="140" class="content" fill="#006400">• 准备应急药物（如抗组胺药）</text>
+    <text x="10" y="160" class="content" fill="#006400">• 定期复诊，监测病情变化</text>
+  </g>
+  
+  <text x="200" y="1080" class="content" text-anchor="middle" fill="#006400">注意：如出现呼吸困难或大面积水肿，需立即就医</text>
+</svg>

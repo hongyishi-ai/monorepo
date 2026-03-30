@@ -9,3 +9,18 @@ coverage/
 .env
 .env.local
 .vercel
+
+# Apps
+apps/*/node_modules/
+apps/*/.git/
+apps/*/dist/
+apps/*/build/
+apps/*/.next/
+
+# Packages
+packages/*/node_modules/
+packages/*/dist/
+
+# OS
+.DS_Store
+Thumbs.db

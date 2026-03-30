@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 900">
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .title { font-size: 24px; font-weight: bold; }
+    .subtitle { font-size: 18px; font-weight: bold; }
+    .content { font-size: 14px; }
+  </style>
+  
+  <rect width="100%" height="100%" fill="#f3e6e6"/>
+  
+  <text x="200" y="40" class="title" text-anchor="middle" fill="#5e2c2c">痔疮诊断思维链</text>
+  
+  <g transform="translate(20, 80)">
+    <rect width="360" height="120" rx="10" fill="#d6a0a0" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e2c2c">症状评估</text>
+    <text x="10" y="60" class="content" fill="#5e2c2c">• 类型: 内痔 vs 外痔 vs 混合痔</text>
+    <text x="10" y="80" class="content" fill="#5e2c2c">• 症状: 出血、疼痛、肿胀、瘙痒</text>
+    <text x="10" y="100" class="content" fill="#5e2c2c">• 程度: 轻度、中度、重度</text>
+  </g>
+  
+  <g transform="translate(20, 220)">
+    <rect width="360" height="140" rx="10" fill="#d6a0a0" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e2c2c">可能原因</text>
+    <text x="10" y="60" class="content" fill="#5e2c2c">• 长期便秘或腹泻</text>
+    <text x="10" y="80" class="content" fill="#5e2c2c">• 久坐或长时间站立</text>
+    <text x="10" y="100" class="content" fill="#5e2c2c">• 妊娠和分娩</text>
+    <text x="10" y="120" class="content" fill="#5e2c2c">• 饮食不当（辛辣、酒精）</text>
+  </g>
+  
+  <g transform="translate(20, 380)">
+    <rect width="360" height="140" rx="10" fill="#d6a0a0" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e2c2c">诊断步骤</text>
+    <text x="10" y="60" class="content" fill="#5e2c2c">1. 详细病史询问</text>
+    <text x="10" y="80" class="content" fill="#5e2c2c">2. 肛门直肠检查</text>
+    <text x="10" y="100" class="content" fill="#5e2c2c">3. 必要时进行辅助检查（如肛门镜检查）</text>
+    <text x="10" y="120" class="content" fill="#5e2c2c">4. 排除其他肛门直肠疾病</text>
+  </g>
+  
+  <g transform="translate(20, 540)">
+    <rect width="360" height="140" rx="10" fill="#d6a0a0" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e2c2c">治疗方法</text>
+    <text x="10" y="60" class="content" fill="#5e2c2c">• 保守治疗: 温水坐浴、局部药物</text>
+    <text x="10" y="80" class="content" fill="#5e2c2c">• 微创治疗: 橡皮筋结扎、注射硬化</text>
+    <text x="10" y="100" class="content" fill="#5e2c2c">• 手术治疗: 严重或复发性痔疮</text>
+    <text x="10" y="120" class="content" fill="#5e2c2c">• 生活方式调整: 饮食、排便习惯</text>
+  </g>
+  
+  <g transform="translate(20, 700)">
+    <rect width="360" height="120" rx="10" fill="#d6a0a0" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e2c2c">关键信息</text>
+    <text x="10" y="60" class="content" fill="#5e2c2c">• 及时就医，避免症状加重</text>
+    <text x="10" y="80" class="content" fill="#5e2c2c">• 保持良好的个人卫生</text>
+    <text x="10" y="100" class="content" fill="#5e2c2c">• 预防比治疗更重要</text>
+  </g>
+  
+  <text x="200" y="880" class="content" text-anchor="middle" fill="#5e2c2c">注意：此图仅供参考，具体诊断请咨询专科医生</text>
+</svg>

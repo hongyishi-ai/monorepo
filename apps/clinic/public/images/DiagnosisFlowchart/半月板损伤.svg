@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1100">
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .title { font-size: 24px; font-weight: bold; }
+    .subtitle { font-size: 18px; font-weight: bold; }
+    .content { font-size: 14px; }
+  </style>
+  
+  <rect width="100%" height="100%" fill="#e6e6fa"/>
+  
+  <text x="200" y="40" class="title" text-anchor="middle" fill="#4b0082">半月板损伤诊断思维链</text>
+  
+  <g transform="translate(20, 80)">
+    <rect width="360" height="160" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">症状特征</text>
+    <text x="10" y="60" class="content" fill="#4b0082">• 膝关节疼痛：尤其在负重时加重</text>
+    <text x="10" y="80" class="content" fill="#4b0082">• 关节僵硬：可能伴有肿胀</text>
+    <text x="10" y="100" class="content" fill="#4b0082">• 活动受限：尤其是屈伸膝关节时</text>
+    <text x="10" y="120" class="content" fill="#4b0082">• 膝关节"锁住"感：完全伸直或弯曲困难</text>
+    <text x="10" y="140" class="content" fill="#4b0082">• 膝关节不稳定感或"弹响"声</text>
+  </g>
+  
+  <g transform="translate(20, 260)">
+    <rect width="360" height="200" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">病因分析</text>
+    <text x="10" y="60" class="content" fill="#4b0082">1. 急性损伤：</text>
+    <text x="10" y="80" class="content" fill="#4b0082">   • 运动扭伤：如足球、篮球等</text>
+    <text x="10" y="100" class="content" fill="#4b0082">   • 突然转身或急停</text>
+    <text x="10" y="120" class="content" fill="#4b0082">2. 慢性损伤：</text>
+    <text x="10" y="140" class="content" fill="#4b0082">   • 长期过度使用</text>
+    <text x="10" y="160" class="content" fill="#4b0082">   • 退行性变：如老年人的退化性改变</text>
+    <text x="10" y="180" class="content" fill="#4b0082">3. 解剖因素：如O型腿或X型腿</text>
+  </g>
+  
+  <g transform="translate(20, 480)">
+    <rect width="360" height="140" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">诊断要点</text>
+    <text x="10" y="60" class="content" fill="#4b0082">1. 详细病史：发病过程、运动史、既往损伤</text>
+    <text x="10" y="80" class="content" fill="#4b0082">2. 体格检查：McMurray试验、Apley压缩试验</text>
+    <text x="10" y="100" class="content" fill="#4b0082">3. 影像学检查：MRI为金标准</text>
+    <text x="10" y="120" class="content" fill="#4b0082">4. 关节镜检查：确诊和治疗的重要手段</text>
+  </g>
+  
+  <g transform="translate(20, 640)">
+    <rect width="360" height="200" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">治疗方法</text>
+    <text x="10" y="60" class="content" fill="#4b0082">1. 保守治疗：</text>
+    <text x="10" y="80" class="content" fill="#4b0082">   • RICE原则：休息、冰敷、加压、抬高</text>
+    <text x="10" y="100" class="content" fill="#4b0082">   • 物理治疗：强化周围肌肉</text>
+    <text x="10" y="120" class="content" fill="#4b0082">   • 药物治疗：消炎止痛药</text>
+    <text x="10" y="140" class="content" fill="#4b0082">2. 手术治疗：</text>
+    <text x="10" y="160" class="content" fill="#4b0082">   • 关节镜下修复或部分切除</text>
+    <text x="10" y="180" class="content" fill="#4b0082">   • 严重情况可能需要半月板移植</text>
+  </g>
+  
+  <g transform="translate(20, 860)">
+    <rect width="360" height="180" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">预防和自我管理</text>
+    <text x="10" y="60" class="content" fill="#4b0082">• 保持健康体重：减轻膝关节负担</text>
+    <text x="10" y="80" class="content" fill="#4b0082">• 强化腿部肌肉：提高膝关节稳定性</text>
+    <text x="10" y="100" class="content" fill="#4b0082">• 正确的运动技巧：避免不当动作</text>
+    <text x="10" y="120" class="content" fill="#4b0082">• 适当热身：运动前充分准备</text>
+    <text x="10" y="140" class="content" fill="#4b0082">• 穿着合适的鞋：提供足够支撑</text>
+    <text x="10" y="160" class="content" fill="#4b0082">• 避免过度使用：适度休息和恢复</text>
+  </g>
+  
+  <text x="200" y="1080" class="content" text-anchor="middle" fill="#4b0082">注意：如出现严重疼痛、肿胀或膝关节无法正常活动，需及时就医</text>
+</svg>

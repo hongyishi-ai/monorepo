@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 900">
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .title { font-size: 24px; font-weight: bold; }
+    .subtitle { font-size: 18px; font-weight: bold; }
+    .content { font-size: 14px; }
+  </style>
+  
+  <rect width="100%" height="100%" fill="#e6e6f3"/>
+  
+  <text x="200" y="40" class="title" text-anchor="middle" fill="#2c2c5e">耳道流脓诊断思维链</text>
+  
+  <g transform="translate(20, 80)">
+    <rect width="360" height="100" rx="10" fill="#a0a0d6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#2c2c5e">症状评估</text>
+    <text x="10" y="60" class="content" fill="#2c2c5e">• 持续时间: 急性 vs 慢性</text>
+    <text x="10" y="80" class="content" fill="#2c2c5e">• 性质: 脓性 vs 浆液性 vs 血性</text>
+  </g>
+  
+  <g transform="translate(20, 200)">
+    <rect width="360" height="120" rx="10" fill="#a0a0d6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#2c2c5e">可能原因</text>
+    <text x="10" y="60" class="content" fill="#2c2c5e">• 外耳道炎</text>
+    <text x="10" y="80" class="content" fill="#2c2c5e">• 中耳炎（急性或慢性）</text>
+    <text x="10" y="100" class="content" fill="#2c2c5e">• 鼓膜穿孔</text>
+  </g>
+  
+  <g transform="translate(20, 340)">
+    <rect width="360" height="140" rx="10" fill="#a0a0d6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#2c2c5e">诊断步骤</text>
+    <text x="10" y="60" class="content" fill="#2c2c5e">1. 详细病史询问</text>
+    <text x="10" y="80" class="content" fill="#2c2c5e">2. 耳镜检查</text>
+    <text x="10" y="100" class="content" fill="#2c2c5e">3. 听力测试</text>
+    <text x="10" y="120" class="content" fill="#2c2c5e">4. 必要时进行细菌培养</text>
+  </g>
+  
+  <g transform="translate(20, 500)">
+    <rect width="360" height="140" rx="10" fill="#a0a0d6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#2c2c5e">治疗方法</text>
+    <text x="10" y="60" class="content" fill="#2c2c5e">• 局部抗生素滴耳液</text>
+    <text x="10" y="80" class="content" fill="#2c2c5e">• 全身抗生素（严重感染时）</text>
+    <text x="10" y="100" class="content" fill="#2c2c5e">• 清洁和干燥外耳道</text>
+    <text x="10" y="120" class="content" fill="#2c2c5e">• 必要时手术干预（如慢性病例）</text>
+  </g>
+  
+  <g transform="translate(20, 660)">
+    <rect width="360" height="100" rx="10" fill="#a0a0d6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#2c2c5e">关键信息</text>
+    <text x="10" y="60" class="content" fill="#2c2c5e">• 避免耳朵进水</text>
+    <text x="10" y="80" class="content" fill="#2c2c5e">• 持续症状需及时就医</text>
+  </g>
+  
+  <text x="200" y="880" class="content" text-anchor="middle" fill="#2c2c5e">注意：此图仅供参考，具体诊断请咨询医生</text>
+</svg>

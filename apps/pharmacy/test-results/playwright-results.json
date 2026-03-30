@@ -1,0 +1,2515 @@
+{
+  "config": {
+    "configFile": "/Users/zhangwenzhao/Downloads/pharmacy/pharmacy-inventory-system/playwright.config.ts",
+    "rootDir": "/Users/zhangwenzhao/Downloads/pharmacy/pharmacy-inventory-system/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 3600000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 4
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "test-results/playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/playwright-results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/playwright-junit.xml"
+        }
+      ],
+      ["line", null]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/zhangwenzhao/Downloads/pharmacy/pharmacy-inventory-system/test-results/playwright-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "setup",
+        "name": "setup",
+        "testDir": "/Users/zhangwenzhao/Downloads/pharmacy/pharmacy-inventory-system/tests/e2e",
+        "testIgnore": [],
+        "testMatch": ["/.*\\.setup\\.ts/"],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/zhangwenzhao/Downloads/pharmacy/pharmacy-inventory-system/test-results/playwright-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "cleanup",
+        "name": "cleanup",
+        "testDir": "/Users/zhangwenzhao/Downloads/pharmacy/pharmacy-inventory-system/tests/e2e",
+        "testIgnore": [],
+        "testMatch": ["/.*\\.teardown\\.ts/"],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/zhangwenzhao/Downloads/pharmacy/pharmacy-inventory-system/test-results/playwright-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/zhangwenzhao/Downloads/pharmacy/pharmacy-inventory-system/tests/e2e",
+        "testIgnore": [],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/zhangwenzhao/Downloads/pharmacy/pharmacy-inventory-system/test-results/playwright-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/zhangwenzhao/Downloads/pharmacy/pharmacy-inventory-system/tests/e2e",
+        "testIgnore": [],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/zhangwenzhao/Downloads/pharmacy/pharmacy-inventory-system/test-results/playwright-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/zhangwenzhao/Downloads/pharmacy/pharmacy-inventory-system/tests/e2e",
+        "testIgnore": [],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.54.1",
+    "workers": 4,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:5173",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "api/api-endpoints.test.ts",
+      "file": "api/api-endpoints.test.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "API端点测试",
+          "file": "api/api-endpoints.test.ts",
+          "line": 10,
+          "column": 6,
+          "specs": [],
+          "suites": [
+            {
+              "title": "基础表访问测试",
+              "file": "api/api-endpoints.test.ts",
+              "line": 23,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "medicines表API访问",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1003,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ medicines表API访问成功，返回0条记录\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:06.445Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-e09a74f86d484384eaac",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 24,
+                  "column": 5
+                },
+                {
+                  "title": "batches表API访问",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 453,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ batches表API访问成功，返回0条记录\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:07.480Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-4f77eb705a150aefef34",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 45,
+                  "column": 5
+                },
+                {
+                  "title": "inventory_transactions表API访问",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 456,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ inventory_transactions表API访问成功，返回0条记录\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:07.937Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-c2dfb8810bed5b07afbe",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 66,
+                  "column": 5
+                },
+                {
+                  "title": "users表API访问",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 1442,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ users表API访问成功，返回0条记录\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:06.458Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-981472c6740f3fa5a9d2",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 92,
+                  "column": 5
+                },
+                {
+                  "title": "system_settings表API访问",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 468,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ system_settings表API访问成功，返回0条记录\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:07.932Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-a23470364e1bd8412f71",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 113,
+                  "column": 5
+                },
+                {
+                  "title": "medicines表API访问",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "firefox",
+                      "projectName": "firefox",
+                      "results": [
+                        {
+                          "workerIndex": 4,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 864,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ medicines表API访问成功，返回0条记录\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:09.657Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-fe3301277caccb1153a0",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 24,
+                  "column": 5
+                },
+                {
+                  "title": "batches表API访问",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "firefox",
+                      "projectName": "firefox",
+                      "results": [
+                        {
+                          "workerIndex": 4,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 454,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ batches表API访问成功，返回0条记录\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:10.534Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-6f48cbb43064953ba342",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 45,
+                  "column": 5
+                },
+                {
+                  "title": "inventory_transactions表API访问",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "firefox",
+                      "projectName": "firefox",
+                      "results": [
+                        {
+                          "workerIndex": 4,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 881,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ inventory_transactions表API访问成功，返回0条记录\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:10.992Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-6096b6e01f634bd33057",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 66,
+                  "column": 5
+                },
+                {
+                  "title": "users表API访问",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "firefox",
+                      "projectName": "firefox",
+                      "results": [
+                        {
+                          "workerIndex": 5,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 1314,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ users表API访问成功，返回0条记录\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:10.040Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-917618181cc4416c6ffc",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 92,
+                  "column": 5
+                },
+                {
+                  "title": "system_settings表API访问",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "firefox",
+                      "projectName": "firefox",
+                      "results": [
+                        {
+                          "workerIndex": 5,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 887,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ system_settings表API访问成功，返回0条记录\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:11.370Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-1a72496c346ba5bf9b72",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 113,
+                  "column": 5
+                },
+                {
+                  "title": "medicines表API访问",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "webkit",
+                      "projectName": "webkit",
+                      "results": [
+                        {
+                          "workerIndex": 8,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 896,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ medicines表API访问成功，返回0条记录\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:13.115Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-0f4870148203ebee1abc",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 24,
+                  "column": 5
+                },
+                {
+                  "title": "batches表API访问",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "webkit",
+                      "projectName": "webkit",
+                      "results": [
+                        {
+                          "workerIndex": 8,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 919,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ batches表API访问成功，返回0条记录\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:14.020Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-a6895a8fa6004f400a98",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 45,
+                  "column": 5
+                },
+                {
+                  "title": "inventory_transactions表API访问",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "webkit",
+                      "projectName": "webkit",
+                      "results": [
+                        {
+                          "workerIndex": 8,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 899,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ inventory_transactions表API访问成功，返回0条记录\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:14.942Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-0e037ddfe01dd5141fbe",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 66,
+                  "column": 5
+                },
+                {
+                  "title": "users表API访问",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "webkit",
+                      "projectName": "webkit",
+                      "results": [
+                        {
+                          "workerIndex": 9,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 1314,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ users表API访问成功，返回0条记录\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:13.450Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-311f80057ffa2878f9f7",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 92,
+                  "column": 5
+                },
+                {
+                  "title": "system_settings表API访问",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "webkit",
+                      "projectName": "webkit",
+                      "results": [
+                        {
+                          "workerIndex": 9,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 443,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ system_settings表API访问成功，返回0条记录\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:14.776Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-2f70381385c8fda63c16",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 113,
+                  "column": 5
+                }
+              ]
+            },
+            {
+              "title": "关联查询测试",
+              "file": "api/api-endpoints.test.ts",
+              "line": 138,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "药品和批次关联查询",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 451,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 药品和批次关联查询成功\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:08.404Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-1c0e518ec680f2ad1d5d",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 139,
+                  "column": 5
+                },
+                {
+                  "title": "库存交易关联查询",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 1465,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 库存交易关联查询成功\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:06.434Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-a3ec7ab9f29177d654b7",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 167,
+                  "column": 5
+                },
+                {
+                  "title": "药品和批次关联查询",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "firefox",
+                      "projectName": "firefox",
+                      "results": [
+                        {
+                          "workerIndex": 5,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 878,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 药品和批次关联查询成功\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:12.261Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-e68f7a97b82c52d974ca",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 139,
+                  "column": 5
+                },
+                {
+                  "title": "库存交易关联查询",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "firefox",
+                      "projectName": "firefox",
+                      "results": [
+                        {
+                          "workerIndex": 6,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 867,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 库存交易关联查询成功\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:10.126Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-f0031584102a129c4a0a",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 167,
+                  "column": 5
+                },
+                {
+                  "title": "药品和批次关联查询",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "webkit",
+                      "projectName": "webkit",
+                      "results": [
+                        {
+                          "workerIndex": 9,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 878,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 药品和批次关联查询成功\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:15.222Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-9c8c4bbf3842989782d9",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 139,
+                  "column": 5
+                },
+                {
+                  "title": "库存交易关联查询",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "webkit",
+                      "projectName": "webkit",
+                      "results": [
+                        {
+                          "workerIndex": 10,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 879,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 库存交易关联查询成功\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:13.789Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-856929d60c2d51b81dc7",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 167,
+                  "column": 5
+                }
+              ]
+            },
+            {
+              "title": "过滤和排序测试",
+              "file": "api/api-endpoints.test.ts",
+              "line": 200,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "按类型过滤库存交易",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 889,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 按类型过滤库存交易成功\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:07.926Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-3f7e3ee101bece42af26",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 201,
+                  "column": 5
+                },
+                {
+                  "title": "按时间排序查询",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 865,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 按时间排序查询成功\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:08.819Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-53cf7e8e32dab4f11fd9",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 231,
+                  "column": 5
+                },
+                {
+                  "title": "按类型过滤库存交易",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "firefox",
+                      "projectName": "firefox",
+                      "results": [
+                        {
+                          "workerIndex": 6,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 902,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 按类型过滤库存交易成功\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:11.006Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-af524e2f238bc7890f63",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 201,
+                  "column": 5
+                },
+                {
+                  "title": "按时间排序查询",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "firefox",
+                      "projectName": "firefox",
+                      "results": [
+                        {
+                          "workerIndex": 6,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 435,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 按时间排序查询成功\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:11.911Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-20bc48bcd900b51d9a84",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 231,
+                  "column": 5
+                },
+                {
+                  "title": "按类型过滤库存交易",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "webkit",
+                      "projectName": "webkit",
+                      "results": [
+                        {
+                          "workerIndex": 10,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 444,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 按类型过滤库存交易成功\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:14.680Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-3df120b50174b6387ee9",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 201,
+                  "column": 5
+                },
+                {
+                  "title": "按时间排序查询",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "webkit",
+                      "projectName": "webkit",
+                      "results": [
+                        {
+                          "workerIndex": 10,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 496,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 按时间排序查询成功\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:15.128Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-1573c6d4aff9bc2b9013",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 231,
+                  "column": 5
+                }
+              ]
+            },
+            {
+              "title": "错误处理测试",
+              "file": "api/api-endpoints.test.ts",
+              "line": 266,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "无效表名返回404",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 1431,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 无效表名正确返回404\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:06.441Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-e7a719231c0aa79f5080",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 267,
+                  "column": 5
+                },
+                {
+                  "title": "无效API密钥返回401",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 204,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 无效API密钥正确返回401\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:07.897Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-a7dab5287d530945301c",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 284,
+                  "column": 5
+                },
+                {
+                  "title": "无效表名返回404",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "firefox",
+                      "projectName": "firefox",
+                      "results": [
+                        {
+                          "workerIndex": 7,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 920,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 无效表名正确返回404\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:10.149Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-30a3cd3e838f8a75f9dc",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 267,
+                  "column": 5
+                },
+                {
+                  "title": "无效API密钥返回401",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "firefox",
+                      "projectName": "firefox",
+                      "results": [
+                        {
+                          "workerIndex": 7,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 244,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 无效API密钥正确返回401\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:11.079Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-918271e9a6d06abc6204",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 284,
+                  "column": 5
+                },
+                {
+                  "title": "无效表名返回404",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "webkit",
+                      "projectName": "webkit",
+                      "results": [
+                        {
+                          "workerIndex": 11,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 876,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 无效表名正确返回404\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:13.952Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-bbf6f6b645cb4c727e39",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 267,
+                  "column": 5
+                },
+                {
+                  "title": "无效API密钥返回401",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "webkit",
+                      "projectName": "webkit",
+                      "results": [
+                        {
+                          "workerIndex": 11,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 203,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "✅ 无效API密钥正确返回401\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-12T11:57:14.838Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "4c89ceb0b1407ab31140-72fb63621fb27ea41610",
+                  "file": "api/api-endpoints.test.ts",
+                  "line": 284,
+                  "column": 5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "api/basic-api.test.ts",
+      "file": "api/basic-api.test.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "基础API端点测试",
+          "file": "api/basic-api.test.ts",
+          "line": 10,
+          "column": 6,
+          "specs": [
+            {
+              "title": "验证medicines表API访问",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 448,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🔧 API配置验证通过\n"
+                        },
+                        {
+                          "text": "📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co\n"
+                        },
+                        {
+                          "text": "🧪 测试medicines表API访问...\n"
+                        },
+                        {
+                          "text": "✅ medicines表API访问成功，返回0条记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:08.114Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-57495ffea5618bab5911",
+              "file": "api/basic-api.test.ts",
+              "line": 26,
+              "column": 3
+            },
+            {
+              "title": "验证inventory_transactions表API访问",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 452,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🧪 测试inventory_transactions表API访问...\n"
+                        },
+                        {
+                          "text": "✅ inventory_transactions表API访问成功，返回0条记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:08.567Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-52c71475922033a72308",
+              "file": "api/basic-api.test.ts",
+              "line": 56,
+              "column": 3
+            },
+            {
+              "title": "验证users表API访问",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 444,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🔧 API配置验证通过\n"
+                        },
+                        {
+                          "text": "📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co\n"
+                        },
+                        {
+                          "text": "🧪 测试users表API访问...\n"
+                        },
+                        {
+                          "text": "✅ users表API访问成功，返回0条记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:08.408Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-7ed5709d598f1ec7c8f3",
+              "file": "api/basic-api.test.ts",
+              "line": 95,
+              "column": 3
+            },
+            {
+              "title": "验证batches表API访问",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 469,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🧪 测试batches表API访问...\n"
+                        },
+                        {
+                          "text": "✅ batches表API访问成功，返回0条记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:08.858Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-227805966501ebf2728c",
+              "file": "api/basic-api.test.ts",
+              "line": 129,
+              "column": 3
+            },
+            {
+              "title": "验证system_settings表API访问",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 457,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🔧 API配置验证通过\n"
+                        },
+                        {
+                          "text": "📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co\n"
+                        },
+                        {
+                          "text": "🧪 测试system_settings表API访问...\n"
+                        },
+                        {
+                          "text": "✅ system_settings表API访问成功，返回0条记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:08.866Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-a1aacf0a5ab67c187bc5",
+              "file": "api/basic-api.test.ts",
+              "line": 160,
+              "column": 3
+            },
+            {
+              "title": "验证错误处理 - 无效表名",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 457,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🧪 测试错误处理 - 无效表名...\n"
+                        },
+                        {
+                          "text": "✅ 无效表名正确返回404错误\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:09.328Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-c75dd51cfb4d9d5bab78",
+              "file": "api/basic-api.test.ts",
+              "line": 192,
+              "column": 3
+            },
+            {
+              "title": "验证错误处理 - 无效API密钥",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 231,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🔧 API配置验证通过\n"
+                        },
+                        {
+                          "text": "📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co\n"
+                        },
+                        {
+                          "text": "🧪 测试错误处理 - 无效API密钥...\n"
+                        },
+                        {
+                          "text": "✅ 无效API密钥正确返回401错误\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:09.024Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-dffd9c65ff1540fa6701",
+              "file": "api/basic-api.test.ts",
+              "line": 211,
+              "column": 3
+            },
+            {
+              "title": "验证过滤查询功能",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 500,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🧪 测试过滤查询功能...\n"
+                        },
+                        {
+                          "text": "✅ 过滤查询功能正常，返回0条入库记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:09.260Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-2b091f8282c487bd8eba",
+              "file": "api/basic-api.test.ts",
+              "line": 227,
+              "column": 3
+            },
+            {
+              "title": "验证medicines表API访问",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 457,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🔧 API配置验证通过\n"
+                        },
+                        {
+                          "text": "📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co\n"
+                        },
+                        {
+                          "text": "🧪 测试medicines表API访问...\n"
+                        },
+                        {
+                          "text": "✅ medicines表API访问成功，返回0条记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:11.340Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-759492ff1deeba9134ac",
+              "file": "api/basic-api.test.ts",
+              "line": 26,
+              "column": 3
+            },
+            {
+              "title": "验证inventory_transactions表API访问",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 460,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🧪 测试inventory_transactions表API访问...\n"
+                        },
+                        {
+                          "text": "✅ inventory_transactions表API访问成功，返回0条记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:11.803Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-37e53d8e1961c1e960a9",
+              "file": "api/basic-api.test.ts",
+              "line": 56,
+              "column": 3
+            },
+            {
+              "title": "验证users表API访问",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 445,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🔧 API配置验证通过\n"
+                        },
+                        {
+                          "text": "📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co\n"
+                        },
+                        {
+                          "text": "🧪 测试users表API访问...\n"
+                        },
+                        {
+                          "text": "✅ users表API访问成功，返回0条记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:11.886Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-4da899dcf3e0ed3298eb",
+              "file": "api/basic-api.test.ts",
+              "line": 95,
+              "column": 3
+            },
+            {
+              "title": "验证batches表API访问",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 444,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🧪 测试batches表API访问...\n"
+                        },
+                        {
+                          "text": "✅ batches表API访问成功，返回0条记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:12.337Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-ca37cf07d7cb7cf3192f",
+              "file": "api/basic-api.test.ts",
+              "line": 129,
+              "column": 3
+            },
+            {
+              "title": "验证system_settings表API访问",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 902,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🔧 API配置验证通过\n"
+                        },
+                        {
+                          "text": "📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co\n"
+                        },
+                        {
+                          "text": "🧪 测试system_settings表API访问...\n"
+                        },
+                        {
+                          "text": "✅ system_settings表API访问成功，返回0条记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:12.267Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-06a39df8815ee090fc8c",
+              "file": "api/basic-api.test.ts",
+              "line": 160,
+              "column": 3
+            },
+            {
+              "title": "验证错误处理 - 无效表名",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 445,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🧪 测试错误处理 - 无效表名...\n"
+                        },
+                        {
+                          "text": "✅ 无效表名正确返回404错误\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:13.176Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-861c7b6e3eb5af43b6de",
+              "file": "api/basic-api.test.ts",
+              "line": 192,
+              "column": 3
+            },
+            {
+              "title": "验证错误处理 - 无效API密钥",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 218,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🔧 API配置验证通过\n"
+                        },
+                        {
+                          "text": "📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co\n"
+                        },
+                        {
+                          "text": "🧪 测试错误处理 - 无效API密钥...\n"
+                        },
+                        {
+                          "text": "✅ 无效API密钥正确返回401错误\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:12.355Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-7706735b3e261a232584",
+              "file": "api/basic-api.test.ts",
+              "line": 211,
+              "column": 3
+            },
+            {
+              "title": "验证过滤查询功能",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 872,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🧪 测试过滤查询功能...\n"
+                        },
+                        {
+                          "text": "✅ 过滤查询功能正常，返回0条入库记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:12.578Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-973107c3371f7bf2f8f4",
+              "file": "api/basic-api.test.ts",
+              "line": 227,
+              "column": 3
+            },
+            {
+              "title": "验证medicines表API访问",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 885,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🔧 API配置验证通过\n"
+                        },
+                        {
+                          "text": "📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co\n"
+                        },
+                        {
+                          "text": "🧪 测试medicines表API访问...\n"
+                        },
+                        {
+                          "text": "✅ medicines表API访问成功，返回0条记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:15.052Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-39b06286b4e193c5b910",
+              "file": "api/basic-api.test.ts",
+              "line": 26,
+              "column": 3
+            },
+            {
+              "title": "验证inventory_transactions表API访问",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 461,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🧪 测试inventory_transactions表API访问...\n"
+                        },
+                        {
+                          "text": "✅ inventory_transactions表API访问成功，返回0条记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:15.941Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-e9ba518fa152aaf4c3f0",
+              "file": "api/basic-api.test.ts",
+              "line": 56,
+              "column": 3
+            },
+            {
+              "title": "验证users表API访问",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 444,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🔧 API配置验证通过\n"
+                        },
+                        {
+                          "text": "📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co\n"
+                        },
+                        {
+                          "text": "🧪 测试users表API访问...\n"
+                        },
+                        {
+                          "text": "✅ users表API访问成功，返回0条记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:15.636Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-fc12905e2eae3100d527",
+              "file": "api/basic-api.test.ts",
+              "line": 95,
+              "column": 3
+            },
+            {
+              "title": "验证batches表API访问",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 874,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🧪 测试batches表API访问...\n"
+                        },
+                        {
+                          "text": "✅ batches表API访问成功，返回0条记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:16.087Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-455dfabf16b5f2ac068a",
+              "file": "api/basic-api.test.ts",
+              "line": 129,
+              "column": 3
+            },
+            {
+              "title": "验证system_settings表API访问",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 896,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🔧 API配置验证通过\n"
+                        },
+                        {
+                          "text": "📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co\n"
+                        },
+                        {
+                          "text": "🧪 测试system_settings表API访问...\n"
+                        },
+                        {
+                          "text": "✅ system_settings表API访问成功，返回0条记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:15.853Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-8236d284efaac1c672c4",
+              "file": "api/basic-api.test.ts",
+              "line": 160,
+              "column": 3
+            },
+            {
+              "title": "验证错误处理 - 无效表名",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 464,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🧪 测试错误处理 - 无效表名...\n"
+                        },
+                        {
+                          "text": "✅ 无效表名正确返回404错误\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:16.755Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-eb6e313fd46ca4b3ba60",
+              "file": "api/basic-api.test.ts",
+              "line": 192,
+              "column": 3
+            },
+            {
+              "title": "验证错误处理 - 无效API密钥",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 221,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🔧 API配置验证通过\n"
+                        },
+                        {
+                          "text": "📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co\n"
+                        },
+                        {
+                          "text": "🧪 测试错误处理 - 无效API密钥...\n"
+                        },
+                        {
+                          "text": "✅ 无效API密钥正确返回401错误\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:16.110Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-e9d09bf143aa73c597d3",
+              "file": "api/basic-api.test.ts",
+              "line": 211,
+              "column": 3
+            },
+            {
+              "title": "验证过滤查询功能",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 454,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🧪 测试过滤查询功能...\n"
+                        },
+                        {
+                          "text": "✅ 过滤查询功能正常，返回0条入库记录\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-12T11:57:16.339Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f68acd2a40693e5bf4e6-6ace1d3b27b3031260b2",
+              "file": "api/basic-api.test.ts",
+              "line": 227,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-08-12T11:57:05.920Z",
+    "duration": 11317.211,
+    "expected": 57,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

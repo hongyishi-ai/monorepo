@@ -1,0 +1,57 @@
+.switch {
+  all: unset;
+  position: fixed;
+  right: 16px;
+  top: 16px;
+  z-index: 9999;
+  display: inline-grid;
+  place-items: center;
+  color: currentColor;
+  border-radius: 9999px;
+  cursor: pointer;
+  --size: 28px;
+  height: var(--size);
+  width: var(--size);
+  border: 1px solid currentColor;
+  background: color-mix(in srgb, currentColor 6%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  opacity: 0.9;
+}
+
+.switch:hover { 
+  opacity: 1; 
+}
+
+/* 极简图标样式 */
+[data-mode="light"] .switch::after,
+[data-mode="dark"] .switch::after,
+[data-mode="system"] .switch::after {
+  content: "";
+  display: block;
+  width: calc(var(--size) - 10px);
+  height: calc(var(--size) - 10px);
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
+  background: currentColor;
+}
+
+/* Sun icon */
+[data-mode="light"] .switch::after { 
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>'); 
+}
+
+/* Moon icon */
+[data-mode="dark"] .switch::after { 
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'); 
+}
+
+/* System icon (small dot) */
+[data-mode="system"] .switch::after { 
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>'); 
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@hongyishi/fms",
+  "version": "1.0.0",
+  "private": true,
+  "description": "训练伤防治平台 - FMS功能性动作筛查系统",
+  "type": "module",
+  "scripts": {
+    "dev": "cd fms-app && pnpm dev",
+    "build": "cd fms-app && pnpm build",
+    "preview": "cd fms-app && pnpm preview",
+    "lint": "cd fms-app && pnpm lint",
+    "test": "cd fms-app && pnpm test"
+  }
+}

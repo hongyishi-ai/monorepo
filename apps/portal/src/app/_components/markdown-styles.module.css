@@ -1,0 +1,45 @@
+.markdown {
+  /* 将行间距设置为约 1.2 × 原 relaxed（≈1.6×1.2 ≈ 1.92） */
+  @apply text-lg leading-[1.92];
+}
+
+.markdown p,
+.markdown ul,
+.markdown ol,
+.markdown blockquote {
+  /* 段落/列表上下间距从 1.5rem 提升到 2.25rem（1.5 倍） */
+  @apply my-9;
+}
+
+.markdown h2 {
+  /* 顶部间距从 3rem ≈ 4.5rem（1.5 倍），底部从 1rem → 1.5rem */
+  @apply text-3xl mb-6 leading-snug;
+  margin-top: 4.5rem; /* mt-[4.5rem] */
+  scroll-margin-top: 7rem;
+}
+
+.markdown h3 {
+  /* 顶部间距从 2rem → 3rem（1.5 倍），底部从 1rem → 1.5rem */
+  @apply text-2xl mt-12 mb-6 leading-snug;
+  scroll-margin-top: 7rem;
+}
+
+/* Tables (GFM) */
+.markdown table {
+  @apply w-full text-left text-sm my-6 border-collapse;
+}
+.markdown thead th {
+  @apply border-b border-black/20 dark:border-white/20 font-semibold py-2 px-3;
+}
+.markdown td {
+  @apply border-b border-black/10 dark:border-white/10 py-2 px-3 align-top;
+}
+.markdown tr:last-child td {
+  @apply border-b-0;
+}
+
+/* Links inside markdown */
+.markdown a {
+  /* 低调的黑白色系链接：默认与正文接近，仅在悬停时稍作强调 */
+  @apply underline underline-offset-4 decoration-neutral-400 text-neutral-700 hover:text-neutral-900 hover:decoration-neutral-600 dark:text-slate-300 dark:hover:text-slate-100 dark:decoration-slate-500 dark:hover:decoration-slate-300 break-words;
+}

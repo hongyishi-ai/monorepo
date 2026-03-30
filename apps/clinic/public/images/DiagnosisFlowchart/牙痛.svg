@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1100">
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .title { font-size: 24px; font-weight: bold; }
+    .subtitle { font-size: 18px; font-weight: bold; }
+    .content { font-size: 14px; }
+  </style>
+  
+  <rect width="100%" height="100%" fill="#e6e6fa"/>
+  
+  <text x="200" y="40" class="title" text-anchor="middle" fill="#4b0082">牙痛诊断思维链</text>
+  
+  <g transform="translate(20, 80)">
+    <rect width="360" height="160" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">常见症状</text>
+    <text x="10" y="60" class="content" fill="#4b0082">• 持续性或间歇性疼痛</text>
+    <text x="10" y="80" class="content" fill="#4b0082">• 咀嚼时加重的疼痛</text>
+    <text x="10" y="100" class="content" fill="#4b0082">• 对冷热刺激敏感</text>
+    <text x="10" y="120" class="content" fill="#4b0082">• 牙龈肿胀或出血</text>
+    <text x="10" y="140" class="content" fill="#4b0082">• 口腔异味或味觉改变</text>
+  </g>
+  
+  <g transform="translate(20, 260)">
+    <rect width="360" height="200" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">可能原因</text>
+    <text x="10" y="60" class="content" fill="#4b0082">1. 龋齿（蛀牙）</text>
+    <text x="10" y="80" class="content" fill="#4b0082">2. 牙髓炎（牙神经炎症）</text>
+    <text x="10" y="100" class="content" fill="#4b0082">3. 牙周炎（牙龈感染）</text>
+    <text x="10" y="120" class="content" fill="#4b0082">4. 牙齿裂纹或破碎</text>
+    <text x="10" y="140" class="content" fill="#4b0082">5. 牙齿磨损或敏感</text>
+    <text x="10" y="160" class="content" fill="#4b0082">6. 智齿问题</text>
+    <text x="10" y="180" class="content" fill="#4b0082">7. 咬合不正（错颌畸形）</text>
+  </g>
+  
+  <g transform="translate(20, 480)">
+    <rect width="360" height="140" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">诊断方法</text>
+    <text x="10" y="60" class="content" fill="#4b0082">1. 详细病史询问：疼痛特征、持续时间等</text>
+    <text x="10" y="80" class="content" fill="#4b0082">2. 口腔检查：视诊、触诊、叩诊</text>
+    <text x="10" y="100" class="content" fill="#4b0082">3. 影像学检查：X光片、CBCT等</text>
+    <text x="10" y="120" class="content" fill="#4b0082">4. 牙髓活力测试：冷热测试、电活力测试</text>
+  </g>
+  
+  <g transform="translate(20, 640)">
+    <rect width="360" height="200" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">治疗方案</text>
+    <text x="10" y="60" class="content" fill="#4b0082">1. 龋齿：填充、嵌体或冠修复</text>
+    <text x="10" y="80" class="content" fill="#4b0082">2. 牙髓炎：根管治疗</text>
+    <text x="10" y="100" class="content" fill="#4b0082">3. 牙周炎：深度洁治、牙周手术</text>
+    <text x="10" y="120" class="content" fill="#4b0082">4. 牙齿裂纹：粘合、冠修复或拔除</text>
+    <text x="10" y="140" class="content" fill="#4b0082">5. 牙齿敏感：脱敏剂、氟化物治疗</text>
+    <text x="10" y="160" class="content" fill="#4b0082">6. 智齿问题：拔除或手术</text>
+    <text x="10" y="180" class="content" fill="#4b0082">7. 咬合调整或正畸治疗</text>
+  </g>
+  
+  <g transform="translate(20, 860)">
+    <rect width="360" height="180" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">预防和自我管理</text>
+    <text x="10" y="60" class="content" fill="#4b0082">• 保持良好的口腔卫生习惯</text>
+    <text x="10" y="80" class="content" fill="#4b0082">• 定期进行口腔检查和洁牙</text>
+    <text x="10" y="100" class="content" fill="#4b0082">• 使用含氟牙膏和漱口水</text>
+    <text x="10" y="120" class="content" fill="#4b0082">• 控制糖分和酸性食物的摄入</text>
+    <text x="10" y="140" class="content" fill="#4b0082">• 避免咬硬物或使用牙齿开瓶</text>
+    <text x="10" y="160" class="content" fill="#4b0082">• 佩戴护齿套（如有夜磨牙）</text>
+  </g>
+  
+  <text x="200" y="1080" class="content" text-anchor="middle" fill="#4b0082">注意：持续或剧烈的牙痛应及时就诊，以防病情恶化</text>
+</svg>

@@ -1,0 +1,14 @@
+{
+  "name": "@hongyishi/heat-stroke",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "热射病防治平台 - 静态 PWA",
+  "scripts": {
+    "dev": "npx serve . -l 3000",
+    "preview": "npx serve . -l 3000"
+  },
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}

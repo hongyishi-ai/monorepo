@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>热射病防治"黄金法则"</title>
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
+    <!-- Tailwind CSS via CDN -->
+    <script src="../assets/vendors/tailwind.compiler.js"></script>
+    <!-- Font Awesome via CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Framer Motion via CDN -->
+    <script src="../assets/vendors/framer-motion.js"></script>
+    <style>
+        body {
+            background-color: #000000;
+            color: #E5E7EB; /* text-gray-200 */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            scroll-behavior: smooth;
+        }
+        .highlight { color: #FF6B00; }
+        .highlight-bg { background-color: #FF6B00; }
+        .highlight-border { border-color: #FF6B00; }
+        .bento-item {
+            background-color: #111827; /* gray-900 */
+            border-radius: 1rem; /* rounded-2xl */
+            padding: 1.5rem; /* p-6 */
+            border: 1px solid #374151; /* border-gray-700 */
+            overflow: hidden;
+            position: relative;
+        }
+        .bento-item-glow {
+             background: radial-gradient(circle at top left, rgba(255, 107, 0, 0.15) 0%, rgba(255, 107, 0, 0) 40%);
+        }
+        .ultra-large-text {
+            font-size: 8rem; /* text-9xl */
+            line-height: 1;
+            font-weight: 800; /* font-extrabold */
+        }
+        .large-bold-cn {
+            font-size: 1.875rem; /* text-3xl */
+            line-height: 2.25rem; /* leading-9 */
+            font-weight: 700; /* font-bold */
+        }
+        .medium-bold-cn {
+            font-size: 1.25rem; /* text-xl */
+            line-height: 1.75rem; /* leading-7 */
+            font-weight: 600; /* font-semibold */
+        }
+        .icon-line-art {
+            stroke: #FF6B00;
+            stroke-width: 1.5;
+            fill: none;
+        }
+        .highlight-gradient-bg {
+            background: linear-gradient(to bottom, rgba(255, 107, 0, 0.3), rgba(255, 107, 0, 0));
+        }
+        /* Ensure motion divs take up space initially for Intersection Observer */
+        [data-motion-id] {
+            opacity: 0; /* Start hidden for fade-in */
+        }
+    </style>
+</head>
+<body class="bg-black text-gray-200">
+
+<!-- 添加导航栏 -->
+<nav class="bg-black py-4 px-6 sticky top-0 z-50 border-b border-gray-800">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="../index.html" class="flex items-center text-orange-500 hover:text-orange-400 transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i>
+            <span class="font-bold">返回主页</span>
+        </a>
+    </div>
+</nav>
+
+    <div class="container mx-auto px-4 py-12 md:py-20">
+
+        <!-- Header Section -->
+        <div class="text-center mb-16 md:mb-24">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">
+                防治热射病 <span class="highlight">黄金法则</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-400">
+                热射病防治专家组组长宋青独创 <span class="highlight font-semibold">"8-4-6法则"</span> 
+            </p>
+        </div>
+
+        <!-- Bento Grid Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+            <!-- Intro Card -->
+            <div class="bento-item md:col-span-2 lg:col-span-2 bento-item-glow">
+                <h3 class="large-bold-cn mb-3">什么是热射病?</h3>
+                <p class="text-gray-300 mb-4">
+                    热射病（重度中暑）是指人体长时间暴露在<span class="highlight">高温、高湿</span>环境下，或进行<span class="highlight">高强度运动</span>时，引起体温调节功能失调、体内热量过度积蓄，从而导致中枢神经系统损害、多器官功能障碍等危及生命的临床综合征。
+                </p>
+                <p class="medium-bold-cn highlight">可防可控，关键在于预防！</p>
+            </div>
+
+            <!-- 8 Prevention Measures Title -->
+            <div class="bento-item md:col-span-1 lg:col-span-2 flex flex-col items-center justify-center highlight-gradient-bg">
+                <div class="ultra-large-text highlight">8</div>
+                <h3 class="large-bold-cn mt-2 text-center">项预防措施</h3>
+            </div>
+
+            <!-- Prevention Measure 1: Heat Acclimatization -->
+            <div class="bento-item lg:col-span-2">
+                <div class="flex items-center mb-3">
+                    <i class="fas fa-temperature-three-quarters highlight text-2xl mr-3"></i>
+                    <h4 class="medium-bold-cn">1. 做好热习服</h4>
+                </div>
+                <p class="text-sm text-gray-400 mb-2">通过反复热刺激提高机体热耐受能力，一般需 <span class="highlight font-semibold">10-14天</span>。</p>
+                <p class="text-sm text-gray-400 mb-2">强度判断：心率 &lt;120 (低), 120-150 (中), &gt;150 (高), &gt;180 (极限)。</p>
+                <p class="text-sm text-gray-400 mb-2">安全心率 ≈ (220-年龄)×70%；最高心率 ≈ (220-年龄)×(80%-85%)。</p>
+                <p class="text-sm text-gray-400">心率&gt;150持续不降或体温&gt;38.5℃ <span class="highlight">应终止训练</span>。</p>
+            </div>
+
+            <!-- Prevention Measure 2: Avoid Training When Sick -->
+            <div class="bento-item">
+                <div class="flex items-center mb-3">
+                    <i class="fas fa-notes-medical highlight text-2xl mr-3"></i>
+                    <h4 class="medium-bold-cn">2. 不带病参训</h4>
+                </div>
+                <p class="text-sm text-gray-400">感冒、发烧、腹泻等降低抵抗力，易中暑。医生需评估。</p>
+                <p class="text-sm text-gray-400 mt-2">危险因素：身体不适、服药、超重、缺乏锻炼、中暑史。</p>
+            </div>
+
+            <!-- Prevention Measure 3: Cooling During Breaks -->
+             <div class="bento-item">
+                <div class="flex items-center mb-3">
+                     <i class="fas fa-snowflake highlight text-2xl mr-3"></i>
+                    <h4 class="medium-bold-cn">3. 重视间隙降温</h4>
+                </div>
+                <p class="text-sm text-gray-400">冷水喷雾、冰帽/颈圈、湿毛巾、冰袋、冷水浸泡前臂、饮用含盐冰液体。</p>
+                 <p class="text-sm text-gray-400 mt-2">烈日下<span class="highlight">不摘帽</span>。</p>
+            </div>
+
+            <!-- Prevention Measure 4: Hydration & Salt -->
+            <div class="bento-item lg:col-span-2">
+                <div class="flex items-center mb-3">
+                    <i class="fas fa-tint highlight text-2xl mr-3"></i>
+                    <h4 class="medium-bold-cn">4. 补水补盐</h4>
+                </div>
+                <p class="text-sm text-gray-400 mb-2">口渴时已缺水 <span class="highlight font-semibold">~2%</span> 体重，此时极易中暑。</p>
+                <p class="text-sm text-gray-400 mb-2">高强度训练时：每小时补含盐饮品 <span class="highlight font-semibold">0.5-1升</span>，每天 <span class="highlight font-semibold">6-8升</span>。</p>
+                <p class="text-sm text-gray-400 mb-2">观察尿量和颜色判断是否充足。</p>
+                <p class="text-sm text-gray-400">推荐：榨菜+水、电解质泡腾片、口服补液盐。</p>
+            </div>
+
+            <!-- Prevention Measure 5: Monitoring Tools -->
+            <div class="bento-item">
+                 <div class="flex items-center mb-3">
+                    <i class="fas fa-toolbox highlight text-2xl mr-3"></i>
+                    <h4 class="medium-bold-cn">5. 备齐监测"三宝"</h4>
+                </div>
+                <p class="text-sm text-gray-400 mb-2"><span class="highlight">温湿度计</span>：监测环境。</p>
+                <p class="text-sm text-gray-400 mb-2"><span class="highlight">耳温监测仪</span>：测核心体温。</p>
+                <p class="text-sm text-gray-400 mb-2"><span class="highlight">指脉氧检测仪</span>：测心率、血氧。</p>
+                <p class="text-sm text-gray-400">备好防暑药品：藿香正气、十滴水等。</p>
+            </div>
+
+            <!-- Prevention Measure 6: Cooling Equipment -->
+            <div class="bento-item">
+                 <div class="flex items-center mb-3">
+                    <i class="fas fa-medkit highlight text-2xl mr-3"></i>
+                    <h4 class="medium-bold-cn">6. 准备降温设备</h4>
+                </div>
+                <p class="text-sm text-gray-400">救援浴盆担架、贮水槽、医用冰帽/颈圈/冰毯、冰袋等，用于紧急降温。</p>
+                 <svg viewBox="0 0 100 50" class="w-full h-16 mt-4 icon-line-art opacity-50">
+                    <path d="M 5 25 Q 15 5, 25 25 T 45 25 Q 55 5, 65 25 T 85 25 Q 95 5, 95 25" stroke-dasharray="3 2"/>
+                    <rect x="10" y="30" width="80" height="15" rx="3"/>
+                </svg>
+            </div>
+
+            <!-- Prevention Measure 7: Sufficient Sleep -->
+            <div class="bento-item">
+                 <div class="flex items-center mb-3">
+                    <i class="fas fa-bed highlight text-2xl mr-3"></i>
+                    <h4 class="medium-bold-cn">7. 保证充足睡眠</h4>
+                </div>
+                <p class="text-sm text-gray-400">恢复体力，放松身心。野外可用眼罩改善环境。必要时遵医嘱用助眠药。</p>
+            </div>
+
+            <!-- Prevention Measure 8: Focus on Key Groups -->
+            <div class="bento-item">
+                 <div class="flex items-center mb-3">
+                    <i class="fas fa-users-viewfinder highlight text-2xl mr-3"></i>
+                    <h4 class="medium-bold-cn">8. 关注重点人群</h4>
+                </div>
+                <p class="text-sm text-gray-400">新训人员、少锻炼者、非热环境训练者、未热习服者、脱离热环境2周者。需先热习服并评估。</p>
+            </div>
+
+            <!-- 4 Warning Signs Title -->
+            <div class="bento-item md:col-span-1 lg:col-span-1 flex flex-col items-center justify-center highlight-gradient-bg">
+                <div class="ultra-large-text highlight">4</div>
+                <h3 class="large-bold-cn mt-2 text-center">个预警信号</h3>
+            </div>
+
+            <!-- Warning Signs Details -->
+            <div class="bento-item md:col-span-2 lg:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4 items-center">
+                <div class="text-center p-4 border border-orange-500/30 rounded-lg">
+                    <div class="text-6xl font-bold highlight mb-2">烫</div>
+                    <p class="medium-bold-cn">自觉发烫</p>
+                    <p class="text-sm text-gray-400">(从里向外)</p>
+                </div>
+                 <div class="text-center p-4 border border-orange-500/30 rounded-lg">
+                    <div class="text-6xl font-bold highlight mb-2">晃</div>
+                    <p class="medium-bold-cn">行走不稳</p>
+                    <p class="text-sm text-gray-400">(异常疲倦)</p>
+                </div>
+                 <div class="text-center p-4 border border-orange-500/30 rounded-lg">
+                    <div class="text-6xl font-bold highlight mb-2">晕</div>
+                    <p class="medium-bold-cn">头晕抽搐</p>
+                    <p class="text-sm text-gray-400">(意识模糊)</p>
+                </div>
+                 <div class="text-center p-4 border border-orange-500/30 rounded-lg">
+                    <div class="text-6xl font-bold highlight mb-2">乱</div>
+                    <p class="medium-bold-cn">生理紊乱</p>
+                    <p class="text-sm text-gray-400">(恶心呕吐等)</p>
+                </div>
+            </div>
+
+             <!-- 6 Treatment Steps Title -->
+            <div class="bento-item md:col-span-3 lg:col-span-4 flex flex-col md:flex-row items-center justify-center highlight-gradient-bg p-8 md:p-12">
+                <div class="ultra-large-text highlight mr-0 md:mr-8 mb-4 md:mb-0">6</div>
+                <div class="text-center md:text-left">
+                    <h3 class="large-bold-cn md:text-5xl lg:text-6xl">步现场救治法</h3>
+                    <p class="medium-bold-cn text-gray-300 mt-2">迅速抢救，<span class="highlight">第一时间正确降温</span>是关键！</p>
+                    <p class="text-gray-400">目标：1小时内体温降至 <span class="highlight">38.5℃</span> 以下</p>
+                </div>
+            </div>
+
+            <!-- Treatment Steps Grid -->
+            <div class="bento-item md:col-span-1 lg:col-span-1">
+                <div class="flex items-center mb-3">
+                    <span class="highlight font-bold text-3xl mr-3">1</span>
+                    <h4 class="medium-bold-cn">立即脱离热环境</h4>
+                </div>
+                <p class="text-sm text-gray-400">扶至阴凉处，脱去外衣，评估意识。</p>
+                 <i class="fas fa-person-running text-4xl highlight opacity-30 absolute bottom-4 right-4"></i>
+            </div>
+
+            <div class="bento-item md:col-span-1 lg:col-span-1">
+                <div class="flex items-center mb-3">
+                    <span class="highlight font-bold text-3xl mr-3">2</span>
+                    <h4 class="medium-bold-cn">全身降温</h4>
+                </div>
+                <p class="text-sm text-gray-400">浸泡(头外, ~20℃水)或冰水擦拭+冰敷(腋下/大腿根)。</p>
+                 <i class="fas fa-bath text-4xl highlight opacity-30 absolute bottom-4 right-4"></i>
+            </div>
+
+            <div class="bento-item md:col-span-1 lg:col-span-1">
+                <div class="flex items-center mb-3">
+                    <span class="highlight font-bold text-3xl mr-3">3</span>
+                    <h4 class="medium-bold-cn">测量生命体征</h4>
+                </div>
+                <p class="text-sm text-gray-400">核心体温(耳温)、心率、血氧、血压。</p>
+                 <i class="fas fa-heart-pulse text-4xl highlight opacity-30 absolute bottom-4 right-4"></i>
+            </div>
+
+             <div class="bento-item md:col-span-1 lg:col-span-1">
+                <div class="flex items-center mb-3">
+                    <span class="highlight font-bold text-3xl mr-3">4</span>
+                    <h4 class="medium-bold-cn">建立静脉通道</h4>
+                </div>
+                <p class="text-sm text-gray-400">卫生员操作，快速输液 (林格氏液/生理盐水等)。</p>
+                 <i class="fas fa-syringe text-4xl highlight opacity-30 absolute bottom-4 right-4"></i>
+            </div>
+
+            <div class="bento-item md:col-span-1 lg:col-span-2">
+                <div class="flex items-center mb-3">
+                    <span class="highlight font-bold text-3xl mr-3">5</span>
+                    <h4 class="medium-bold-cn">气道保护与氧疗</h4>
+                </div>
+                <p class="text-sm text-gray-400">血氧&lt;95%鼻导管吸氧。昏迷头偏一侧防窒息，及时清呕吐物。</p>
+                 <i class="fas fa-lungs text-4xl highlight opacity-30 absolute bottom-4 right-4"></i>
+            </div>
+
+            <div class="bento-item md:col-span-1 lg:col-span-2">
+                <div class="flex items-center mb-3">
+                    <span class="highlight font-bold text-3xl mr-3">6</span>
+                    <h4 class="medium-bold-cn">控制抽搐</h4>
+                </div>
+                <p class="text-sm text-gray-400">遵医嘱用药 (如安定)，观察呼吸/血氧。按压躁动者避开关节。</p>
+                 <i class="fas fa-brain text-4xl highlight opacity-30 absolute bottom-4 right-4"></i>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // 移除了Framer Motion相关的代码，因为CDN版本可能不兼容React风格的props
+        // 如果需要动画效果，可以考虑使用CSS动画或简单的JavaScript动画
+    </script>
+
+    <!-- 返回顶部按钮 -->
+    <button id="backToTopBtn" class="fixed bottom-20 right-6 z-50 p-3 rounded-full bg-orange-500 text-white shadow-lg transform transition-transform duration-300 opacity-0 translate-y-10">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- 统一页脚 -->
+    <footer class="relative mt-16 pt-10 pb-6 bg-gray-900 border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <!-- 顶部返回主页 -->
+            <div class="flex justify-center mb-8">
+                <a href="../index.html"
+                    class="inline-flex items-center px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-lg">
+                    <i class="fas fa-home mr-2"></i> 返回主页
+                </a>
+            </div>
+
+            <!-- 主要内容 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+                <!-- 快速导航 -->
+                <div class="lg:col-span-2">
+                    <h3 class="text-xl font-semibold text-orange-500 mb-4">快速导航</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <a href="/pages/中国热射病诊断与治疗指南.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-book-medical mr-2 text-orange-500 w-5"></i> 诊断与治疗指南
+                        </a>
+                        <a href="/pages/热射病救治体系建设标准专家共识.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-users-rays mr-2 text-orange-500 w-5"></i> 救治体系建设标准
+                        </a>
+                        <a href="/pages/热耐力评估.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-clipboard-check mr-2 text-orange-500 w-5"></i> 热耐力评估
+                        </a>
+                        <a href="/pages/热射病核心体温监测与降温方法.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-temperature-three-quarters mr-2 text-orange-500 w-5"></i> 核心体温监测
+                        </a>
+                        <a href="/pages/热射病现场处置.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-kit-medical mr-2 text-orange-500 w-5"></i> 现场处置
+                        </a>
+                        <a href="/pages/热射病通关挑战.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-gamepad mr-2 text-orange-500 w-5"></i> 通关挑战
+                        </a>
+                        <a href="/pages/8-4-6黄金法则.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-stopwatch-20 mr-2 text-orange-500 w-5"></i> 8-4-6黄金法则
+                        </a>
+                        <a href="/pages/热指数查询.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-thermometer-half mr-2 text-orange-500 w-5"></i> 热指数查询
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 快速链接 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-orange-500 mb-4">快速链接</h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="关于本项目.html"
+                                class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                                <i class="fas fa-user-doctor mr-2 text-orange-500 w-5"></i> 关于本项目
+                            </a>
+                        </li>
+                        <li class="text-gray-300 flex items-center">
+                            <i class="fas fa-phone-alt mr-2 text-orange-500 w-5"></i> 紧急情况请拨打 <span
+                                class="text-orange-500 font-bold ml-1">120</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 联系我们 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-orange-500 mb-4">联系我们</h3>
+                    <p class="text-gray-300 flex items-center mb-2">
+                        <i class="fas fa-envelope mr-2 text-orange-500 w-5"></i>
+                        <a href="mailto:nimrod1990@163.com"
+                            class="hover:text-orange-400 transition-colors">nimrod1990@163.com</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- 声明部分 -->
+            <div class="border-t border-gray-800 pt-6 text-center">
+                <p class="text-gray-400 mb-2">
+                    <strong class="text-orange-500">版权声明：</strong>©2025 红医师 热射病防治
+                </p>
+                <p class="text-gray-400 mb-2">
+                    <strong class="text-orange-500">免责声明：</strong>本网站内容仅供参考，不替代专业医疗建议。如有紧急情况请立即就医。
+                </p>
+                <p class="text-gray-400">
+                    <strong class="text-orange-500">转载声明：</strong>所有资料来源于互联网公开资料，已脱密处理，禁止商用，转载请联系作者
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 返回顶部按钮脚本
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        
+        // 监听滚动事件
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) { // 当页面滚动超过300px时显示按钮
+                backToTopBtn.classList.remove('opacity-0', 'translate-y-10');
+                backToTopBtn.classList.add('opacity-100', 'translate-y-0');
+            } else {
+                backToTopBtn.classList.remove('opacity-100', 'translate-y-0');
+                backToTopBtn.classList.add('opacity-0', 'translate-y-10');
+            }
+        });
+        
+        // 点击按钮返回顶部
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+
+</body>
+</html>

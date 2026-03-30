@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 900">
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .title { font-size: 24px; font-weight: bold; }
+    .subtitle { font-size: 18px; font-weight: bold; }
+    .content { font-size: 14px; }
+  </style>
+  
+  <rect width="100%" height="100%" fill="#e6e6f3"/>
+  
+  <text x="200" y="40" class="title" text-anchor="middle" fill="#2c2c5e">虫咬伤诊断思维链</text>
+  
+  <g transform="translate(20, 80)">
+    <rect width="360" height="100" rx="10" fill="#a0a0d6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#2c2c5e">症状评估</text>
+    <text x="10" y="60" class="content" fill="#2c2c5e">• 咬伤部位: 位置、大小、数量</text>
+    <text x="10" y="80" class="content" fill="#2c2c5e">• 症状: 瘙痒、疼痛、肿胀、发红</text>
+  </g>
+  
+  <g transform="translate(20, 200)">
+    <rect width="360" height="120" rx="10" fill="#a0a0d6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#2c2c5e">可能原因</text>
+    <text x="10" y="60" class="content" fill="#2c2c5e">• 蚊虫: 蚊子、跳蚤、臭虫</text>
+    <text x="10" y="80" class="content" fill="#2c2c5e">• 有毒昆虫: 蜜蜂、黄蜂、蚂蚁</text>
+    <text x="10" y="100" class="content" fill="#2c2c5e">• 蛛形纲: 蜘蛛、蜱虫</text>
+  </g>
+  
+  <g transform="translate(20, 340)">
+    <rect width="360" height="140" rx="10" fill="#a0a0d6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#2c2c5e">诊断步骤</text>
+    <text x="10" y="60" class="content" fill="#2c2c5e">1. 详细询问暴露史和症状发展</text>
+    <text x="10" y="80" class="content" fill="#2c2c5e">2. 仔细检查咬伤部位</text>
+    <text x="10" y="100" class="content" fill="#2c2c5e">3. 评估全身症状 (如过敏反应)</text>
+    <text x="10" y="120" class="content" fill="#2c2c5e">4. 必要时进行实验室检查</text>
+  </g>
+  
+  <g transform="translate(20, 500)">
+    <rect width="360" height="140" rx="10" fill="#a0a0d6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#2c2c5e">治疗方法</text>
+    <text x="10" y="60" class="content" fill="#2c2c5e">• 局部处理: 清洁、冷敷、抗过敏药膏</text>
+    <text x="10" y="80" class="content" fill="#2c2c5e">• 口服药物: 抗组胺药、止痛药</text>
+    <text x="10" y="100" class="content" fill="#2c2c5e">• 严重反应: 肾上腺素、紧急就医</text>
+    <text x="10" y="120" class="content" fill="#2c2c5e">• 预防: 驱虫剂、防护服</text>
+  </g>
+  
+  <g transform="translate(20, 660)">
+    <rect width="360" height="100" rx="10" fill="#a0a0d6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#2c2c5e">关键信息</text>
+    <text x="10" y="60" class="content" fill="#2c2c5e">• 警惕严重过敏反应 (如呼吸困难)</text>
+    <text x="10" y="80" class="content" fill="#2c2c5e">• 注意感染和传染病的可能性</text>
+  </g>
+  
+  <text x="200" y="880" class="content" text-anchor="middle" fill="#2c2c5e">注意：此图仅供参考，具体诊断请咨询医生</text>
+</svg>

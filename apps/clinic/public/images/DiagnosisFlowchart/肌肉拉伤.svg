@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 900">
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .title { font-size: 24px; font-weight: bold; }
+    .subtitle { font-size: 18px; font-weight: bold; }
+    .content { font-size: 14px; }
+  </style>
+  
+  <rect width="100%" height="100%" fill="#f3e6f3"/>
+  
+  <text x="200" y="40" class="title" text-anchor="middle" fill="#5e2c5e">肌肉拉伤诊断思维链</text>
+  
+  <g transform="translate(20, 80)">
+    <rect width="360" height="100" rx="10" fill="#d6a0d6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e2c5e">症状评估</text>
+    <text x="10" y="60" class="content" fill="#5e2c5e">• 疼痛: 程度、性质、位置</text>
+    <text x="10" y="80" class="content" fill="#5e2c5e">• 功能: 活动受限、肿胀、瘀斑</text>
+  </g>
+  
+  <g transform="translate(20, 200)">
+    <rect width="360" height="120" rx="10" fill="#d6a0d6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e2c5e">可能原因</text>
+    <text x="10" y="60" class="content" fill="#5e2c5e">• 急性拉伤: 突然用力或过度伸展</text>
+    <text x="10" y="80" class="content" fill="#5e2c5e">• 慢性拉伤: 反复微小损伤</text>
+    <text x="10" y="100" class="content" fill="#5e2c5e">• 其他: 肌肉疲劳、运动前准备不足</text>
+  </g>
+  
+  <g transform="translate(20, 340)">
+    <rect width="360" height="140" rx="10" fill="#d6a0d6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e2c5e">诊断步骤</text>
+    <text x="10" y="60" class="content" fill="#5e2c5e">1. 详细询问受伤过程和症状</text>
+    <text x="10" y="80" class="content" fill="#5e2c5e">2. 体格检查: 触诊、活动度测试</text>
+    <text x="10" y="100" class="content" fill="#5e2c5e">3. 必要时进行影像学检查 (如超声、MRI)</text>
+    <text x="10" y="120" class="content" fill="#5e2c5e">4. 评估拉伤程度 (轻、中、重度)</text>
+  </g>
+  
+  <g transform="translate(20, 500)">
+    <rect width="360" height="140" rx="10" fill="#d6a0d6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e2c5e">治疗方法</text>
+    <text x="10" y="60" class="content" fill="#5e2c5e">• 急性期: RICE原则 (休息、冰敷、压迫、抬高)</text>
+    <text x="10" y="80" class="content" fill="#5e2c5e">• 药物: 非甾体抗炎药、止痛药</text>
+    <text x="10" y="100" class="content" fill="#5e2c5e">• 康复: 物理治疗、渐进性运动</text>
+    <text x="10" y="120" class="content" fill="#5e2c5e">• 预防: 正确热身、肌力训练</text>
+  </g>
+  
+  <g transform="translate(20, 660)">
+    <rect width="360" height="100" rx="10" fill="#d6a0d6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e2c5e">关键信息</text>
+    <text x="10" y="60" class="content" fill="#5e2c5e">• 避免过早恢复高强度活动</text>
+    <text x="10" y="80" class="content" fill="#5e2c5e">• 注意区分肌肉拉伤和骨折</text>
+  </g>
+  
+  <text x="200" y="880" class="content" text-anchor="middle" fill="#5e2c5e">注意：此图仅供参考，具体诊断请咨询医生</text>
+</svg>

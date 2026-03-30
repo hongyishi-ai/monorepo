@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1100">
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .title { font-size: 24px; font-weight: bold; }
+    .subtitle { font-size: 18px; font-weight: bold; }
+    .content { font-size: 14px; }
+  </style>
+  
+  <rect width="100%" height="100%" fill="#e6e6fa"/>
+  
+  <text x="200" y="40" class="title" text-anchor="middle" fill="#4b0082">真菌感染诊断思维链</text>
+  
+  <g transform="translate(20, 80)">
+    <rect width="360" height="160" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">常见症状</text>
+    <text x="10" y="60" class="content" fill="#4b0082">• 皮肤：瘙痒、发红、脱屑、水疱</text>
+    <text x="10" y="80" class="content" fill="#4b0082">• 指甲：变色、增厚、脆裂</text>
+    <text x="10" y="100" class="content" fill="#4b0082">• 口腔：白斑、疼痛、吞咽困难</text>
+    <text x="10" y="120" class="content" fill="#4b0082">• 阴道：异常分泌物、瘙痒、灼烧感</text>
+    <text x="10" y="140" class="content" fill="#4b0082">• 全身：发热、疲劳（深部真菌感染）</text>
+  </g>
+  
+  <g transform="translate(20, 260)">
+    <rect width="360" height="200" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">易感因素</text>
+    <text x="10" y="60" class="content" fill="#4b0082">1. 环境因素：</text>
+    <text x="10" y="80" class="content" fill="#4b0082">   • 高温潮湿环境</text>
+    <text x="10" y="100" class="content" fill="#4b0082">   • 公共场所接触（如游泳池）</text>
+    <text x="10" y="120" class="content" fill="#4b0082">2. 个人因素：</text>
+    <text x="10" y="140" class="content" fill="#4b0082">   • 免疫功能低下（如HIV感染、化疗）</text>
+    <text x="10" y="160" class="content" fill="#4b0082">   • 长期使用抗生素或类固醇</text>
+    <text x="10" y="180" class="content" fill="#4b0082">   • 慢性疾病（如糖尿病）</text>
+  </g>
+  
+  <g transform="translate(20, 480)">
+    <rect width="360" height="140" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">诊断方法</text>
+    <text x="10" y="60" class="content" fill="#4b0082">1. 临床检查：症状评估、皮肤/粘膜检查</text>
+    <text x="10" y="80" class="content" fill="#4b0082">2. 实验室检查：真菌培养、显微镜检查</text>
+    <text x="10" y="100" class="content" fill="#4b0082">3. 皮肤刮屑KOH检查</text>
+    <text x="10" y="120" class="content" fill="#4b0082">4. 血清学检查：抗原/抗体检测（深部感染）</text>
+  </g>
+  
+  <g transform="translate(20, 640)">
+    <rect width="360" height="200" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">治疗方案</text>
+    <text x="10" y="60" class="content" fill="#4b0082">1. 局部治疗：</text>
+    <text x="10" y="80" class="content" fill="#4b0082">   • 抗真菌药膏/溶液（如克霉唑、特比萘芬）</text>
+    <text x="10" y="100" class="content" fill="#4b0082">   • 抗真菌洗剂或喷雾</text>
+    <text x="10" y="120" class="content" fill="#4b0082">2. 全身治疗：</text>
+    <text x="10" y="140" class="content" fill="#4b0082">   • 口服抗真菌药（如伊曲康唑、氟康唑）</text>
+    <text x="10" y="160" class="content" fill="#4b0082">   • 严重感染可能需要静脉用药</text>
+    <text x="10" y="180" class="content" fill="#4b0082">3. 治疗疗程依据感染类型和严重程度而定</text>
+  </g>
+  
+  <g transform="translate(20, 860)">
+    <rect width="360" height="180" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">预防和自我管理</text>
+    <text x="10" y="60" class="content" fill="#4b0082">• 保持皮肤清洁干燥</text>
+    <text x="10" y="80" class="content" fill="#4b0082">• 避免与感染者共用个人物品</text>
+    <text x="10" y="100" class="content" fill="#4b0082">• 在公共场所穿戴拖鞋</text>
+    <text x="10" y="120" class="content" fill="#4b0082">• 及时更换潮湿的衣物和鞋袜</text>
+    <text x="10" y="140" class="content" fill="#4b0082">• 增强免疫力：均衡饮食、适度运动</text>
+    <text x="10" y="160" class="content" fill="#4b0082">• 慢性病患者应积极控制基础疾病</text>
+  </g>
+  
+  <text x="200" y="1080" class="content" text-anchor="middle" fill="#4b0082">注意：如症状持续或加重，或出现全身症状，应及时就医</text>
+</svg>

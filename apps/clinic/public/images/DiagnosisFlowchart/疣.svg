@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 900">
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .title { font-size: 24px; font-weight: bold; }
+    .subtitle { font-size: 18px; font-weight: bold; }
+    .content { font-size: 14px; }
+  </style>
+  
+  <rect width="100%" height="100%" fill="#f3f3e6"/>
+  
+  <text x="200" y="40" class="title" text-anchor="middle" fill="#5e5e2c">疣的诊断思维链</text>
+  
+  <g transform="translate(20, 80)">
+    <rect width="360" height="100" rx="10" fill="#d6d6a0" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e5e2c">症状评估</text>
+    <text x="10" y="60" class="content" fill="#5e5e2c">• 外观: 大小、颜色、形状、表面特征</text>
+    <text x="10" y="80" class="content" fill="#5e5e2c">• 位置: 手、脚、生殖器等</text>
+  </g>
+  
+  <g transform="translate(20, 200)">
+    <rect width="360" height="120" rx="10" fill="#d6d6a0" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e5e2c">可能类型</text>
+    <text x="10" y="60" class="content" fill="#5e5e2c">• 普通疣: 常见于手指和手背</text>
+    <text x="10" y="80" class="content" fill="#5e5e2c">• 跖疣: 发生在脚掌</text>
+    <text x="10" y="100" class="content" fill="#5e5e2c">• 扁平疣: 常见于儿童面部和手背</text>
+  </g>
+  
+  <g transform="translate(20, 340)">
+    <rect width="360" height="140" rx="10" fill="#d6d6a0" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e5e2c">诊断步骤</text>
+    <text x="10" y="60" class="content" fill="#5e5e2c">1. 详细询问病史和发展过程</text>
+    <text x="10" y="80" class="content" fill="#5e5e2c">2. 皮肤检查: 观察疣的特征</text>
+    <text x="10" y="100" class="content" fill="#5e5e2c">3. 必要时进行皮肤活检</text>
+    <text x="10" y="120" class="content" fill="#5e5e2c">4. 鉴别诊断 (如鸡眼、皮肤癌)</text>
+  </g>
+  
+  <g transform="translate(20, 500)">
+    <rect width="360" height="140" rx="10" fill="#d6d6a0" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e5e2c">治疗方法</text>
+    <text x="10" y="60" class="content" fill="#5e5e2c">• 局部治疗: 水杨酸、冷冻疗法</text>
+    <text x="10" y="80" class="content" fill="#5e5e2c">• 手术治疗: 激光、电灼、切除</text>
+    <text x="10" y="100" class="content" fill="#5e5e2c">• 免疫调节: 咪喹莫特乳膏</text>
+    <text x="10" y="120" class="content" fill="#5e5e2c">• 观察等待: 部分疣可能自行消退</text>
+  </g>
+  
+  <g transform="translate(20, 660)">
+    <rect width="360" height="100" rx="10" fill="#d6d6a0" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e5e2c">关键信息</text>
+    <text x="10" y="60" class="content" fill="#5e5e2c">• 疣由人乳头瘤病毒(HPV)引起</text>
+    <text x="10" y="80" class="content" fill="#5e5e2c">• 注意预防传播和复发</text>
+  </g>
+  
+  <text x="200" y="880" class="content" text-anchor="middle" fill="#5e5e2c">注意：此图仅供参考，具体诊断请咨询医生</text>
+</svg>

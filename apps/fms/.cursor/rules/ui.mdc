@@ -1,0 +1,16 @@
+---
+alwaysApply: false
+---
+你是一个审美极好的程序员
+  
+1. 使用Bento Grid风格的视觉设计，纯黑色底配合亮蓝色作为高亮  
+2. 强调超大字体或数字突出核心要点，画面中有超大视觉元素强调重点，与小元素的比例形成反差  
+3. 简洁的勾线图形化作为数据可视化或者配图元素  
+4. 运用高亮色自身透明度渐变制造科技感，但是不同高亮色不要互相渐变  
+5. 模仿 apple 官网的动效，向下滚动鼠标配合动效：**Intersection Observer**，**scrollIntoView**，**Scroll Monitoring**，元素触发动画，元素进入视口时的淡入动画效果
+6. 数据可以引用在线的图表组件，样式需要跟主题一致
+7. 使用HTML5、TailwindCSS 3.0+（可通过CDN引入）和必要的JavaScript  
+8. 使用专业图标库如Font Awesome或Material Icons（可通过CDN引入）
+9. 使用 Framer Motion （可通过CDN引入）
+10. 避免使用emoji作为主要图标  
+11. 不要省略内容要点

@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国热射病诊断与治疗指南 (2025 版) 速通</title>
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
+    <!-- 返回主页导航 -->
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <!-- Tailwind CSS via CDN -->
+    <script src="../assets/vendors/tailwind.compiler.js"></script>
+    <!-- Font Awesome via CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Framer Motion via CDN -->
+    <script src="../assets/vendors/framer-motion.js"></script>
+
+    <style>
+        :root {
+            --highlight-color: #FF6B00; /* Brand Orange */
+            --highlight-color-rgb: 255, 107, 0;
+        }
+
+        body {
+            background-color: #000000;
+            color: #E5E7EB; /* Light Gray for text */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+        }
+
+        /* Custom Scrollbar (optional, for aesthetics) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--highlight-color);
+            border-radius: 4px;
+            border: 2px solid #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(var(--highlight-color-rgb), 0.8);
+        }
+
+        /* Highlight color */
+        .highlight {
+            color: var(--highlight-color);
+        }
+        .bg-highlight {
+            background-color: var(--highlight-color);
+        }
+        .border-highlight {
+            border-color: var(--highlight-color);
+        }
+
+        /* Large Chinese Font Emphasis */
+        .cn-emphasis {
+            font-weight: bold;
+            letter-spacing: 0.05em;
+        }
+
+        /* Bento Grid Item Base Style */
+        .bento-item {
+            background-color: #111111; /* Slightly lighter than pure black */
+            border-radius: 1.5rem; /* More rounded corners */
+            padding: 1.5rem; /* Default padding */
+            border: 1px solid #222; /* Subtle border */
+            overflow: hidden; /* Prevent content spill */
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        }
+        .bento-item:hover {
+             transform: translateY(-5px);
+             box-shadow: 0 10px 25px rgba(var(--highlight-color-rgb), 0.1);
+        }
+
+        /* Animation Class */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Opacity Gradient Effect for Highlight Elements */
+        .highlight-gradient-bg {
+            background: linear-gradient(180deg, var(--highlight-color) 0%, rgba(var(--highlight-color-rgb), 0.6) 70%, rgba(var(--highlight-color-rgb), 0.3) 100%);
+        }
+        .highlight-gradient-text {
+            background: linear-gradient(180deg, var(--highlight-color) 60%, rgba(var(--highlight-color-rgb), 0.5) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Simple Line Icon Styling */
+        .line-icon {
+            stroke: var(--highlight-color);
+            stroke-width: 1.5;
+            fill: none;
+            width: 4rem;
+            height: 4rem;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        .bento-item:hover .line-icon {
+            opacity: 1;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.875rem; /* 14px */
+        }
+        th, td {
+            border: 1px solid #374151; /* Gray-700 */
+            padding: 0.75rem 1rem;
+            text-align: left;
+            vertical-align: top; /* Align top for better readability in complex cells */
+        }
+        th {
+            background-color: #1F2937; /* Gray-800 */
+            font-weight: 600;
+            color: #D1D5DB; /* Gray-300 */
+        }
+        tbody tr:nth-child(even) {
+            background-color: #1a1a1a; /* Slightly different background for rows */
+        }
+        tbody tr:hover {
+            background-color: #2a2a2a; /* Hover effect */
+        }
+
+        /* Responsive adjustments for tables */
+        .table-container {
+            overflow-x: auto; /* Enable horizontal scroll on small screens */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        }
+
+    </style>
+</head>
+
+<body class="bg-black text-gray-300 antialiased">
+    <!-- 导航栏 -->
+    <nav class="bg-black py-4 px-6 sticky top-0 z-50 border-b border-gray-800">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="../index.html" class="flex items-center text-orange-500 hover:text-orange-400 transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i>
+                <span class="font-bold">返回主页</span>
+            </a>
+            <a href="https://www.xiaoyuzhoufm.com/episodes/6818b62347ebeede7edf1e87" target="_blank" class="flex items-center text-orange-500 hover:text-orange-400 transition-colors">
+                <i class="fas fa-podcast mr-2"></i>
+                <span class="font-bold">收听播客讲解</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-12 md:py-20">
+
+        <!-- Header Section -->
+        <section class="mb-16 fade-in">
+            <h1 class="text-5xl md:text-7xl font-bold mb-4 text-center cn-emphasis">
+                中国热射病<br class="md:hidden">诊断与治疗指南
+            </h1>
+            <p class="text-2xl md:text-4xl font-bold text-center highlight highlight-gradient-text mb-6">2025 版</p>
+            <p class="text-center text-gray-400 text-lg max-w-3xl mx-auto">Guideline for Diagnosis and Treatment of Heatstroke in China (2025 Edition)</p>
+        </section>
+
+        <!-- Bento Grid Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+            <!-- Abstract -->
+            <div class="bento-item md:col-span-2 lg:col-span-3 fade-in">
+                <h2 class="text-2xl font-bold mb-3 cn-emphasis">核心摘要 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Abstract</span></h2>
+                <p class="text-gray-400 mb-4">近年来，气候变暖导致热射病发病率和死亡率逐年升高，不典型症状病例增加。本指南基于最新证据，采用GRADE、AGREE、RIGHT标准制定，涵盖分型、机制、诊断、治疗、康复、预防等8方面，提出25条推荐意见，旨在规范诊疗，提升防治水平。</p>
+                 <div class="flex items-center space-x-4 text-gray-400 text-sm">
+                    <span class="flex items-center"><i class="fas fa-book-medical mr-2 highlight"></i>GRADE 系统</span>
+                    <span class="flex items-center"><i class="fas fa-clipboard-check mr-2 highlight"></i>AGREE 标准</span>
+                    <span class="flex items-center"><i class="fas fa-file-signature mr-2 highlight"></i>RIGHT 标准</span>
+                </div>
+            </div>
+
+            <!-- Key Statistic: Incidence/Mortality -->
+            <div class="bento-item flex flex-col items-center justify-center text-center fade-in">
+                 <i class="fas fa-temperature-three-quarters fa-3x highlight mb-4"></i>
+                <h3 class="text-lg font-semibold mb-2 cn-emphasis">全球热相关死亡</h3>
+                <p class="text-5xl md:text-6xl font-bold highlight highlight-gradient-text">34.5<span class="text-3xl">万</span></p>
+                <p class="text-gray-400 text-sm mt-1">(2019年, 65岁以上)</p>
+                <p class="text-gray-500 text-xs mt-2">Global Heat-Related Deaths (2019, >65 yrs)</p>
+            </div>
+
+            <!-- Introduction -->
+             <div class="bento-item md:col-span-2 fade-in">
+                <h2 class="text-2xl font-bold mb-3 cn-emphasis">背景与挑战 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Background & Challenge</span></h2>
+                <p class="mb-4">热射病是可致死性热损伤疾病。全球变暖加剧其发病率与死亡率，已超自然灾害总和。为应对复杂形势，更新2015及2019版共识，制定本指南。</p>
+                <div class="flex space-x-4">
+                    <div class="text-center">
+                        <p class="text-4xl font-bold highlight">80.6%</p>
+                        <p class="text-xs text-gray-400">死亡率增长</p>
+                        <p class="text-xs text-gray-500">Mortality Rate Increase</p>
+                    </div>
+                     <div class="text-center">
+                        <p class="text-4xl font-bold highlight">180.7%</p>
+                        <p class="text-xs text-gray-400">就诊人数增长 (2022 vs 2021, 中国)</p>
+                        <p class="text-xs text-gray-500">Patient Visits Increase</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guidelines Methodology -->
+            <div class="bento-item md:col-span-1 fade-in">
+                 <i class="fas fa-microscope fa-3x highlight mb-4"></i>
+                <h2 class="text-xl font-bold mb-3 cn-emphasis">指南制定方法 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Methodology</span></h2>
+                <p class="text-sm text-gray-400 mb-2">遵循国际标准，采用 GRADE 系统评估证据，AGREE 标准指导过程，RIGHT 清单规范报告。</p>
+                <p class="text-sm text-gray-400">检索 PubMed, Embase, Web of Science, Cochrane, CNKI 等数据库至 2024.12.31。</p>
+            </div>
+
+            <!-- Target Audience -->
+            <div class="bento-item flex flex-col items-center justify-center text-center fade-in">
+                 <i class="fas fa-users fa-3x highlight mb-4"></i>
+                <h3 class="text-lg font-semibold mb-2 cn-emphasis">适用对象</h3>
+                <p class="text-sm text-gray-400">疑似/确诊热射病患者</p>
+                <p class="text-xs text-gray-500 mt-2">Target Patients</p>
+                <h3 class="text-lg font-semibold mt-4 mb-2 cn-emphasis">使用者</h3>
+                <p class="text-sm text-gray-400">各级医师、基层卫生人员、应急救援、医疗保障人员</p>
+                <p class="text-xs text-gray-500 mt-2">Users</p>
+            </div>
+
+            <!-- GRADE System Table -->
+            <div class="bento-item md:col-span-3 lg:col-span-2 fade-in">
+                 <h3 class="text-xl font-bold mb-3 cn-emphasis">证据质量与推荐强度 <span class="text-sm font-normal text-gray-500 uppercase ml-2">GRADE System</span></h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>证据把握度级别</th>
+                                <th>定义</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="2" class="font-semibold bg-gray-800">证据质量</td></tr>
+                            <tr><td>高 (A)</td><td>非常有把握，观察值接近真实值</td></tr>
+                            <tr><td>中 (B)</td><td>对观察值有中等把握，观察值有可能接近真实值，也有可能差别很大</td></tr>
+                            <tr><td>低 (C)</td><td>对观察值把握有限，观察值与真实值可能有很大差别</td></tr>
+                            <tr><td>极低 (D)</td><td>对观察值几乎没有把握，观察值与真实值可能有很大差别</td></tr>
+                            <tr><td colspan="2" class="font-semibold bg-gray-800">推荐强度</td></tr>
+                            <tr><td>强推荐 (I)</td><td>明确显示干预措施利大于弊，或弊大于利</td></tr>
+                            <tr><td>弱推荐 (II)</td><td>利弊不确定，或无论质量高低的证据均显示利弊相当</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recommendation 1: Classification -->
+            <div class="bento-item fade-in">
+                <h2 class="text-xl font-bold mb-3 cn-emphasis">推荐 1: 分型诊断 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Classification</span></h2>
+                <p class="text-gray-400 mb-2">应根据病史和临床特点对热相关疾病 (HRS) 进行分型诊断。</p>
+                <p class="highlight text-lg font-bold">推荐强度 I, 证据等级 C</p>
+                 <p class="text-xs text-gray-500 mt-2">Includes heat rash, edema, cramps, syncope, exhaustion, and heatstroke.</p>
+            </div>
+
+            <!-- Heat-Related Illnesses Table -->
+            <div class="bento-item md:col-span-3 lg:col-span-4 fade-in">
+                <h3 class="text-xl font-bold mb-3 cn-emphasis">热相关疾病分类 <span class="text-sm font-normal text-gray-500 uppercase ml-2">HRS Classification</span></h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>临床状况</th>
+                                <th>定义</th>
+                                <th>症状和体征</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>热疹</td><td>由于过度出汗导致汗腺堵塞</td><td>出现皮疹、炎症、感染</td></tr>
+                            <tr><td>热水肿</td><td>由于外周血管扩张和间质液体积聚引起的四肢肿胀</td><td>在热环境中久坐导致的四肢(通常是下肢)肿胀</td></tr>
+                            <tr><td>热痉挛</td><td>在热环境中运动时由于液体和电解质耗竭引起的疼痛性肌肉痉挛</td><td>疼痛性肌肉收缩，受影响的肌肉僵硬且触诊时有压痛</td></tr>
+                            <tr><td>热晕厥</td><td>热环境导致血管内容量不足，在体位改变时发生眩晕或晕厥</td><td>全身无力、体位性晕厥，一旦平躺迅速恢复</td></tr>
+                            <tr><td>热衰竭</td><td>由于体液大量丢失导致心输出量减少</td><td>疲劳、恶心、呕吐、头痛、眩晕、焦虑、大量出汗，但意识状态正常</td></tr>
+                            <tr><td>热射病</td><td>极高的核心体温(>40°C)和中枢神经系统功能障碍</td><td>意识状态改变、癫痫发作、昏迷、多系统器官衰竭</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Heatstroke Types (CHS vs EHS) -->
+            <div class="bento-item md:col-span-2 lg:col-span-2 fade-in">
+                <h2 class="text-2xl font-bold mb-4 cn-emphasis">热射病两大类型 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Types of Heatstroke</span></h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2 highlight">经典型 (CHS)</h3>
+                        <p class="text-sm text-gray-400">被动暴露于热环境，常见于老、幼、弱、慢病患者。起病缓，体温可达40-42°C，或不明显。易误诊。</p>
+                        <p class="text-xs text-gray-500 mt-1">Classic Heat Stroke</p>
+                    </div>
+                     <div>
+                        <h3 class="text-xl font-semibold mb-2 highlight">劳力型 (EHS)</h3>
+                        <p class="text-sm text-gray-400">高温高湿下高强度活动，常见于健康年轻人。起病急，体温速升>40°C，可首发严重神经症状。低温环境也可发生。</p>
+                        <p class="text-xs text-gray-500 mt-1">Exertional Heat Stroke</p>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Recommendation 2: Epidemiology -->
+            <div class="bento-item md:col-span-1 lg:col-span-2 fade-in">
+                 <i class="fas fa-chart-line fa-3x highlight mb-4"></i>
+                <h2 class="text-xl font-bold mb-3 cn-emphasis">推荐 2: 流行病学 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Epidemiology</span></h2>
+                <p class="text-gray-400 mb-2">应充分了解热射病高危因素，辅助诊断和预防。</p>
+                <p class="highlight text-lg font-bold mb-3">推荐强度 I, 证据等级 B</p>
+                <p class="text-xs text-gray-500">CHS mortality: 14-65% (ICU >60%). EHS mortality: >30% (with hypotension).</p>
+                <p class="text-xs text-gray-500 mt-1">China 2022 study: Overall mortality 32.4% (CHS 33.8%, EHS 30%).</p>
+            </div>
+
+            <!-- Risk Factors Table -->
+            <div class="bento-item md:col-span-3 lg:col-span-4 fade-in">
+                <h3 class="text-xl font-bold mb-3 cn-emphasis">热射病危险因素 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Risk Factors</span></h3>
+                 <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>因素</th><th>举例</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>环境因素</td><td>高温高湿环境(热浪、桑拿等)、缺乏空调</td></tr>
+                            <tr><td>个体因素</td><td>运动过度、着装过多、高龄、肥胖、饮酒、未经热习服、儿童、遗传因素(钙结合蛋白1、肉碱 棕榈酰转移酶II)</td></tr>
+                            <tr><td>社会因素</td><td>风险职业(军人、消防员、运动员、高温环境作业者、户外工作者)、强烈求胜的动机、流浪者、独居</td></tr>
+                            <tr><td>共病</td><td>烧伤、脱水、腹泻、感染、糖尿病、神经系统疾病、呼吸系统疾病、认知障碍、心脏病、心理障碍、汗腺功能障碍、吸毒史</td></tr>
+                            <tr><td>药物治疗</td><td>非甾体类解热镇痛药、抗胆碱能药物、抗精神病药、β受体阻滞剂、利尿剂、甲状腺药物、抗组胺药、抗帕金森药、钙通道阻滞剂、泻药、三环类抗抑郁药、锂</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                 <p class="text-xs text-gray-500 mt-2">*注：非甾体类解热镇痛药对热射病无效且可能有害。</p>
+            </div>
+
+            <!-- Recommendation 3: Pathophysiology Highlight -->
+            <div class="bento-item md:col-span-1 lg:col-span-1 flex flex-col items-center justify-center text-center fade-in">
+                <i class="fas fa-bacteria fa-3x highlight mb-4"></i>
+                <h2 class="text-xl font-bold mb-3 cn-emphasis">推荐 3: 病生机制 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Pathophysiology</span></h2>
+                <p class="text-gray-400 mb-2">重视热射病时肠肝损伤导致的继发性脓毒症反应。</p>
+                <p class="highlight text-lg font-bold">推荐强度 I, 证据等级 C</p>
+                <p class="text-xs text-gray-500 mt-2">Focus on gut-liver axis and secondary sepsis.</p>
+            </div>
+
+            <!-- Pathophysiology Overview -->
+             <div class="bento-item md:col-span-2 lg:col-span-3 fade-in">
+                <h2 class="text-2xl font-bold mb-3 cn-emphasis">病理生理机制概述 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Pathophysiology Overview</span></h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-thermometer-half highlight"></i><span>体温调节障碍</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                         <i class="fas fa-heart-pulse highlight"></i><span>急性循环障碍</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                         <i class="fas fa-microbe highlight"></i><span>肠肝损伤与脓毒症</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                         <i class="fas fa-shield-virus highlight"></i><span>炎症失调与凝血紊乱</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-brain highlight"></i><span>中枢神经损伤</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-bone highlight"></i><span>横纹肌溶解与肾损伤</span>
+                    </div>
+                     <div class="flex items-center space-x-2">
+                        <i class="fas fa-lungs highlight"></i><span>肺损伤</span>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-500 mt-4">*详细机制见图1 (placeholder below)</p>
+                <!-- Placeholder for Figure 1 -->
+                <div class="mt-4 border border-dashed border-gray-600 rounded-lg h-32 flex items-center justify-center text-gray-500">
+                    <i class="fas fa-image mr-2"></i> 图 1: 病理生理机制示意图 Placeholder
+                </div>
+            </div>
+
+            <!-- Recommendations 4-7: Clinical Manifestations/Monitoring -->
+            <div class="bento-item md:col-span-3 lg:col-span-2 fade-in">
+                 <h2 class="text-2xl font-bold mb-4 cn-emphasis">推荐 4-7: 临床表现与监测 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Clinical Manifestations & Monitoring</span></h2>
+                 <ul class="space-y-3 text-gray-400">
+                    <li class="flex items-start">
+                        <i class="fas fa-brain highlight mr-3 mt-1"></i>
+                        <span><strong class="text-white">推荐 4 (I, C):</strong> 应用颅脑 CT 动态评估中枢神经系统损害。</span>
+                    </li>
+                     <li class="flex items-start">
+                        <i class="fas fa-vial highlight mr-3 mt-1"></i>
+                         <span><strong class="text-white">推荐 5 (I, C):</strong> 使用 TEG 或凝血分析仪动态评估凝血状态。</span>
+                     </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-heart-pulse highlight mr-3 mt-1"></i>
+                         <span><strong class="text-white">推荐 6 (II, D):</strong> 对血流动力学不稳定者进行连续血流动力学监测。</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-magnifying-glass-chart highlight mr-3 mt-1"></i>
+                         <span><strong class="text-white">推荐 7 (II, D):</strong> 应用 MRI 评估脑、心肌、横纹肌损伤程度。</span>
+                    </li>
+                 </ul>
+                 <p class="text-xs text-gray-500 mt-3">*EHS: 更早出现严重横纹肌溶解、肾/肝损伤、DIC。</p>
+                 <p class="text-xs text-gray-500 mt-1">*CHS: 表现易与基础病混淆。</p>
+            </div>
+
+            <!-- Key Organ System Impacts -->
+             <div class="bento-item md:col-span-3 lg:col-span-2 fade-in">
+                <h2 class="text-xl font-bold mb-3 cn-emphasis">主要器官系统影响 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Key Organ Impacts</span></h2>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                     <div><i class="fas fa-brain highlight mr-1"></i> 中枢神经系统 (谵妄、昏迷、癫痫；小脑损伤常见)</div>
+                     <div><i class="fas fa-droplet highlight mr-1"></i> 凝血功能 (高凝 -> 低凝/DIC；TEG指导)</div>
+                     <div><i class="fas fa-heartbeat highlight mr-1"></i> 循环功能 (高动力 -> 低动力；心肌损伤)</div>
+                     <div><i class="fas fa-bacterium highlight mr-1"></i> 肝功能 (AST/ALT 剧升，胆红素升高)</div>
+                     <div><i class="fas fa-filter highlight mr-1"></i> 肾功能 (急性肾损伤；NGAL 敏感指标)</div>
+                     <div><i class="fas fa-person-running highlight mr-1"></i> 横纹肌 (EHS 多见；CK/Mb 剧升)</div>
+                     <div><i class="fas fa-arrows-left-right-to-line highlight mr-1"></i> 胃肠功能 (动力下降、出血、肠源性感染)</div>
+                     <div><i class="fas fa-lungs-virus highlight mr-1"></i> 呼吸功能 (ARDS 风险)</div>
+                     <div><i class="fas fa-flask highlight mr-1"></i> 内环境 (电解质紊乱、酸中毒)</div>
+                </div>
+            </div>
+
+             <!-- Laboratory Monitoring Table -->
+            <div class="bento-item md:col-span-3 lg:col-span-4 fade-in">
+                <h3 class="text-xl font-bold mb-3 cn-emphasis">实验室监测指标及频次 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Lab Monitoring</span></h3>
+                <div class="table-container">
+                    <!-- Table 4 content here -->
+                    <table>
+                        <thead>
+                            <tr><th>项目</th><th>监测指标</th><th>频次</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>血常规</td><td>WBC, NEUT%, LYM#, PLT, HGB, HCT</td><td>1-2次/d, 出血者视情增加</td></tr>
+                            <tr><td>心肌标志物</td><td>cTnI, BNP</td><td>1次/d</td></tr>
+                            <tr><td>横纹肌溶解</td><td>CK, Mb</td><td>1次/d</td></tr>
+                             <tr><td>凝血功能</td><td>PT, APTT, D-dimer, Fibrinogen</td><td>早期1次/6h, 稳定后1次/d</td></tr>
+                            <tr><td></td><td>TEG / 凝血与血小板功能分析仪</td><td>早期1-2次/d, 直至稳定</td></tr>
+                            <tr><td></td><td>TAT, PIC</td><td>早期1-2次/d, 直至稳定</td></tr>
+                            <tr><td>血管内皮功能</td><td>TM, t-PAIC</td><td>早期1次/d, 直至稳定</td></tr>
+                            <tr><td>肾功能</td><td>Creatinine</td><td>1次/d</td></tr>
+                            <tr><td>肝功能</td><td>ALT, AST, Total Bilirubin</td><td>早期2次/d, 直至稳定</td></tr>
+                            <tr><td>炎性指标</td><td>CRP, IL-6</td><td>1次/d</td></tr>
+                            <tr><td>电解质</td><td>K, Na, Cl, Ca</td><td>1-2次/d, 依异常情况增加</td></tr>
+                            <tr><td>血糖</td><td>Glucose</td><td>1次/4h, 直至稳定</td></tr>
+                            <tr><td>血气</td><td>pH, PO2, PCO2, HCO3-, BE, Lactate</td><td>1次/4h, 直至稳定</td></tr>
+                            <tr><td>感染</td><td>PCT</td><td>1次/d</td></tr>
+                             <tr><td>病原学</td><td>血液培养</td><td>持续高热或可疑感染者</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recommendation 8: Diagnosis & Severity -->
+            <div class="bento-item md:col-span-2 lg:col-span-2 fade-in">
+                 <h2 class="text-xl font-bold mb-3 cn-emphasis">推荐 8: 诊断与评估 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Diagnosis & Severity</span></h2>
+                 <p class="text-gray-400 mb-2">推荐使用中国热射病及 HIC 诊断标准进行早期诊断，应用 HSSS 评分系统每日评估危重程度。</p>
+                 <p class="highlight text-lg font-bold mb-3">推荐强度 I, 证据等级 C</p>
+                 <div class="space-y-2 text-sm">
+                     <p><i class="fas fa-clipboard-list highlight mr-2"></i>热射病诊断标准 (表5)</p>
+                     <p><i class="fas fa-water highlight mr-2"></i>HIC 诊断评分 (表7)</p>
+                     <p><i class="fas fa-tachometer-alt-fast highlight mr-2"></i>HSSS 危重评分 (表8)</p>
+                 </div>
+            </div>
+
+            <!-- Diagnostic Criteria Table (Simplified) -->
+            <div class="bento-item md:col-span-2 lg:col-span-2 fade-in">
+                 <h3 class="text-xl font-bold mb-3 cn-emphasis">热射病诊断标准 (简要) <span class="text-sm font-normal text-gray-500 uppercase ml-2">Diagnostic Criteria (Brief)</span></h3>
+                <p class="text-gray-400">需满足以下条件之一：</p>
+                 <ul class="list-disc list-inside text-gray-400 space-y-1 mt-2 text-sm">
+                    <li><strong>病史:</strong> 暴露于高温高湿环境 或 高强度运动</li>
+                     <li><strong>临床表现 (任一):</strong>
+                        <ul class="list-circle list-inside ml-4">
+                             <li>中枢神经系统功能障碍 (昏迷、抽搐等)</li>
+                            <li>核心体温 > 40°C (非绝对必要条件)</li>
+                            <li>多器官 (≥2个) 功能损伤</li>
+                        </ul>
+                     </li>
+                 </ul>
+                 <p class="text-xs text-gray-500 mt-2">*不能用其他原因解释。需区分CHS与EHS (表6)。</p>
+            </div>
+
+             <!-- HIC Diagnostic Score Table -->
+             <div class="bento-item md:col-span-2 fade-in">
+                 <h3 class="text-xl font-bold mb-3 cn-emphasis">HIC 诊断评分系统 <span class="text-sm font-normal text-gray-500 uppercase ml-2">HIC Score</span></h3>
+                 <div class="table-container">
+                     <table>
+                         <thead><tr><th>积分</th><th>最高核心体温(℃)</th><th>D-二聚体(μg/mL)</th><th>PT延长值(s)</th></tr></thead>
+                         <tbody>
+                             <tr><td>0分</td><td><40.0</td><td><1.0</td><td><2</td></tr>
+                             <tr><td>1分</td><td>40.0~42.0</td><td>1.0~2.5</td><td>2~4</td></tr>
+                             <tr><td>2分</td><td>≥42.0</td><td>≥2.5</td><td>≥4</td></tr>
+                         </tbody>
+                     </table>
+                 </div>
+                  <p class="highlight text-lg font-bold mt-2">总分 ≥ 3 分可诊断 HIC</p>
+                 <p class="text-xs text-gray-500">*建议采用直肠温度，急诊初次评估。</p>
+             </div>
+
+             <!-- HSSS Severity Score (Placeholder) -->
+             <div class="bento-item md:col-span-2 fade-in">
+                 <h3 class="text-xl font-bold mb-3 cn-emphasis">热射病危重评分 (HSSS) <span class="text-sm font-normal text-gray-500 uppercase ml-2">Severity Score</span></h3>
+                 <p class="text-gray-400 mb-2">每日评估病情，总分 0-32 分。</p>
+                 <ul class="text-sm text-gray-400 space-y-1">
+                     <li><span class="highlight font-bold">1-10 分:</span> 轻度</li>
+                     <li><span class="highlight font-bold">11-20 分:</span> 中度</li>
+                     <li><span class="highlight font-bold">>20 分:</span> 重度</li>
+                 </ul>
+                 <p class="text-xs text-gray-500 mt-2">*基于核心体温、氧合指数、PLT、胆红素、血压、乳酸、GCS、肌酐/尿量 (详见表8)。</p>
+             </div>
+
+            <!-- Differential Diagnosis -->
+            <div class="bento-item md:col-span-2 lg:col-span-2 fade-in">
+                <h2 class="text-xl font-bold mb-3 cn-emphasis">鉴别诊断 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Differential Diagnosis</span></h2>
+                <p class="text-gray-400 mb-2">需与以下疾病鉴别：</p>
+                <ul class="list-disc list-inside text-gray-400 space-y-1 text-sm">
+                    <li>中枢神经系统疾病 (脑血管病, 脑炎/脑膜炎, 癫痫)</li>
+                    <li>感染性疾病 (脓毒症休克)</li>
+                    <li>代谢障碍性疾病 (低血糖/高渗昏迷, 肝/肾性脑病)</li>
+                    <li>恶性高热 (麻醉相关)</li>
+                 </ul>
+            </div>
+
+            <!-- Life-Saving Chain Overview -->
+            <div class="bento-item md:col-span-2 lg:col-span-2 fade-in">
+                 <h2 class="text-2xl font-bold mb-3 cn-emphasis">救治生命链 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Life-Saving Chain</span></h2>
+                 <p class="text-gray-400 mb-4">由5个关键环节组成，强调快速反应和连续性。</p>
+                 <div class="flex items-center justify-around text-center text-xs md:text-sm">
+                     <div class="fade-in"><i class="fas fa-magnifying-glass highlight text-2xl mb-1"></i><p>快速<br>评估</p></div>
+                     <i class="fas fa-chevron-right text-gray-600 mx-1"></i>
+                     <div class="fade-in" style="animation-delay: 0.1s;"><i class="fas fa-first-aid highlight text-2xl mb-1"></i><p>现场<br>急救</p></div>
+                      <i class="fas fa-chevron-right text-gray-600 mx-1"></i>
+                     <div class="fade-in" style="animation-delay: 0.2s;"><i class="fas fa-ambulance highlight text-2xl mb-1"></i><p>后送<br>转运</p></div>
+                      <i class="fas fa-chevron-right text-gray-600 mx-1"></i>
+                     <div class="fade-in" style="animation-delay: 0.3s;"><i class="fas fa-hospital highlight text-2xl mb-1"></i><p>医院<br>救治</p></div>
+                      <i class="fas fa-chevron-right text-gray-600 mx-1"></i>
+                     <div class="fade-in" style="animation-delay: 0.4s;"><i class="fas fa-person-walking highlight text-2xl mb-1"></i><p>康复<br>返岗</p></div>
+                 </div>
+                  <p class="text-xs text-gray-500 mt-4">*详细流程见图2 (placeholder below)</p>
+                 <!-- Placeholder for Figure 2 -->
+                <div class="mt-4 border border-dashed border-gray-600 rounded-lg h-24 flex items-center justify-center text-gray-500">
+                     <i class="fas fa-image mr-2"></i> 图 2: 救治生命链示意图 Placeholder
+                 </div>
+            </div>
+
+            <!-- Rec 9-11: Rapid Assessment & Cooling -->
+             <div class="bento-item md:col-span-2 lg:col-span-2 fade-in">
+                <h2 class="text-xl font-bold mb-4 cn-emphasis">推荐 9-11: 快速评估与降温 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Rapid Assessment & Cooling</span></h2>
+                 <ul class="space-y-3 text-gray-400">
+                     <li class="flex items-start">
+                         <i class="fas fa-stopwatch highlight mr-3 mt-1"></i>
+                         <span><strong class="text-white">推荐 9 (I, C):</strong> 卫生人员应在 <strong class="highlight text-2xl font-bold">5 min</strong> 内完成快速识别与评估。</span>
+                     </li>
+                      <li class="flex items-start">
+                         <i class="fas fa-temperature-arrow-down highlight mr-3 mt-1"></i>
+                         <span><strong class="text-white">推荐 10 (I, B):</strong> 降温目标：发病 <strong class="highlight text-xl font-bold">30 min</strong> 内核心体温 <strong class="highlight text-xl font-bold"><39.0°C</strong>，<strong class="highlight text-xl font-bold">2 h</strong> 内 <strong class="highlight text-xl font-bold"><38.5°C</strong>。</span>
+                     </li>
+                     <li class="flex items-start">
+                         <i class="fas fa-thermometer highlight mr-3 mt-1"></i>
+                         <span><strong class="text-white">推荐 11 (I, C):</strong> 应持续监测 <strong class="highlight">核心体温</strong> (首选直肠温度 ≥15cm)。</span>
+                     </li>
+                 </ul>
+                  <p class="text-xs text-gray-500 mt-3">*关注不典型热射病：体温<40°C、非高温环境、运动强度不高、意识障碍不重。</p>
+             </div>
+
+             <!-- On-site Treatment Steps -->
+            <div class="bento-item md:col-span-2 lg:col-span-2 fade-in">
+                 <h2 class="text-xl font-bold mb-3 cn-emphasis">现场急救六步法 <span class="text-sm font-normal text-gray-500 uppercase ml-2">On-Site First Aid</span></h2>
+                 <p class="text-gray-400 mb-3">遵循"边降温边转运"，"降温第一，转运第二"原则。</p>
+                 <div class="grid grid-cols-2 gap-3 text-center text-sm">
+                    <div class="bg-gray-800 p-3 rounded-lg"><i class="fas fa-sign-out-alt highlight mr-1"></i> 脱 (离热环境)</div>
+                    <div class="bg-gray-800 p-3 rounded-lg"><i class="fas fa-bath highlight mr-1"></i> 泡 (冰水/冷水浸泡最佳)</div>
+                    <div class="bg-gray-800 p-3 rounded-lg"><i class="fas fa-thermometer-three-quarters highlight mr-1"></i> 测 (核心体温)</div>
+                    <div class="bg-gray-800 p-3 rounded-lg"><i class="fas fa-tint highlight mr-1"></i> 补 (快速补液, 首选含钠液)</div>
+                    <div class="bg-gray-800 p-3 rounded-lg"><i class="fas fa-wind highlight mr-1"></i> 通 (保持气道通畅, 吸氧)</div>
+                    <div class="bg-gray-800 p-3 rounded-lg"><i class="fas fa-pills highlight mr-1"></i> 静 (控制抽搐, 地西泮)</div>
+                 </div>
+                 <p class="text-xs text-gray-500 mt-3">*禁止使用非甾体类药物降温。</p>
+                 <p class="text-xs text-gray-500 mt-1">*降温速率需 ≥ 0.155 °C/min。</p>
+            </div>
+
+            <!-- Rec 12: Transport -->
+            <div class="bento-item md:col-span-1 lg:col-span-2 fade-in">
+                 <i class="fas fa-ambulance fa-3x highlight mb-4"></i>
+                <h2 class="text-xl font-bold mb-3 cn-emphasis">推荐 12: 后送转运 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Transport</span></h2>
+                <p class="text-gray-400 mb-2">现场降温效果不理想者，应 <strong class="highlight">边降温边后送</strong>。</p>
+                <p class="highlight text-lg font-bold mb-3">推荐强度 I, 证据等级 B</p>
+                <p class="text-xs text-gray-400">转运指征：体温>40°C, 降温30min后仍>40°C, 意识障碍无改善, 缺乏救治条件。</p>
+                <p class="text-xs text-gray-500 mt-1">Transport Indications & Continuous Cooling</p>
+            </div>
+
+             <!-- Hospital Treatment Principles -->
+            <div class="bento-item md:col-span-3 lg:col-span-4 fade-in">
+                 <h2 class="text-2xl font-bold mb-3 cn-emphasis text-center">医院救治："十早一禁"原则 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Hospital Treatment: "10 Early, 1 Prohibited"</span></h2>
+                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 text-center text-sm mt-4">
+                    <div class="fade-in"><i class="fas fa-temperature-down highlight text-2xl mb-1"></i><p>早降温</p></div>
+                    <div class="fade-in" style="animation-delay: 0.05s;"><i class="fas fa-prescription-bottle highlight text-2xl mb-1"></i><p>早补液</p></div>
+                    <div class="fade-in" style="animation-delay: 0.1s;"><i class="fas fa-bed highlight text-2xl mb-1"></i><p>早镇静</p></div>
+                    <div class="fade-in" style="animation-delay: 0.15s;"><i class="fas fa-lungs highlight text-2xl mb-1"></i><p>早插管</p></div>
+                    <div class="fade-in" style="animation-delay: 0.2s;"><i class="fas fa-syringe highlight text-2xl mb-1"></i><p>早抗凝</p></div>
+                    <div class="fade-in" style="animation-delay: 0.25s;"><i class="fas fa-tint highlight text-2xl mb-1"></i><p>早补凝</p></div>
+                    <div class="fade-in" style="animation-delay: 0.3s;"><i class="fas fa-viruses highlight text-2xl mb-1"></i><p>早抗感染</p></div>
+                    <div class="fade-in" style="animation-delay: 0.35s;"><i class="fas fa-fire-extinguisher highlight text-2xl mb-1"></i><p>早抗炎</p></div>
+                    <div class="fade-in" style="animation-delay: 0.4s;"><i class="fas fa-filter highlight text-2xl mb-1"></i><p>早血液净化</p></div>
+                    <div class="fade-in" style="animation-delay: 0.45s;"><i class="fas fa-utensils highlight text-2xl mb-1"></i><p>早胃肠管理</p></div>
+                    <div class="fade-in col-span-2 sm:col-span-1 md:col-span-2 lg:col-span-2" style="animation-delay: 0.5s;"><i class="fas fa-ban highlight text-2xl mb-1"></i><p>禁手术 (凝血障碍时)</p></div>
+                 </div>
+                  <!-- Placeholder for Figure 3 -->
+                <div class="mt-6 border border-dashed border-gray-600 rounded-lg h-24 flex items-center justify-center text-gray-500">
+                     <i class="fas fa-image mr-2"></i> 图 3: "十早一禁"原则示意图 Placeholder
+                 </div>
+            </div>
+
+            <!-- Rec 13-23 Details (Grouped logically) -->
+             <!-- Cooling & Fluids -->
+            <div class="bento-item md:col-span-1 lg:col-span-2 fade-in">
+                 <h3 class="text-xl font-bold mb-3 cn-emphasis">推荐 13-14: 降温与液体 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Cooling & Fluids</span></h3>
+                 <p class="text-sm mb-2"><strong class="text-white">推荐 13 (I, C):</strong> 常规降温无效尽早行 <strong class="highlight">血液净化 (CBP)</strong> 降温。</p>
+                 <p class="text-sm"><strong class="text-white">推荐 14 (I, C):</strong> <strong class="highlight">血流动力学监测</strong> 下精准液体管理 (首选晶体液)。</p>
+                 <p class="text-xs text-gray-500 mt-1">Target Temp <38.5°C (TTM). PICCO monitoring recommended.</p>
+            </div>
+
+             <!-- CNS & Airway -->
+            <div class="bento-item md:col-span-1 lg:col-span-2 fade-in">
+                 <h3 class="text-xl font-bold mb-3 cn-emphasis">推荐 15-16: 神经与气道 <span class="text-sm font-normal text-gray-500 uppercase ml-2">CNS & Airway</span></h3>
+                  <p class="text-sm mb-2"><strong class="text-white">推荐 15 (I, C):</strong> 严重中枢损害者尽早 <strong class="highlight">镇痛镇静</strong> 治疗。</p>
+                 <p class="text-sm"><strong class="text-white">推荐 16 (I, C):</strong> 伴中枢损害者尽早行 <strong class="highlight">气管插管</strong>。</p>
+                 <p class="text-xs text-gray-500 mt-1">Control seizures, manage brain edema. Secure airway early.</p>
+            </div>
+
+             <!-- Coagulation Management -->
+            <div class="bento-item md:col-span-2 lg:col-span-2 fade-in">
+                <h3 class="text-xl font-bold mb-3 cn-emphasis">推荐 17-18: 凝血管理 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Coagulation</span></h3>
+                 <p class="text-sm mb-2"><strong class="text-white">推荐 17 (II, C):</strong> 符合 HIC 标准且无活动出血，尽早启动 <strong class="highlight">抗凝</strong> (首选 UFH)。</p>
+                 <p class="text-sm"><strong class="text-white">推荐 18 (II, D):</strong> 有出血倾向或出血时，行 <strong class="highlight">目标导向替代治疗</strong> (补凝)。</p>
+                 <p class="text-xs text-gray-500 mt-1">Monitor with TEG/ACT. Use FFP, Cryo, Platelets based on targets.</p>
+                 <!-- Placeholder for Figure 4 -->
+                 <div class="mt-3 border border-dashed border-gray-600 rounded-lg h-16 flex items-center justify-center text-gray-500">
+                     <i class="fas fa-image mr-2"></i> 图 4: HIC 抗凝治疗流程 Placeholder
+                 </div>
+            </div>
+
+             <!-- Infection & Inflammation -->
+            <div class="bento-item md:col-span-1 lg:col-span-2 fade-in">
+                 <h3 class="text-xl font-bold mb-3 cn-emphasis">推荐 19-20: 感染与炎症 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Infection & Inflammation</span></h3>
+                  <p class="text-sm mb-2"><strong class="text-white">推荐 19 (I, D):</strong> 疑似脓毒症尽早用 <strong class="highlight">广谱抗生素</strong>。</p>
+                 <p class="text-sm"><strong class="text-white">推荐 20 (II, D):</strong> 过度炎症反应可启动 <strong class="highlight">抗炎治疗</strong> (小剂量激素, 蛋白酶抑制剂)。</p>
+                 <p class="text-xs text-gray-500 mt-1">Monitor PCT, blood cultures. Consider corticosteroids, Ulinastatin.</p>
+            </div>
+
+             <!-- Organ Support -->
+             <div class="bento-item md:col-span-2 lg:col-span-2 fade-in">
+                 <h3 class="text-xl font-bold mb-3 cn-emphasis">推荐 21-22: 器官支持 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Organ Support</span></h3>
+                 <p class="text-sm mb-2"><strong class="text-white">推荐 21 (I, C):</strong> 横纹肌溶解或严重 AKI 时，尽早行 <strong class="highlight">血液净化 (CBP)</strong>。</p>
+                 <p class="text-sm"><strong class="text-white">推荐 22 (II, D):</strong> 合并急性肝衰竭时，尽快启动 <strong class="highlight">人工肝 (ALSS)</strong> 治疗。</p>
+                 <p class="text-xs text-gray-500 mt-1">CVVH/CVVHD/CVVHDF for kidney/rhabdo. Plasma exchange/PDF for liver.</p>
+             </div>
+
+              <!-- Nutrition -->
+             <div class="bento-item md:col-span-1 lg:col-span-2 fade-in">
+                 <i class="fas fa-apple-alt fa-3x highlight mb-4"></i>
+                 <h3 class="text-xl font-bold mb-3 cn-emphasis">推荐 23: 胃肠管理 <span class="text-sm font-normal text-gray-500 uppercase ml-2">GI Management</span></h3>
+                 <p class="text-gray-400 mb-2">血流动力学稳定者应尽早给予 <strong class="highlight">肠内营养</strong>。</p>
+                 <p class="highlight text-lg font-bold mb-3">推荐强度 II, 证据等级 D</p>
+                 <p class="text-xs text-gray-400">从短肽到整蛋白，允许性低热卡摄入 [20-25 kcal/(kg·d)]。</p>
+                 <p class="text-xs text-gray-500 mt-1">Start early enteral nutrition if stable.</p>
+             </div>
+
+             <!-- Rehabilitation -->
+             <div class="bento-item md:col-span-2 lg:col-span-2 fade-in">
+                  <i class="fas fa-dumbbell fa-3x highlight mb-4"></i>
+                 <h2 class="text-xl font-bold mb-3 cn-emphasis">推荐 24: 康复与返岗 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Rehabilitation</span></h2>
+                 <p class="text-gray-400 mb-2">EHS 患者临床痊愈后，可进行 <strong class="highlight">热耐力测试</strong> 及重建治疗。</p>
+                  <p class="highlight text-lg font-bold mb-3">推荐强度 I, 证据等级 D</p>
+                 <p class="text-xs text-gray-400">测试环境：40°C, 40% RH。计算 PSI 指数评估。</p>
+                 <p class="text-xs text-gray-500 mt-1">Heat tolerance testing (HTT) and rebuilding for EHS patients.</p>
+             </div>
+
+             <!-- Prevention -->
+            <div class="bento-item md:col-span-2 lg:col-span-2 fade-in">
+                 <i class="fas fa-shield-alt fa-3x highlight mb-4"></i>
+                <h2 class="text-xl font-bold mb-3 cn-emphasis">推荐 25: 预防 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Prevention</span></h2>
+                <p class="text-gray-400 mb-2">科学开展 <strong class="highlight">热习服</strong> 可有效预防热射病 (尤其 EHS)。</p>
+                 <p class="highlight text-lg font-bold mb-3">推荐强度 I, 证据等级 C</p>
+                 <p class="text-xs text-gray-400">每年入夏前常规训练，周期 10-14 天。关注高危人群，及时补水补盐。</p>
+                 <p class="text-xs text-gray-500 mt-1">Heat acclimatization is key. Screen high-risk individuals.</p>
+            </div>
+
+            <!-- Summary & Outlook -->
+            <div class="bento-item md:col-span-3 lg:col-span-4 fade-in">
+                <h2 class="text-2xl font-bold mb-3 cn-emphasis">总结与展望 <span class="text-sm font-normal text-gray-500 uppercase ml-2">Summary & Outlook</span></h2>
+                <p class="text-gray-400 mb-4">本指南更新了分型、机制、诊断评分、救治链、康复策略及"十早一禁"原则。未来研究需关注：核心机制、个体化表现机制、特异性标志物、高效降温方法、免疫紊乱干预、热耐力评估标准等。</p>
+                 <div class="flex flex-wrap gap-2 text-xs text-gray-500">
+                    <span class="bg-gray-800 px-2 py-1 rounded">#核心机制</span>
+                    <span class="bg-gray-800 px-2 py-1 rounded">#个体差异</span>
+                    <span class="bg-gray-800 px-2 py-1 rounded">#诊断标志物</span>
+                    <span class="bg-gray-800 px-2 py-1 rounded">#高效降温</span>
+                    <span class="bg-gray-800 px-2 py-1 rounded">#免疫紊乱</span>
+                    <span class="bg-gray-800 px-2 py-1 rounded">#热耐力评估</span>
+                 </div>
+            </div>
+
+        </div> <!-- End Bento Grid -->
+
+    </div> <!-- End Container -->
+
+    <!-- 返回顶部按钮 -->
+    <button id="backToTopBtn" class="fixed bottom-20 right-6 z-50 p-3 rounded-full bg-orange-500 text-white shadow-lg transform transition-transform duration-300 opacity-0 translate-y-10">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- 统一页脚 -->
+    <footer class="relative mt-16 pt-10 pb-6 bg-gray-900 border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <!-- 顶部返回主页 -->
+            <div class="flex justify-center mb-8">
+                <a href="../index.html"
+                    class="inline-flex items-center px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-lg">
+                    <i class="fas fa-home mr-2"></i> 返回主页
+                </a>
+            </div>
+
+            <!-- 主要内容 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+                <!-- 快速导航 -->
+                <div class="lg:col-span-2">
+                    <h3 class="text-xl font-semibold text-orange-500 mb-4">快速导航</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <a href="/pages/中国热射病诊断与治疗指南.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-book-medical mr-2 text-orange-500 w-5"></i> 诊断与治疗指南
+                        </a>
+                        <a href="/pages/热射病救治体系建设标准专家共识.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-users-rays mr-2 text-orange-500 w-5"></i> 救治体系建设标准
+                        </a>
+                        <a href="/pages/热耐力评估.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-clipboard-check mr-2 text-orange-500 w-5"></i> 热耐力评估
+                        </a>
+                        <a href="/pages/热射病核心体温监测与降温方法.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-temperature-three-quarters mr-2 text-orange-500 w-5"></i> 核心体温监测
+                        </a>
+                        <a href="/pages/热射病现场处置.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-kit-medical mr-2 text-orange-500 w-5"></i> 现场处置
+                        </a>
+                        <a href="/pages/热射病通关挑战.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-gamepad mr-2 text-orange-500 w-5"></i> 通关挑战
+                        </a>
+                        <a href="/pages/8-4-6黄金法则.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-stopwatch-20 mr-2 text-orange-500 w-5"></i> 8-4-6黄金法则
+                        </a>
+                        <a href="/pages/热指数查询.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-thermometer-half mr-2 text-orange-500 w-5"></i> 热指数查询
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 快速链接 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-orange-500 mb-4">快速链接</h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="关于本项目.html"
+                                class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                                <i class="fas fa-user-doctor mr-2 text-orange-500 w-5"></i> 关于本项目
+                            </a>
+                        </li>
+                        <li class="text-gray-300 flex items-center">
+                            <i class="fas fa-phone-alt mr-2 text-orange-500 w-5"></i> 紧急情况请拨打 <span
+                                class="text-orange-500 font-bold ml-1">120</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 联系我们 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-orange-500 mb-4">联系我们</h3>
+                    <p class="text-gray-300 flex items-center mb-2">
+                        <i class="fas fa-envelope mr-2 text-orange-500 w-5"></i>
+                        <a href="mailto:nimrod1990@163.com"
+                            class="hover:text-orange-400 transition-colors">nimrod1990@163.com</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- 声明部分 -->
+            <div class="border-t border-gray-800 pt-6 text-center">
+                <p class="text-gray-400 mb-2">
+                    <strong class="text-orange-500">版权声明：</strong>©2025 红医师 热射病防治
+                </p>
+                <p class="text-gray-400 mb-2">
+                    <strong class="text-orange-500">免责声明：</strong>本网站内容仅供参考，不替代专业医疗建议。如有紧急情况请立即就医。
+                </p>
+                <p class="text-gray-400">
+                    <strong class="text-orange-500">转载声明：</strong>所有资料来源于互联网公开资料，已脱密处理，禁止商用，转载请联系作者
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple Intersection Observer for Fade-in Animation
+        document.addEventListener("DOMContentLoaded", function() {
+            const observerOptions = {
+                root: null, // relative to document viewport
+                rootMargin: '0px',
+                threshold: 0.1 // trigger when 10% of the element is visible
+            };
+
+            const observerCallback = (entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); // Animate only once
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+            const targets = document.querySelectorAll('.fade-in');
+            targets.forEach(target => {
+                observer.observe(target);
+            });
+
+             // Framer Motion CDN usage is complex in vanilla JS without its ecosystem.
+             // The CDN mainly provides the library, but integrating requires more setup
+             // often tied to a build process or a framework like React.
+             // We've used CSS transitions triggered by IntersectionObserver for the animation effect.
+             console.log("Framer Motion library loaded (via CDN):", window.motion ? "Yes" : "No/Check Loading");
+        });
+
+        // 返回顶部按钮脚本
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        
+        // 监听滚动事件
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) { // 当页面滚动超过300px时显示按钮
+                backToTopBtn.classList.remove('opacity-0', 'translate-y-10');
+                backToTopBtn.classList.add('opacity-100', 'translate-y-0');
+            } else {
+                backToTopBtn.classList.remove('opacity-100', 'translate-y-0');
+                backToTopBtn.classList.add('opacity-0', 'translate-y-10');
+            }
+        });
+        
+        // 点击按钮返回顶部
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+
+<script>
+// Scroll reveal for .fade-in (Intersection Observer + optional Motion)
+(function(){
+  const els=document.querySelectorAll('.fade-in');
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          const motionAPI=window.motion||window.framerMotion;
+          if(motionAPI){
+            motionAPI.animate(entry.target,{opacity:[0,1],y:[20,0],scale:[0.98,1]},{duration:0.6,easing:'ease-out'});
+          }
+          io.unobserve(entry.target);
+        }
+      });
+    },{threshold:0.15});
+    els.forEach(el=>io.observe(el));
+  } else {
+    els.forEach(el=>el.classList.add('visible'));
+  }
+})();
+</script>
+</body>
+</html>

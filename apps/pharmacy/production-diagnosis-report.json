@@ -1,0 +1,10 @@
+{
+  "timestamp": "2025-07-30T02:25:22.188Z",
+  "results": {
+    "environment": true,
+    "staticAssets": true,
+    "supabase": true,
+    "vercel": true
+  },
+  "environment": "unknown"
+}

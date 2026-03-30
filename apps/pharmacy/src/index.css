@@ -1,0 +1,359 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* 迪特·拉姆斯色彩系统 - 博朗设计语言 */
+    /* 背景: #F4F4F0 (博朗米白) */
+    --background: 60 9% 95%; /* #F4F4F0 */
+    /* 主文字: #1A1A1A (哑光黑) */
+    --foreground: 0 0% 10%; /* #1A1A1A */
+    --card: 60 9% 95%;
+    --card-foreground: 0 0% 10%;
+    --popover: 60 9% 95%;
+    --popover-foreground: 0 0% 10%;
+
+    /* 主题颜色 - 哑光黑为主，信号橙点缀 */
+    /* #FF4400 信号橙作为唯一强调色 */
+    --primary: 18 100% 50%; /* #FF4400 博朗信号橙 */
+    --primary-foreground: 0 0% 10%; /* 哑光黑 */
+    --secondary: 60 6% 90%; /* #EBEBEA 次级灰 */
+    --secondary-foreground: 0 0% 10%;
+    --muted: 60 6% 90%;
+    --muted-foreground: 0 0% 40%; /* #666666 次级文字 */
+    --accent: 60 6% 90%;
+    --accent-foreground: 0 0% 10%;
+
+    /* 功能颜色 - 保持高对比度 */
+    --destructive: 0 72% 51%; /* 保持红色 */
+    --destructive-foreground: 0 0% 100%;
+
+    /* 药房专用语义化颜色 - 升级为迪特风格 */
+    --success: 152 100% 26%; /* #10B981 更深的绿 */
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 47%; /* #F59E0B 琥珀色 */
+    --warning-foreground: 0 0% 10%;
+    --error: 0 72% 51%; /* #EF4444 红色 */
+    --error-foreground: 0 0% 100%;
+    --info: 211 100% 45%; /* #2563EB 蓝色 */
+    --info-foreground: 0 0% 100%;
+
+    /* 边框 - 清晰的灰黑色边框 */
+    --border: 40 6% 83%; /* #D0D0CC 博朗边框灰 */
+    --input: 40 6% 83%;
+    --ring: 18 100% 50%; /* 信号橙用于焦点环 */
+
+    /* 圆角 */
+    --radius: 0.5rem;
+
+    /* 字体 */
+    --font-sans:
+      'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      'Helvetica Neue', Arial, sans-serif;
+    --font-mono:
+      'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      'Liberation Mono', 'Courier New', monospace;
+
+    /* 间距 */
+    --spacing-1: 0.25rem;
+    --spacing-2: 0.5rem;
+    --spacing-3: 0.75rem;
+    --spacing-4: 1rem;
+    --spacing-5: 1.25rem;
+    --spacing-6: 1.5rem;
+    --spacing-8: 2rem;
+    --spacing-10: 2.5rem;
+    --spacing-12: 3rem;
+    --spacing-16: 4rem;
+
+    /* 阴影 */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-md:
+      0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg:
+      0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+    /* 过渡 */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* 药房业务变量 */
+    --expiry-warning-days: 30;
+  }
+
+  .dark {
+    /* 暗色模式 - 迪特·拉姆斯风格 */
+    --background: 0 0% 8%; /* #141414 哑光黑 */
+    --foreground: 0 0% 90%; /* #E6E6E6 浅灰 */
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 90%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 90%;
+    --primary: 18 100% 50%; /* #FF4400 信号橙 */
+    --primary-foreground: 0 0% 8%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 90%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 90%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 18 100% 50%;
+
+    /* 药房专用语义化颜色 - 暗色模式 */
+    --success: 152 100% 40%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 8%;
+    --error: 0 72% 55%;
+    --error-foreground: 0 0% 100%;
+    --info: 211 100% 55%;
+    --info-foreground: 0 0% 100%;
+
+    /* 阴影 - 暗色模式（减少阴影以保持迪特风格） */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4);
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+  }
+
+  /* 设置基础排版 */
+  h1 {
+    @apply text-3xl font-bold md:text-4xl;
+  }
+
+  h2 {
+    @apply text-2xl font-bold md:text-3xl;
+  }
+
+  h3 {
+    @apply text-xl font-bold md:text-2xl;
+  }
+
+  h4 {
+    @apply text-lg font-bold md:text-xl;
+  }
+
+  h5 {
+    @apply text-base font-bold md:text-lg;
+  }
+
+  h6 {
+    @apply text-sm font-bold md:text-base;
+  }
+
+  /* 设置链接样式 */
+  a {
+    @apply text-primary hover:text-primary-700 transition-colors;
+  }
+}
+
+@layer components {
+  /* 药房专用组件样式 */
+  .card-dashboard {
+    @apply bg-card p-4 rounded-lg border shadow-sm;
+  }
+
+  .stat-card {
+    @apply flex flex-col p-4 bg-card rounded-lg border shadow-sm;
+  }
+
+  .stat-value {
+    @apply text-2xl font-bold;
+  }
+
+  .stat-label {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .data-table {
+    @apply w-full border-collapse;
+  }
+
+  .data-table th {
+    @apply p-2 text-left bg-muted text-muted-foreground font-medium text-sm;
+  }
+
+  .data-table td {
+    @apply p-2 border-b border-border;
+  }
+
+  .data-table tr:hover {
+    @apply bg-muted/50;
+  }
+
+  /* 扫码相关组件 */
+  .scanner-container {
+    @apply relative overflow-hidden rounded-lg border-2 border-primary;
+  }
+
+  .scanner-overlay {
+    @apply absolute inset-0 bg-black/50 flex items-center justify-center;
+  }
+
+  .scanner-target {
+    @apply absolute border-2 border-primary rounded-lg;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+  }
+
+  /* 表单组件 */
+  .form-group {
+    @apply mb-4;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium mb-1;
+  }
+
+  .form-input {
+    @apply w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  }
+
+  .form-error {
+    @apply text-sm text-error mt-1;
+  }
+
+  /* 药品卡片 */
+  .medicine-card {
+    @apply bg-card p-4 rounded-lg border shadow-sm hover:shadow-md transition-shadow;
+  }
+
+  .medicine-name {
+    @apply font-bold text-lg mb-1;
+  }
+
+  .medicine-spec {
+    @apply text-sm text-muted-foreground mb-2;
+  }
+
+  .medicine-batch {
+    @apply text-xs bg-muted px-2 py-1 rounded-md inline-block mr-2 mb-2;
+  }
+}
+
+@layer utilities {
+  /* 药房专用工具类 */
+  .status-success {
+    @apply bg-success text-white;
+  }
+
+  .status-warning {
+    @apply bg-warning text-white;
+  }
+
+  .status-error {
+    @apply bg-error text-white;
+  }
+
+  .status-info {
+    @apply bg-info text-white;
+  }
+
+  /* 库存状态颜色 */
+  .stock-sufficient {
+    @apply text-success-dark bg-success/10 border-success/20;
+  }
+
+  .stock-low {
+    @apply text-warning-dark bg-warning/10 border-warning/20;
+  }
+
+  .stock-empty {
+    @apply text-error-dark bg-error/10 border-error/20;
+  }
+
+  /* 近效期状态颜色 */
+  .expiry-normal {
+    @apply text-foreground;
+  }
+
+  .expiry-warning {
+    @apply text-warning-dark bg-warning/10;
+  }
+
+  .expiry-expired {
+    @apply text-error-dark bg-error/10;
+  }
+
+  /* 扫码界面专用 */
+  .scanner-overlay {
+    @apply fixed inset-0 bg-black/80 z-50;
+  }
+
+  .scanner-frame {
+    @apply border-2 border-primary rounded-lg;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+  }
+
+  /* 动画效果 */
+  .fade-in {
+    @apply animate-fade-in;
+  }
+
+  .slide-in-top {
+    @apply animate-slide-in-from-top;
+  }
+
+  .slide-in-bottom {
+    @apply animate-slide-in-from-bottom;
+  }
+
+  /* 响应式工具类 */
+  .mobile-only {
+    @apply block md:hidden;
+  }
+
+  .desktop-only {
+    @apply hidden md:block;
+  }
+
+  /* 布局工具类 */
+  .page-container {
+    @apply container mx-auto px-4 py-6 md:px-6 md:py-8;
+  }
+
+  .section-container {
+    @apply mb-8;
+  }
+
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  .flex-between {
+    @apply flex items-center justify-between;
+  }
+
+  /* 阴影工具类 */
+  .shadow-hover {
+    @apply transition-shadow hover:shadow-md;
+  }
+
+  /* 文本工具类 */
+  .text-truncate {
+    @apply overflow-hidden text-ellipsis whitespace-nowrap;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}

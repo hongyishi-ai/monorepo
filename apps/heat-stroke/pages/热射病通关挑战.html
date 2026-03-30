@@ -1,0 +1,2678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>热射病挑战：预防与救治学习平台</title>
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
+    <script src="../assets/vendors/tailwind.compiler.js"></script>
+    <script src="../assets/vendors/framer-motion.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* 导航链接样式 */
+        nav a {
+            text-decoration: none;
+        }
+
+        /* ... (CSS styles remain unchanged) ... */
+        :root {
+            --primary: #FF6B00;
+            --secondary: #3498db;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f1c40f;
+            --dark: #0b0b0b;
+            --light: #1f2937;
+            --text: #E5E7EB;
+            --background: #000000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-wrap: break-word;
+            /* Added to prevent horizontal overflow from long words */
+            /* Optional but often helpful on mobile: ensure no unintended horizontal scroll */
+            /* overflow-x: hidden; */
+            /* Commented out for now, break-word is usually sufficient */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+            /* Ensure container uses full available width up to max-width */
+        }
+
+        header {
+            background-color: #000000;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+
+        .user-stats {
+            display: flex;
+            align-items: center;
+        }
+
+        .stat {
+            margin-left: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        main {
+            padding: 2rem 0;
+            min-height: calc(100vh - 180px);
+            /* Adjusted height calculation might be needed depending on nav bar */
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 20px;
+        }
+
+        .sidebar {
+            background: #111111;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-container {
+            margin-bottom: 20px;
+        }
+
+        .progress-title {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .achievements {
+            margin-top: 30px;
+        }
+
+        .achievement-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .achievement {
+            background: var(--light);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--dark);
+            opacity: 0.5;
+            transition: all 0.3s ease;
+            cursor: help;
+            /* Add cursor to indicate clickability/hover for details */
+        }
+
+        .achievement.unlocked {
+            opacity: 1;
+            background: var(--warning);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 2px 10px rgba(241, 196, 15, 0.5);
+        }
+
+        .content {
+            background: #111111;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow-x: hidden;
+            /* Prevent internal content from causing horizontal scroll */
+        }
+
+        .module-selector {
+            display: flex;
+            overflow-x: auto;
+            /* Keep horizontal scroll for buttons */
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            -webkit-overflow-scrolling: touch;
+            /* Smooth scrolling on iOS */
+        }
+
+        .module-btn {
+            background: var(--light);
+            border: none;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            /* Prevent buttons from shrinking */
+        }
+
+        .module-btn:hover {
+            background: #ddd;
+        }
+
+        .module-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .lesson-container {
+            position: relative;
+        }
+
+        .lesson {
+            display: none;
+        }
+
+        .lesson.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .lesson-header {
+            margin-bottom: 20px;
+        }
+
+        .lesson-title {
+            font-size: 1.8rem;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .lesson-description {
+            color: #666;
+        }
+
+        .lesson-content {
+            margin-bottom: 30px;
+        }
+
+        .lesson-section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-bottom: 10px;
+            border-left: 4px solid var(--primary);
+            padding-left: 10px;
+        }
+
+        .quiz-container {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .quiz-title {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            /* Add some space below each question */
+            border-bottom: 1px solid #eee;
+            /* Separator */
+        }
+
+        .quiz-question:last-child {
+            border-bottom: none;
+            /* Remove border for last question */
+        }
+
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .option {
+            background: #111111;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: var(--secondary);
+        }
+
+        .option.selected {
+            border-color: var(--secondary);
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .option.correct {
+            border-color: var(--success);
+            background: rgba(46, 204, 113, 0.1);
+        }
+
+        .option.incorrect {
+            border-color: var(--danger);
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            /* Adjusted margin */
+            padding: 10px 15px;
+            /* Adjusted padding */
+            border-radius: 8px;
+            display: none;
+            font-size: 0.9rem;
+            /* Slightly smaller feedback text */
+        }
+
+        .feedback.success {
+            background: rgba(46, 204, 113, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            display: block;
+        }
+
+        .feedback.error {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            display: block;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            /* Allow wrapping on smaller screens */
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 5px;
+            /* Add some margin for wrapped buttons */
+        }
+
+        .btn:hover {
+            background: #e86b15;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn.secondary {
+            background: var(--secondary);
+        }
+
+        .btn.secondary:hover {
+            background: #2980b9;
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .reward-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.7);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 90%;
+            max-width: 400px;
+            /* Limit max width */
+        }
+
+        .reward-popup.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .reward-icon {
+            font-size: 4rem;
+            color: var(--warning);
+            margin-bottom: 20px;
+            animation: pulse 1s infinite alternate;
+        }
+
+        .reward-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .reward-description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .daily-challenge {
+            background: linear-gradient(135deg, var(--primary), #ff9f4a);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .daily-challenge::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+        }
+
+        .challenge-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .challenge-title i {
+            margin-right: 8px;
+        }
+
+        .challenge-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .challenge-progress {
+            margin-top: 10px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .challenge-fill {
+            height: 100%;
+            background: white;
+            border-radius: 4px;
+            width: 30%;
+            /* Example width */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.1);
+            }
+        }
+
+        .drag-drop-container {
+            margin: 20px 0;
+        }
+
+        .drag-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 10px;
+            /* Add some padding */
+            background: #f0f0f0;
+            /* Background for source area */
+            border-radius: 5px;
+        }
+
+        .drag-item {
+            background: var(--light);
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: grab;
+            user-select: none;
+            transition: all 0.2s ease;
+            border: 1px solid #ccc;
+        }
+
+        .drag-item:active {
+            cursor: grabbing;
+        }
+
+
+        .drag-item:hover {
+            background: #ddd;
+        }
+
+        .drag-item.dragging {
+            opacity: 0.5;
+            border: 2px dashed var(--primary);
+            /* Style while dragging */
+        }
+
+        .drop-zones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            /* Responsive columns */
+            gap: 15px;
+        }
+
+        .drop-zone {
+            min-height: 150px;
+            /* Increased min height */
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            /* Increased padding */
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.2s ease;
+            background: #fff;
+            /* White background for drop zones */
+        }
+
+        .drop-zone-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            /* Increased margin */
+            color: #555;
+            /* Slightly darker title */
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            /* Separator */
+            padding-bottom: 5px;
+        }
+
+        .drop-zone.highlight {
+            border-color: var(--secondary);
+            background: rgba(52, 152, 219, 0.05);
+        }
+
+        /* Style for items inside drop zone */
+        .drop-zone .drag-item {
+            cursor: auto;
+            /* No grab cursor inside drop zone */
+            background: #e9f5ff;
+            /* Light blue background when dropped */
+            border-color: var(--secondary);
+        }
+
+
+        .scenario-container {
+            background: linear-gradient(135deg, #3a6186, #89253e);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .scenario-title {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .scenario-title i {
+            margin-right: 10px;
+        }
+
+        .scenario-description {
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .scenario-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .scenario-option {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            /* Base border */
+        }
+
+        .scenario-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            /* Highlight border on hover */
+        }
+
+        .scenario-option.correct {
+            background: rgba(46, 204, 113, 0.2);
+            /* Use alpha for background */
+            border-color: var(--success);
+        }
+
+        .scenario-option.incorrect {
+            background: rgba(231, 76, 60, 0.2);
+            /* Use alpha for background */
+            border-color: var(--danger);
+        }
+
+        /* Specific style for identified signal options */
+        .scenario-option[data-identified="true"] {
+            background: rgba(46, 204, 113, 0.15);
+            cursor: default;
+            opacity: 0.9;
+            /* Slightly fade identified options */
+        }
+
+
+        .scenario-feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            /* Darker background for contrast */
+            display: none;
+            border: 1px solid transparent;
+        }
+
+        .scenario-feedback.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Feedback specific styles */
+        .scenario-feedback.success {
+            background: rgba(46, 204, 113, 0.2);
+            border-color: var(--success);
+        }
+
+        .scenario-feedback.error {
+            background: rgba(231, 76, 60, 0.2);
+            border-color: var(--danger);
+        }
+
+
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+
+            /* ... (Existing 768px styles remain) ... */
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+
+            .drop-zones {
+                grid-template-columns: 1fr;
+                /* Stack drop zones */
+            }
+
+            /* 头部导航调整 */
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                padding: 10px 0;
+                /* Reduced padding slightly */
+            }
+
+            .logo {
+                font-size: 1.5rem;
+                margin-bottom: 10px;
+            }
+
+            .logo i {
+                font-size: 1.7rem;
+            }
+
+            .user-stats {
+                margin-top: 15px;
+                width: 100%;
+                justify-content: center;
+                /* Center stats */
+                flex-wrap: wrap;
+                /* Allow stats to wrap if needed */
+            }
+
+            .stat {
+                margin: 0 10px 10px 10px;
+                /* Adjust margin for wrapping */
+            }
+
+            /* 内容区域调整 */
+            .container {
+                padding: 0 15px;
+                /* Consistent padding */
+            }
+
+            main {
+                padding: 1.5rem 0;
+                /* Adjusted padding */
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            /* 模块选择器调整 */
+            .module-selector {
+                padding-bottom: 10px;
+                margin-bottom: 15px;
+                justify-content: flex-start;
+                /* Align left for scrolling */
+            }
+
+            .module-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+                /* Slightly smaller text */
+            }
+
+            /* 课程内容调整 */
+            .lesson-title {
+                font-size: 1.6rem;
+                /* Adjusted size */
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+                /* Adjusted size */
+            }
+
+            /* 测验和交互元素调整 */
+            .quiz-container {
+                padding: 15px;
+            }
+
+            .quiz-title {
+                font-size: 1.2rem;
+            }
+
+            .option {
+                padding: 12px;
+            }
+
+            .navigation {
+                flex-direction: column;
+                /* Stack buttons vertically */
+                align-items: center;
+                /* Center stacked buttons */
+            }
+
+            .navigation .btn {
+                width: 80%;
+                /* Make buttons wider */
+                max-width: 300px;
+                /* Limit max width */
+                min-width: 0;
+                /* Remove min-width */
+                margin: 8px 0;
+                /* Adjust margin for vertical stacking */
+                justify-content: center;
+                /* Center text/icon */
+            }
+
+            .navigation .btn:first-child {
+                margin-top: 0;
+            }
+
+            .navigation .btn:last-child {
+                margin-bottom: 0;
+            }
+
+
+            /* 侧边栏调整 */
+            .sidebar {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+
+            .achievement {
+                width: 45px;
+                /* Slightly larger */
+                height: 45px;
+                font-size: 1.3rem;
+            }
+
+            /* 场景容器调整 */
+            .scenario-container {
+                padding: 15px;
+            }
+
+            .scenario-title {
+                font-size: 1.2rem;
+            }
+
+            /* 弹窗调整 */
+            .reward-popup {
+                padding: 20px;
+            }
+
+            .reward-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* 超小屏幕优化 */
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.4rem;
+                /* Slightly smaller */
+            }
+
+            .stat-value {
+                font-size: 1rem;
+            }
+
+            .stat-label {
+                font-size: 0.7rem;
+            }
+
+            .module-btn {
+                padding: 7px 14px;
+                /* Adjust padding */
+                font-size: 0.85rem;
+                /* Adjust font size */
+                margin-right: 8px;
+                /* Adjust margin */
+            }
+
+            .lesson-title {
+                font-size: 1.4rem;
+                /* Adjust size */
+            }
+
+            .section-title {
+                font-size: 1.15rem;
+                /* Adjust size */
+            }
+
+            .achievement {
+                width: 40px;
+                /* Adjust size */
+                height: 40px;
+                font-size: 1.1rem;
+            }
+
+            .navigation .btn {
+                width: 90%;
+                /* Even wider on very small screens */
+                padding: 10px 15px;
+                /* Adjust padding */
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+                /* Ensure options stack */
+            }
+
+            .option {
+                padding: 10px;
+                /* Slightly smaller padding */
+            }
+
+            .container {
+                padding: 0 10px;
+                /* Reduce padding further */
+            }
+
+            .content {
+                padding: 15px 10px;
+                /* Reduce padding */
+            }
+
+            .sidebar {
+                padding: 10px;
+                /* Reduce padding */
+            }
+        }
+
+        /* --- End of Mobile Optimization Styles --- */
+
+        /* FontAwesome already loaded in head */
+
+        /* Navigation Bar Styles */
+        .bg-black {
+            background-color: #000000;
+        }
+
+        .py-4 {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .px-6 {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+        .sticky {
+            position: sticky;
+        }
+
+        .top-0 {
+            top: 0;
+        }
+
+        .z-50 {
+            z-index: 50;
+        }
+
+        .border-b {
+            border-bottom-width: 1px;
+        }
+
+        .border-gray-800 {
+            /* Assuming Tailwind's gray-800 is similar to this */
+            border-color: #1f2937;
+            /* Adjust if needed */
+        }
+
+        .text-orange-500 {
+            color: var(--primary);
+            /* Use CSS variable */
+        }
+
+        .hover\:text-orange-400:hover {
+            color: #fb923c;
+            /* Lighter orange for hover */
+        }
+
+        .transition-colors {
+            transition-property: color, background-color, border-color;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            /* Tailwind default ease */
+            transition-duration: 150ms;
+            /* Tailwind default duration */
+        }
+
+        .mr-2 {
+            margin-right: 0.5rem;
+        }
+
+        .font-bold {
+            font-weight: 700;
+        }
+
+        /* Add flex utilities used in the nav */
+        .flex {
+            display: flex;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 触摸拖放增强样式 */
+        .drag-item.touch-dragging {
+            opacity: 0.3;
+            border: 2px dashed var(--primary);
+        }
+
+        .drag-clone {
+            position: absolute;
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0.8;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: var(--light);
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: none;
+        }
+
+        .drop-zone.touch-highlight {
+            background-color: rgba(52, 152, 219, 0.1);
+            border: 2px dashed var(--secondary);
+        }
+
+        .mobile-drag-hint {
+            display: none;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            background-color: #fff3cd;
+            border-left: 4px solid var(--warning);
+            border-radius: 4px;
+        }
+
+        /* 仅在移动设备上显示提示 */
+        @media (max-width: 768px) {
+            .mobile-drag-hint {
+                display: block;
+            }
+        }
+
+        /* Fade-in animation for scroll reveal */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .fade-in {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+
+            .reward-icon {
+                animation: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-black text-gray-300">
+    <!-- 添加导航栏 -->
+    <nav class="bg-black py-4 px-6 sticky top-0 z-50 border-b border-gray-800">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="../index.html" class="flex items-center text-orange-500 hover:text-orange-400 transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i>
+                <span class="font-bold">返回主页</span>
+            </a>
+        </div>
+    </nav>
+
+    <header class="fade-in">
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                热射病通关挑战！
+            </div>
+            <div class="user-stats">
+                <div class="stat">
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">经验值</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">徽章</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">0%</div>
+                    <div class="stat-label">完成度</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container dashboard">
+            <div class="sidebar fade-in">
+                <div class="daily-challenge">
+                    <div class="challenge-title">
+                        <i class="fas fa-calendar-day"></i>
+                        每日挑战
+                    </div>
+                    <div class="challenge-description">完成热射病预防措施测验</div>
+                    <div class="challenge-progress">
+                        <div class="challenge-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-title">
+                        <span>总体进度</span>
+                        <span>0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-title">
+                        <span>预防措施</span>
+                        <span>0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-title">
+                        <span>救治方法</span>
+                        <span>0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="achievements">
+                    <h3>成就徽章</h3>
+                    <div class="achievement-list">
+                        <!-- Added data-achievement-type for JS mapping -->
+                        <div class="achievement" title="完成热习服训练" data-achievement-type="training">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="achievement" title="掌握预防措施" data-achievement-type="prevention">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="achievement" title="掌握救治方法" data-achievement-type="treatment">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <div class="achievement" title="完成所有测验" data-achievement-type="quiz">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="achievement" title="连续学习3天" data-achievement-type="streak">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="achievement" title="获得满分" data-achievement-type="perfect">
+                            <i class="fas fa-award"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content fade-in">
+                <div class="module-selector">
+                    <button class="module-btn active" data-module="intro">热射病简介</button>
+                    <button class="module-btn" data-module="prevention">预防措施</button>
+                    <button class="module-btn" data-module="warning">预警信号</button>
+                    <button class="module-btn" data-module="treatment">救治方法</button>
+                    <button class="module-btn" data-module="quiz">综合测验</button>
+                </div>
+
+                <div class="lesson-container">
+                    <!-- 热射病简介 -->
+                    <div class="lesson active" id="intro">
+                        <!-- ... Intro content unchanged ... -->
+                        <div class="lesson-header">
+                            <h2 class="lesson-title">热射病简介</h2>
+                            <p class="lesson-description">了解热射病的定义、危害及其重要性</p>
+                        </div>
+
+                        <div class="lesson-content">
+                            <div class="lesson-section">
+                                <h3 class="section-title">什么是热射病？</h3>
+                                <p>热射病（重度中暑）是指人体长时间暴露在高温、高湿环境下，或进行高强度运动时，引起体温调节功能失调、体内热量过度积蓄，从而导致中枢神经系统损害、多器官功能障碍或严重凝血功能障碍等危及生命的临床综合征。
+                                </p>
+                            </div>
+
+                            <div class="scenario-container">
+                                <h3 class="scenario-title">
+                                    <i class="fas fa-theater-masks"></i>
+                                    情景模拟
+                                </h3>
+                                <p class="scenario-description">
+                                    你是一名新训人员，正在参加夏季高温下的野外训练。今天气温高达38℃，湿度很大。训练已经持续了2小时，你开始感到头晕、恶心，并且出汗减少。你应该怎么做？</p>
+
+                                <div class="scenario-options">
+                                    <div class="scenario-option" data-correct="false">
+                                        坚持训练，这只是正常的训练反应，需要克服
+                                    </div>
+                                    <div class="scenario-option" data-correct="true">
+                                        立即停止训练，到阴凉处休息，并向教官报告身体状况
+                                    </div>
+                                    <div class="scenario-option" data-correct="false">
+                                        喝一些水继续训练，稍后会好起来
+                                    </div>
+                                </div>
+
+                                <div class="scenario-feedback">
+                                    <!-- Feedback text set by JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="navigation">
+                            <button class="btn secondary" disabled>
+                                <i class="fas fa-arrow-left"></i> 上一关
+                            </button>
+                            <button class="btn next-lesson" data-next="prevention">
+                                下一关 <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 预防措施 -->
+                    <div class="lesson" id="prevention">
+                        <!-- ... Prevention content mostly unchanged ... -->
+                        <div class="lesson-header">
+                            <h2 class="lesson-title">热射病预防措施</h2>
+                            <p class="lesson-description">学习8项关键预防措施，有效预防热射病</p>
+                        </div>
+
+                        <div class="lesson-content">
+                            <div class="lesson-section">
+                                <h3 class="section-title">热射病可防可控</h3>
+                                <p>热射病可防可控，关键在于做好预防。以下8项措施对预防热射病十分重要。</p>
+                            </div>
+
+                            <div class="drag-drop-container">
+                                <h3>拖拽预防措施到正确的分类中</h3>
+                                <div class="mobile-drag-hint">在手机上：点按并按住条目拖到下方分类框中</div>
+                                <div class="drag-items">
+                                    <div class="drag-item" draggable="true" data-category="training">做好热习服训练</div>
+                                    <div class="drag-item" draggable="true" data-category="health">不提倡带病参训</div>
+                                    <div class="drag-item" draggable="true" data-category="training">重视训练间隙的降温</div>
+                                    <div class="drag-item" draggable="true" data-category="health">补水补盐</div>
+                                    <div class="drag-item" draggable="true" data-category="equipment">备齐防暑监测"三宝"</div>
+                                    <div class="drag-item" draggable="true" data-category="equipment">准备降温设备</div>
+                                    <div class="drag-item" draggable="true" data-category="health">保证充足睡眠</div>
+                                    <div class="drag-item" draggable="true" data-category="training">关注重点人群</div>
+                                </div>
+
+                                <div class="drop-zones">
+                                    <div class="drop-zone" data-category="training">
+                                        <div class="drop-zone-title">训练相关措施</div>
+                                    </div>
+                                    <div class="drop-zone" data-category="health">
+                                        <div class="drop-zone-title">健康相关措施</div>
+                                    </div>
+                                    <!-- Combined Equipment/Other zone for simplicity if needed, or keep separate -->
+                                    <div class="drop-zone" data-category="equipment">
+                                        <div class="drop-zone-title">装备/其他措施</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="lesson-section">
+                                <h3 class="section-title">热习服训练</h3>
+                                <p>热习服是通过反复热刺激，使人体出现生理、心理、行为、形态方面的适应性反应，从而提高机体对热的耐受能力，即主动热适应。进行热习服训练时，要在热适应的基础上循序渐进增加运动量，如先适应热环境下的低强度训练，再适应热环境下的高强度训练。这个适应过程一般需要10～14天。
+                                </p>
+                                <p>训练强度标准：</p>
+                                <ul>
+                                    <li>心率小于120次/分：低强度</li>
+                                    <li>心率在120～150次/分：中等强度</li>
+                                    <li>心率大于150次/分：大强度</li>
+                                    <li>心率超过180次/分：极限强度</li>
+                                </ul>
+                                <p>安全心率计算：(220-年龄)×70%</p>
+                                <p>最高心率计算：(220-年龄)×(80%~85%)</p>
+                            </div>
+                        </div>
+
+                        <div class="quiz-container" id="prevention-quiz">
+                            <h3 class="quiz-title">快速测验</h3>
+
+                            <div class="quiz-question">
+                                <p>热习服训练一般需要多长时间？</p>
+                                <div class="options">
+                                    <div class="option" data-correct="false">3-5天</div>
+                                    <div class="option" data-correct="true">10-14天</div>
+                                    <div class="option" data-correct="false">20-30天</div>
+                                    <div class="option" data-correct="false">1-2个月</div>
+                                </div>
+                                <div class="feedback"></div>
+                            </div>
+                            <button class="btn submit-single-quiz" style="margin-top: 20px;">提交答案</button>
+                        </div>
+
+                        <div class="navigation">
+                            <button class="btn secondary prev-lesson" data-prev="intro">
+                                <i class="fas fa-arrow-left"></i> 上一关
+                            </button>
+                            <button class="btn next-lesson" data-next="warning">
+                                下一关 <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 预警信号 -->
+                    <div class="lesson" id="warning">
+                        <div class="lesson-header">
+                            <h2 class="lesson-title">热射病预警信号</h2>
+                            <p class="lesson-description">学习识别热射病的4个关键预警信号</p>
+                        </div>
+
+                        <div class="lesson-content">
+                            <div class="lesson-section">
+                                <h3 class="section-title">热射病预警4信号</h3>
+                                <p>训练中要关注热射病预警4信号。如果战友们在训练中或训练后出现以下4种情况，极有可能是发生热射病的先兆：</p>
+                                <ul style="margin-left: 20px;">
+                                    <li><strong>烫</strong>：自觉身体发烫（从里向外发热）</li>
+                                    <li><strong>晃</strong>：异常疲倦、行走不稳</li>
+                                    <li><strong>晕</strong>：头晕、意识模糊、抽搐</li>
+                                    <li><strong>乱</strong>：出现脸白、心慌、气短、恶心、呕吐、腹痛、腹泻等症状</li>
+                                </ul>
+                            </div>
+
+                            <div class="scenario-container">
+                                <!-- Ensure this container only holds the signal ID scenario -->
+                                <h3 class="scenario-title">
+                                    <i class="fas fa-tasks"></i> <!-- Changed icon -->
+                                    情景识别：匹配预警信号
+                                </h3>
+                                <p class="scenario-description">点击以下每个场景，将其与对应的预警信号（烫、晃、晕、乱）关联起来：</p>
+
+                                <div class="scenario-options"> <!-- These options are for the signal identification -->
+                                    <div class="scenario-option" data-signal="烫">
+                                        小王在训练中感觉自己体温异常升高，感觉身体内部在发热
+                                    </div>
+                                    <div class="scenario-option" data-signal="晃">
+                                        小李完成5公里跑后，走路摇摇晃晃，比平时疲劳感更强
+                                    </div>
+                                    <div class="scenario-option" data-signal="晕">
+                                        小张在训练中突然感到头晕目眩，意识开始模糊
+                                    </div>
+                                    <div class="scenario-option" data-signal="乱">
+                                        小陈训练后脸色苍白，出现心慌、恶心想吐的症状
+                                    </div>
+                                </div>
+                                <!-- No feedback div needed here as feedback is inline -->
+                            </div>
+                        </div>
+
+                        <div class="navigation">
+                            <button class="btn secondary prev-lesson" data-prev="prevention">
+                                <i class="fas fa-arrow-left"></i> 上一关
+                            </button>
+                            <button class="btn next-lesson" data-next="treatment">
+                                下一关 <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 救治方法 -->
+                    <div class="lesson" id="treatment">
+                        <!-- ... Treatment content mostly unchanged ... -->
+                        <div class="lesson-header">
+                            <h2 class="lesson-title">热射病救治方法</h2>
+                            <p class="lesson-description">学习热射病救治6步法，掌握紧急救治技能</p>
+                        </div>
+
+                        <div class="lesson-content">
+                            <div class="lesson-section">
+                                <h3 class="section-title">热射病救治6步法</h3>
+                                <p>一旦发生热射病，要迅速实施抢救，第一时间进行正确降温，不让患者的体温升起来，而不是立即后送。如果在1小时内患者体温降至38.5摄氏度，即使发生了热射病也不会很严重。
+                                </p>
+                            </div>
+
+                            <div class="drag-drop-container">
+                                <h3>将救治步骤拖拽到正确的顺序</h3>
+                                <div class="mobile-drag-hint">在手机上：点按并按住条目拖到下方框中按顺序排列</div>
+                                <div class="drag-items">
+                                    <div class="drag-item" draggable="true" data-order="3">测量核心体温、心率、血压</div>
+                                    <div class="drag-item" draggable="true" data-order="1">立即脱离热环境</div>
+                                    <div class="drag-item" draggable="true" data-order="6">控制抽搐</div>
+                                    <div class="drag-item" draggable="true" data-order="2">用水、冰进行全身降温</div>
+                                    <div class="drag-item" draggable="true" data-order="4">建立静脉输液通道</div>
+                                    <div class="drag-item" draggable="true" data-order="5">气道保护与氧疗</div>
+                                </div>
+
+                                <div class="drop-zones">
+                                    <!-- Single drop zone for ordered steps -->
+                                    <div class="drop-zone" data-order="steps">
+                                        <div class="drop-zone-title">救治步骤顺序 (按1-6拖入)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="lesson-section">
+                                <h3 class="section-title">救治步骤详解</h3>
+                                <ol>
+                                    <li><strong>立即脱离热环境</strong>：如果发现战友跑步时摇摇晃晃或已经摔倒，应立即将其搀扶到树荫下，脱去装具和外衣裤，便于散热。同时，对其大声呼叫，以评估意识状态。
+                                    </li>
+                                    <li><strong>用水、冰进行全身降温</strong>：将患者除头部外的其他身体部位浸泡在20摄氏度左右的浴盆中。此方法降温快速有效。也可以用冰水浸泡过的毛巾擦拭全身，同时将冰块放置在患者双腋下、大腿根，或者将患者放在冰床上，头部戴冰帽、冰颈圈，并用冰毛巾擦拭全身。
+                                    </li>
+                                    <li><strong>测量核心体温、心率、血压</strong>：用耳温枪测的耳温即为核心体温；用指脉氧检测仪夹在手指上测心率和指脉氧饱和度，以了解心肺情况；用血压计测血压，以了解体液丢失程度。
+                                    </li>
+                                    <li><strong>建立静脉输液通道</strong>：卫生人员到达后，应立即建立静脉输液通道，视病情可以建立两条静脉输液通道，快速输入林格氏液、生理盐水、糖盐水等。
+                                    </li>
+                                    <li><strong>气道保护与氧疗</strong>：如指脉氧饱和度小于95%，要给予鼻导管吸氧。若患者处于昏迷状态，应将其头部偏向一侧，防止口腔有异物引起窒息。一旦发生呕吐，应立即清除口腔分泌物，确保呼吸道通畅。
+                                    </li>
+                                    <li><strong>控制抽搐</strong>：如患者突发抽搐，应立即给予安定注射液（10～20mg肌肉注射或5～10mg静脉注射）。注射后注意观察患者的呼吸情况、监测指脉氧饱和度。如果出现呼吸抑制、指脉氧饱和度下降的情况，可以通过简易呼吸器辅助呼吸。在按压躁动的患者时，不要按压大关节处，避免造成骨折、脱位和肌肉损伤。
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="quiz-container" id="treatment-quiz">
+                            <h3 class="quiz-title">快速测验</h3>
+
+                            <div class="quiz-question">
+                                <p>热射病患者应在多长时间内将体温降至38.5摄氏度？</p>
+                                <div class="options">
+                                    <div class="option" data-correct="false">30分钟内</div>
+                                    <div class="option" data-correct="true">1小时内</div>
+                                    <div class="option" data-correct="false">2小时内</div>
+                                    <div class="option" data-correct="false">4小时内</div>
+                                </div>
+                                <div class="feedback"></div>
+                            </div>
+                            <button class="btn submit-single-quiz" style="margin-top: 20px;">提交答案</button>
+                        </div>
+
+                        <div class="navigation">
+                            <button class="btn secondary prev-lesson" data-prev="warning">
+                                <i class="fas fa-arrow-left"></i> 上一关
+                            </button>
+                            <button class="btn next-lesson" data-next="quiz">
+                                综合测验 <i class="fas fa-graduation-cap"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 综合测验 -->
+                    <div class="lesson" id="quiz">
+                        <div class="lesson-header">
+                            <h2 class="lesson-title">热射病预防与救治综合测验</h2>
+                            <p class="lesson-description">测试你对热射病预防与救治的全面理解</p>
+                        </div>
+
+                        <div class="lesson-content">
+                            <div class="quiz-container">
+                                <!-- All 15 questions -->
+                                <div class="quiz-question">
+                                    <p>1. 热射病的定义是什么？</p>
+                                    <div class="options">
+                                        <div class="option" data-correct="false">轻度中暑的一种表现形式</div>
+                                        <div class="option" data-correct="true">人体长时间暴露在高温、高湿环境下，引起体温调节功能失调的危及生命的临床综合征
+                                        </div>
+                                        <div class="option" data-correct="false">仅在夏季出现的季节性疾病</div>
+                                        <div class="option" data-correct="false">只有老年人才会发生的疾病</div>
+                                    </div>
+                                    <div class="feedback"></div>
+                                </div>
+
+                                <div class="quiz-question">
+                                    <p>2. 热习服训练的适应过程一般需要多长时间？</p>
+                                    <div class="options">
+                                        <div class="option" data-correct="false">3-5天</div>
+                                        <div class="option" data-correct="true">10-14天</div>
+                                        <div class="option" data-correct="false">1个月</div>
+                                        <div class="option" data-correct="false">2-3个月</div>
+                                    </div>
+                                    <div class="feedback"></div>
+                                </div>
+
+                                <div class="quiz-question">
+                                    <p>3. 以下哪项不是热射病的预警信号？</p>
+                                    <div class="options">
+                                        <div class="option" data-correct="false">烫：自觉身体发烫</div>
+                                        <div class="option" data-correct="false">晃：异常疲倦、行走不稳</div>
+                                        <div class="option" data-correct="false">晕：头晕、意识模糊</div>
+                                        <div class="option" data-correct="true">痒：皮肤瘙痒难忍</div>
+                                    </div>
+                                    <div class="feedback"></div>
+                                </div>
+
+                                <div class="quiz-question">
+                                    <p>4. 热射病救治的第一步是什么？</p>
+                                    <div class="options">
+                                        <div class="option" data-correct="true">立即脱离热环境</div>
+                                        <div class="option" data-correct="false">建立静脉输液通道</div>
+                                        <div class="option" data-correct="false">测量核心体温</div>
+                                        <div class="option" data-correct="false">立即后送医院</div>
+                                    </div>
+                                    <div class="feedback"></div>
+                                </div>
+
+                                <div class="quiz-question">
+                                    <p>5. 热射病患者应在多长时间内将体温降至38.5摄氏度？</p>
+                                    <div class="options">
+                                        <div class="option" data-correct="false">30分钟内</div>
+                                        <div class="option" data-correct="true">1小时内</div>
+                                        <div class="option" data-correct="false">2小时内</div>
+                                        <div class="option" data-correct="false">不需要特别控制时间</div>
+                                    </div>
+                                    <div class="feedback"></div>
+                                </div>
+
+                                <div class="quiz-question">
+                                    <p>6. 防暑监测"三宝"不包括以下哪项？</p>
+                                    <div class="options">
+                                        <div class="option" data-correct="false">温湿度计</div>
+                                        <div class="option" data-correct="false">耳温监测仪</div>
+                                        <div class="option" data-correct="false">指脉氧检测仪</div>
+                                        <div class="option" data-correct="true">血糖监测仪</div>
+                                    </div>
+                                    <div class="feedback"></div>
+                                </div>
+
+                                <div class="quiz-question">
+                                    <p>7. 以下哪些人群属于热射病高风险人群？</p>
+                                    <div class="options">
+                                        <div class="option" data-correct="false">经常在高温环境下训练的人员</div>
+                                        <div class="option" data-correct="true">新训人和长期不锻炼人员</div>
+                                        <div class="option" data-correct="false">已完成热习服训练的人员</div>
+                                        <div class="option" data-correct="false">体重正常的年轻人</div>
+                                    </div>
+                                    <div class="feedback"></div>
+                                </div>
+
+                                <div class="quiz-question">
+                                    <p>8. 训练中如果心率大于多少，且持续不降，应终止训练？</p>
+                                    <div class="options">
+                                        <div class="option" data-correct="false">120次/分</div>
+                                        <div class="option" data-correct="false">140次/分</div>
+                                        <div class="option" data-correct="true">150次/分</div>
+                                        <div class="option" data-correct="false">180次/分</div>
+                                    </div>
+                                    <div class="feedback"></div>
+                                </div>
+
+                                <div class="quiz-question">
+                                    <p>9. 热射病患者如果出现抽搐，应该如何处理？</p>
+                                    <div class="options">
+                                        <div class="option" data-correct="false">立即后送医院，不做任何处理</div>
+                                        <div class="option" data-correct="false">用力按压患者的大关节处制止抽搐</div>
+                                        <div class="option" data-correct="true">给予安定注射液，并监测呼吸情况</div>
+                                        <div class="option" data-correct="false">让患者喝水，补充体液</div>
+                                    </div>
+                                    <div class="feedback"></div>
+                                </div>
+
+                                <div class="quiz-question">
+                                    <p>10. 以下哪项不是热射病救治的正确做法？</p>
+                                    <div class="options">
+                                        <div class="option" data-correct="false">将患者除头部外的身体浸泡在20摄氏度左右的水中</div>
+                                        <div class="option" data-correct="false">用冰块放置在患者双腋下、大腿根部位</div>
+                                        <div class="option" data-correct="true">立即后送医院，不进行任何现场降温</div>
+                                        <div class="option" data-correct="false">昏迷患者将头部偏向一侧，防止窒息</div>
+                                    </div>
+                                    <div class="feedback"></div>
+                                </div>
+
+                                <!-- NEW Questions based on PDF -->
+                                <div class="quiz-question">
+                                    <p>11. 以下哪项是判断热习服达标的简单方法？</p>
+                                    <div class="options">
+                                        <div class="option" data-correct="true">相同强度训练下，自觉不适减轻、心率增快不明显、体温上升幅度不高</div>
+                                        <div class="option" data-correct="false">训练后体重减轻超过2%</div>
+                                        <div class="option" data-correct="false">完全不出汗</div>
+                                        <div class="option" data-correct="false">运动中心率始终低于100次/分</div>
+                                    </div>
+                                    <div class="feedback"></div>
+                                </div>
+
+                                <div class="quiz-question">
+                                    <p>12. 为什么不提倡带病（如感冒、发烧、腹泻）参加高温训练？</p>
+                                    <div class="options">
+                                        <div class="option" data-correct="false">会传染给其他战友</div>
+                                        <div class="option" data-correct="true">生病时身体抵抗力下降，更容易发生中暑或热射病</div>
+                                        <div class="option" data-correct="false">会影响训练成绩</div>
+                                        <div class="option" data-correct="false">带病训练是意志力的体现</div>
+                                    </div>
+                                    <div class="feedback"></div>
+                                </div>
+
+                                <div class="quiz-question">
+                                    <p>13. 如何通过尿液颜色判断补水是否足够？</p>
+                                    <div class="options">
+                                        <div class="option" data-correct="true">尿量充足且颜色呈浅黄色或无色，表明补水足够</div>
+                                        <div class="option" data-correct="false">尿液颜色越深黄越好，表明身体浓缩能力强</div>
+                                        <div class="option" data-correct="false">只要不感到口渴就说明补水足够</div>
+                                        <div class="option" data-correct="false">尿液颜色与补水无关</div>
+                                    </div>
+                                    <div class="feedback"></div>
+                                </div>
+
+                                <div class="quiz-question">
+                                    <p>14. 保证充足睡眠对预防热射病有什么作用？</p>
+                                    <div class="options">
+                                        <div class="option" data-correct="true">有助于身体恢复，提高对热环境的耐受力</div>
+                                        <div class="option" data-correct="false">睡眠与热射病无关</div>
+                                        <div class="option" data-correct="false">睡得越多越容易中暑</div>
+                                        <div class="option" data-correct="false">可以减少白天的出汗量</div>
+                                    </div>
+                                    <div class="feedback"></div>
+                                </div>
+
+                                <div class="quiz-question">
+                                    <p>15. 对于突发抽搐的热射病患者，应首选以下哪种药物控制？</p>
+                                    <div class="options">
+                                        <div class="option" data-correct="false">退烧药</div>
+                                        <div class="option" data-correct="true">安定（地西泮）注射液</div>
+                                        <div class="option" data-correct="false">抗生素</div>
+                                        <div class="option" data-correct="false">生理盐水</div>
+                                    </div>
+                                    <div class="feedback"></div>
+                                </div>
+                            </div>
+
+                            <div class="navigation">
+                                <!-- Navigation content replaced by JS on submit -->
+                                <button class="btn secondary prev-lesson" data-prev="treatment">
+                                    <i class="fas fa-arrow-left"></i> 返回
+                                </button>
+                                <button class="btn submit-quiz">
+                                    <i class="fas fa-check-circle"></i> 提交测验
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>热射病通关：预防与救治学习平台 © 2025</p>
+        </div>
+    </footer>
+
+    <div class="overlay"></div>
+
+    <div class="reward-popup">
+        <div class="reward-icon">
+            <!-- Icon will be set by JS -->
+            <i class=""></i>
+        </div>
+        <h3 class="reward-title"></h3>
+        <p class="reward-description"></p>
+        <button class="btn close-popup-btn">
+            <i class="fas fa-check"></i> 继续学习
+        </button>
+    </div>
+
+    <script>
+        // Scroll reveal for .fade-in
+        (function () {
+            const els = document.querySelectorAll('.fade-in');
+            if ('IntersectionObserver' in window) {
+                const io = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            const motionAPI = window.motion || window.framerMotion;
+                            if (motionAPI) {
+                                motionAPI.animate(entry.target, { opacity: [0, 1], y: [20, 0], scale: [0.98, 1] }, { duration: 0.6, easing: 'ease-out' });
+                            }
+                            io.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.15 });
+                els.forEach(el => io.observe(el));
+            } else {
+                els.forEach(el => el.classList.add('is-visible'));
+            }
+        })();
+        // Achievements configuration
+        const achievementsConfig = {
+            'training': { icon: 'fas fa-fire', title: '热习服新星', description: '完成热习服基础学习与测验' },
+            'prevention': { icon: 'fas fa-shield-alt', title: '预防专家', description: '掌握热射病预防关键措施' },
+            'treatment': { icon: 'fas fa-heartbeat', title: '救治能手', description: '掌握热射病紧急救治方法' },
+            'quiz': { icon: 'fas fa-graduation-cap', title: '测验达人', description: '成功通过综合测验' },
+            'streak': { icon: 'fas fa-calendar-check', title: '持之以恒', description: '连续学习3天' },
+            'perfect': { icon: 'fas fa-award', title: '满分学霸', description: '以满分通过综合测验' }
+        };
+
+        // 用户数据
+        const userData = {
+            xp: 0,
+            badges: 0,
+            completion: 0,
+            preventionProgress: 0,
+            treatmentProgress: 0,
+            achievements: [], // Stores unlocked achievement types (e.g., ['training', 'prevention'])
+            completedLessons: [], // Stores completed module IDs (e.g., ['intro', 'prevention'])
+            lastVisit: null,
+            streak: 0
+        };
+
+        // 本地存储功能
+        const storage = {
+            save: function () {
+                try {
+                    localStorage.setItem('heatStrokeWarrior', JSON.stringify(userData));
+                } catch (e) {
+                    console.error("Failed to save to localStorage:", e);
+                }
+            },
+            load: function () {
+                const saved = localStorage.getItem('heatStrokeWarrior');
+                if (saved) {
+                    try {
+                        const parsed = JSON.parse(saved);
+                        // Basic validation
+                        if (parsed && typeof parsed === 'object' && Array.isArray(parsed.achievements)) {
+                            Object.assign(userData, parsed);
+                        } else {
+                            console.warn("Invalid data found in localStorage. Resetting.");
+                            localStorage.removeItem('heatStrokeWarrior');
+                        }
+                    } catch (e) {
+                        console.error("Failed to parse localStorage data. Resetting.", e);
+                        localStorage.removeItem('heatStrokeWarrior');
+                    }
+                }
+                updateUI(); // Update UI after loading
+
+                // 检查每日登录
+                const today = new Date().toDateString();
+                if (userData.lastVisit !== today) {
+                    const yesterday = new Date();
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    if (userData.lastVisit === yesterday.toDateString()) {
+                        userData.streak = (userData.streak || 0) + 1;
+                    } else if (userData.lastVisit) { // Don't reset streak on first ever visit
+                        userData.streak = 1;
+                    } else {
+                        userData.streak = 1; // First visit
+                    }
+                    userData.lastVisit = today;
+
+                    if (userData.streak >= 3 && !userData.achievements.includes('streak')) {
+                        unlockAchievement('streak');
+                    }
+                    storage.save();
+                }
+            }
+        };
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function () {
+            storage.load();
+            initModules();
+            initDragDrop();
+            initTouchDragDrop(); // 添加触摸拖拽支持
+            initScenarios(); // Initializes both types of scenarios
+            initQuizzes(); // Initializes MC selection logic for all quizzes
+            initSingleQuizzes(); // Adds submit logic for lesson quizzes
+        });
+
+        // 模块切换
+        function initModules() {
+            const moduleButtons = document.querySelectorAll('.module-btn');
+            // ... (rest of initModules remains the same) ...
+            const lessons = document.querySelectorAll('.lesson');
+
+            moduleButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const moduleId = this.dataset.module;
+                    activateModule(moduleId);
+                });
+            });
+
+            // 下一关按钮
+            const nextButtons = document.querySelectorAll('.next-lesson');
+            nextButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const currentLessonElement = button.closest('.lesson');
+                    if (!currentLessonElement) return; // Safety check
+
+                    const currentModule = currentLessonElement.id;
+                    const nextModule = this.dataset.next;
+
+                    // Mark current lesson as completed (if not already)
+                    if (!userData.completedLessons.includes(currentModule)) {
+                        userData.completedLessons.push(currentModule);
+                        addXP(30); // XP for completing a lesson section
+                        updateProgress();
+                    }
+
+                    activateModule(nextModule);
+
+                    // Grant achievement based on completing specific modules (triggered by moving NEXT)
+                    if (currentModule === 'prevention' && !userData.achievements.includes('prevention')) {
+                        // Check if prevention drag/drop/quiz completed if needed
+                        unlockAchievement('prevention');
+                    } else if (currentModule === 'treatment' && !userData.achievements.includes('treatment')) {
+                        // Check if treatment drag/drop/quiz completed if needed
+                        unlockAchievement('treatment');
+                    }
+                });
+            });
+
+            // 上一关按钮
+            const prevButtons = document.querySelectorAll('.prev-lesson');
+            prevButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const prevModule = this.dataset.prev;
+                    activateModule(prevModule);
+                });
+            });
+        }
+
+        function activateModule(moduleId) {
+            const moduleButtons = document.querySelectorAll('.module-btn');
+            const lessons = document.querySelectorAll('.lesson');
+
+            // 更新按钮状态
+            moduleButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.module === moduleId);
+            });
+
+            // 更新课程显示
+            lessons.forEach(lesson => {
+                lesson.classList.toggle('active', lesson.id === moduleId);
+            });
+
+            // Scroll module selector if needed
+            const activeButton = document.querySelector(`.module-btn[data-module="${moduleId}"]`);
+            if (activeButton) {
+                activeButton.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll page to top
+        }
+
+        // 拖拽功能
+        function initDragDrop() {
+            // ... (initDragDrop remains largely the same) ...
+            const dragContainers = document.querySelectorAll('.drag-drop-container');
+
+            dragContainers.forEach(container => {
+                const dragItems = container.querySelectorAll('.drag-items .drag-item'); // Select items from source
+                const dropZones = container.querySelectorAll('.drop-zone');
+                let draggedItem = null;
+
+                dragItems.forEach(item => {
+                    item.addEventListener('dragstart', function (e) {
+                        draggedItem = this;
+                        e.dataTransfer.effectAllowed = 'move';
+                        e.dataTransfer.setData('text/plain', null); // For Firefox compatibility
+                        setTimeout(() => this.classList.add('dragging'), 0);
+                    });
+
+                    item.addEventListener('dragend', function () {
+                        this.classList.remove('dragging');
+                        draggedItem = null;
+                        checkDragComplete(container); // Check completion after drag ends
+                    });
+                });
+
+                dropZones.forEach(zone => {
+                    zone.addEventListener('dragover', function (e) {
+                        e.preventDefault();
+                        e.dataTransfer.dropEffect = 'move';
+                        this.classList.add('highlight');
+                    });
+
+                    zone.addEventListener('dragleave', function () {
+                        this.classList.remove('highlight');
+                    });
+
+                    zone.addEventListener('drop', function (e) {
+                        e.preventDefault();
+                        this.classList.remove('highlight');
+
+                        if (draggedItem) {
+                            const requiredCategory = zone.dataset.category;
+                            const requiredOrder = zone.dataset.order;
+                            const itemCategory = draggedItem.dataset.category;
+                            // const itemOrder = draggedItem.dataset.order;
+
+                            // Check if dropped in the correct category zone OR the steps zone
+                            if ((requiredCategory && requiredCategory === itemCategory) || requiredOrder === 'steps') {
+                                this.appendChild(draggedItem); // Move the item
+                                // No XP added on drop, add XP on correct completion check
+                            } else {
+                                console.log("Incorrect drop zone");
+                                // Optional: Add visual feedback for incorrect drop
+                            }
+                        }
+                    });
+                });
+            });
+        }
+
+        // 检查拖拽是否完成 (check entire container)
+        function checkDragComplete(container) {
+            const sourceItems = container.querySelectorAll('.drag-items .drag-item');
+            const dropZones = container.querySelectorAll('.drop-zone');
+
+            // Only check if source is empty
+            if (sourceItems.length > 0) {
+                return;
+            }
+
+            console.log("All items placed, checking correctness...");
+            let isCorrect = true; // Assume correct initially
+
+            // Check each drop zone
+            dropZones.forEach(zone => {
+                const itemsInZone = zone.querySelectorAll('.drag-item');
+                const requiredCategory = zone.dataset.category;
+                const requiredOrder = zone.dataset.order;
+
+                if (requiredCategory) { // Check category zones
+                    itemsInZone.forEach(item => {
+                        if (item.dataset.category !== requiredCategory) {
+                            isCorrect = false;
+                            console.log(`Incorrect item in category ${requiredCategory}:`, item.textContent);
+                            // Optional: Mark incorrect items/zones visually
+                            item.style.border = '2px solid var(--danger)';
+                        } else {
+                            item.style.border = '1px solid var(--secondary)'; // Reset border if correct
+                        }
+                    });
+                } else if (requiredOrder === 'steps') { // Check ordered steps zone
+                    let expectedOrder = 1;
+                    // Check if correct number of items are present first
+                    if (itemsInZone.length !== 6) { // Assuming 6 steps based on HTML
+                        isCorrect = false;
+                        console.log("Incorrect number of items in steps zone.");
+                    } else {
+                        itemsInZone.forEach(item => {
+                            if (parseInt(item.dataset.order) !== expectedOrder) {
+                                isCorrect = false;
+                                console.log(`Incorrect order at step ${expectedOrder}:`, item.textContent);
+                                item.style.border = '2px solid var(--danger)';
+                            } else {
+                                item.style.border = '1px solid var(--secondary)'; // Reset border if correct
+                            }
+                            expectedOrder++;
+                        });
+                    }
+                }
+            });
+
+            if (isCorrect) {
+                console.log("Drag and drop completed correctly!");
+                addXP(100); // Grant bonus XP for correct completion
+
+                // Unlock relevant achievement if not already unlocked
+                const preventionContainer = document.querySelector('#prevention .drag-drop-container');
+                const treatmentContainer = document.querySelector('#treatment .drag-drop-container');
+
+                if (container === preventionContainer && !userData.achievements.includes('prevention')) {
+                    // unlockAchievement('prevention'); // Can unlock here or via Next button
+                } else if (container === treatmentContainer && !userData.achievements.includes('treatment')) {
+                    // unlockAchievement('treatment'); // Can unlock here or via Next button
+                }
+                // Optional: Show completion message
+                const completionMessage = document.createElement('div');
+                completionMessage.innerHTML = '<p style="color: var(--success); text-align: center; margin-top: 15px; font-weight: bold;">分类/排序正确！ <i class="fas fa-check-circle"></i></p>';
+                container.appendChild(completionMessage);
+
+
+            } else {
+                console.log("Drag and drop incorrect.");
+                // Optional: Show general incorrect message
+                const existingError = container.querySelector('.drag-error-message');
+                if (!existingError) {
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'drag-error-message'; // Add class to prevent duplicates
+                    errorMessage.innerHTML = '<p style="color: var(--danger); text-align: center; margin-top: 15px; font-weight: bold;">分类或排序有误，请检查红色边框的项目！</p>';
+                    container.appendChild(errorMessage);
+                }
+            }
+        }
+
+
+        // 情景模拟 (REVISED with fix)
+        function initScenarios() {
+            const scenarioContainers = document.querySelectorAll('.scenario-container');
+
+            scenarioContainers.forEach(container => {
+                const options = container.querySelectorAll('.scenario-option');
+                const feedback = container.querySelector('.scenario-feedback');
+                let isSignalIdentification = container.querySelector('.scenario-option[data-signal]') !== null;
+
+                options.forEach(option => {
+                    option.addEventListener('click', function () {
+
+                        if (isSignalIdentification) {
+                            // --- Logic for Signal Identification ---
+                            if (this.dataset.identified) return; // Prevent re-clicking the same identified option
+                            this.dataset.identified = 'true'; // Mark this specific option as identified
+
+                            const signal = this.dataset.signal;
+                            // Add feedback text directly inside the clicked option
+                            const feedbackDiv = document.createElement('div');
+                            feedbackDiv.style.marginTop = '10px';
+                            feedbackDiv.style.fontWeight = 'bold';
+                            feedbackDiv.style.color = '#2ecc71'; // Use a distinct color
+                            feedbackDiv.innerHTML = `识别为: ${signal}预警信号 <i class="fas fa-check"></i>`;
+                            this.appendChild(feedbackDiv);
+
+                            this.style.backgroundColor = 'rgba(46, 204, 113, 0.1)'; // Style update
+                            this.style.cursor = 'default'; // Indicate it's done
+
+                            addXP(25); // XP for identifying one signal
+
+                            // Check if all signal options in *this container* are done
+                            const allSignalOptionsInContainer = container.querySelectorAll('.scenario-option[data-signal]');
+                            let allDone = true;
+                            allSignalOptionsInContainer.forEach(opt => {
+                                if (!opt.dataset.identified) { // Check the custom attribute
+                                    allDone = false;
+                                }
+                            });
+
+                            if (allDone) {
+                                console.log("All warning signals identified!");
+                                addXP(50); // Bonus XP for identifying all signals
+                                // Optional: Show a specific reward/message for completing this section
+                                // showReward('fas fa-exclamation-triangle', '预警信号专家', '你已成功识别所有热射病预警信号！');
+                            }
+
+                        } else {
+                            // --- Logic for Correct/Incorrect Choice Scenario ---
+                            if (container.dataset.answered) return; // Prevent re-answering
+                            container.dataset.answered = 'true';
+
+                            const isCorrect = this.dataset.correct === 'true';
+
+                            // Disable all options in this container
+                            options.forEach(opt => {
+                                opt.style.pointerEvents = 'none';
+                                opt.style.opacity = '0.7'; // Dim non-selected options
+                                if (opt.dataset.correct === 'true') {
+                                    opt.classList.add('correct'); // Highlight correct answer visually
+                                    opt.style.opacity = '1'; // Ensure correct is fully visible
+                                }
+                            });
+
+                            this.style.opacity = '1'; // Ensure selected option is fully visible
+                            if (isCorrect) {
+                                this.classList.add('correct'); // Add class to selected if correct
+                                if (feedback) {
+                                    feedback.innerHTML = '<p><strong>正确！</strong>当出现头晕、恶心和出汗减少等症状时，这可能是热射病的早期预警信号。应立即停止训练，到阴凉处休息，并向教官报告身体状况，以防病情加重。</p>';
+                                    feedback.className = 'scenario-feedback show success';
+                                }
+                                addXP(50);
+                            } else {
+                                this.classList.add('incorrect'); // Add class to selected if incorrect
+                                if (feedback) {
+                                    feedback.innerHTML = '<p><strong>不正确。</strong>当出现这些症状时，继续训练可能会导致热射病，应立即停止训练并寻求帮助。正确答案已用绿色标出。</p>';
+                                    feedback.className = 'scenario-feedback show error';
+                                }
+                            }
+                            if (feedback) feedback.style.display = 'block'; // Show feedback area
+                        }
+                    });
+                });
+            });
+        }
+
+
+        // Initialize single quizzes within lessons
+        function initSingleQuizzes() {
+            // ... (initSingleQuizzes remains the same) ...
+            const singleQuizSubmitButtons = document.querySelectorAll('.submit-single-quiz');
+
+            singleQuizSubmitButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const quizContainer = this.closest('.quiz-container');
+                    const questions = quizContainer.querySelectorAll('.quiz-question');
+                    let allAnswered = true;
+                    let isCorrect = true;
+
+                    questions.forEach(question => {
+                        const selectedOption = question.querySelector('.option.selected');
+                        if (!selectedOption) {
+                            allAnswered = false;
+                            // Highlight unanswered question briefly
+                            question.style.outline = '2px solid red';
+                            setTimeout(() => { question.style.outline = 'none'; }, 1500);
+                        } else if (selectedOption.dataset.correct !== 'true') {
+                            isCorrect = false;
+                        }
+                        // Immediate feedback is handled by initQuizzes click listener
+                    });
+
+                    if (!allAnswered) {
+                        alert('请先回答问题！');
+                        return;
+                    }
+
+                    button.disabled = true; // Prevent resubmitting
+                    button.textContent = '已提交';
+                    button.style.backgroundColor = '#ccc'; // Grey out button
+
+                    if (isCorrect) {
+                        addXP(30); // Extra XP for getting lesson quiz right
+                        // Unlock specific achievements based on the quiz ID
+                        if (quizContainer.id === 'prevention-quiz' && !userData.achievements.includes('training')) {
+                            unlockAchievement('training');
+                        }
+                        if (quizContainer.id === 'treatment-quiz' && !userData.achievements.includes('treatment')) {
+                            // Can unlock here or rely on "Next" button logic
+                            // unlockAchievement('treatment');
+                        }
+                        // Add visual confirmation
+                        const confirmMsg = document.createElement('p');
+                        confirmMsg.innerHTML = '回答正确 <i class="fas fa-check" style="color: var(--success);"></i>';
+                        confirmMsg.style.marginTop = '10px';
+                        quizContainer.appendChild(confirmMsg);
+                    } else {
+                        console.log("Single quiz answered incorrectly.");
+                        // Add visual confirmation
+                        const errorMsg = document.createElement('p');
+                        errorMsg.innerHTML = '回答有误，请参考高亮答案 <i class="fas fa-times" style="color: var(--danger);"></i>';
+                        errorMsg.style.marginTop = '10px';
+                        quizContainer.appendChild(errorMsg);
+                    }
+                });
+            });
+        }
+
+        // Main Quiz functionality (MC selection and feedback)
+        function initQuizzes() {
+            // ... (initQuizzes handles selection styling and immediate feedback outside final quiz) ...
+            const quizQuestions = document.querySelectorAll('.quiz-question');
+
+            quizQuestions.forEach(question => {
+                const options = question.querySelectorAll('.option');
+                const feedback = question.querySelector('.feedback');
+                const isFinalQuiz = question.closest('#quiz') !== null; // Check if inside the final quiz module
+
+                options.forEach(option => {
+                    option.addEventListener('click', function () {
+                        // Allow changing answers in the final quiz before submitting
+                        // but prevent changing after submitting single quizzes
+                        const singleSubmitBtn = question.closest('.quiz-container')?.querySelector('.submit-single-quiz');
+                        if (singleSubmitBtn && singleSubmitBtn.disabled) {
+                            return; // Don't allow changes if single quiz was submitted
+                        }
+
+                        // Mark question as potentially answered
+                        question.dataset.answered = 'true';
+
+                        // Clear previous selection *within this question*
+                        options.forEach(opt => opt.classList.remove('selected', 'correct', 'incorrect'));
+                        feedback.style.display = 'none';
+                        feedback.className = 'feedback';
+
+                        // Mark current selection
+                        this.classList.add('selected');
+
+                        // Provide immediate feedback ONLY for lesson quizzes (not final)
+                        if (!isFinalQuiz) {
+                            if (this.dataset.correct === 'true') {
+                                this.classList.add('correct');
+                                feedback.classList.add('success');
+                                feedback.innerHTML = '正确！';
+                                feedback.style.display = 'block';
+                            } else {
+                                this.classList.add('incorrect');
+                                feedback.classList.add('error');
+                                feedback.innerHTML = '不正确。正确答案已高亮显示。';
+                                feedback.style.display = 'block';
+
+                                // Highlight correct answer immediately
+                                options.forEach(opt => {
+                                    if (opt.dataset.correct === 'true') {
+                                        opt.classList.add('correct');
+                                        // opt.style.borderColor = 'var(--success)'; // Optional extra highlight
+                                    }
+                                });
+                            }
+                        }
+                    });
+                });
+            });
+
+
+            // Handle final quiz submission (logic remains the same)
+            const submitQuizButton = document.querySelector('.submit-quiz');
+            if (submitQuizButton) {
+                submitQuizButton.addEventListener('click', function () {
+                    const quizContainer = document.querySelector('#quiz .quiz-container');
+                    const questions = quizContainer.querySelectorAll('.quiz-question');
+                    let correctCount = 0;
+                    let totalQuestions = questions.length;
+                    let allAnswered = true;
+
+                    questions.forEach((question, index) => { // Add index for numbering
+                        const selectedOption = question.querySelector('.option.selected');
+                        const feedback = question.querySelector('.feedback');
+                        const questionNumber = index + 1;
+
+                        // Reset previous feedback/styles from potential re-clicks
+                        feedback.style.display = 'none';
+                        feedback.className = 'feedback';
+                        question.querySelectorAll('.option').forEach(opt => opt.classList.remove('correct', 'incorrect'));
+                        question.style.border = 'none'; // Clear potential red border
+
+
+                        if (!selectedOption) {
+                            allAnswered = false;
+                            question.style.borderLeft = '3px solid var(--danger)'; // Highlight unanswered
+                            if (allAnswered) { // Scroll to the first unanswered question
+                                question.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        } else {
+                            question.style.borderLeft = '3px solid transparent'; // Clear highlight if answered now
+                            if (selectedOption.dataset.correct === 'true') {
+                                correctCount++;
+                                selectedOption.classList.add('correct');
+                                feedback.classList.add('success');
+                                feedback.innerHTML = `问题 ${questionNumber}: 正确！`;
+                            } else {
+                                selectedOption.classList.add('incorrect');
+                                feedback.classList.add('error');
+                                feedback.innerHTML = `问题 ${questionNumber}: 不正确。`;
+                                // Highlight correct answer after submission
+                                question.querySelectorAll('.option').forEach(opt => {
+                                    if (opt.dataset.correct === 'true') {
+                                        opt.classList.add('correct');
+                                    }
+                                });
+                            }
+                            feedback.style.display = 'block'; // Show feedback after submit
+                        }
+                    });
+
+                    if (!allAnswered) {
+                        alert('请回答所有问题后再提交！未回答的问题已用红框标出。');
+                        // Find first unanswered and scroll to it
+                        const firstUnanswered = Array.from(questions).find(q => !q.querySelector('.option.selected'));
+                        if (firstUnanswered) {
+                            firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                        return;
+                    }
+
+                    const score = Math.round((correctCount / totalQuestions) * 100);
+
+                    // Disable further interaction with options after submission
+                    quizContainer.querySelectorAll('.option').forEach(opt => opt.style.pointerEvents = 'none');
+
+
+                    // Display result message (replace button area)
+                    const navigationArea = document.querySelector('#quiz .navigation');
+                    navigationArea.innerHTML = `
+                         <div style="text-align:center; padding:20px; background: var(--light); border-radius: 10px; width: 100%;">
+                             <h3>测验完成！</h3>
+                             <div style="font-size:3rem; margin:15px 0; color:${score >= 80 ? 'var(--success)' : 'var(--danger)'}">
+                                 ${score}%
+                             </div>
+                             <p>你答对了 ${correctCount} 道题，共 ${totalQuestions} 道题。</p>
+                             <p style="margin-top: 15px;">${score === 100 ? '太棒了，满分！' : score >= 80 ? '恭喜你，掌握得不错！' : '继续努力，温故知新！'}</p>
+                             <button class="btn secondary" onclick="location.reload()" style="margin-top: 20px;">
+                                 <i class="fas fa-redo"></i> 再学一次
+                             </button>
+                         </div>
+                     `;
+
+                    // Add experience points based on score
+                    addXP(score * 2);
+
+                    // Unlock achievements based on score
+                    if (score === 100) {
+                        if (!userData.achievements.includes('perfect')) unlockAchievement('perfect');
+                        if (!userData.achievements.includes('quiz')) unlockAchievement('quiz');
+                    } else if (score >= 80) {
+                        if (!userData.achievements.includes('quiz')) unlockAchievement('quiz');
+                    }
+
+                    updateProgress(); // Update overall progress after quiz
+                    window.scrollTo({ top: quizContainer.offsetTop - 50, behavior: 'smooth' }); // Scroll to results (adjust offset)
+                });
+            }
+        }
+
+
+        // 添加经验值
+        function addXP(amount) {
+            // ... (addXP remains the same) ...
+            if (!amount || amount <= 0) return; // Don't process zero or negative XP
+
+            userData.xp += amount;
+
+            const xpElement = document.querySelectorAll('.stat-value')[0];
+            const targetXP = userData.xp;
+
+            // Display "+amount" animation
+            const gainIndicator = document.createElement('span');
+            gainIndicator.textContent = `+${amount}`;
+            gainIndicator.style.color = 'var(--success)';
+            gainIndicator.style.fontWeight = 'bold';
+            gainIndicator.style.position = 'absolute'; // Position relative to stat value
+            gainIndicator.style.top = '-15px';
+            gainIndicator.style.left = '50%';
+            gainIndicator.style.transform = 'translateX(-50%)';
+            gainIndicator.style.opacity = '1';
+            gainIndicator.style.transition = 'top 0.8s ease-out, opacity 0.8s ease-out';
+            xpElement.parentNode.style.position = 'relative'; // Ensure parent has relative positioning
+            xpElement.parentNode.appendChild(gainIndicator);
+
+            // Animate fade up and out
+            setTimeout(() => {
+                gainIndicator.style.top = '-30px';
+                gainIndicator.style.opacity = '0';
+            }, 50); // Start animation shortly after adding
+
+            // Remove indicator after animation
+            setTimeout(() => {
+                gainIndicator.remove();
+            }, 850); // Remove after transition ends
+
+
+            // Update the actual value (can be immediate or delayed)
+            xpElement.textContent = targetXP;
+
+
+            updateUI(); // Update other parts of UI if needed
+            storage.save();
+        }
+
+        // 解锁成就
+        function unlockAchievement(type) {
+            // ... (unlockAchievement remains the same) ...
+            if (!type || !achievementsConfig[type] || userData.achievements.includes(type)) {
+                // console.log(`Achievement "${type}" already unlocked or invalid.`);
+                return;
+            }
+
+            console.log(`Unlocking achievement: ${type}`);
+            userData.achievements.push(type);
+            userData.badges = userData.achievements.length;
+
+            const achievementElement = document.querySelector(`.achievement[data-achievement-type="${type}"]`);
+            if (achievementElement) {
+                achievementElement.classList.add('unlocked');
+            } else {
+                console.warn(`Could not find achievement element for type: ${type}`);
+            }
+
+            updateUI();
+            storage.save();
+
+            const config = achievementsConfig[type];
+            showReward(config.icon, config.title, config.description);
+        }
+
+        // 更新进度
+        function updateProgress() {
+            // ... (updateProgress remains the same) ...
+            const coreModules = ['prevention', 'warning', 'treatment'];
+            let completedCoreModules = 0;
+            coreModules.forEach(modId => {
+                if (userData.completedLessons.includes(modId)) {
+                    completedCoreModules++;
+                }
+            });
+
+            const totalCoreModules = coreModules.length;
+            const completion = totalCoreModules > 0 ? Math.round((completedCoreModules / totalCoreModules) * 100) : 0;
+            userData.completion = completion;
+
+            userData.preventionProgress = userData.completedLessons.includes('prevention') ? 100 : 0;
+            userData.treatmentProgress = userData.completedLessons.includes('treatment') ? 100 : 0;
+
+            updateUI();
+            storage.save();
+        }
+
+        // 更新UI
+        function updateUI() {
+            // ... (updateUI remains the same) ...
+            // Update header stats
+            document.querySelectorAll('.stat-value')[0].textContent = userData.xp;
+            document.querySelectorAll('.stat-value')[1].textContent = userData.badges;
+            document.querySelectorAll('.stat-value')[2].textContent = userData.completion + '%';
+
+            // Update sidebar progress bars
+            document.querySelectorAll('.progress-fill')[0].style.width = userData.completion + '%';
+            document.querySelectorAll('.progress-title span')[1].textContent = userData.completion + '%';
+
+            document.querySelectorAll('.progress-fill')[1].style.width = userData.preventionProgress + '%';
+            document.querySelectorAll('.progress-title span')[3].textContent = userData.preventionProgress + '%';
+
+            document.querySelectorAll('.progress-fill')[2].style.width = userData.treatmentProgress + '%';
+            document.querySelectorAll('.progress-title span')[5].textContent = userData.treatmentProgress + '%';
+
+            // Update daily challenge progress (example)
+            document.querySelector('.challenge-fill').style.width = userData.completion + '%';
+
+            // Update achievement visual state
+            const achievementElements = document.querySelectorAll('.achievement');
+            achievementElements.forEach(el => {
+                const type = el.dataset.achievementType;
+                el.classList.toggle('unlocked', userData.achievements.includes(type));
+            });
+        }
+
+        // 显示奖励弹窗
+        function showReward(iconClass, title, description) {
+            // ... (showReward remains the same, audio is removed) ...
+            const overlay = document.querySelector('.overlay');
+            const popup = document.querySelector('.reward-popup');
+            if (!overlay || !popup) return; // Safety check
+
+            const rewardIcon = popup.querySelector('.reward-icon i');
+            const rewardTitle = popup.querySelector('.reward-title');
+            const rewardDescription = popup.querySelector('.reward-description');
+            const closeButton = popup.querySelector('.close-popup-btn');
+
+            if (!rewardIcon || !rewardTitle || !rewardDescription || !closeButton) return; // More checks
+
+            rewardIcon.className = iconClass || 'fas fa-star'; // Default icon if needed
+            rewardTitle.textContent = title;
+            rewardDescription.textContent = description;
+
+            overlay.classList.add('show');
+            popup.classList.add('show');
+
+            // Close handlers
+            const closePopup = () => {
+                overlay.classList.remove('show');
+                popup.classList.remove('show');
+                // Clean up event listeners to prevent memory leaks
+                closeButton.removeEventListener('click', closePopup);
+                overlay.removeEventListener('click', closePopup);
+            };
+
+            closeButton.addEventListener('click', closePopup);
+            overlay.addEventListener('click', closePopup);
+
+        }
+
+        // 触摸拖拽功能 - 为移动设备添加
+        function initTouchDragDrop() {
+            const dragContainers = document.querySelectorAll('.drag-drop-container');
+
+            dragContainers.forEach(container => {
+                const dragItems = container.querySelectorAll('.drag-items .drag-item');
+                const dropZones = container.querySelectorAll('.drop-zone');
+                let touchDraggedItem = null;
+                let originalParent = null;
+                let clonedItem = null;
+
+                // 为每个可拖拽项目添加触摸事件
+                dragItems.forEach(item => {
+                    // 保存原始拖拽数据以便在触摸版本中使用
+                    item.addEventListener('touchstart', function (e) {
+                        e.preventDefault(); // 阻止默认行为（滚动等）
+                        touchDraggedItem = this;
+                        originalParent = this.parentElement;
+
+                        // 创建一个克隆元素来显示拖动效果
+                        clonedItem = this.cloneNode(true);
+                        clonedItem.classList.add('drag-clone');
+                        document.body.appendChild(clonedItem);
+
+                        // 保存触摸开始的位置
+                        const touch = e.touches[0];
+
+                        // 标记原始元素为正在拖拽
+                        this.classList.add('touch-dragging');
+
+                        // 保存原始位置并设置克隆元素位置
+                        const rect = this.getBoundingClientRect();
+                        clonedItem.style.width = rect.width + 'px';
+                        clonedItem.style.left = touch.clientX - (rect.width / 2) + 'px';
+                        clonedItem.style.top = touch.clientY - (rect.height / 2) + 'px';
+                    }, { passive: false });
+
+                    // 处理拖拽过程中的移动
+                    item.addEventListener('touchmove', function (e) {
+                        if (!touchDraggedItem) return;
+                        e.preventDefault();
+
+                        const touch = e.touches[0];
+
+                        // 移动克隆元素
+                        if (clonedItem) {
+                            clonedItem.style.left = touch.clientX - (clonedItem.offsetWidth / 2) + 'px';
+                            clonedItem.style.top = touch.clientY - (clonedItem.offsetHeight / 2) + 'px';
+                        }
+
+                        // 根据位置高亮放置区域
+                        dropZones.forEach(zone => {
+                            zone.classList.remove('touch-highlight');
+
+                            const rect = zone.getBoundingClientRect();
+                            if (
+                                touch.clientX > rect.left &&
+                                touch.clientX < rect.right &&
+                                touch.clientY > rect.top &&
+                                touch.clientY < rect.bottom
+                            ) {
+                                zone.classList.add('touch-highlight');
+                            }
+                        });
+                    }, { passive: false });
+
+                    // 结束拖拽时处理放置
+                    item.addEventListener('touchend', function (e) {
+                        if (!touchDraggedItem) return;
+
+                        // 移除拖拽标记
+                        this.classList.remove('touch-dragging');
+
+                        // 检测是否在有效的放置区域
+                        let dropped = false;
+                        if (e.changedTouches && e.changedTouches.length > 0) {
+                            const touch = e.changedTouches[0];
+
+                            dropZones.forEach(zone => {
+                                zone.classList.remove('touch-highlight');
+                                zone.classList.remove('highlight'); // 同时移除原始高亮
+                                const rect = zone.getBoundingClientRect();
+
+                                if (
+                                    touch.clientX > rect.left &&
+                                    touch.clientX < rect.right &&
+                                    touch.clientY > rect.top &&
+                                    touch.clientY < rect.bottom
+                                ) {
+                                    // 放置在区域内
+                                    const requiredCategory = zone.dataset.category;
+                                    const requiredOrder = zone.dataset.order;
+                                    const itemCategory = touchDraggedItem.dataset.category;
+
+                                    // 检查是否放在正确的分类区域
+                                    if ((requiredCategory && requiredCategory === itemCategory) ||
+                                        requiredOrder === 'steps') {
+                                        zone.appendChild(touchDraggedItem);
+                                        dropped = true;
+
+                                        // 添加视觉反馈
+                                        zone.classList.add('highlight');
+                                        setTimeout(() => {
+                                            zone.classList.remove('highlight');
+                                        }, 500);
+                                    }
+                                }
+                            });
+                        }
+
+                        // 如果没有放在有效区域，回到原位
+                        if (!dropped && originalParent) {
+                            originalParent.appendChild(touchDraggedItem);
+                        }
+
+                        // 移除克隆元素
+                        if (clonedItem && clonedItem.parentElement) {
+                            clonedItem.parentElement.removeChild(clonedItem);
+                        }
+
+                        // 重置变量
+                        touchDraggedItem = null;
+                        originalParent = null;
+                        clonedItem = null;
+
+                        // 检查拖拽是否完成
+                        checkDragComplete(container);
+                    });
+
+                    // 触摸取消时处理
+                    item.addEventListener('touchcancel', function (e) {
+                        if (!touchDraggedItem) return;
+
+                        // 恢复原始状态
+                        this.classList.remove('touch-dragging');
+
+                        // 移除克隆元素
+                        if (clonedItem && clonedItem.parentElement) {
+                            clonedItem.parentElement.removeChild(clonedItem);
+                        }
+
+                        // 移除高亮
+                        dropZones.forEach(zone => {
+                            zone.classList.remove('touch-highlight');
+                            zone.classList.remove('highlight');
+                        });
+
+                        // 如果已经从原位置移出，放回原位
+                        if (originalParent) {
+                            originalParent.appendChild(touchDraggedItem);
+                        }
+
+                        // 重置变量
+                        touchDraggedItem = null;
+                        originalParent = null;
+                        clonedItem = null;
+                    });
+                });
+
+                // 为放置区域添加触摸事件处理
+                dropZones.forEach(zone => {
+                    zone.addEventListener('touchstart', function (e) {
+                        // 防止拖拽项目的touchstart冒泡到这里
+                        if (e.target !== zone && e.target.classList.contains('drag-item')) {
+                            return;
+                        }
+                    });
+                });
+            });
+        }
+
+    </script>
+</body>
+
+</html>

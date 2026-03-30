@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>热射病核心体温监测与降温方法</title>
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
+    <!-- Tailwind CSS CDN -->
+    <script src="../assets/vendors/tailwind.compiler.js"></script>
+    <!-- Framer Motion CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/framer-motion/11.2.10/motion.umd.min.js" integrity="sha512-/S9lAhJNLcsru5fD20p5Kszm7F9EqkfEVbuAXFvnvBXRG/IBxzf7YUbMqjUjPSLTOVksLKvAy4g1/k0a3sH7RA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            background-color: #000000;
+            color: #E5E7EB; /* text-gray-200 */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; /* Common sans-serif stack */
+        }
+        .bento-box {
+            background-color: #111827; /* gray-900 */
+            border-radius: 1rem; /* rounded-xl */
+            padding: 1.5rem; /* p-6 */
+            border: 1px solid #374151; /* gray-700 */
+            overflow: hidden; /* Ensure content fits */
+            position: relative; /* For potential absolute positioning inside */
+            /* Add default motion properties here if needed, or rely on inline attributes */
+        }
+        .highlight-orange {
+            color: #FF6B00; /* brand orange */
+        }
+        .bg-highlight-orange-gradient {
+             background: linear-gradient(180deg, rgba(249, 115, 22, 0.3) 0%, rgba(249, 115, 22, 0.05) 100%);
+        }
+        .chinese-title {
+            font-size: 2.25rem; /* text-4xl */
+            line-height: 2.5rem; /* leading-10 */
+            font-weight: 700; /* font-bold */
+            margin-bottom: 0.5rem; /* mb-2 */
+        }
+         .chinese-subtitle {
+            font-size: 1.5rem; /* text-2xl */
+            line-height: 2rem; /* leading-8 */
+            font-weight: 600; /* font-semibold */
+            margin-bottom: 1rem; /* mb-4 */
+        }
+        .english-caption {
+            font-size: 0.875rem; /* text-sm */
+            line-height: 1.25rem; /* leading-5 */
+            color: #9CA3AF; /* gray-400 */
+            text-transform: uppercase;
+            letter-spacing: 0.05em; /* tracking-wider */
+        }
+        .large-visual {
+            font-size: 6rem; /* text-9xl */
+            line-height: 1;
+            font-weight: 800; /* font-extrabold */
+            position: absolute;
+            opacity: 0.1;
+            z-index: 0;
+            right: 1rem;
+            bottom: 1rem;
+            color: #F97316; /* orange-500 */
+            user-select: none; /* Prevent text selection */
+            pointer-events: none; /* Prevent interaction */
+        }
+         .icon-large {
+            font-size: 3rem; /* text-5xl */
+            margin-bottom: 1rem; /* mb-4 */
+            color: #F97316; /* orange-500 */
+            display: inline-block; /* Ensure margin works */
+        }
+        /* Basic scroll snap simulation (won't be perfect like Apple's without JS) */
+        /* Apply this to the main container if needed */
+        /* .scroll-snap-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+        .scroll-snap-section {
+             scroll-snap-align: start;
+             min-height: 80vh; /* Adjust as needed */
+        /* } */
+
+        /* Simple fade-in animation using CSS for elements entering viewport */
+        /* Requires Intersection Observer JS to add/remove the 'is-visible' class */
+        /* As requested, Framer Motion attributes are used instead */
+
+        /* Timeline style */
+        .timeline-item {
+            position: relative;
+            padding-left: 2.5rem; /* space for icon and line */
+            padding-bottom: 1.5rem; /* mb-6 */
+        }
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 0.6875rem; /* Adjust to center the line on the icon */
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: rgba(255, 107, 0, 0.3); /* brand orange/30 */
+        }
+         .timeline-item:last-child .timeline-line {
+            display: none; /* Hide line for the last item */
+         }
+        .timeline-icon {
+            position: absolute;
+            left: 0;
+            top: 0.125rem; /* Align icon vertically */
+            width: 1.5rem; /* w-6 */
+            height: 1.5rem; /* h-6 */
+            border-radius: 9999px; /* rounded-full */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #FF6B00; /* brand orange */
+            color: white;
+            z-index: 1;
+        }
+        /* Adjust icon colors for progression */
+        .timeline-icon-1 { background-color: #B45309; } /* orange-700 */
+        .timeline-icon-2 { background-color: #e16400; }
+        .timeline-icon-3 { background-color: #FF6B00; }
+        .timeline-icon-4 { background-color: #ffa366; }
+        .timeline-icon-5 { background-color: #ffbe99; }
+
+    </style>
+</head>
+<body class="antialiased">
+
+<!-- 添加导航栏 -->
+<nav class="bg-black py-4 px-6 sticky top-0 z-50 border-b border-gray-800">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="../index.html" class="flex items-center text-orange-500 hover:text-orange-400 transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i>
+            <span class="font-bold">返回主页</span>
+        </a>
+    </div>
+</nav>
+
+    <!-- Note: motion.* attributes require Framer Motion library and potentially JS initialization -->
+    <!-- The UMD script is included, basic animations using attributes like whileInView should work -->
+    <div id="app" class="container mx-auto px-4 py-12 max-w-7xl">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+            <!-- Header Section -->
+            <motion.div class="bento-box md:col-span-3 lg:col-span-4"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}>
+                <div class="relative">
+                    <h1 class="chinese-title">热射病核心体温监测与降温方法</h1>
+                    <p class="english-caption mb-2">CORE BODY TEMPERATURE MONITORING & COOLING METHODS FOR HEATSTROKE</p>
+                    <p class="text-lg text-gray-300 mb-4">讲者：热射病专家组教授 | <span class="english-caption">SPEAKER: HS EXPERT GROUP PROFESSOR </span> | 日期：2025.04 </p>
+                    <p class="text-gray-400">本次分享聚焦热射病早期关键环节：核心体温监测与快速有效降温，结合十余年急救经验，系统讲解常用知识与方法。</p>
+                    <div class="absolute top-0 right-0 text-5xl opacity-10 text-orange-500"><i class="fa-solid fa-temperature-high"></i></div>
+                </div>
+            </motion.div>
+
+            <!-- Importance & Goal -->
+            <motion.div class="bento-box md:col-span-2 lg:col-span-2 relative flex flex-col justify-between"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.1 }}>
+                 <div>
+                    <p class="english-caption mb-2">CRITICAL GOAL</p>
+                    <h2 class="chinese-subtitle highlight-orange">降温<span class="text-gray-300">是关键</span></h2>
+                    <p class="text-gray-300 mb-4">快速有效降温是治疗核心。研究表明，每延迟1分钟，病死率增加约1%。</p>
+                    <p class="text-gray-300 font-semibold">早发现 / 早诊断 / 早治疗 <span class="english-caption ml-1">(EARLY DETECTION, DIAGNOSIS, TREATMENT)</span></p>
+                 </div>
+                 <div class="text-right mt-4 z-10">
+                    <p class="text-7xl font-extrabold highlight-orange">30<span class="text-4xl text-gray-300 ml-1">min</span></p>
+                    <p class="text-gray-400">黄金降温时间 <span class="english-caption ml-1">(GOLDEN HOUR)</span> 降至38℃以下</p>
+                 </div>
+                 <div class="large-visual"><i class="fa-solid fa-stopwatch"></i></div>
+            </motion.div>
+
+            <!-- Core Temperature -->
+            <motion.div class="bento-box relative"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.2 }}>
+                <p class="english-caption mb-2">VITAL SIGN</p>
+                <h2 class="chinese-subtitle">核心体温</h2>
+                <i class="fa-solid fa-temperature-arrow-down icon-large"></i>
+                <p class="text-gray-300">反映内部脏器温度，优于体表温度。热射病特征：核心体温 > 40℃。</p>
+                <p class="english-caption mt-1">CORE TEMP > 40°C (104°F)</p>
+                <div class="large-visual">>40°</div>
+            </motion.div>
+
+            <!-- Heatstroke Overview -->
+            <motion.div class="bento-box"
+                         initial={{ opacity: 0, y: 20 }}
+                         whileInView={{ opacity: 1, y: 0 }}
+                         viewport={{ once: true }}
+                         transition={{ duration: 0.5, delay: 0.3 }}>
+                <p class="english-caption mb-2">OVERVIEW</p>
+                <h2 class="chinese-subtitle">热射病概述</h2>
+                 <i class="fa-solid fa-triangle-exclamation icon-large"></i>
+                <p class="text-gray-300 mb-2">中暑最严重阶段，核心体温 > 40℃ + 中枢神经损害。</p>
+                <p class="english-caption mb-2">MOST SEVERE FORM OF HEAT ILLNESS</p>
+                <ul class="list-none space-y-1 text-gray-400 text-sm">
+                    <li><span class="highlight-orange mr-1">▶</span> 早期: 热痉挛 (Mild: Heat Cramps)</li>
+                    <li><span class="highlight-orange mr-1">▶</span> 进展: 热衰竭 (Moderate: Heat Exhaustion)</li>
+                    <li><span class="text-red-500 font-bold mr-1">▶</span> 严重: 热射病 (Severe: Heatstroke)</li>
+                </ul>
+            </motion.div>
+
+            <!-- Monitoring Methods -->
+            <motion.div class="bento-box md:col-span-2 lg:col-span-2"
+                         initial={{ opacity: 0, y: 20 }}
+                         whileInView={{ opacity: 1, y: 0 }}
+                         viewport={{ once: true }}
+                         transition={{ duration: 0.5, delay: 0.1 }}>
+                 <p class="english-caption mb-2">MONITORING</p>
+                <h2 class="chinese-subtitle">核心体温监测方法</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <p class="font-semibold text-gray-200 mb-1"><i class="fa-solid fa-star text-orange-500 mr-1"></i> 金标准 <span class="english-caption ml-1">(GOLD STANDARD)</span></p>
+                        <p class="highlight-orange text-lg font-medium">直肠温度</p>
+                        <p class="text-gray-400 text-sm">Rectal Temperature</p>
+                    </div>
+                    <div>
+                         <p class="font-semibold text-gray-200 mb-1"><i class="fa-solid fa-hospital-user text-orange-500 mr-1"></i> 替代方法 <span class="english-caption ml-1">(ALTERNATIVES)</span></p>
+                        <ul class="list-disc list-inside text-gray-400 text-sm">
+                            <li>膀胱温度 (Bladder)</li>
+                            <li>食道温度 (Esophageal)</li>
+                            <li>体温胶囊 (Pill - Advanced)</li>
+                        </ul>
+                    </div>
+                </div>
+                 <p class="font-semibold text-gray-200 mt-4 mb-1"><i class="fa-solid fa-circle-xmark text-red-500 mr-1"></i> 不推荐 <span class="english-caption ml-1">(NOT FOR DIAGNOSIS)</span></p>
+                 <p class="text-gray-400 text-sm">腋温 (Axillary), 口温 (Oral), 额温 (Forehead), 耳温 (Ear) - 误差大 / Unreliable</p>
+                 <p class="mt-4 text-gray-300 font-semibold">持续监测，避免过度降温 (&lt;36℃)</p>
+                 <p class="english-caption mt-1">CONTINUOUS MONITORING, AVOID HYPOTHERMIA (<36°C)</p>
+            </motion.div>
+
+             <!-- Prevention -->
+            <motion.div class="bento-box md:col-span-2 lg:col-span-2"
+                         initial={{ opacity: 0, y: 20 }}
+                         whileInView={{ opacity: 1, y: 0 }}
+                         viewport={{ once: true }}
+                         transition={{ duration: 0.5, delay: 0.2 }}>
+                 <p class="english-caption mb-2">PREVENTION</p>
+                <h2 class="chinese-subtitle">预防措施 <span class="english-caption ml-1">PROACTIVE MEASURES</span></h2>
+                 <i class="fa-solid fa-shield-halved icon-large"></i>
+                <ul class="list-none space-y-2 text-gray-300">
+                    <li class="flex items-start"><i class="fa-regular fa-sun text-orange-500 w-5 text-center mr-2 mt-1"></i> <div><strong class="text-gray-200">环境把控:</strong> 避开高温时段，改善通风。<span class="block english-caption">ENVIRONMENTAL CONTROL</span></div></li>
+                    <li class="flex items-start"><i class="fa-solid fa-bottle-water text-orange-500 w-5 text-center mr-2 mt-1"></i> <div><strong class="text-gray-200">个人防护:</strong> 主动补含盐水电解质，穿透气衣物。<span class="block english-caption">PERSONAL PROTECTION (HYDRATION, CLOTHING)</span></div></li>
+                    <li class="flex items-start"><i class="fa-solid fa-person-running text-orange-500 w-5 text-center mr-2 mt-1"></i> <div><strong class="text-gray-200">热习服:</strong> 逐步适应热环境。<span class="block english-caption">HEAT ACCLIMATIZATION</span></div></li>
+                    <li class="flex items-start"><i class="fa-solid fa-users text-orange-500 w-5 text-center mr-2 mt-1"></i> <div><strong class="text-gray-200">关注特殊人群:</strong> 老年、儿童、慢病等。<span class="block english-caption">VULNERABLE GROUPS</span></div></li>
+                     <li class="flex items-start"><i class="fa-solid fa-dumbbell text-orange-500 w-5 text-center mr-2 mt-1"></i> <div><strong class="text-gray-200">科学训练:</strong> 张弛有度，高温下多休息。<span class="block english-caption">SCIENTIFIC TRAINING & REST</span></div></li>
+                </ul>
+            </motion.div>
+
+            <!-- Cooling Methods -->
+            <motion.div class="bento-box md:col-span-3 lg:col-span-4"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.1 }}>
+                 <p class="english-caption mb-2">COOLING METHODS</p>
+                <h2 class="chinese-subtitle">专业降温方法</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="border border-orange-500/50 p-4 rounded-lg bg-highlight-orange-gradient transform hover:scale-105 transition-transform duration-300">
+                        <h3 class="font-semibold text-lg highlight-orange mb-2"><i class="fa-solid fa-bath mr-2"></i>冰水浸泡 (CWI)</h3>
+                        <p class="text-gray-300 text-sm"><strong>效果:</strong> 降温最快，劳力性热射病首选。</p>
+                        <p class="english-caption mt-1">FASTEST COOLING, PREFERRED FOR EXERTIONAL HEATSTROKE</p>
+                        <p class="text-gray-400 text-xs mt-2"><strong>方法:</strong> 0-15℃冷水浸泡 (除头)。</p>
+                    </div>
+                    <div class="border border-gray-700 p-4 rounded-lg transform hover:scale-105 transition-transform duration-300">
+                        <h3 class="font-semibold text-lg text-gray-200 mb-2"><i class="fa-solid fa-wind mr-2"></i>蒸发降温</h3>
+                         <p class="text-gray-300 text-sm"><strong>效果:</strong> 速度较快，相对安全。</p>
+                         <p class="english-caption mt-1">EVAPORATIVE COOLING (SAFER, EFFECTIVE)</p>
+                         <p class="text-gray-400 text-xs mt-2"><strong>方法:</strong> 喷洒温水 + 风扇强吹。</p>
+                    </div>
+                     <div class="border border-gray-700 p-4 rounded-lg transform hover:scale-105 transition-transform duration-300">
+                        <h3 class="font-semibold text-lg text-gray-200 mb-2"><i class="fa-solid fa-syringe mr-2"></i>血管内降温</h3>
+                         <p class="text-gray-300 text-sm"><strong>效果:</strong> 高效。</p>
+                         <p class="english-caption mt-1">INTRAVASCULAR COOLING (HIGHLY EFFECTIVE)</p>
+                         <p class="text-gray-400 text-xs mt-2"><strong>方法:</strong> 中心静脉置管+设备 (ICU)。</p>
+                    </div>
+                </div>
+                 <p class="font-semibold text-red-500 mt-6 mb-2 text-lg"><i class="fa-solid fa-ban mr-2"></i>禁用方法 <span class="english-caption ml-1">(PROHIBITED)</span></p>
+                 <ul class="list-disc list-inside text-red-400 space-y-1">
+                     <li><strong>退热药 (Antipyretics):</strong> 无效且可能伤肝肾 (Ineffective & Harmful)。</li>
+                     <li><strong>酒精擦浴 (Alcohol Rub):</strong> 有中毒风险 (Risk of Toxicity)。</li>
+                 </ul>
+            </motion.div>
+
+             <!-- Treatment Goals & Support -->
+            <motion.div class="bento-box md:col-span-2 lg:col-span-2"
+                         initial={{ opacity: 0, y: 20 }}
+                         whileInView={{ opacity: 1, y: 0 }}
+                         viewport={{ once: true }}
+                         transition={{ duration: 0.5, delay: 0.2 }}>
+                 <p class="english-caption mb-2">TREATMENT & SUPPORT</p>
+                <h2 class="chinese-subtitle">治疗目标与器官支持</h2>
+                <div class="mb-4 border-l-4 border-orange-500 pl-4 py-2">
+                    <p class="highlight-orange font-semibold text-lg mb-1">第一阶段 (30min): <span class="text-gray-200">核心体温 &lt; 38.5℃</span></p>
+                     <p class="english-caption">PHASE 1 GOAL: CORE TEMP < 38.5°C WITHIN 30 MIN</p>
+                    <p class="text-gray-300 font-semibold text-lg mt-2">第二阶段 (24h): <span class="text-gray-200">维持 37-38℃</span></p>
+                     <p class="english-caption">PHASE 2 GOAL: MAINTAIN 37-38°C</p>
+                </div>
+                <h3 class="font-semibold text-gray-200 mb-2">器官功能支持 <span class="english-caption ml-1">(ICU LEVEL SUPPORT)</span>:</h3>
+                 <ul class="list-disc list-inside text-gray-400 text-sm space-y-1">
+                    <li>呼吸支持 (Ventilation)</li>
+                    <li>循环支持 (Circulation)</li>
+                    <li>肾脏支持 (Renal - CRRT)</li>
+                    <li>凝血障碍处理 (Coagulation)</li>
+                    <li>中枢神经保护 (CNS Protection)</li>
+                 </ul>
+            </motion.div>
+
+             <!-- Four "DON'Ts" -->
+            <motion.div class="bento-box md:col-span-1 lg:col-span-2 relative flex flex-col justify-center"
+                         initial={{ opacity: 0, scale: 0.9 }}
+                         whileInView={{ opacity: 1, scale: 1 }}
+                         viewport={{ once: true }}
+                         transition={{ duration: 0.5, delay: 0.3 }}>
+                 <p class="english-caption mb-2">KEY PROHIBITIONS</p>
+                <h2 class="chinese-subtitle text-red-500">降温处理"四不"</h2>
+                 <i class="fa-solid fa-hand icon-large text-red-500"></i>
+                <ul class="space-y-2 text-gray-300 z-10 relative">
+                    <li><strong class="text-red-400">1. 不用退热药</strong> <span class="english-caption">(NO ANTIPYRETICS)</span></li>
+                    <li><strong class="text-red-400">2. 不过度搓揉</strong> <span class="english-caption">(NO AGGRESSIVE RUBBING)</span></li>
+                    <li><strong class="text-red-400">3. 不滥用纯水 (口服)</strong> <span class="english-caption">(NO PLAIN WATER ORALLY)</span></li>
+                    <li><strong class="text-red-400">4. 不用酒精擦浴</strong> <span class="english-caption">(NO ALCOHOL RUBS)</span></li>
+                </ul>
+                <div class="large-visual text-red-500">4<span class="text-6xl">NO</span></div>
+            </motion.div>
+
+             <!-- Summary Flow -->
+            <motion.div class="bento-box md:col-span-3 lg:col-span-4"
+                         initial={{ opacity: 0, y: 20 }}
+                         whileInView={{ opacity: 1, y: 0 }}
+                         viewport={{ once: true }}
+                         transition={{ duration: 0.5, delay: 0.1 }}>
+                 <p class="english-caption mb-2">PROCESS SUMMARY</p>
+                <h2 class="chinese-subtitle">急救流程总结 "NINE EARLY, ONE CENTRALIZED"</h2>
+                <div class="mt-4">
+                     <div class="timeline-line"></div>
+                     <div class="timeline-item">
+                        <div class="timeline-icon timeline-icon-1"><i class="fa-solid fa-angles-right text-xs"></i></div>
+                        <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-200">立即 <span class="english-caption ml-2">(IMMEDIATELY)</span></h3>
+                        <p class="text-sm font-normal text-gray-400">脱离热环境，初步评估 (ABC).<span class="block english-caption">REMOVE FROM HEAT, ASSESS ABC</span></p>
+                    </div>
+                     <div class="timeline-item">
+                        <div class="timeline-icon timeline-icon-2"><i class="fa-solid fa-thermometer text-xs"></i></div>
+                        <h3 class="mb-1 text-lg font-semibold text-gray-200">5分钟内 <span class="english-caption ml-2">(WITHIN 5 MIN)</span></h3>
+                        <p class="text-sm font-normal text-gray-400">启动核心体温(直肠)监测.<span class="block english-caption">START CORE (RECTAL) TEMP MONITORING</span></p>
+                    </div>
+                     <div class="timeline-item">
+                        <div class="timeline-icon timeline-icon-3"><i class="fa-solid fa-snowflake text-xs"></i></div>
+                        <h3 class="mb-1 text-lg font-semibold text-gray-200">15分钟内 <span class="english-caption ml-2">(WITHIN 15 MIN)</span></h3>
+                        <p class="text-sm font-normal text-gray-400">开始有效降温 (CWI / Evaporative).<span class="block english-caption">INITIATE EFFECTIVE COOLING</span></p>
+                    </div>
+                     <div class="timeline-item">
+                         <div class="timeline-icon timeline-icon-4"><i class="fa-solid fa-bullseye text-xs"></i></div>
+                        <h3 class="mb-1 text-lg font-semibold text-gray-200">30分钟内 <span class="english-caption ml-2">(WITHIN 30 MIN)</span></h3>
+                        <p class="text-sm font-normal text-gray-400">核心体温降至 <strong class="highlight-orange">&lt; 38.5℃</strong>.<span class="block english-caption">CORE TEMP < 38.5°C</span></p>
+                    </div>
+                    <div class="timeline-item">
+                         <div class="timeline-icon timeline-icon-5"><i class="fa-solid fa-infinity text-xs"></i></div>
+                        <h3 class="mb-1 text-lg font-semibold text-gray-200">持续进行 <span class="english-caption ml-2">(CONTINUOUSLY)</span></h3>
+                        <p class="text-sm font-normal text-gray-400">监测，维持 <strong class="highlight-orange">37-38℃</strong>，处理并发症，早期集中救治.<span class="block english-caption">MONITOR, MAINTAIN TEMP, MANAGE COMPLICATIONS, TRANSFER</span></p>
+                    </div>
+                </div>
+                 <p class="mt-6 text-center text-xl font-bold highlight-orange">时间就是生命！时间就是大脑！时间就是器官！</p>
+                 <p class="english-caption text-center mt-1">TIME IS LIFE! TIME IS BRAIN! TIME IS ORGAN!</p>
+            </motion.div>
+
+            <!-- Case Study -->
+             <motion.div class="bento-box md:col-span-2 lg:col-span-2"
+                         initial={{ opacity: 0, y: 20 }}
+                         whileInView={{ opacity: 1, y: 0 }}
+                         viewport={{ once: true }}
+                         transition={{ duration: 0.5, delay: 0.2 }}>
+                 <p class="english-caption mb-2">CASE STUDY & LESSONS</p>
+                <h2 class="chinese-subtitle">案例分享与教训</h2>
+                 <i class="fa-solid fa-book-skull icon-large"></i>
+                <p class="text-gray-300 mb-2">分享了30年前一例因认识不足、降温不当、未使用核心体温监测、误用退热药导致死亡的案例.</p>
+                <p class="english-caption mb-2">A 30-YEAR-OLD CASE HIGHLIGHTING PAST MISTAKES</p>
+                <p class="font-semibold text-gray-200 mb-1">深刻教训 <span class="english-caption ml-1">(KEY LESSONS)</span>:</p>
+                 <ul class="list-disc list-inside text-gray-400 text-sm space-y-1">
+                    <li>早期、快速、有效降温至关重要 (Early, Rapid, Effective Cooling is Vital).</li>
+                    <li>核心体温监测是基础 (Core Temp Monitoring is Foundational).</li>
+                    <li>掌握正确降温方法和禁忌 (Know Correct Methods & Contraindications).</li>
+                    <li>凝血功能障碍需早期防治 (Prevent/Treat Coagulopathy Early).</li>
+                 </ul>
+            </motion.div>
+
+            <!-- Takeaway -->
+             <motion.div class="bento-box md:col-span-1 lg:col-span-2 flex flex-col justify-center items-center text-center relative bg-highlight-orange-gradient"
+                         initial={{ opacity: 0, scale: 0.9 }}
+                         whileInView={{ opacity: 1, scale: 1 }}
+                         viewport={{ once: true }}
+                         transition={{ duration: 0.5, delay: 0.3 }}>
+                  <p class="english-caption mb-4">CORE TAKEAWAY</p>
+                 <h2 class="text-5xl font-extrabold highlight-orange mb-4 leading-tight">降温!<br/>降温!<br/>还是降温!</h2>
+                 <p class="text-gray-300 font-semibold">COOL DOWN! COOL DOWN! COOL DOWN!</p>
+                 <div class="large-visual"><i class="fa-solid fa-exclamation"></i></div>
+            </motion.div>
+
+             <!-- Final points -->
+            <motion.div class="bento-box md:col-span-3 lg:col-span-4"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.1 }}>
+                <p class="english-caption mb-2">KEY POINTS & OUTLOOK</p>
+                <h2 class="chinese-subtitle">核心要点与展望</h2>
+                <ol class="list-decimal list-inside space-y-3 text-gray-300 text-lg">
+                   <li>热射病是<strong class="highlight-orange">急症</strong>！降温速度决定生死.<span class="block english-caption text-sm">HEATSTROKE IS AN EMERGENCY! SPEED SAVES LIVES.</span></li>
+                   <li><strong class="highlight-orange">预防</strong>是关键！做好防护.<span class="block english-caption text-sm">PREVENTION IS KEY! TAKE PRECAUTIONS.</span></li>
+                   <li>救治核心是"黄金30分钟"降温！首选冷水浸泡 (劳力性).<span class="block english-caption text-sm">"GOLDEN 30 MIN" COOLING IS CRITICAL! CWI FOR EXERTIONAL.</span></li>
+                   <li><strong class="highlight-orange">核心体温监测</strong>是基石！指导精准降温.<span class="block english-caption text-sm">CORE TEMP MONITORING IS FUNDAMENTAL! GUIDES TREATMENT.</span></li>
+                </ol>
+                 <p class="mt-8 text-center text-xl font-semibold text-gray-200">谢谢大家！ <span class="english-caption ml-1">THANK YOU!</span></p>
+            </motion.div>
+
+        </div>
+    </div>
+
+    <!-- 返回顶部按钮 -->
+    <button id="backToTopBtn" class="fixed bottom-20 right-6 z-50 p-3 rounded-full bg-orange-500 text-white shadow-lg transform transition-transform duration-300 opacity-0 translate-y-10">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- 统一页脚 -->
+    <footer class="relative mt-16 pt-10 pb-6 bg-gray-900 border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <!-- 顶部返回主页 -->
+            <div class="flex justify-center mb-8">
+                <a href="../index.html"
+                    class="inline-flex items-center px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-lg">
+                    <i class="fas fa-home mr-2"></i> 返回主页
+                </a>
+            </div>
+
+            <!-- 主要内容 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+                <!-- 快速导航 -->
+                <div class="lg:col-span-2">
+                    <h3 class="text-xl font-semibold text-orange-500 mb-4">快速导航</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <a href="/pages/中国热射病诊断与治疗指南.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-book-medical mr-2 text-orange-500 w-5"></i> 诊断与治疗指南
+                        </a>
+                        <a href="/pages/热射病救治体系建设标准专家共识.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-users-rays mr-2 text-orange-500 w-5"></i> 救治体系建设标准
+                        </a>
+                        <a href="/pages/热耐力评估.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-clipboard-check mr-2 text-orange-500 w-5"></i> 热耐力评估
+                        </a>
+                        <a href="/pages/热射病核心体温监测与降温方法.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-temperature-three-quarters mr-2 text-orange-500 w-5"></i> 核心体温监测
+                        </a>
+                        <a href="/pages/热射病现场处置.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-kit-medical mr-2 text-orange-500 w-5"></i> 现场处置
+                        </a>
+                        <a href="/pages/热射病通关挑战.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-gamepad mr-2 text-orange-500 w-5"></i> 通关挑战
+                        </a>
+                        <a href="/pages/8-4-6黄金法则.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-stopwatch-20 mr-2 text-orange-500 w-5"></i> 8-4-6黄金法则
+                        </a>
+                        <a href="/pages/热指数查询.html"
+                            class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-thermometer-half mr-2 text-orange-500 w-5"></i> 热指数查询
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 快速链接 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-orange-500 mb-4">快速链接</h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="关于本项目.html"
+                                class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                                <i class="fas fa-user-doctor mr-2 text-orange-500 w-5"></i> 关于本项目
+                            </a>
+                        </li>
+                        <li class="text-gray-300 flex items-center">
+                            <i class="fas fa-phone-alt mr-2 text-orange-500 w-5"></i> 紧急情况请拨打 <span
+                                class="text-orange-500 font-bold ml-1">120</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 联系我们 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-orange-500 mb-4">联系我们</h3>
+                    <p class="text-gray-300 flex items-center mb-2">
+                        <i class="fas fa-envelope mr-2 text-orange-500 w-5"></i>
+                        <a href="mailto:nimrod1990@163.com"
+                            class="hover:text-orange-400 transition-colors">nimrod1990@163.com</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- 声明部分 -->
+            <div class="border-t border-gray-800 pt-6 text-center">
+                <p class="text-gray-400 mb-2">
+                    <strong class="text-orange-500">版权声明：</strong>©2025 红医师 热射病防治
+                </p>
+                <p class="text-gray-400 mb-2">
+                    <strong class="text-orange-500">免责声明：</strong>本网站内容仅供参考，不替代专业医疗建议。如有紧急情况请立即就医。
+                </p>
+                <p class="text-gray-400">
+                    <strong class="text-orange-500">转载声明：</strong>所有资料来源于互联网公开资料，已脱密处理，禁止商用，转载请联系作者
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Framer Motion UMD library is included.
+        // The `motion.*` attributes used in the HTML (e.g., initial, animate, whileInView, transition, viewport)
+        // are declarative ways to specify animations provided by Framer Motion.
+        // This setup aims to fulfill the prompt's requirements for using Framer Motion via CDN
+        // and applying animations declaratively within the HTML structure.
+        // No additional complex JavaScript initialization is strictly required for these basic viewport animations to work with the UMD bundle.
+
+        // 返回顶部按钮脚本
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        
+        // 监听滚动事件
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) { // 当页面滚动超过300px时显示按钮
+                backToTopBtn.classList.remove('opacity-0', 'translate-y-10');
+                backToTopBtn.classList.add('opacity-100', 'translate-y-0');
+            } else {
+                backToTopBtn.classList.remove('opacity-100', 'translate-y-0');
+                backToTopBtn.classList.add('opacity-0', 'translate-y-10');
+            }
+        });
+        
+        // 点击按钮返回顶部
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

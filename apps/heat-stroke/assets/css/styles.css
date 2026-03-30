@@ -1,0 +1,132 @@
+/* 
+   原有样式已被移除。
+   页面主要样式现在由 Tailwind CSS (通过 CDN 引入 index.html) 控制。
+   可以在此处添加少量无法用 Tailwind 实现的自定义样式或覆盖。
+*/
+
+/* 全局基础样式 */
+body {
+    /* 设置字体平滑 */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* 添加平滑滚动效果 */
+    scroll-behavior: smooth;
+}
+
+/* Chart.js 图表样式调整 */
+canvas#heat-index-chart {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 300px;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    min-height: 250px;
+}
+
+/* 滚动动画相关样式 */
+.animated-item {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.animated-item.visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+/* 为不同元素设置不同的动画延迟，创造错落有致的效果 */
+.animated-item:nth-child(1) { transition-delay: 0.1s; }
+.animated-item:nth-child(2) { transition-delay: 0.2s; }
+.animated-item:nth-child(3) { transition-delay: 0.3s; }
+.animated-item:nth-child(4) { transition-delay: 0.4s; }
+.animated-item:nth-child(5) { transition-delay: 0.5s; }
+
+/* 为资源链接添加悬停效果 */
+.bento-item {
+    transition: all 0.3s ease;
+    border-radius: 0.5rem;
+}
+
+.bento-item:hover {
+    background-color: rgba(255, 107, 0, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(255, 107, 0, 0.1), 0 4px 6px -2px rgba(255, 107, 0, 0.05);
+}
+
+/* 确保内容正常显示，即使JS未加载 */
+.loading, .weather-info {
+    min-height: 150px;
+}
+
+/* 修复天气图标显示问题 */
+#weather-icon {
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+}
+
+/* 热指数警告颜色 */
+.alert.alert-comfort { background-color: rgba(74, 222, 128, 0.2); color: rgb(74, 222, 128); }
+.alert.alert-caution { background-color: rgba(250, 204, 21, 0.2); color: rgb(250, 204, 21); }
+.alert.alert-extreme-caution { background-color: rgba(249, 115, 22, 0.2); color: rgb(249, 115, 22); }
+.alert.alert-danger { background-color: rgba(239, 68, 68, 0.2); color: rgb(239, 68, 68); }
+.alert.alert-extreme-danger { background-color: rgba(220, 38, 38, 0.2); color: rgb(220, 38, 38); }
+
+/* 热射病预防检查清单样式 */
+.checklist-item {
+    transition: all 0.3s ease;
+}
+
+.checklist-item:hover {
+    transform: translateX(3px);
+}
+
+.checklist-item input[type="checkbox"] {
+    cursor: pointer;
+    appearance: none;
+    background-color: transparent;
+    border: 2px solid #555;
+    border-radius: 4px;
+    display: inline-block;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.checklist-item input[type="checkbox"]:checked {
+    background-color: #FF6B00;
+    border-color: #FF6B00;
+}
+
+.checklist-item input[type="checkbox"]:checked::after {
+    content: '✓';
+    font-size: 16px;
+    color: black;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1;
+}
+
+.checklist-item.completed {
+    border-left-color: #FF6B00;
+    background-color: rgba(255, 107, 0, 0.1);
+}
+
+.checklist-item.completed label > span:first-child {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+/* 确保Framer Motion动画正常工作的备用方案 */
+@media (prefers-reduced-motion: reduce) {
+    .animated-item {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}

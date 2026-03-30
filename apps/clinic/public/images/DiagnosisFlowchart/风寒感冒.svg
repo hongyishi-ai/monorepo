@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1000">
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .title { font-size: 24px; font-weight: bold; }
+    .subtitle { font-size: 18px; font-weight: bold; }
+    .content { font-size: 14px; }
+  </style>
+  
+  <rect width="100%" height="100%" fill="#e6f3ff"/>
+  
+  <text x="200" y="40" class="title" text-anchor="middle" fill="#00008b">风寒感冒诊断思维链</text>
+  
+  <g transform="translate(20, 80)">
+    <rect width="360" height="180" rx="10" fill="#b0e0e6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#00008b">症状特征</text>
+    <text x="10" y="60" class="content" fill="#00008b">• 发热: 轻微或无发热</text>
+    <text x="10" y="80" class="content" fill="#00008b">• 畏寒: 明显怕冷，常伴有寒战</text>
+    <text x="10" y="100" class="content" fill="#00008b">• 鼻塞: 严重，多为清稀鼻涕</text>
+    <text x="10" y="120" class="content" fill="#00008b">• 咳嗽: 有痰，痰多色白</text>
+    <text x="10" y="140" class="content" fill="#00008b">• 头身痛: 全身酸痛，头痛</text>
+    <text x="10" y="160" class="content" fill="#00008b">• 其他: 口不渴，小便清长</text>
+  </g>
+  
+  <g transform="translate(20, 280)">
+    <rect width="360" height="120" rx="10" fill="#b0e0e6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#00008b">中医病因</text>
+    <text x="10" y="60" class="content" fill="#00008b">• 外感风寒之邪</text>
+    <text x="10" y="80" class="content" fill="#00008b">• 正气不足，卫外不固</text>
+    <text x="10" y="100" class="content" fill="#00008b">• 寒邪束表，肺气失宣</text>
+  </g>
+  
+  <g transform="translate(20, 420)">
+    <rect width="360" height="140" rx="10" fill="#b0e0e6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#00008b">辨证要点</text>
+    <text x="10" y="60" class="content" fill="#00008b">1. 察舌象: 舌质淡，苔薄白</text>
+    <text x="10" y="80" class="content" fill="#00008b">2. 诊脉象: 脉浮紧</text>
+    <text x="10" y="100" class="content" fill="#00008b">3. 询问发病速度和症状特点</text>
+    <text x="10" y="120" class="content" fill="#00008b">4. 区别于风热感冒</text>
+  </g>
+  
+  <g transform="translate(20, 580)">
+    <rect width="360" height="180" rx="10" fill="#b0e0e6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#00008b">治疗方法</text>
+    <text x="10" y="60" class="content" fill="#00008b">• 中医: 解表散寒，宣肺止咳</text>
+    <text x="10" y="80" class="content" fill="#00008b">• 推荐方剂: 桂枝汤、麻黄汤</text>
+    <text x="10" y="100" class="content" fill="#00008b">• 现代治疗: 退热、止咳祛痰药物</text>
+    <text x="10" y="120" class="content" fill="#00008b">• 生活调护: 保暖，避免受凉</text>
+    <text x="10" y="140" class="content" fill="#00008b">• 饮食调理: 温热食物，如生姜红糖水</text>
+    <text x="10" y="160" class="content" fill="#00008b">• 外治法: 艾灸、刮痧（需专业指导）</text>
+  </g>
+  
+  <g transform="translate(20, 780)">
+    <rect width="360" height="140" rx="10" fill="#b0e0e6" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#00008b">关键信息</text>
+    <text x="10" y="60" class="content" fill="#00008b">• 症状持续或加重需及时就医</text>
+    <text x="10" y="80" class="content" fill="#00008b">• 预防: 注意保暖，避免受凉</text>
+    <text x="10" y="100" class="content" fill="#00008b">• 风寒感冒多见于冬季或气温骤降时</text>
+    <text x="10" y="120" class="content" fill="#00008b">• 与风热感冒相比，畏寒更甚于发热</text>
+  </g>
+  
+  <text x="200" y="960" class="content" text-anchor="middle" fill="#00008b">注意：此图仅供参考，具体诊断请咨询中医师</text>
+</svg>

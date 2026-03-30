@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1100">
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .title { font-size: 24px; font-weight: bold; }
+    .subtitle { font-size: 18px; font-weight: bold; }
+    .content { font-size: 14px; }
+  </style>
+  
+  <rect width="100%" height="100%" fill="#f0fff0"/>
+  
+  <text x="200" y="40" class="title" text-anchor="middle" fill="#2e8b57">神经性皮炎诊断思维链</text>
+  
+  <g transform="translate(20, 80)">
+    <rect width="360" height="160" rx="10" fill="#98fb98" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#2e8b57">症状特征</text>
+    <text x="10" y="60" class="content" fill="#2e8b57">• 剧烈瘙痒：持续、难以控制的搔抓冲动</text>
+    <text x="10" y="80" class="content" fill="#2e8b57">• 皮肤增厚：长期搔抓导致的苔藓化</text>
+    <text x="10" y="100" class="content" fill="#2e8b57">• 色素沉着：患处皮肤变暗</text>
+    <text x="10" y="120" class="content" fill="#2e8b57">• 局限性：通常只影响特定部位</text>
+    <text x="10" y="140" class="content" fill="#2e8b57">• 慢性病程：症状可持续数月或数年</text>
+  </g>
+  
+  <g transform="translate(20, 260)">
+    <rect width="360" height="200" rx="10" fill="#98fb98" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#2e8b57">病因分析</text>
+    <text x="10" y="60" class="content" fill="#2e8b57">1. 心理因素：</text>
+    <text x="10" y="80" class="content" fill="#2e8b57">   • 压力、焦虑、抑郁</text>
+    <text x="10" y="100" class="content" fill="#2e8b57">2. 神经系统异常：</text>
+    <text x="10" y="120" class="content" fill="#2e8b57">   • 痒觉阈值降低</text>
+    <text x="10" y="140" class="content" fill="#2e8b57">3. 遗传倾向</text>
+    <text x="10" y="160" class="content" fill="#2e8b57">4. 环境刺激：</text>
+    <text x="10" y="180" class="content" fill="#2e8b57">   • 干燥气候、紧身衣物、某些化学物质</text>
+  </g>
+  
+  <g transform="translate(20, 480)">
+    <rect width="360" height="140" rx="10" fill="#98fb98" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#2e8b57">诊断要点</text>
+    <text x="10" y="60" class="content" fill="#2e8b57">1. 详细病史：发病时间、诱因、心理状态</text>
+    <text x="10" y="80" class="content" fill="#2e8b57">2. 皮肤检查：观察苔藓化和色素沉着</text>
+    <text x="10" y="100" class="content" fill="#2e8b57">3. 排除其他疾病：如湿疹、牛皮癣等</text>
+    <text x="10" y="120" class="content" fill="#2e8b57">4. 皮肤活检：必要时进行，以排除其他病因</text>
+  </g>
+  
+  <g transform="translate(20, 640)">
+    <rect width="360" height="200" rx="10" fill="#98fb98" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#2e8b57">治疗方法</text>
+    <text x="10" y="60" class="content" fill="#2e8b57">1. 局部治疗：</text>
+    <text x="10" y="80" class="content" fill="#2e8b57">   • 强效糖皮质激素：缓解炎症和瘙痒</text>
+    <text x="10" y="100" class="content" fill="#2e8b57">   • 钙调神经磷酸酶抑制剂：如他克莫司</text>
+    <text x="10" y="120" class="content" fill="#2e8b57">2. 系统治疗：</text>
+    <text x="10" y="140" class="content" fill="#2e8b57">   • 抗组胺药：控制瘙痒</text>
+    <text x="10" y="160" class="content" fill="#2e8b57">   • 抗焦虑或抗抑郁药物：必要时使用</text>
+    <text x="10" y="180" class="content" fill="#2e8b57">3. 心理治疗：认知行为疗法等</text>
+  </g>
+  
+  <g transform="translate(20, 860)">
+    <rect width="360" height="180" rx="10" fill="#98fb98" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#2e8b57">预防和自我管理</text>
+    <text x="10" y="60" class="content" fill="#2e8b57">• 避免搔抓：使用冰敷或压敷缓解瘙痒</text>
+    <text x="10" y="80" class="content" fill="#2e8b57">• 保持皮肤湿润：使用无香温和保湿剂</text>
+    <text x="10" y="100" class="content" fill="#2e8b57">• 应对压力：学习放松技巧，如冥想</text>
+    <text x="10" y="120" class="content" fill="#2e8b57">• 穿着合适：选择宽松、棉质衣物</text>
+    <text x="10" y="140" class="content" fill="#2e8b57">• 保持指甲短而光滑：减少搔抓损伤</text>
+    <text x="10" y="160" class="content" fill="#2e8b57">• 识别并避免诱发因素</text>
+  </g>
+  
+  <text x="200" y="1080" class="content" text-anchor="middle" fill="#2e8b57">注意：如症状持续恶化或出现感染迹象，需及时就医</text>
+</svg>

@@ -1,0 +1,277 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Tailwind 蓝色变量 */
+    --blue-50: #eff6ff;
+    --blue-100: #dbeafe;
+    --blue-200: #bfdbfe;
+    --blue-300: #93c5fd;
+    --blue-400: #60a5fa;
+    --blue-500: #3b82f6;
+    --blue-600: #2563eb;
+    --blue-700: #1d4ed8;
+    --blue-800: #1e40af;
+    --blue-900: #1e3a8a;
+
+    /* Tailwind 绿色变量（可选） */
+    --green-50: #f0fdf4;
+    --green-100: #dcfce7;
+    --green-200: #bbf7d0;
+    --green-300: #86efac;
+    --green-400: #4ade80;
+    --green-500: #22c55e;
+    --green-600: #16a34a;
+    --green-700: #15803d;
+    --green-800: #166534;
+    --green-900: #14532d;
+
+    /* 现有的颜色变量 */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Tailwind 蓝色变量在暗黑模式下 */
+    --blue-50: #1e3a8a;
+    --blue-100: #1e40af;
+    --blue-200: #2563eb;
+    --blue-300: #3b82f6;
+    --blue-400: #60a5fa;
+    --blue-500: #93c5fd;
+    --blue-600: #bfdbfe;
+    --blue-700: #dbeafe;
+    --blue-800: #eff6ff;
+    --blue-900: #ffffff;
+
+    /* Tailwind 绿色变量在暗黑模式下（可选） */
+    --green-50: #14532d;
+    --green-100: #166534;
+    --green-200: #15803d;
+    --green-300: #16a34a;
+    --green-400: #22c55e;
+    --green-500: #4ade80;
+    --green-600: #86efac;
+    --green-700: #bbf7d0;
+    --green-800: #dcfce7;
+    --green-900: #f0fdf4;
+
+    /* 现有的暗黑模式颜色变量 */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+
+  /* 应用边框颜色 */
+  * {
+    @apply border-border;
+  }
+  /* 应用背景和文字颜色 */
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.dark body {
+  @apply bg-gray-900 text-gray-100;
+}
+
+.dark .bg-white {
+  @apply bg-gray-800;
+}
+
+.dark .bg-gray-50 {
+  @apply bg-gray-900;
+}
+
+.dark .text-gray-900 {
+  @apply text-gray-100;
+}
+
+.dark .border-gray-200 {
+  @apply border-gray-700;
+}
+
+.dark .hover\:bg-gray-100:hover {
+  @apply hover:bg-gray-700;
+}
+
+.dark .shadow-md {
+  @apply shadow-gray-700;
+}
+
+/* Tailwind Typography 插件的自定义样式 */
+@layer components {
+  /* Light Mode Styles for .prose */
+  .prose {
+    /* 标题样式 */
+    h1, h2, h3, h4, h5, h6 {
+      @apply text-primary font-bold;
+    }
+
+    /* 段落样式 */
+    p {
+      @apply text-foreground;
+    }
+
+    /* 链接样式 */
+    a {
+      @apply text-blue-500 hover:text-blue-700;
+    }
+
+    /* 代码块样式 */
+    code {
+      @apply bg-gray-100 text-gray-800 px-1 rounded;
+    }
+
+    /* 块引用样式 */
+    blockquote {
+      @apply border-l-4 border-blue-500 pl-4 italic text-gray-600;
+    }
+
+    ul {
+      @apply list-disc list-inside;
+    }
+
+    ol {
+      @apply list-decimal list-inside;
+    }
+
+    /* 图片样式 */
+    img {
+      @apply rounded-lg;
+    }
+
+    /* 表格样式 */
+    table {
+      @apply w-full border-collapse;
+    }
+
+    th, td {
+      @apply border border-gray-300 px-4 py-2;
+    }
+
+    th {
+      @apply bg-gray-200;
+    }
+
+    /* 其他自定义样式 */
+  }
+
+  /* Dark Mode Styles for .prose-dark */
+  .dark .prose-dark {
+    /* 标题样式 */
+    h1, h2, h3, h4, h5, h6 {
+      @apply text-primary-foreground font-bold;
+    }
+
+    /* 段落样式 */
+    p {
+      @apply text-gray-100;
+    }
+
+    /* 链接样式 */
+    a {
+      @apply text-blue-300 hover:text-blue-500;
+    }
+
+    /* 代码块样式 */
+    code {
+      @apply bg-gray-800 text-gray-100 px-1 rounded;
+    }
+
+    /* 块引用样式 */
+    blockquote {
+      @apply border-l-4 border-blue-300 pl-4 italic text-gray-400;
+    }
+
+    /* 列表样式 */
+    ul {
+      @apply list-disc list-inside;
+    }
+
+    ol {
+      @apply list-decimal list-inside;
+    }
+
+    /* 图片样式 */
+    img {
+      @apply rounded-lg;
+    }
+
+    /* 表格样式 */
+    table {
+      @apply w-full border-collapse;
+    }
+
+    th, td {
+      @apply border border-gray-700 px-4 py-2;
+    }
+
+    th {
+      @apply bg-gray-700;
+    }
+
+    /* 其他自定义样式 */
+  }
+}
+
+/* 现有的其他样式 */
+
+.highlight {
+  background-color: rgba(53, 176, 5, 0.277);
+  transition: background-color 0.5s ease;
+}

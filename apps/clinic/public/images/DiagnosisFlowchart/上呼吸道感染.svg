@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1100">
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .title { font-size: 24px; font-weight: bold; }
+    .subtitle { font-size: 18px; font-weight: bold; }
+    .content { font-size: 14px; }
+  </style>
+  
+  <rect width="100%" height="100%" fill="#f0f8ff"/>
+  
+  <text x="200" y="40" class="title" text-anchor="middle" fill="#00008b">上呼吸道感染诊断思维链</text>
+  
+  <g transform="translate(20, 80)">
+    <rect width="360" height="160" rx="10" fill="#87cefa" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#00008b">症状特征</text>
+    <text x="10" y="60" class="content" fill="#00008b">• 鼻塞或流涕：可能是清澈或浑浊的</text>
+    <text x="10" y="80" class="content" fill="#00008b">• 咽喉痛：吞咽时可能加重</text>
+    <text x="10" y="100" class="content" fill="#00008b">• 咳嗽：可能是干咳或有痰</text>
+    <text x="10" y="120" class="content" fill="#00008b">• 发热：通常为低热，少数可能高热</text>
+    <text x="10" y="140" class="content" fill="#00008b">• 其他：可能伴有头痛、全身乏力</text>
+  </g>
+  
+  <g transform="translate(20, 260)">
+    <rect width="360" height="200" rx="10" fill="#87cefa" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#00008b">病因分析</text>
+    <text x="10" y="60" class="content" fill="#00008b">1. 病毒感染:</text>
+    <text x="10" y="80" class="content" fill="#00008b">   • 鼻病毒、冠状病毒、腺病毒等</text>
+    <text x="10" y="100" class="content" fill="#00008b">2. 细菌感染:</text>
+    <text x="10" y="120" class="content" fill="#00008b">   • 链球菌、肺炎球菌等（较少见）</text>
+    <text x="10" y="140" class="content" fill="#00008b">3. 过敏原:</text>
+    <text x="10" y="160" class="content" fill="#00008b">   • 花粉、灰尘、动物皮屑等</text>
+    <text x="10" y="180" class="content" fill="#00008b">4. 环境因素: 空气污染、温度变化</text>
+  </g>
+  
+  <g transform="translate(20, 480)">
+    <rect width="360" height="140" rx="10" fill="#87cefa" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#00008b">诊断要点</text>
+    <text x="10" y="60" class="content" fill="#00008b">1. 详细病史询问: 症状发展、接触史</text>
+    <text x="10" y="80" class="content" fill="#00008b">2. 体格检查: 咽部、鼻腔、耳部检查</text>
+    <text x="10" y="100" class="content" fill="#00008b">3. 实验室检查: 必要时进行血常规、CRP</text>
+    <text x="10" y="120" class="content" fill="#00008b">4. 排除并发症: 如肺炎、中耳炎等</text>
+  </g>
+  
+  <g transform="translate(20, 640)">
+    <rect width="360" height="200" rx="10" fill="#87cefa" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#00008b">治疗方法</text>
+    <text x="10" y="60" class="content" fill="#00008b">1. 对症治疗:</text>
+    <text x="10" y="80" class="content" fill="#00008b">   • 退热药: 如对乙酰氨基酚</text>
+    <text x="10" y="100" class="content" fill="#00008b">   • 缓解症状: 如止咳药、减充血剂</text>
+    <text x="10" y="120" class="content" fill="#00008b">2. 支持治疗:</text>
+    <text x="10" y="140" class="content" fill="#00008b">   • 充分休息、多饮水</text>
+    <text x="10" y="160" class="content" fill="#00008b">   • 保持室内空气湿润</text>
+    <text x="10" y="180" class="content" fill="#00008b">3. 抗生素: 仅在细菌感染时使用</text>
+  </g>
+  
+  <g transform="translate(20, 860)">
+    <rect width="360" height="180" rx="10" fill="#87cefa" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#00008b">预防和自我管理</text>
+    <text x="10" y="60" class="content" fill="#00008b">• 勤洗手，保持良好的个人卫生习惯</text>
+    <text x="10" y="80" class="content" fill="#00008b">• 避免接触感冒患者</text>
+    <text x="10" y="100" class="content" fill="#00008b">• 保持充足睡眠，均衡饮食</text>
+    <text x="10" y="120" class="content" fill="#00008b">• 适当运动，增强免疫力</text>
+    <text x="10" y="140" class="content" fill="#00008b">• 在流行季节考虑接种流感疫苗</text>
+    <text x="10" y="160" class="content" fill="#00008b">• 避免吸烟和二手烟暴露</text>
+  </g>
+  
+  <text x="200" y="1080" class="content" text-anchor="middle" fill="#00008b">注意：如出现高烧不退、呼吸困难等症状，需及时就医</text>
+</svg>

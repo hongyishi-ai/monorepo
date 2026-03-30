@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1100">
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .title { font-size: 24px; font-weight: bold; }
+    .subtitle { font-size: 18px; font-weight: bold; }
+    .content { font-size: 14px; }
+  </style>
+  
+  <rect width="100%" height="100%" fill="#e6e6fa"/>
+  
+  <text x="200" y="40" class="title" text-anchor="middle" fill="#4b0082">腹泻诊断思维链</text>
+  
+  <g transform="translate(20, 80)">
+    <rect width="360" height="160" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">常见症状</text>
+    <text x="10" y="60" class="content" fill="#4b0082">• 排便次数增加（≥3次/天）</text>
+    <text x="10" y="80" class="content" fill="#4b0082">• 粪便稀薄或呈水样</text>
+    <text x="10" y="100" class="content" fill="#4b0082">• 腹痛或腹部绞痛</text>
+    <text x="10" y="120" class="content" fill="#4b0082">• 恶心、呕吐</text>
+    <text x="10" y="140" class="content" fill="#4b0082">• 发热、全身不适（部分病例）</text>
+  </g>
+  
+  <g transform="translate(20, 260)">
+    <rect width="360" height="200" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">可能原因</text>
+    <text x="10" y="60" class="content" fill="#4b0082">1. 感染性：</text>
+    <text x="10" y="80" class="content" fill="#4b0082">   • 病毒（如轮状病毒、诺如病毒）</text>
+    <text x="10" y="100" class="content" fill="#4b0082">   • 细菌（如沙门氏菌、大肠杆菌）</text>
+    <text x="10" y="120" class="content" fill="#4b0082">   • 寄生虫（如阿米巴原虫）</text>
+    <text x="10" y="140" class="content" fill="#4b0082">2. 非感染性：</text>
+    <text x="10" y="160" class="content" fill="#4b0082">   • 食物不耐受（如乳糖不耐受）</text>
+    <text x="10" y="180" class="content" fill="#4b0082">   • 炎症性肠病、肠易激综合征</text>
+  </g>
+  
+  <g transform="translate(20, 480)">
+    <rect width="360" height="140" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">诊断方法</text>
+    <text x="10" y="60" class="content" fill="#4b0082">1. 详细病史询问：症状持续时间、旅行史等</text>
+    <text x="10" y="80" class="content" fill="#4b0082">2. 体格检查：腹部触诊、脱水征象评估</text>
+    <text x="10" y="100" class="content" fill="#4b0082">3. 实验室检查：粪便常规、培养、寄生虫检查</text>
+    <text x="10" y="120" class="content" fill="#4b0082">4. 影像学检查：必要时进行腹部CT或内镜检查</text>
+  </g>
+  
+  <g transform="translate(20, 640)">
+    <rect width="360" height="200" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">治疗方案</text>
+    <text x="10" y="60" class="content" fill="#4b0082">1. 补充水分和电解质：口服或静脉给液</text>
+    <text x="10" y="80" class="content" fill="#4b0082">2. 饮食调整：暂时低纤维饮食</text>
+    <text x="10" y="100" class="content" fill="#4b0082">3. 药物治疗：</text>
+    <text x="10" y="120" class="content" fill="#4b0082">   • 止泻药（如洛哌丁胺）</text>
+    <text x="10" y="140" class="content" fill="#4b0082">   • 抗生素（细菌性腹泻）</text>
+    <text x="10" y="160" class="content" fill="#4b0082">   • 抗寄生虫药物（寄生虫感染）</text>
+    <text x="10" y="180" class="content" fill="#4b0082">4. 益生菌补充</text>
+  </g>
+  
+  <g transform="translate(20, 860)">
+    <rect width="360" height="180" rx="10" fill="#d8bfd8" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#4b0082">预防和自我管理</text>
+    <text x="10" y="60" class="content" fill="#4b0082">• 注意饮食卫生，避免生食或未煮熟的食物</text>
+    <text x="10" y="80" class="content" fill="#4b0082">• 勤洗手，尤其在进食前和如厕后</text>
+    <text x="10" y="100" class="content" fill="#4b0082">• 饮用安全水源</text>
+    <text x="10" y="120" class="content" fill="#4b0082">• 旅行时注意饮食卫生</text>
+    <text x="10" y="140" class="content" fill="#4b0082">• 发生腹泻时及时补充水分</text>
+    <text x="10" y="160" class="content" fill="#4b0082">• 避免使用可能引起腹泻的药物</text>
+  </g>
+  
+  <text x="200" y="1080" class="content" text-anchor="middle" fill="#4b0082">注意：如有持续高热、血便或严重脱水症状，应立即就医</text>
+</svg>

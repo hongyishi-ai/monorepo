@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>热射病防治一站式解决</title>
+    <meta name="hs-api-base" content="/api/openweather">
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
+    <!-- 引入 Tailwind CSS -->
+    <script src="../assets/vendors/tailwind.compiler.js"></script>
+    <!-- 引入 Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- 引入 Chart.js图表库 -->
+    <script src="../assets/vendors/chart.min.js"></script>
+    <!-- 引入Chart.js的annotation插件，确保版本兼容性 -->
+    <script
+        src="../assets/vendors/chartjs-plugin-annotation.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <script>
+        // Tailwind 配置 (可选，用于自定义)
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-orange': '#FF6B00', // 定义亮橙色
+                    },
+                    fontFamily: {
+                        sans: ['Helvetica Neue', 'Arial', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Framer Motion via CDN -->
+    <script src="../assets/vendors/framer-motion.js"></script>
+</head>
+
+<body class="bg-black text-gray-300">
+
+    <!-- 添加导航栏 -->
+    <nav class="bg-black py-4 px-6 sticky top-0 z-50 border-b border-gray-800">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="../index.html" class="flex items-center text-orange-500 hover:text-orange-400 transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i>
+                <span class="font-bold">返回主页</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 修正重复 body 标签 -->
+        <div class="container mx-auto p-4 md:p-8">
+            <header class="mb-8 md:mb-12 text-center">
+                <h1 class="text-3xl md:text-7xl font-bold text-white mb-2">今天，你准备好了吗？</h1>
+                <p class="text-lg md:text-xl text-gray-400">热射病防治一站式解决</p>
+                <p class="text-sm text-gray-500 mt-1">预测、评估、预防三步走</p>
+            </header>
+
+
+
+            <!-- Bento Grid 布局开始 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+
+                <!-- 位置信息块 (跨2列) -->
+                <div
+                    class="md:col-span-2 p-4 md:p-6 bg-gray-900 rounded-lg shadow-lg flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4 animated-item">
+                    <div id="location-display" class="text-lg font-semibold text-white mb-2 md:mb-0">正在获取位置...</div>
+                    <!-- Container for input and buttons, always row -->
+                    <div
+                        class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full md:w-auto">
+                        <input type="text" id="location-input" placeholder="输入城市 (e.g., 北京)"
+                            class="bg-gray-800 text-white border border-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-orange flex-grow">
+                        <!-- Container for buttons, always row on mobile -->
+                        <div class="flex space-x-2 w-full sm:w-auto">
+                            <button id="search-btn"
+                                class="bg-brand-orange hover:bg-opacity-80 text-black font-bold py-2 px-4 rounded transition duration-300 flex-1 sm:flex-initial"><i
+                                    class="fas fa-search mr-1"></i> 搜索</button>
+                            <button id="refresh-btn"
+                                class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded transition duration-300 flex-1 sm:flex-initial"><i
+                                    class="fas fa-sync-alt mr-1"></i> 刷新</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 当前天气块 -->
+                <div class="p-4 md:p-6 bg-gray-900 rounded-lg shadow-lg animated-item">
+                    <h2 class="text-2xl font-bold text-brand-orange mb-4">当前天气 <span
+                            class="text-sm text-gray-400">NOW</span></h2>
+                    <div id="loading" class="loading text-center text-gray-500">正在加载...</div>
+                    <div id="weather-info" class="weather-info hidden flex flex-col space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="text-center">
+                                <img id="weather-icon" src="" alt="天气图标" class="w-16 h-16 mx-auto mb-1">
+                                <div id="weather-description" class="text-sm text-gray-400"></div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-4xl font-bold text-white"><span id="temperature"></span></div>
+                                <div class="text-sm text-gray-400">温度 TEMP</div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 text-sm">
+                            <div><span class="label text-gray-400">湿度 HUM:</span> <span id="humidity"
+                                    class="value text-white font-semibold"></span></div>
+                            <div><span class="label text-gray-400">风速 WIND:</span> <span id="wind-speed"
+                                    class="value text-white font-semibold"></span></div>
+                        </div>
+                        <div class="heat-index mt-3 text-center p-3 bg-gray-800 rounded">
+                            <span class="label text-brand-orange font-bold text-lg">热指数 HI:</span>
+                            <span id="heat-index" class="value text-white font-bold text-2xl ml-2"></span>
+                        </div>
+                        <div id="heat-index-alert" class="alert hidden mt-3 p-2 rounded text-center font-semibold">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 手动计算热指数块 -->
+                <div class="md:col-span-3 p-4 md:p-6 bg-gray-900 rounded-lg shadow-lg animated-item mb-4 md:mb-6">
+                    <h2 class="text-2xl font-bold text-brand-orange mb-4">手动计算热指数 <span
+                            class="text-sm text-gray-400">自备温湿度计更准确！</span></h2>
+                    <!-- Changed grid-cols-1 to grid-cols-2 for mobile -->
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <!-- Removed md:col-span-1, now col-span-1 for all sizes -->
+                        <div class="col-span-1">
+                            <label for="manual-temp" class="block text-gray-400 mb-2">温度 (°C)</label>
+                            <input type="number" id="manual-temp"
+                                class="bg-gray-800 text-white border border-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-orange w-full"
+                                placeholder="例如：32" min="0" max="50" step="0.1">
+                        </div>
+                        <!-- Removed md:col-span-1, now col-span-1 for all sizes -->
+                        <div class="col-span-1">
+                            <label for="manual-humidity" class="block text-gray-400 mb-2">湿度 (%)</label>
+                            <input type="number" id="manual-humidity"
+                                class="bg-gray-800 text-white border border-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-orange w-full"
+                                placeholder="例如：70" min="0" max="100" step="1">
+                        </div>
+                        <!-- Added col-span-2 for mobile, kept md:col-span-1 -->
+                        <div class="col-span-2 md:col-span-1 flex items-end">
+                            <button id="calculate-hi-btn"
+                                class="bg-brand-orange hover:bg-opacity-80 text-black font-bold py-2 px-4 rounded transition duration-300 w-full"><i
+                                    class="fas fa-calculator mr-1"></i> 计算热指数</button>
+                        </div>
+                    </div>
+                    <div id="manual-result" class="mt-4 p-4 border border-gray-700 rounded hidden">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-gray-400">计算结果：</span>
+                                <span id="manual-hi-value" class="text-white font-bold text-2xl ml-2"></span>
+                            </div>
+                            <div id="manual-hi-level" class="px-4 py-1 rounded-full text-sm font-semibold"></div>
+                        </div>
+                        <div id="manual-hi-tips" class="mt-3 text-sm"></div>
+                    </div>
+                </div>
+
+                <!-- 24小时预测图表块 (跨2列) -->
+                <div class="md:col-span-2 p-4 md:p-6 bg-gray-900 rounded-lg shadow-lg animated-item">
+                    <h2 class="text-2xl font-bold text-brand-orange mb-4">24小时预测 <span
+                            class="text-sm text-gray-400">FORECAST</span></h2>
+                    <div class="chart-container h-64 md:h-80 relative">
+                        <canvas id="heat-index-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 健康提示块 -->
+                <div class="p-4 md:p-6 bg-gray-900 rounded-lg shadow-lg animated-item">
+                    <h3 class="text-xl font-bold text-brand-orange mb-3">健康提示 <span
+                            class="text-sm text-gray-400">TIPS</span></h3>
+                    <ul id="health-tips-list" class="list-disc list-inside text-gray-300 space-y-1 text-sm">
+                        <li>请等待热指数计算完成后查看相应健康建议</li>
+                    </ul>
+                </div>
+
+                <!-- 热射病预防8项检查清单块 (跨3列) -->
+                <div class="md:col-span-3 p-4 md:p-6 bg-gray-900 rounded-lg shadow-lg animated-item">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-3xl font-bold text-brand-orange flex items-center">
+                            <i class="fas fa-clipboard-check text-brand-orange mr-3"></i>
+                            <span class="text-white text-5xl font-bold mx-2">8</span>项预防措施
+                        </h3>
+                        <div class="flex items-center space-x-2">
+                            <span id="checklist-count" class="text-2xl font-bold text-white">0/8</span>
+                            <button id="reset-checklist"
+                                class="bg-gray-700 hover:bg-gray-600 text-sm text-white px-3 py-1 rounded transition-colors">
+                                <i class="fas fa-redo-alt mr-1"></i> 重置
+                            </button>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <ul id="prevention-checklist" class="space-y-4">
+                            <!-- 热习服项 -->
+                            <li
+                                class="checklist-item bg-gray-800 rounded-lg p-4 border-l-4 border-transparent hover:border-brand-orange transition-all">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 mr-3">
+                                        <input type="checkbox" id="check-1"
+                                            class="checklist-checkbox w-6 h-6 rounded border-2 border-gray-600 text-brand-orange focus:ring-brand-orange focus:ring-opacity-50">
+                                    </div>
+                                    <div class="flex-grow">
+                                        <label for="check-1" class="flex flex-col cursor-pointer">
+                                            <span class="text-xl font-bold text-white mb-1">是否经历过完整热习服？</span>
+                                            <span
+                                                class="text-gray-400 text-sm">通过反复热刺激，使人体出现适应性反应，提高机体对热的耐受能力。热习服训练一般需要10～14天</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- 带病训练项 -->
+                            <li
+                                class="checklist-item bg-gray-800 rounded-lg p-4 border-l-4 border-transparent hover:border-brand-orange transition-all">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 mr-3">
+                                        <input type="checkbox" id="check-2"
+                                            class="checklist-checkbox w-6 h-6 rounded border-2 border-gray-600 text-brand-orange focus:ring-brand-orange focus:ring-opacity-50">
+                                    </div>
+                                    <div class="flex-grow">
+                                        <label for="check-2" class="flex flex-col cursor-pointer">
+                                            <span class="text-xl font-bold text-white mb-1">确认无带病参训</span>
+                                            <span class="text-gray-400 text-sm">生病时身体抵抗力下降，在炎热天气下训练容易发生中暑</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- 训练降温项 -->
+                            <li
+                                class="checklist-item bg-gray-800 rounded-lg p-4 border-l-4 border-transparent hover:border-brand-orange transition-all">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 mr-3">
+                                        <input type="checkbox" id="check-3"
+                                            class="checklist-checkbox w-6 h-6 rounded border-2 border-gray-600 text-brand-orange focus:ring-brand-orange focus:ring-opacity-50">
+                                    </div>
+                                    <div class="flex-grow">
+                                        <label for="check-3" class="flex flex-col cursor-pointer">
+                                            <span class="text-xl font-bold text-white mb-1">是否在训练间隙的降温？</span>
+                                            <span
+                                                class="text-gray-400 text-sm">训练前和训练间隙可通过冷水喷雾、戴冰帽和冷颈圈、用湿毛巾和冰袋冰敷等方式降温</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- 补水补盐项 -->
+                            <li
+                                class="checklist-item bg-gray-800 rounded-lg p-4 border-l-4 border-transparent hover:border-brand-orange transition-all">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 mr-3">
+                                        <input type="checkbox" id="check-4"
+                                            class="checklist-checkbox w-6 h-6 rounded border-2 border-gray-600 text-brand-orange focus:ring-brand-orange focus:ring-opacity-50">
+                                    </div>
+                                    <div class="flex-grow">
+                                        <label for="check-4" class="flex flex-col cursor-pointer">
+                                            <span class="text-xl font-bold text-white mb-1">补水补盐是否充分？</span>
+                                            <span class="text-gray-400 text-sm">建议每小时补充含盐饮品0.5～1升，每天补水6～8升</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- 防暑监测项 -->
+                            <li
+                                class="checklist-item bg-gray-800 rounded-lg p-4 border-l-4 border-transparent hover:border-brand-orange transition-all">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 mr-3">
+                                        <input type="checkbox" id="check-5"
+                                            class="checklist-checkbox w-6 h-6 rounded border-2 border-gray-600 text-brand-orange focus:ring-brand-orange focus:ring-opacity-50">
+                                    </div>
+                                    <div class="flex-grow">
+                                        <label for="check-5" class="flex flex-col cursor-pointer">
+                                            <span class="text-xl font-bold text-white mb-1">防暑监测"三宝"是否备齐？</span>
+                                            <span class="text-gray-400 text-sm">温湿度计、耳温监测仪、指脉氧检测仪，用来监测环境温湿度和生命体征</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- 降温设备项 -->
+                            <li
+                                class="checklist-item bg-gray-800 rounded-lg p-4 border-l-4 border-transparent hover:border-brand-orange transition-all">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 mr-3">
+                                        <input type="checkbox" id="check-6"
+                                            class="checklist-checkbox w-6 h-6 rounded border-2 border-gray-600 text-brand-orange focus:ring-brand-orange focus:ring-opacity-50">
+                                    </div>
+                                    <div class="flex-grow">
+                                        <label for="check-6" class="flex flex-col cursor-pointer">
+                                            <span class="text-xl font-bold text-white mb-1">降温设备是否齐备？</span>
+                                            <span
+                                                class="text-gray-400 text-sm">准备热射病救援浴盆担架组合、贮水槽、医用冰帽、冰颈圈、冰毯等降温设备</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- 睡眠充足项 -->
+                            <li
+                                class="checklist-item bg-gray-800 rounded-lg p-4 border-l-4 border-transparent hover:border-brand-orange transition-all">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 mr-3">
+                                        <input type="checkbox" id="check-7"
+                                            class="checklist-checkbox w-6 h-6 rounded border-2 border-gray-600 text-brand-orange focus:ring-brand-orange focus:ring-opacity-50">
+                                    </div>
+                                    <div class="flex-grow">
+                                        <label for="check-7" class="flex flex-col cursor-pointer">
+                                            <span class="text-xl font-bold text-white mb-1">睡眠是否充足？</span>
+                                            <span class="text-gray-400 text-sm">充足的睡眠可以使大脑和身体得到充分放松，有助于恢复体力</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- 重点关注项 -->
+                            <li
+                                class="checklist-item bg-gray-800 rounded-lg p-4 border-l-4 border-transparent hover:border-brand-orange transition-all">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 mr-3">
+                                        <input type="checkbox" id="check-8"
+                                            class="checklist-checkbox w-6 h-6 rounded border-2 border-gray-600 text-brand-orange focus:ring-brand-orange focus:ring-opacity-50">
+                                    </div>
+                                    <div class="flex-grow">
+                                        <label for="check-8" class="flex flex-col cursor-pointer">
+                                            <span class="text-xl font-bold text-white mb-1">是否有需要重点关注的人？</span>
+                                            <span
+                                                class="text-gray-400 text-sm">新训人员、长期不锻炼人员、未进行热习服训练人员等热耐受能力较差的人群需特别关注</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <!-- 检查结果提示 -->
+                        <div id="checklist-summary"
+                            class="mt-6 p-4 rounded-lg bg-gray-800 border-l-4 border-brand-orange hidden">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-exclamation-triangle text-brand-orange text-2xl"></i>
+                                </div>
+                                <div class="flex-grow">
+                                    <h4 class="text-xl font-bold text-white mb-1">预防措施未全部到位</h4>
+                                    <p class="text-gray-400">请确保所有预防措施到位，以降低发生热射病的风险。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 返回顶部按钮 -->
+            <button id="backToTopBtn"
+                class="fixed bottom-20 right-6 z-50 p-3 rounded-full bg-orange-500 text-white shadow-lg transform transition-transform duration-300 opacity-0 translate-y-10">
+                <i class="fas fa-arrow-up"></i>
+            </button>
+
+            <!-- 统一页脚 -->
+            <footer class="relative mt-16 pt-10 pb-6 bg-gray-900 border-t border-gray-800">
+                <div class="container mx-auto px-4">
+                    <!-- 顶部返回主页 -->
+                    <div class="flex justify-center mb-8">
+                        <a href="../index.html"
+                            class="inline-flex items-center px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-lg">
+                            <i class="fas fa-home mr-2"></i> 返回主页
+                        </a>
+                    </div>
+
+                    <!-- 主要内容 -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+                        <!-- 快速导航 -->
+                        <div class="lg:col-span-2">
+                            <h3 class="text-xl font-semibold text-orange-500 mb-4">快速导航</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <a href="/pages/中国热射病诊断与治疗指南.html"
+                                    class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                                    <i class="fas fa-book-medical mr-2 text-orange-500 w-5"></i> 诊断与治疗指南
+                                </a>
+                                <a href="/pages/热射病救治体系建设标准专家共识.html"
+                                    class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                                    <i class="fas fa-users-rays mr-2 text-orange-500 w-5"></i> 救治体系建设标准
+                                </a>
+                                <a href="/pages/热耐力评估.html"
+                                    class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                                    <i class="fas fa-clipboard-check mr-2 text-orange-500 w-5"></i> 热耐力评估
+                                </a>
+                                <a href="/pages/热射病核心体温监测与降温方法.html"
+                                    class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                                    <i class="fas fa-temperature-three-quarters mr-2 text-orange-500 w-5"></i> 核心体温监测
+                                </a>
+                                <a href="/pages/热射病现场处置.html"
+                                    class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                                    <i class="fas fa-kit-medical mr-2 text-orange-500 w-5"></i> 现场处置
+                                </a>
+                                <a href="/pages/热射病通关挑战.html"
+                                    class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                                    <i class="fas fa-gamepad mr-2 text-orange-500 w-5"></i> 通关挑战
+                                </a>
+                                <a href="/pages/8-4-6黄金法则.html"
+                                    class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                                    <i class="fas fa-stopwatch-20 mr-2 text-orange-500 w-5"></i> 8-4-6黄金法则
+                                </a>
+                                <a href="/pages/热指数查询.html"
+                                    class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                                    <i class="fas fa-thermometer-half mr-2 text-orange-500 w-5"></i> 热指数查询
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- 快速链接 -->
+                        <div>
+                            <h3 class="text-xl font-semibold text-orange-500 mb-4">快速链接</h3>
+                            <ul class="space-y-2">
+                                <li>
+                                    <a href="关于本项目.html"
+                                        class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                                        <i class="fas fa-user-doctor mr-2 text-orange-500 w-5"></i> 关于本项目
+                                    </a>
+                                </li>
+                                <li class="text-gray-300 flex items-center">
+                                    <i class="fas fa-phone-alt mr-2 text-orange-500 w-5"></i> 紧急情况请拨打 <span
+                                        class="text-orange-500 font-bold ml-1">120</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 联系我们 -->
+                        <div>
+                            <h3 class="text-xl font-semibold text-orange-500 mb-4">联系我们</h3>
+                            <p class="text-gray-300 flex items-center mb-2">
+                                <i class="fas fa-envelope mr-2 text-orange-500 w-5"></i>
+                                <a href="mailto:nimrod1990@163.com"
+                                    class="hover:text-orange-400 transition-colors">nimrod1990@163.com</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 声明部分 -->
+                    <div class="border-t border-gray-800 pt-6 text-center">
+                        <p class="text-gray-400 mb-2">
+                            <strong class="text-orange-500">版权声明：</strong>©2025 红医师 热射病防治
+                        </p>
+                        <p class="text-gray-400 mb-2">
+                            <strong class="text-orange-500">免责声明：</strong>本网站内容仅供参考，不替代专业医疗建议。如有紧急情况请立即就医。
+                        </p>
+                        <p class="text-gray-400">
+                            <strong class="text-orange-500">转载声明：</strong>所有资料来源于互联网公开资料，已脱密处理，禁止商用，转载请联系作者
+                        </p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <script src="../assets/js/script.js"></script>
+    </body>
+
+</html>

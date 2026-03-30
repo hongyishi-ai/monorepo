@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-07-24T16:01:03.688Z",
+  "environments": {
+    "development": {
+      "exists": true,
+      "variableCount": 15,
+      "issues": 3,
+      "errors": 0,
+      "warnings": 2
+    },
+    "staging": {
+      "exists": true,
+      "variableCount": 30,
+      "issues": 0,
+      "errors": 0,
+      "warnings": 0
+    },
+    "production": {
+      "exists": true,
+      "variableCount": 29,
+      "issues": 0,
+      "errors": 0,
+      "warnings": 0
+    }
+  }
+}

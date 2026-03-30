@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>关于本项目</title>
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #F8F8F8;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        article {
+            padding-top: 4.25rem;
+            padding-bottom: 7rem;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            margin: 0 auto;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.25rem;
+            font-weight: 700;
+        }
+        .date {
+            color: #717279;
+            font-size: 0.875rem;
+            margin-bottom: 3rem;
+        }
+        .grid {
+            display: grid;
+            gap: 6rem;
+            margin-top: 3rem;
+        }
+        .prose {
+            max-width: 800px;
+            margin: 2rem auto;
+            position: relative;
+        }
+        .sticky-img {
+            position: sticky;
+            top: 4rem;
+            margin-bottom: 2rem;
+        }
+        .aspect-img {
+            position: relative;
+            width: 110%; /* 略宽于文字区域 */
+            margin-left: -5%;
+            padding-bottom: 55%; /* 调整宽高比 */
+        }
+        .aspect-img img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 1s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .content {
+            background-color: white;
+            padding: 3rem 1.5rem;
+            position: relative;
+            margin-top: -10rem; /* 模拟重叠效果 */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: #333;
+        }
+        @media (min-width: 768px) {
+            article {
+                padding-top: 8.75rem;
+                padding-bottom: 12rem;
+                padding-left: 2rem;
+                padding-right: 2rem;
+            }
+            h1 {
+                font-size: 3.5rem;
+                margin-bottom: 1.5rem;
+            }
+            .date {
+                font-size: 1.125rem;
+            }
+            .grid {
+                gap: 12rem;
+                margin-top: 7.75rem;
+            }
+            .content {
+                padding: 6.25rem;
+                margin-top: -18.75rem; /* 根据 md:-mt-[calc(50%-300px)] 调整 */
+            }
+            .sticky-img {
+                top: 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <article>
+            <header class="container">
+                <h1>关于本项目</h1>
+                <div class="date">
+                    <time datetime="2025-05-01">2025 年 5 月</time>
+                </div>
+            </header>
+            <div class="grid">
+                <section class="prose">
+                    <div class="sticky-img">
+                        <div class="aspect-img">
+                            <img src="../assets/images/image.jpeg" alt="红医师热射病防治平台项目图片，展示医疗救援与健康防护理念">
+                        </div>
+                    </div>
+                    <div class="content">
+                        <p>“红医师”是一个由笔者发起的医疗公益项目，旨在汇聚医疗行业的资讯与实践经验，借助现代科技手段，让公众能够更加便捷地获取专业医疗知识。在科技迅猛发展的时代，推动医疗保障的现代化，是“红医师”始终不懈探索的方向与使命。</p>
+                        <p>“红医师热射病防治”平台，作为“红医师”项目的重要子栏目，专注于为可能面临热射病威胁的人群、医疗从业者以及广大公众提供科学、实用的知识支持，帮助大家快速了解这一危重疾病的特征与应对方法，从而提升社会整体应对突发健康危机的能力。</p>
+                        <p>作为一名长期奋战在医疗救援一线的工作者，我深知热射病的严峻危害。无数人曾因中暑而痛苦不堪，甚至有人因此失去了宝贵的生命。基于这一现实，我结合临床指南、个人经验以及热射病防治专家组的权威指导，倾力打造了这一资源平台。我始终坚信：生命的健康是我们学习、工作与生活品质的根本保障。为此，我诚挚呼吁每一个人积极学习热射病的预防、预警与急救知识，并将这一平台分享给更多需要帮助的人，让关爱传递更远。</p>
+                        <p>目前，“热射病防治”平台仍在不断完善之中，我真诚欢迎您提出宝贵的意见与建议。我将全力以赴，维护好这一公益性学习平台，为守护公众健康贡献绵薄之力。</p>
+                        <!-- 更多段落内容可以继续添加，但为简洁起见，此处省略 -->
+                    </div>
+                </section>
+            </div>
+        </article>
+    </main>
+</body>
+</html>

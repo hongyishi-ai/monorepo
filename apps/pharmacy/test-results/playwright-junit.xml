@@ -1,0 +1,404 @@
+<testsuites id="" name="" tests="57" failures="0" skipped="0" errors="0" time="11.317210999999999">
+<testsuite name="api/api-endpoints.test.ts" timestamp="2025-08-12T11:57:05.996Z" hostname="chromium" tests="11" failures="0" skipped="0" time="9.127" errors="0">
+<testcase name="API端点测试 › 基础表访问测试 › medicines表API访问" classname="api/api-endpoints.test.ts" time="1.003">
+<system-out>
+<![CDATA[✅ medicines表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 基础表访问测试 › batches表API访问" classname="api/api-endpoints.test.ts" time="0.453">
+<system-out>
+<![CDATA[✅ batches表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 基础表访问测试 › inventory_transactions表API访问" classname="api/api-endpoints.test.ts" time="0.456">
+<system-out>
+<![CDATA[✅ inventory_transactions表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 基础表访问测试 › users表API访问" classname="api/api-endpoints.test.ts" time="1.442">
+<system-out>
+<![CDATA[✅ users表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 基础表访问测试 › system_settings表API访问" classname="api/api-endpoints.test.ts" time="0.468">
+<system-out>
+<![CDATA[✅ system_settings表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 关联查询测试 › 药品和批次关联查询" classname="api/api-endpoints.test.ts" time="0.451">
+<system-out>
+<![CDATA[✅ 药品和批次关联查询成功
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 关联查询测试 › 库存交易关联查询" classname="api/api-endpoints.test.ts" time="1.465">
+<system-out>
+<![CDATA[✅ 库存交易关联查询成功
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 过滤和排序测试 › 按类型过滤库存交易" classname="api/api-endpoints.test.ts" time="0.889">
+<system-out>
+<![CDATA[✅ 按类型过滤库存交易成功
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 过滤和排序测试 › 按时间排序查询" classname="api/api-endpoints.test.ts" time="0.865">
+<system-out>
+<![CDATA[✅ 按时间排序查询成功
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 错误处理测试 › 无效表名返回404" classname="api/api-endpoints.test.ts" time="1.431">
+<system-out>
+<![CDATA[✅ 无效表名正确返回404
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 错误处理测试 › 无效API密钥返回401" classname="api/api-endpoints.test.ts" time="0.204">
+<system-out>
+<![CDATA[✅ 无效API密钥正确返回401
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="api/basic-api.test.ts" timestamp="2025-08-12T11:57:05.996Z" hostname="chromium" tests="8" failures="0" skipped="0" time="3.458" errors="0">
+<testcase name="基础API端点测试 › 验证medicines表API访问" classname="api/basic-api.test.ts" time="0.448">
+<system-out>
+<![CDATA[🔧 API配置验证通过
+📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co
+🧪 测试medicines表API访问...
+✅ medicines表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证inventory_transactions表API访问" classname="api/basic-api.test.ts" time="0.452">
+<system-out>
+<![CDATA[🧪 测试inventory_transactions表API访问...
+✅ inventory_transactions表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证users表API访问" classname="api/basic-api.test.ts" time="0.444">
+<system-out>
+<![CDATA[🔧 API配置验证通过
+📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co
+🧪 测试users表API访问...
+✅ users表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证batches表API访问" classname="api/basic-api.test.ts" time="0.469">
+<system-out>
+<![CDATA[🧪 测试batches表API访问...
+✅ batches表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证system_settings表API访问" classname="api/basic-api.test.ts" time="0.457">
+<system-out>
+<![CDATA[🔧 API配置验证通过
+📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co
+🧪 测试system_settings表API访问...
+✅ system_settings表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证错误处理 - 无效表名" classname="api/basic-api.test.ts" time="0.457">
+<system-out>
+<![CDATA[🧪 测试错误处理 - 无效表名...
+✅ 无效表名正确返回404错误
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证错误处理 - 无效API密钥" classname="api/basic-api.test.ts" time="0.231">
+<system-out>
+<![CDATA[🔧 API配置验证通过
+📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co
+🧪 测试错误处理 - 无效API密钥...
+✅ 无效API密钥正确返回401错误
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证过滤查询功能" classname="api/basic-api.test.ts" time="0.5">
+<system-out>
+<![CDATA[🧪 测试过滤查询功能...
+✅ 过滤查询功能正常，返回0条入库记录
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="api/api-endpoints.test.ts" timestamp="2025-08-12T11:57:05.996Z" hostname="firefox" tests="11" failures="0" skipped="0" time="8.646" errors="0">
+<testcase name="API端点测试 › 基础表访问测试 › medicines表API访问" classname="api/api-endpoints.test.ts" time="0.864">
+<system-out>
+<![CDATA[✅ medicines表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 基础表访问测试 › batches表API访问" classname="api/api-endpoints.test.ts" time="0.454">
+<system-out>
+<![CDATA[✅ batches表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 基础表访问测试 › inventory_transactions表API访问" classname="api/api-endpoints.test.ts" time="0.881">
+<system-out>
+<![CDATA[✅ inventory_transactions表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 基础表访问测试 › users表API访问" classname="api/api-endpoints.test.ts" time="1.314">
+<system-out>
+<![CDATA[✅ users表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 基础表访问测试 › system_settings表API访问" classname="api/api-endpoints.test.ts" time="0.887">
+<system-out>
+<![CDATA[✅ system_settings表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 关联查询测试 › 药品和批次关联查询" classname="api/api-endpoints.test.ts" time="0.878">
+<system-out>
+<![CDATA[✅ 药品和批次关联查询成功
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 关联查询测试 › 库存交易关联查询" classname="api/api-endpoints.test.ts" time="0.867">
+<system-out>
+<![CDATA[✅ 库存交易关联查询成功
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 过滤和排序测试 › 按类型过滤库存交易" classname="api/api-endpoints.test.ts" time="0.902">
+<system-out>
+<![CDATA[✅ 按类型过滤库存交易成功
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 过滤和排序测试 › 按时间排序查询" classname="api/api-endpoints.test.ts" time="0.435">
+<system-out>
+<![CDATA[✅ 按时间排序查询成功
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 错误处理测试 › 无效表名返回404" classname="api/api-endpoints.test.ts" time="0.92">
+<system-out>
+<![CDATA[✅ 无效表名正确返回404
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 错误处理测试 › 无效API密钥返回401" classname="api/api-endpoints.test.ts" time="0.244">
+<system-out>
+<![CDATA[✅ 无效API密钥正确返回401
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="api/basic-api.test.ts" timestamp="2025-08-12T11:57:05.996Z" hostname="firefox" tests="8" failures="0" skipped="0" time="4.243" errors="0">
+<testcase name="基础API端点测试 › 验证medicines表API访问" classname="api/basic-api.test.ts" time="0.457">
+<system-out>
+<![CDATA[🔧 API配置验证通过
+📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co
+🧪 测试medicines表API访问...
+✅ medicines表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证inventory_transactions表API访问" classname="api/basic-api.test.ts" time="0.46">
+<system-out>
+<![CDATA[🧪 测试inventory_transactions表API访问...
+✅ inventory_transactions表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证users表API访问" classname="api/basic-api.test.ts" time="0.445">
+<system-out>
+<![CDATA[🔧 API配置验证通过
+📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co
+🧪 测试users表API访问...
+✅ users表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证batches表API访问" classname="api/basic-api.test.ts" time="0.444">
+<system-out>
+<![CDATA[🧪 测试batches表API访问...
+✅ batches表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证system_settings表API访问" classname="api/basic-api.test.ts" time="0.902">
+<system-out>
+<![CDATA[🔧 API配置验证通过
+📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co
+🧪 测试system_settings表API访问...
+✅ system_settings表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证错误处理 - 无效表名" classname="api/basic-api.test.ts" time="0.445">
+<system-out>
+<![CDATA[🧪 测试错误处理 - 无效表名...
+✅ 无效表名正确返回404错误
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证错误处理 - 无效API密钥" classname="api/basic-api.test.ts" time="0.218">
+<system-out>
+<![CDATA[🔧 API配置验证通过
+📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co
+🧪 测试错误处理 - 无效API密钥...
+✅ 无效API密钥正确返回401错误
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证过滤查询功能" classname="api/basic-api.test.ts" time="0.872">
+<system-out>
+<![CDATA[🧪 测试过滤查询功能...
+✅ 过滤查询功能正常，返回0条入库记录
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="api/api-endpoints.test.ts" timestamp="2025-08-12T11:57:05.996Z" hostname="webkit" tests="11" failures="0" skipped="0" time="8.247" errors="0">
+<testcase name="API端点测试 › 基础表访问测试 › medicines表API访问" classname="api/api-endpoints.test.ts" time="0.896">
+<system-out>
+<![CDATA[✅ medicines表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 基础表访问测试 › batches表API访问" classname="api/api-endpoints.test.ts" time="0.919">
+<system-out>
+<![CDATA[✅ batches表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 基础表访问测试 › inventory_transactions表API访问" classname="api/api-endpoints.test.ts" time="0.899">
+<system-out>
+<![CDATA[✅ inventory_transactions表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 基础表访问测试 › users表API访问" classname="api/api-endpoints.test.ts" time="1.314">
+<system-out>
+<![CDATA[✅ users表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 基础表访问测试 › system_settings表API访问" classname="api/api-endpoints.test.ts" time="0.443">
+<system-out>
+<![CDATA[✅ system_settings表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 关联查询测试 › 药品和批次关联查询" classname="api/api-endpoints.test.ts" time="0.878">
+<system-out>
+<![CDATA[✅ 药品和批次关联查询成功
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 关联查询测试 › 库存交易关联查询" classname="api/api-endpoints.test.ts" time="0.879">
+<system-out>
+<![CDATA[✅ 库存交易关联查询成功
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 过滤和排序测试 › 按类型过滤库存交易" classname="api/api-endpoints.test.ts" time="0.444">
+<system-out>
+<![CDATA[✅ 按类型过滤库存交易成功
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 过滤和排序测试 › 按时间排序查询" classname="api/api-endpoints.test.ts" time="0.496">
+<system-out>
+<![CDATA[✅ 按时间排序查询成功
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 错误处理测试 › 无效表名返回404" classname="api/api-endpoints.test.ts" time="0.876">
+<system-out>
+<![CDATA[✅ 无效表名正确返回404
+]]>
+</system-out>
+</testcase>
+<testcase name="API端点测试 › 错误处理测试 › 无效API密钥返回401" classname="api/api-endpoints.test.ts" time="0.203">
+<system-out>
+<![CDATA[✅ 无效API密钥正确返回401
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="api/basic-api.test.ts" timestamp="2025-08-12T11:57:05.996Z" hostname="webkit" tests="8" failures="0" skipped="0" time="4.699" errors="0">
+<testcase name="基础API端点测试 › 验证medicines表API访问" classname="api/basic-api.test.ts" time="0.885">
+<system-out>
+<![CDATA[🔧 API配置验证通过
+📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co
+🧪 测试medicines表API访问...
+✅ medicines表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证inventory_transactions表API访问" classname="api/basic-api.test.ts" time="0.461">
+<system-out>
+<![CDATA[🧪 测试inventory_transactions表API访问...
+✅ inventory_transactions表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证users表API访问" classname="api/basic-api.test.ts" time="0.444">
+<system-out>
+<![CDATA[🔧 API配置验证通过
+📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co
+🧪 测试users表API访问...
+✅ users表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证batches表API访问" classname="api/basic-api.test.ts" time="0.874">
+<system-out>
+<![CDATA[🧪 测试batches表API访问...
+✅ batches表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证system_settings表API访问" classname="api/basic-api.test.ts" time="0.896">
+<system-out>
+<![CDATA[🔧 API配置验证通过
+📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co
+🧪 测试system_settings表API访问...
+✅ system_settings表API访问成功，返回0条记录
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证错误处理 - 无效表名" classname="api/basic-api.test.ts" time="0.464">
+<system-out>
+<![CDATA[🧪 测试错误处理 - 无效表名...
+✅ 无效表名正确返回404错误
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证错误处理 - 无效API密钥" classname="api/basic-api.test.ts" time="0.221">
+<system-out>
+<![CDATA[🔧 API配置验证通过
+📍 Supabase URL: https://wyibpwhokxpfkbzilurn.supabase.co
+🧪 测试错误处理 - 无效API密钥...
+✅ 无效API密钥正确返回401错误
+]]>
+</system-out>
+</testcase>
+<testcase name="基础API端点测试 › 验证过滤查询功能" classname="api/basic-api.test.ts" time="0.454">
+<system-out>
+<![CDATA[🧪 测试过滤查询功能...
+✅ 过滤查询功能正常，返回0条入库记录
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

@@ -1,0 +1,9 @@
+# robots.txt for hongyishi.cn
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+
+Sitemap: https://hongyishi.cn/sitemap.xml
+

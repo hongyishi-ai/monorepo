@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1000">
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .title { font-size: 24px; font-weight: bold; }
+    .subtitle { font-size: 18px; font-weight: bold; }
+    .content { font-size: 14px; }
+  </style>
+  
+  <rect width="100%" height="100%" fill="#fff0f5"/>
+  
+  <text x="200" y="40" class="title" text-anchor="middle" fill="#8b008b">中暑诊断思维链</text>
+  
+  <g transform="translate(20, 80)">
+    <rect width="360" height="180" rx="10" fill="#ffc0cb" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#8b008b">症状特征</text>
+    <text x="10" y="60" class="content" fill="#8b008b">• 体温: 轻度升高至高热（&gt;40°C）</text>
+    <text x="10" y="80" class="content" fill="#8b008b">• 头晕: 头痛、眩晕、疲倦感</text>
+    <text x="10" y="100" class="content" fill="#8b008b">• 皮肤: 灼热、潮红或苍白、出汗或无汗</text>
+    <text x="10" y="120" class="content" fill="#8b008b">• 消化: 恶心、呕吐、食欲不振</text>
+    <text x="10" y="140" class="content" fill="#8b008b">• 神志: 轻度意识模糊至昏迷（重症）</text>
+    <text x="10" y="160" class="content" fill="#8b008b">• 其他: 心悸、口渴、肌肉痉挛</text>
+  </g>
+  
+  <g transform="translate(20, 280)">
+    <rect width="360" height="140" rx="10" fill="#ffc0cb" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#8b008b">病因分析</text>
+    <text x="10" y="60" class="content" fill="#8b008b">• 环境因素: 高温、高湿度环境</text>
+    <text x="10" y="80" class="content" fill="#8b008b">• 个体因素: 缺水、过度运动、老年人</text>
+    <text x="10" y="100" class="content" fill="#8b008b">• 生理机制: 体温调节中枢功能失调</text>
+    <text x="10" y="120" class="content" fill="#8b008b">• 并发症: 多器官功能衰竭（重症）</text>
+  </g>
+  
+  <g transform="translate(20, 440)">
+    <rect width="360" height="140" rx="10" fill="#ffc0cb" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#8b008b">诊断要点</text>
+    <text x="10" y="60" class="content" fill="#8b008b">1. 询问暴露于高温环境的情况</text>
+    <text x="10" y="80" class="content" fill="#8b008b">2. 测量体温和生命体征</text>
+    <text x="10" y="100" class="content" fill="#8b008b">3. 评估意识状态和神经系统功能</text>
+    <text x="10" y="120" class="content" fill="#8b008b">4. 必要时进行血液检查和电解质分析</text>
+  </g>
+  
+  <g transform="translate(20, 600)">
+    <rect width="360" height="200" rx="10" fill="#ffc0cb" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#8b008b">治疗方法</text>
+    <text x="10" y="60" class="content" fill="#8b008b">• 降温: 迅速冷却（冰敷、冷水浸浴）</text>
+    <text x="10" y="80" class="content" fill="#8b008b">• 补液: 口服或静脉补充水分电解质</text>
+    <text x="10" y="100" class="content" fill="#8b008b">• 监护: 密切观察生命体征</text>
+    <text x="10" y="120" class="content" fill="#8b008b">• 对症: 治疗头痛、恶心等症状</text>
+    <text x="10" y="140" class="content" fill="#8b008b">• 重症: 可能需要呼吸支持、血液透析等</text>
+    <text x="10" y="160" class="content" fill="#8b008b">• 中医: 清热解暑，如藿香正气水、十滴水</text>
+    <text x="10" y="180" class="content" fill="#8b008b">• 恢复期: 循序渐进恢复活动</text>
+  </g>
+  
+  <g transform="translate(20, 820)">
+    <rect width="360" height="120" rx="10" fill="#ffc0cb" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#8b008b">预防措施</text>
+    <text x="10" y="60" class="content" fill="#8b008b">• 避免长时间暴露于高温环境</text>
+    <text x="10" y="80" class="content" fill="#8b008b">• 保持水分摄入，穿着轻便透气衣物</text>
+    <text x="10" y="100" class="content" fill="#8b008b">• 高温天气避免剧烈运动</text>
+  </g>
+  
+  <text x="200" y="980" class="content" text-anchor="middle" fill="#8b008b">注意：重症中暑为急症，需立即就医</text>
+</svg>

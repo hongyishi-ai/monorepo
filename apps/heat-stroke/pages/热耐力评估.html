@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>热耐力评分表</title>
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
+    <!-- Tailwind CSS CDN -->
+    <script src="../assets/vendors/tailwind.compiler.js"></script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- NOTE: Framer Motion CDN is loaded near the end of the body, BEFORE the inline script -->
+    <style>
+        /* Base styles */
+        html {
+             scroll-behavior: smooth; /* Enable smooth scrolling */
+        }
+        body {
+            background-color: #000000;
+            color: #E5E7EB; /* Light gray text */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* Highlight color */
+        :root {
+            --highlight-color: #FF6B00; /* Brand Orange */
+            --highlight-color-rgb: 255, 107, 0;
+        }
+
+        /* Custom Scrollbar (optional, for aesthetics) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--highlight-color);
+            border-radius: 10px;
+            border: 2px solid #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #FF6600; /* Darker orange on hover */
+        }
+
+        /* Large text emphasis */
+        .text-super-large {
+            font-size: clamp(4rem, 15vw, 10rem); /* Responsive large text */
+            line-height: 1;
+        }
+        .text-very-large {
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            line-height: 1.1;
+        }
+
+        /* Bento Grid Item Base Style */
+        .bento-item {
+            background-color: #111111; /* Slightly lighter than black */
+            border-radius: 1.5rem; /* More rounded corners */
+            padding: 1.5rem; /* Default padding */
+            border: 1px solid #222; /* Subtle border */
+            overflow: hidden; /* Ensure content stays within rounded corners */
+            position: relative; /* For pseudo-elements or absolute positioning inside */
+        }
+
+        /* Input field styling */
+        .form-input {
+            background-color: #222;
+            border: 1px solid #444;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: #E5E7EB;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            width: 100%; /* Full width by default */
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--highlight-color);
+            box-shadow: 0 0 0 2px rgba(var(--highlight-color-rgb), 0.4);
+        }
+        /* Specific styling for number inputs to hide arrows */
+        .form-input[type=number]::-webkit-inner-spin-button,
+        .form-input[type=number]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        .form-input[type=number] {
+          -webkit-appearance: textfield; /* Safari/Chrome */
+          -moz-appearance: textfield; /* Firefox */
+          appearance: textfield; /* 标准属性 */
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #A0AEC0; /* Lighter gray for labels */
+        }
+
+        /* Radio button styling */
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border: 1px solid #333;
+            border-radius: 0.75rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            background-color: #1a1a1a;
+        }
+        .radio-option:hover {
+            background-color: #2a2a2a;
+        }
+        .radio-option input[type="radio"] {
+            appearance: none;
+            width: 1.25em;
+            height: 1.25em;
+            border: 2px solid #555;
+            border-radius: 50%;
+            margin-right: 0.75rem;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            flex-shrink: 0;
+            display: grid;
+            place-content: center;
+        }
+         /* Style for disabled radio buttons */
+        .radio-option input[type="radio"]:disabled {
+            border-color: #444; /* Dim border */
+            cursor: not-allowed;
+        }
+        .radio-option input[type="radio"]:disabled + label {
+            color: #777; /* Dim label text */
+            cursor: not-allowed;
+        }
+        .radio-option input[type="radio"]:disabled:checked {
+             border-color: rgba(var(--highlight-color-rgb), 0.4); /* Dimmed highlight border */
+        }
+        .radio-option input[type="radio"]:disabled:checked::before {
+             box-shadow: inset 1em 1em rgba(var(--highlight-color-rgb), 0.4); /* Dimmed inner circle */
+        }
+        .radio-option input[type="radio"]::before {
+             content: "";
+             width: 0.65em;
+             height: 0.65em;
+             border-radius: 50%;
+             transform: scale(0);
+             transition: 120ms transform ease-in-out;
+             box-shadow: inset 1em 1em var(--highlight-color);
+        }
+
+        .radio-option input[type="radio"]:checked {
+            border-color: var(--highlight-color);
+            background-color: #111; /* Dark inside when checked */
+        }
+         .radio-option input[type="radio"]:checked::before {
+            transform: scale(1);
+        }
+
+        .radio-option input[type="radio"]:checked + label {
+             color: var(--highlight-color);
+             font-weight: 600;
+        }
+        /* Add a class for JS to indicate visual checked state */
+        .radio-option.checked {
+            border-color: var(--highlight-color);
+            background-color: rgba(var(--highlight-color-rgb), 0.1); /* Subtle orange background */
+        }
+         /* Dim the .checked style if the input is disabled */
+         .radio-option input[type="radio"]:disabled:checked + label {
+            color: rgba(var(--highlight-color-rgb), 0.7); /* Dimmed orange */
+         }
+         .radio-option.checked input[type="radio"]:disabled {
+             border-color: rgba(var(--highlight-color-rgb), 0.4);
+             background-color: rgba(var(--highlight-color-rgb), 0.05);
+         }
+
+        .radio-option label {
+            flex-grow: 1;
+            cursor: pointer;
+            color: #CBD5E0; /* Slightly lighter than default text */
+        }
+
+        /* Button styling */
+        .btn {
+            display: inline-block;
+            background-color: var(--highlight-color);
+            color: #000000;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-size: 1.1rem;
+        }
+        .btn:hover {
+            background-color: #FF6600; /* Darker orange */
+            transform: translateY(-2px);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Gradient effect */
+        .highlight-gradient {
+             background: linear-gradient(to bottom, rgba(var(--highlight-color-rgb), 0.3), rgba(var(--highlight-color-rgb), 0));
+        }
+         /* Add focus-visible styles for accessibility */
+        *:focus-visible {
+            outline: 2px solid var(--highlight-color);
+            outline-offset: 2px;
+            border-radius: 4px; /* Optional: makes the outline slightly rounded */
+        }
+
+         /* Specific styling for question number */
+         .question-number {
+            color: var(--highlight-color);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 0.75rem;
+         }
+
+         /* Highlight unanswered questions */
+         .unanswered {
+            outline: 2px dashed rgba(var(--highlight-color-rgb), 0.7);
+            outline-offset: 4px;
+            transition: outline 0.3s ease-out;
+         }
+
+
+         /* Responsive grid adjustments */
+         @media (max-width: 768px) {
+             .bento-grid {
+                 grid-template-columns: 1fr; /* Stack on smaller screens */
+             }
+             .bento-item {
+                 padding: 1rem; /* Smaller padding on mobile */
+             }
+             .text-super-large {
+                 font-size: clamp(3rem, 20vw, 6rem);
+             }
+             .text-very-large {
+                 font-size: clamp(2rem, 10vw, 4rem);
+             }
+             .radio-option {
+                 padding: 0.6rem 0.8rem;
+             }
+         }
+    </style>
+</head>
+<body class="bg-black text-gray-300">
+
+<!-- 添加导航栏 -->
+<nav class="bg-black py-4 px-6 sticky top-0 z-50 border-b border-gray-800">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="../index.html" class="flex items-center text-orange-500 hover:text-orange-400 transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i>
+            <span class="font-bold">返回主页</span>
+        </a>
+    </div>
+</nav>
+
+<div class="container mx-auto px-4 py-8 md:py-16">
+
+    <!-- Bento Grid Layout -->
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 bento-grid">
+
+        <!-- Title Block -->
+        <div
+            class="bento-item md:col-span-3 lg:col-span-4 p-6 md:p-8 flex flex-col justify-center relative overflow-hidden"
+            data-motion-initial='{"opacity": 0, "y": 50}'
+            data-motion-whileInView='{"opacity": 1, "y": 0}'
+            data-motion-viewport='{"once": true, "amount": 0.3}'
+            data-motion-transition='{"duration": 0.6, "ease": "easeOut"}'
+        >
+            <div class="absolute top-0 left-0 w-full h-1/3 highlight-gradient z-0"></div>
+            <h1 class="text-4xl md:text-6xl font-black text-white z-10 relative leading-tight">热耐力评分表</h1>
+            <p class="text-lg md:text-xl text-gray-400 mt-2 z-10 relative">评估您的热适应能力</p>
+             <i class="fas fa-temperature-three-quarters text-super-large text-orange-500 opacity-10 absolute right-8 bottom-0 transform translate-y-1/4 -z-0"></i>
+        </div>
+
+        <!-- Basic Info Block (Height/Weight for BMI) -->
+        <div
+            class="bento-item md:col-span-3 lg:col-span-4 p-6 md:p-8"
+            data-motion-initial='{"opacity": 0, "y": 50}'
+            data-motion-whileInView='{"opacity": 1, "y": 0}'
+            data-motion-viewport='{"once": true, "amount": 0.2}'
+            data-motion-transition='{"duration": 0.6, "ease": "easeOut", "delay": 0.1}'
+        >
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 flex items-center">
+                <i class="fas fa-calculator text-orange-500 mr-3 text-3xl"></i>
+                BMI 自动计算
+            </h2>
+            <p class="text-gray-400 mb-6">请输入身高和体重，系统将自动计算 BMI 并预选第 1 题答案。</p>
+            <div id="bmi-calculator-inputs" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-4">
+                 <div>
+                    <label for="height" class="form-label">身高 (cm):</label>
+                    <input type="number" id="height" name="height" class="form-input" min="1" placeholder="例如: 175" required>
+                </div>
+                <div>
+                    <label for="weight" class="form-label">体重 (Kg):</label>
+                    <input type="number" id="weight" name="weight" class="form-input" min="1" placeholder="例如: 70" step="0.1" required>
+                </div>
+                 <div class="sm:col-span-2 lg:col-span-2 flex items-end pb-2">
+                    <span id="bmi-display-info" class="text-lg text-orange-400 font-semibold"></span>
+                 </div>
+            </div>
+        </div>
+
+        <!-- Questionnaire Header Block -->
+         <div
+            class="bento-item md:col-span-3 lg:col-span-4 p-6 md:p-8 flex justify-between items-center"
+            data-motion-initial='{"opacity": 0, "y": 50}'
+            data-motion-whileInView='{"opacity": 1, "y": 0}'
+            data-motion-viewport='{"once": true, "amount": 0.3}'
+            data-motion-transition='{"duration": 0.6, "ease": "easeOut", "delay": 0.2}'
+        >
+            <div>
+                 <h2 class="text-2xl md:text-3xl font-bold mb-2 flex items-center">
+                     <i class="fas fa-clipboard-list text-orange-500 mr-3 text-3xl"></i>
+                     评分问卷
+                 </h2>
+                 <p class="text-gray-400">下列问题（第2题至第18题），每条5项，从左到右分别计1-5分。</p>
+                 <p class="text-sm text-orange-300 mt-1">第1题已根据 BMI 自动选择。</p>
+            </div>
+            <i class="fas fa-running text-very-large text-orange-500 opacity-10 hidden md:block"></i>
+        </div>
+
+        <!-- Questionnaire Items -->
+        <div
+            class="bento-item md:col-span-3 lg:col-span-4 p-6 md:p-8 space-y-8 questionnaire-section"
+            data-motion-initial='{"opacity": 0, "y": 50}'
+            data-motion-whileInView='{"opacity": 1, "y": 0}'
+            data-motion-viewport='{"once": true, "amount": 0.1}'
+            data-motion-transition='{"duration": 0.6, "ease": "easeOut", "delay": 0.3}'
+        >
+            <!-- NOTE: action="#" can prevent accidental submission if JS fails catastrophically -->
+            <form id="rating-form" action="#">
+                <!-- Question 1 (Auto-selected) -->
+                 <div class="question-item" data-question-id="q1">
+                     <p class="font-semibold text-lg mb-3"><span class="question-number">1.</span> 你的体重指数 [体重(Kg) / 身高(m)的平方] 是多少? <span id="bmi-display-q1" class="text-orange-400 ml-2 font-bold"></span></p>
+                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group">
+                         <div class="radio-option"> <input type="radio" id="q1-1" name="q1" value="1" required disabled><label for="q1-1">>32kg/m2</label></div>
+                         <div class="radio-option"> <input type="radio" id="q1-2" name="q1" value="2" disabled><label for="q1-2">28~32kg/m2</label></div>
+                         <div class="radio-option"> <input type="radio" id="q1-3" name="q1" value="3" disabled><label for="q1-3">24~27.9kg/m2</label></div>
+                         <div class="radio-option"> <input type="radio" id="q1-4" name="q1" value="4" disabled><label for="q1-4">18.5~23.9kg/m2</label></div>
+                         <div class="radio-option"> <input type="radio" id="q1-5" name="q1" value="5" disabled><label for="q1-5"><18.5kg/m2</label></div>
+                     </div>
+                     <p class="text-xs text-gray-500 mt-2 italic">此题根据上方输入的身高体重自动选择，无需手动操作。</p>
+                 </div>
+
+                <!-- Question 2-18 (Remaining questions) -->
+                <div class="space-y-6 pt-6 border-t border-gray-700">
+                    <!-- Question 2 -->
+                    <div class="question-item" data-question-id="q2">
+                        <p class="font-semibold text-lg mb-3"><span class="question-number">2.</span> 您认为自己的耐热能力处于什么水平?</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group">
+                             <div class="radio-option"><input type="radio" id="q2-1" name="q2" value="1" required><label for="q2-1">很差</label></div>
+                             <div class="radio-option"><input type="radio" id="q2-2" name="q2" value="2"><label for="q2-2">不太好</label></div>
+                             <div class="radio-option"><input type="radio" id="q2-3" name="q2" value="3"><label for="q2-3">一般</label></div>
+                             <div class="radio-option"><input type="radio" id="q2-4" name="q2" value="4"><label for="q2-4">比较好</label></div>
+                             <div class="radio-option"><input type="radio" id="q2-5" name="q2" value="5"><label for="q2-5">很强</label></div>
+                        </div>
+                    </div>
+                     <!-- Question 3 -->
+                     <div class="question-item" data-question-id="q3">
+                         <p class="font-semibold text-lg mb-3"><span class="question-number">3.</span> 您是否有训练导致中暑的病史?</p>
+                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group">
+                             <div class="radio-option"><input type="radio" id="q3-1" name="q3" value="1" required><label for="q3-1">最近1个月发生过</label></div>
+                             <div class="radio-option"><input type="radio" id="q3-2" name="q3" value="2"><label for="q3-2">最近半年发生过</label></div>
+                             <div class="radio-option"><input type="radio" id="q3-3" name="q3" value="3"><label for="q3-3">最近1年发生过</label></div>
+                             <div class="radio-option"><input type="radio" id="q3-4" name="q3" value="4"><label for="q3-4">1年以前发生过</label></div>
+                             <div class="radio-option"><input type="radio" id="q3-5" name="q3" value="5"><label for="q3-5">没有</label></div>
+                         </div>
+                     </div>
+                    <!-- Question 4 -->
+                     <div class="question-item" data-question-id="q4">
+                         <p class="font-semibold text-lg mb-3"><span class="question-number">4.</span> 您是否了解自己平时的静息心率是多少?</p>
+                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group items-start">
+                             <div class="radio-option"><input type="radio" id="q4-1" name="q4" value="1" required><label for="q4-1">不知道</label></div>
+                             <div class="radio-option"><input type="radio" id="q4-2" name="q4" value="2"><label for="q4-2">70次/分以上</label></div>
+                             <div class="radio-option"><input type="radio" id="q4-3" name="q4" value="3"><label for="q4-3">60~70次/分</label></div>
+                             <div class="radio-option"><input type="radio" id="q4-4" name="q4" value="4"><label for="q4-4">50~60次/分</label></div>
+                             <div class="radio-option"><input type="radio" id="q4-5" name="q4" value="5"><label for="q4-5">40~50次/分</label></div>
+                         </div>
+                     </div>
+                     <!-- Question 5 -->
+                     <div class="question-item" data-question-id="q5">
+                         <p class="font-semibold text-lg mb-3"><span class="question-number">5.</span> 您最近一次参加三千米跑考核的测试成绩是多少?</p>
+                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group items-start">
+                             <div class="radio-option"><input type="radio" id="q5-1" name="q5" value="1" required><label for="q5-1">不及格</label></div>
+                             <div class="radio-option"><input type="radio" id="q5-2" name="q5" value="2"><label for="q5-2">及格</label></div>
+                             <div class="radio-option"><input type="radio" id="q5-3" name="q5" value="3"><label for="q5-3">良好</label></div>
+                             <div class="radio-option"><input type="radio" id="q5-4" name="q5" value="4"><label for="q5-4">优秀</label></div>
+                             <div class="radio-option"><input type="radio" id="q5-5" name="q5" value="5"><label for="q5-5">特别好</label></div>
+                         </div>
+                     </div>
+                      <!-- Question 6 -->
+                     <div class="question-item" data-question-id="q6">
+                         <p class="font-semibold text-lg mb-3"><span class="question-number">6.</span> 最近这次三千米考核中，您的感觉是以下哪种?</p>
+                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group">
+                             <div class="radio-option"><input type="radio" id="q6-1" name="q6" value="1" required><label for="q6-1">呼吸困难，生不如死，总是想放弃</label></div>
+                             <div class="radio-option"><input type="radio" id="q6-2" name="q6" value="2"><label for="q6-2">浑身发烫，热得要爆，咬牙坚持</label></div>
+                             <div class="radio-option"><input type="radio" id="q6-3" name="q6" value="3"><label for="q6-3">头晕头痛，尚可忍受</label></div>
+                             <div class="radio-option"><input type="radio" id="q6-4" name="q6" value="4"><label for="q6-4">没有异常，全力以赴考核</label></div>
+                             <div class="radio-option"><input type="radio" id="q6-5" name="q6" value="5"><label for="q6-5">很轻松，还有所保留</label></div>
+                         </div>
+                     </div>
+                    <!-- Question 7 -->
+                    <div class="question-item" data-question-id="q7">
+                        <p class="font-semibold text-lg mb-3"><span class="question-number">7.</span> 最近这次三千米考核后您是否觉得很累?</p>
+                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group">
+                            <div class="radio-option"><input type="radio" id="q7-1" name="q7" value="1" required><label for="q7-1">太累了，气都喘不上来了，休息了好几天才缓过来</label></div>
+                            <div class="radio-option"><input type="radio" id="q7-2" name="q7" value="2"><label for="q7-2">很累，全身发烫，休息了好久</label></div>
+                            <div class="radio-option"><input type="radio" id="q7-3" name="q7" value="3"><label for="q7-3">有点累，歇歇就好</label></div>
+                            <div class="radio-option"><input type="radio" id="q7-4" name="q7" value="4"><label for="q7-4">没啥感觉，正常发挥</label></div>
+                            <div class="radio-option"><input type="radio" id="q7-5" name="q7" value="5"><label for="q7-5">很轻松，还可以再快点</label></div>
+                        </div>
+                    </div>
+                     <!-- Question 8 -->
+                    <div class="question-item" data-question-id="q8">
+                        <p class="font-semibold text-lg mb-3"><span class="question-number">8.</span> 最近这次三千米考核后几天是否有不舒服?</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group">
+                            <div class="radio-option"><input type="radio" id="q8-1" name="q8" value="1" required><label for="q8-1">腹泻</label></div>
+                            <div class="radio-option"><input type="radio" id="q8-2" name="q8" value="2"><label for="q8-2">腹痛</label></div>
+                            <div class="radio-option"><input type="radio" id="q8-3" name="q8" value="3"><label for="q8-3">头痛</label></div>
+                            <div class="radio-option"><input type="radio" id="q8-4" name="q8" value="4"><label for="q8-4">四肢酸痛</label></div>
+                            <div class="radio-option"><input type="radio" id="q8-5" name="q8" value="5"><label for="q8-5">没有不舒服</label></div>
+                        </div>
+                    </div>
+                     <!-- Question 9 -->
+                    <div class="question-item" data-question-id="q9">
+                        <p class="font-semibold text-lg mb-3"><span class="question-number">9.</span> 您是否了解自己考核时的平均心率是多少?</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group items-start">
+                            <div class="radio-option"><input type="radio" id="q9-1" name="q9" value="1" required><label for="q9-1">不知道</label></div>
+                            <div class="radio-option"><input type="radio" id="q9-2" name="q9" value="2"><label for="q9-2">180次/分以上</label></div>
+                            <div class="radio-option"><input type="radio" id="q9-3" name="q9" value="3"><label for="q9-3">160~180次/分</label></div>
+                            <div class="radio-option"><input type="radio" id="q9-4" name="q9" value="4"><label for="q9-4">140~160次/分</label></div>
+                            <div class="radio-option"><input type="radio" id="q9-5" name="q9" value="5"><label for="q9-5">140次/分以下</label></div>
+                             <div class="lg:col-span-2 flex items-center gap-2 mt-2 lg:mt-0">
+                                 <label for="q9-hr" class="text-sm text-gray-400 whitespace-nowrap">如了解, 可选填:</label>
+                                 <input type="number" id="q9-hr" name="q9_hr" class="form-input !w-24 !py-1 !px-2 text-sm" placeholder="次/分">
+                             </div>
+                        </div>
+                    </div>
+                     <!-- Question 10 -->
+                     <div class="question-item" data-question-id="q10">
+                         <p class="font-semibold text-lg mb-3"><span class="question-number">10.</span> 您最近一次跑步训练的跑步距离是多长?</p>
+                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group">
+                            <div class="radio-option"><input type="radio" id="q10-1" name="q10" value="1" required><label for="q10-1">半年没跑了</label></div>
+                            <div class="radio-option"><input type="radio" id="q10-2" name="q10" value="2"><label for="q10-2">3km以内</label></div>
+                            <div class="radio-option"><input type="radio" id="q10-3" name="q10" value="3"><label for="q10-3">3~5km</label></div>
+                            <div class="radio-option"><input type="radio" id="q10-4" name="q10" value="4"><label for="q10-4">5~10km</label></div>
+                            <div class="radio-option"><input type="radio" id="q10-5" name="q10" value="5"><label for="q10-5">10km以上</label></div>
+                         </div>
+                     </div>
+                     <!-- Question 11 -->
+                     <div class="question-item" data-question-id="q11">
+                         <p class="font-semibold text-lg mb-3"><span class="question-number">11.</span> 您最近一次跑步训练的跑步时间是多久?</p>
+                          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group">
+                            <div class="radio-option"><input type="radio" id="q11-1" name="q11" value="1" required><label for="q11-1">半年没跑了</label></div>
+                            <div class="radio-option"><input type="radio" id="q11-2" name="q11" value="2"><label for="q11-2">30分钟以内</label></div>
+                            <div class="radio-option"><input type="radio" id="q11-3" name="q11" value="3"><label for="q11-3">30~60分钟</label></div>
+                            <div class="radio-option"><input type="radio" id="q11-4" name="q11" value="4"><label for="q11-4">1~2小时</label></div>
+                            <div class="radio-option"><input type="radio" id="q11-5" name="q11" value="5"><label for="q11-5">2小时以上</label></div>
+                         </div>
+                     </div>
+                     <!-- Question 12 -->
+                     <div class="question-item" data-question-id="q12">
+                         <p class="font-semibold text-lg mb-3"><span class="question-number">12.</span> 您最近一月的跑量是多少?</p>
+                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group">
+                            <div class="radio-option"><input type="radio" id="q12-1" name="q12" value="1" required><label for="q12-1">没跑</label></div>
+                            <div class="radio-option"><input type="radio" id="q12-2" name="q12" value="2"><label for="q12-2">1~12km</label></div>
+                            <div class="radio-option"><input type="radio" id="q12-3" name="q12" value="3"><label for="q12-3">12~40km</label></div>
+                            <div class="radio-option"><input type="radio" id="q12-4" name="q12" value="4"><label for="q12-4">40~80km</label></div>
+                            <div class="radio-option"><input type="radio" id="q12-5" name="q12" value="5"><label for="q12-5">80km以上</label></div>
+                         </div>
+                     </div>
+                      <!-- Question 13 -->
+                      <div class="question-item" data-question-id="q13">
+                          <p class="font-semibold text-lg mb-3"><span class="question-number">13.</span> 您最近跑步的平均速度是多少?</p>
+                          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group">
+                            <div class="radio-option"><input type="radio" id="q13-1" name="q13" value="1" required><label for="q13-1">每公里8分钟以上</label></div>
+                            <div class="radio-option"><input type="radio" id="q13-2" name="q13" value="2"><label for="q13-2">每公里6~8分钟</label></div>
+                            <div class="radio-option"><input type="radio" id="q13-3" name="q13" value="3"><label for="q13-3">每公里5~6分钟</label></div>
+                            <div class="radio-option"><input type="radio" id="q13-4" name="q13" value="4"><label for="q13-4">每公里4~5分钟</label></div>
+                            <div class="radio-option"><input type="radio" id="q13-5" name="q13" value="5"><label for="q13-5">每公里3~4分</label></div>
+                          </div>
+                      </div>
+                      <!-- Question 14 -->
+                      <div class="question-item" data-question-id="q14">
+                          <p class="font-semibold text-lg mb-3"><span class="question-number">14.</span> 您最近1个月体重情况稳定吗?</p>
+                          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group">
+                             <div class="radio-option"><input type="radio" id="q14-1" name="q14" value="1" required><label for="q14-1">重了5kg以上</label></div>
+                             <div class="radio-option"><input type="radio" id="q14-2" name="q14" value="2"><label for="q14-2">重了2~5kg</label></div>
+                             <div class="radio-option"><input type="radio" id="q14-3" name="q14" value="3"><label for="q14-3">基本稳定</label></div>
+                             <div class="radio-option"><input type="radio" id="q14-4" name="q14" value="4"><label for="q14-4">轻了2~5kg</label></div>
+                             <div class="radio-option"><input type="radio" id="q14-5" name="q14" value="5"><label for="q14-5">轻了5kg以上</label></div>
+                          </div>
+                      </div>
+                      <!-- Question 15 -->
+                      <div class="question-item" data-question-id="q15">
+                          <p class="font-semibold text-lg mb-3"><span class="question-number">15.</span> 您最近1个月内休息情况好吗?</p>
+                          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group">
+                             <div class="radio-option"><input type="radio" id="q15-1" name="q15" value="1" required><label for="q15-1">老是失眠，头疼，睡不着，白天老犯困</label></div>
+                             <div class="radio-option"><input type="radio" id="q15-2" name="q15" value="2"><label for="q15-2">经常失眠，睡不好，白天犯困</label></div>
+                             <div class="radio-option"><input type="radio" id="q15-3" name="q15" value="3"><label for="q15-3">偶尔失眠，总体还行</label></div>
+                             <div class="radio-option"><input type="radio" id="q15-4" name="q15" value="4"><label for="q15-4">睡眠正常，白天正常工作</label></div>
+                             <div class="radio-option"><input type="radio" id="q15-5" name="q15" value="5"><label for="q15-5">睡眠质量高，精力充沛工作</label></div>
+                          </div>
+                      </div>
+                      <!-- Question 16 -->
+                      <div class="question-item" data-question-id="q16">
+                          <p class="font-semibold text-lg mb-3"><span class="question-number">16.</span> 最近1个月内您是否生病?</p>
+                          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group">
+                             <div class="radio-option"><input type="radio" id="q16-1" name="q16" value="1" required><label for="q16-1">有发烧，吃了药还没全好，还在吃药</label></div>
+                             <div class="radio-option"><input type="radio" id="q16-2" name="q16" value="2"><label for="q16-2">有发烧，吃了药已经退烧，感觉还要休息一下</label></div>
+                             <div class="radio-option"><input type="radio" id="q16-3" name="q16" value="3"><label for="q16-3">有点感冒、拉肚子，休息几天，已经好了</label></div>
+                             <div class="radio-option"><input type="radio" id="q16-4" name="q16" value="4"><label for="q16-4">有点感冒、拉肚子，没吃药已经好了</label></div>
+                             <div class="radio-option"><input type="radio" id="q16-5" name="q16" value="5"><label for="q16-5">没有</label></div>
+                          </div>
+                      </div>
+                     <!-- Question 17 -->
+                     <div class="question-item" data-question-id="q17">
+                         <p class="font-semibold text-lg mb-3"><span class="question-number">17.</span> 如果在15天内您要参加3千米体能测试，您会怎么看待?</p>
+                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group">
+                            <div class="radio-option"><input type="radio" id="q17-1" name="q17" value="1" required><label for="q17-1">太可怕了，直接放弃，坚决不考</label></div>
+                            <div class="radio-option"><input type="radio" id="q17-2" name="q17" value="2"><label for="q17-2">试试吧，肯定考不过格</label></div>
+                            <div class="radio-option"><input type="radio" id="q17-3" name="q17" value="3"><label for="q17-3">抓紧训练，及格有望</label></div>
+                            <div class="radio-option"><input type="radio" id="q17-4" name="q17" value="4"><label for="q17-4">积极准备，有信心通过</label></div>
+                            <div class="radio-option"><input type="radio" id="q17-5" name="q17" value="5"><label for="q17-5">小菜一碟，随考随过</label></div>
+                         </div>
+                     </div>
+                     <!-- Question 18 -->
+                     <div class="question-item" data-question-id="q18">
+                         <p class="font-semibold text-lg mb-3"><span class="question-number">18.</span> 如果在15天内安排您参加3千米体能测试，您觉得自己的考核成绩会是什么结果?</p>
+                          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 radio-group">
+                             <div class="radio-option"><input type="radio" id="q18-1" name="q18" value="1" required><label for="q18-1">不及格</label></div>
+                             <div class="radio-option"><input type="radio" id="q18-2" name="q18" value="2"><label for="q18-2">能及格</label></div>
+                             <div class="radio-option"><input type="radio" id="q18-3" name="q18" value="3"><label for="q18-3">良好</label></div>
+                             <div class="radio-option"><input type="radio" id="q18-4" name="q18" value="4"><label for="q18-4">优秀</label></div>
+                             <div class="radio-option"><input type="radio" id="q18-5" name="q18" value="5"><label for="q18-5">特别好</label></div>
+                          </div>
+                     </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-8 text-center">
+                    <button type="submit" class="btn">
+                        <i class="fas fa-calculator mr-2"></i>计算总分
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Score Display Block (Bottom) -->
+        <div
+            id="score-section"
+            class="bento-item md:col-span-3 lg:col-span-4 p-6 md:p-8 flex flex-col items-center justify-center text-center relative overflow-hidden min-h-[250px]"
+            data-motion-initial='{"opacity": 0, "y": 50}'
+            data-motion-whileInView='{"opacity": 1, "y": 0}'
+            data-motion-viewport='{"once": true, "amount": 0.3}'
+            data-motion-transition='{"duration": 0.6, "ease": "easeOut"}'
+        >
+             <i class="fas fa-gauge-high text-very-large text-orange-500 opacity-10 absolute top-4 left-4 -z-0"></i>
+             <i class="fas fa-award text-very-large text-orange-500 opacity-10 absolute bottom-4 right-4 -z-0"></i>
+
+            <h2 class="text-2xl md:text-3xl font-bold text-orange-500 mb-4 z-10">最终热耐力评分</h2>
+            <div
+                id="score-display"
+                class="text-super-large font-black text-white z-10"
+                data-motion-initial='{"scale": 0.5, "opacity": 0}'
+                data-motion-animate='{"scale": 1, "opacity": 1}'
+                data-motion-transition='{"type": "spring", "stiffness": 100, "delay": 0.3}'
+            >
+                -
+            </div>
+             <p class="text-base text-gray-400 mt-4 z-10">分数越高，代表评估的热耐力越强。</p>
+              <p id="score-interpretation" class="text-lg text-orange-300 font-semibold mt-2 z-10"></p>
+        </div>
+
+
+    </div> <!-- End Bento Grid -->
+
+</div> <!-- End Container -->
+
+<!-- LOAD EXTERNAL LIBRARIES FIRST -->
+<!-- Framer Motion CDN - Placed before the inline script -->
+<script src="../assets/vendors/framer-motion.js"></script>
+
+<!-- YOUR CUSTOM SCRIPT BLOCK -->
+<script>
+    // Wrap in DOMContentLoaded to ensure DOM elements exist and libraries *might* be ready
+    document.addEventListener('DOMContentLoaded', () => {
+
+        console.log("DOM fully loaded and parsed.");
+
+        // --- Check if Framer Motion loaded ---
+        if (typeof Motion === 'undefined') {
+             console.error("CRITICAL ERROR: Framer Motion library (Motion object) not loaded before inline script! Animations might fail.");
+             // Optionally alert the user or disable animation features
+             // alert("页面动画库加载失败，部分效果可能无法显示。");
+        } else {
+             console.log("Framer Motion object 'Motion' is defined.");
+        }
+        // Proceed even if Motion is undefined initially, but add checks later where it's used.
+        const motion = window.Motion?.motion; // Use optional chaining
+        const animate = window.Motion?.animate; // Use optional chaining
+
+
+        // --- DOM Element References ---
+        const ratingForm = document.getElementById('rating-form');
+        const scoreDisplay = document.getElementById('score-display');
+        const scoreInterpretation = document.getElementById('score-interpretation');
+        const scoreSection = document.getElementById('score-section');
+        const heightInput = document.getElementById('height');
+        const weightInput = document.getElementById('weight');
+        const bmiDisplayInfo = document.getElementById('bmi-display-info');
+        const bmiDisplayQ1 = document.getElementById('bmi-display-q1');
+
+        const totalQuestions = 18;
+
+        // --- Crucial Check: Ensure the form element exists ---
+        if (!ratingForm) {
+            console.error("CRITICAL ERROR: Could not find the form element with ID 'rating-form'! Script cannot proceed.");
+            alert("页面加载错误：找不到评分表单。请检查 HTML 结构。");
+            return; // Stop script execution
+        }
+        // Optional checks for other critical elements
+        if (!scoreDisplay) console.error("Error: Could not find element with ID 'score-display'.");
+        if (!scoreSection) console.error("Error: Could not find element with ID 'score-section'.");
+        if (!heightInput || !weightInput) console.error("Error: Could not find height or weight input elements.");
+
+
+        // --- Function to calculate BMI ---
+        function calculateBMI() {
+            try {
+                // Ensure inputs exist before accessing value
+                if (!heightInput || !weightInput) return null;
+
+                const height = parseFloat(heightInput.value);
+                const weight = parseFloat(weightInput.value);
+
+                document.querySelectorAll('.question-item.unanswered').forEach(el => el.classList.remove('unanswered'));
+
+                if (height > 0 && weight > 0) {
+                    const heightInMeters = height / 100;
+                    const bmi = weight / (heightInMeters * heightInMeters);
+                    const bmiFormatted = bmi.toFixed(1);
+                    if(bmiDisplayInfo) bmiDisplayInfo.textContent = `计算 BMI: ${bmiFormatted}`;
+                    if(bmiDisplayQ1) bmiDisplayQ1.textContent = `(BMI: ${bmiFormatted})`;
+                    autoSelectBMIQuestion(bmi);
+                    return bmi;
+                } else {
+                    if(bmiDisplayInfo) bmiDisplayInfo.textContent = '';
+                    if(bmiDisplayQ1) bmiDisplayQ1.textContent = '';
+                    document.querySelectorAll('input[name="q1"]').forEach(radio => {
+                         const parentOption = radio.closest('.radio-option');
+                         radio.checked = false;
+                         if(parentOption) parentOption.classList.remove('checked');
+                     });
+                    return null;
+                }
+            } catch (error) {
+                 console.error("Error in calculateBMI function:", error);
+                 return null;
+            }
+        }
+
+        // --- Function to auto-select Q1 based on calculated BMI ---
+        function autoSelectBMIQuestion(bmi) {
+            try {
+                let valueToSelect = null;
+                if (bmi < 18.5) valueToSelect = 5;
+                else if (bmi < 24) valueToSelect = 4;
+                else if (bmi < 28) valueToSelect = 3;
+                else if (bmi < 32) valueToSelect = 2;
+                else if (bmi >= 32) valueToSelect = 1;
+
+                document.querySelectorAll('input[name="q1"]').forEach(radio => {
+                    const parentOption = radio.closest('.radio-option');
+                    radio.checked = false; // Ensure logical state is reset
+                    if(parentOption) parentOption.classList.remove('checked');
+                });
+
+                if (valueToSelect !== null) {
+                     const radioToCheck = document.querySelector(`input[name="q1"][value="${valueToSelect}"]`);
+                     if (radioToCheck) {
+                         const parentOption = radioToCheck.closest('.radio-option');
+                         radioToCheck.checked = true; // Set logical state
+                         if(parentOption) parentOption.classList.add('checked'); // Update visual style
+                     }
+                 }
+             } catch (error) {
+                  console.error("Error in autoSelectBMIQuestion function:", error);
+             }
+        }
+
+        // --- Basic Framer Motion setup for elements with data attributes ---
+        // This runs once on load if Motion is available
+        if (motion && typeof motion === 'function') {
+            document.querySelectorAll('[data-motion-initial]').forEach(el => {
+                try {
+                    const initial = JSON.parse(el.dataset.motionInitial || '{}');
+                    const whileInView = JSON.parse(el.dataset.motionWhileinview || '{}'); // Note the lowercase 'whileinview'
+                    const viewport = JSON.parse(el.dataset.motionViewport || '{}');
+                    const transition = JSON.parse(el.dataset.motionTransition || '{}');
+
+                    // Basic implementation - replace with actual Framer Motion calls if needed
+                    // This example just applies initial style and uses Intersection Observer
+                    Object.assign(el.style, { opacity: initial.opacity ?? 1, transform: `translateY(${initial.y ?? 0}px)` });
+
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                el.style.transition = `opacity ${transition.duration ?? 0.6}s ${transition.ease ?? 'ease-out'} ${transition.delay ?? 0}s, transform ${transition.duration ?? 0.6}s ${transition.ease ?? 'ease-out'} ${transition.delay ?? 0}s`;
+                                el.style.opacity = whileInView.opacity ?? 1;
+                                el.style.transform = `translateY(${whileInView.y ?? 0}px)`;
+                                if (viewport.once) {
+                                    observer.unobserve(el);
+                                }
+                            }
+                        });
+                    }, { threshold: viewport.amount ?? 0.1 });
+
+                    observer.observe(el);
+
+                } catch(e) {
+                     console.error("Error applying motion data attributes to element:", el, e);
+                }
+            });
+            console.log("Applied basic scroll animations based on data attributes.");
+        } else {
+            console.warn("Framer Motion 'motion' function not available. Scroll animations via data attributes skipped.");
+            // Fallback: Ensure elements are visible if JS animations fail
+            document.querySelectorAll('[data-motion-initial]').forEach(el => {
+                el.style.opacity = 1;
+                el.style.transform = 'translateY(0px)';
+            });
+        }
+
+
+        // --- Event Listeners ---
+        if (heightInput) heightInput.addEventListener('input', calculateBMI);
+        if (weightInput) weightInput.addEventListener('input', calculateBMI);
+
+        ratingForm.addEventListener('change', (event) => {
+             try {
+                if (event.target.type === 'radio' && event.target.name !== 'q1') {
+                    const groupName = event.target.name;
+                    document.querySelectorAll(`input[name="${groupName}"]`).forEach(radio => {
+                         const parentOption = radio.closest('.radio-option');
+                         if(parentOption) parentOption.classList.remove('checked');
+                    });
+                    const parentOption = event.target.closest('.radio-option');
+                    if(parentOption) parentOption.classList.add('checked');
+                    const questionItem = event.target.closest('.question-item');
+                    if(questionItem) questionItem.classList.remove('unanswered');
+                }
+             } catch (error) {
+                  console.error("Error in Change event listener:", error);
+             }
+        });
+
+        // --- Handle form submission ---
+        console.log("Adding Submit event listener to ratingForm...");
+        ratingForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent default form submission
+            console.log("Submit event triggered, preventDefault() called.");
+
+            try {
+                // --- Validation ---
+                let firstUnansweredElement = null;
+                let allAnswered = true;
+                document.querySelectorAll('.question-item.unanswered').forEach(el => el.classList.remove('unanswered'));
+
+                // Check Q1 (BMI needs to be calculated)
+                if (!document.querySelector('input[name="q1"]:checked')) {
+                    allAnswered = false;
+                    const q1Element = document.querySelector('.question-item[data-question-id="q1"]');
+                    if (q1Element) {
+                         q1Element.classList.add('unanswered');
+                         // Find the BMI input section instead of Q1 itself for focus/scroll
+                         const bmiInputSection = document.getElementById('bmi-calculator-inputs');
+                         firstUnansweredElement = bmiInputSection || q1Element; // Fallback to Q1 element
+                         if(heightInput) heightInput.focus();
+                         alert('请先输入有效的身高和体重以自动选择第1题！');
+                         console.warn("Validation Failed: Q1 not selected (BMI not calculated).");
+                         if (firstUnansweredElement) firstUnansweredElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                         return;
+                    }
+                }
+
+                // Check Q2-Q18
+                for (let i = 2; i <= totalQuestions; i++) {
+                     const questionSelector = `input[name="q${i}"]:checked`;
+                     if (!ratingForm.querySelector(questionSelector)) {
+                         allAnswered = false;
+                         const unansweredElement = ratingForm.querySelector(`.question-item[data-question-id="q${i}"]`);
+                         if (unansweredElement) {
+                             unansweredElement.classList.add('unanswered');
+                             if (!firstUnansweredElement) {
+                                 firstUnansweredElement = unansweredElement;
+                             }
+                         }
+                     }
+                }
+
+                if (!allAnswered) {
+                    alert('请回答所有突出显示的问题后再计算分数！');
+                    if (firstUnansweredElement) {
+                         firstUnansweredElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    console.warn("Validation Failed: Unanswered questions remain.");
+                    return;
+                }
+
+                console.log("Validation Passed. Calculating score...");
+
+                // --- Calculation ---
+                let totalScore = 0;
+                const checkedRadios = ratingForm.querySelectorAll('input[type="radio"]:checked');
+                checkedRadios.forEach(radio => {
+                    totalScore += parseInt(radio.value, 10);
+                });
+                console.log("Calculated Total Score:", totalScore);
+
+
+                // --- Display Score ---
+                if (scoreDisplay && animate && typeof animate === 'function') { // Check if animate is available AND a function
+                     const currentScore = parseInt(scoreDisplay.textContent) || 0;
+                     console.log(`Animating score from ${currentScore} to ${totalScore}`);
+                     animate(
+                         currentScore,
+                         totalScore,
+                         {
+                             duration: 0.8,
+                             ease: "easeOut",
+                             onUpdate: (latest) => { if(scoreDisplay) scoreDisplay.textContent = Math.round(latest); },
+                             onComplete: () => { if(scoreDisplay) scoreDisplay.textContent = totalScore; }
+                         }
+                     );
+                 } else {
+                      console.warn("Framer Motion 'animate' function not available or scoreDisplay missing. Setting score directly.");
+                      if(scoreDisplay) scoreDisplay.textContent = totalScore; // Fallback to direct setting
+                 }
+
+
+                // --- Score Interpretation ---
+                let interpretationText = "";
+                 if (totalScore >= 80) interpretationText = "评估结果：耐热能力优秀";
+                 else if (totalScore >= 70) interpretationText = "评估结果：耐热能力良好";
+                 else if (totalScore >= 60) interpretationText = "评估结果：耐热能力中等";
+                 else if (totalScore >= 40) interpretationText = "评估结果：耐热能力较弱";
+                 else interpretationText = "评估结果：耐热能力差，请注意！";
+
+                 if(scoreInterpretation) {
+                      scoreInterpretation.textContent = interpretationText;
+                      console.log("Score interpretation set:", interpretationText);
+                 } else {
+                      console.error("Cannot set score interpretation, element not found.");
+                 }
+
+
+                // --- Scroll to score section ---
+                 if (scoreSection) {
+                    setTimeout(() => {
+                         console.log("Scrolling to score section...");
+                         scoreSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                     }, 100); // Delay slightly for rendering updates
+                 } else {
+                      console.error("Cannot scroll, scoreSection element not found.");
+                 }
+
+            } catch (error) {
+                console.error("An error occurred during form submission handling:", error);
+                alert("计算过程中发生错误，请检查控制台获取详细信息。");
+            }
+        });
+        console.log("Submit event listener successfully added to ratingForm.");
+
+        // --- Initial Calculation ---
+        calculateBMI(); // Initial BMI calculation on load
+
+    }); // --- End of DOMContentLoaded listener ---
+</script>
+
+<!-- 返回顶部按钮 -->
+<button id="backToTopBtn" class="fixed bottom-20 right-6 z-50 p-3 rounded-full bg-orange-500 text-white shadow-lg transform transition-transform duration-300 opacity-0 translate-y-10">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- 统一页脚 -->
+<footer class="relative mt-16 pt-10 pb-6 bg-gray-900 border-t border-gray-800">
+    <div class="container mx-auto px-4">
+        <!-- 顶部返回主页 -->
+        <div class="flex justify-center mb-8">
+            <a href="../index.html" class="inline-flex items-center px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-lg">
+                <i class="fas fa-home mr-2"></i> 返回主页
+            </a>
+        </div>
+
+        <!-- 主要内容 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+            <!-- 快速导航 -->
+            <div class="lg:col-span-2">
+                <h3 class="text-xl font-semibold text-orange-500 mb-4">快速导航</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <a href="/pages/中国热射病诊断与治疗指南.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                        <i class="fas fa-book-medical mr-2 text-orange-500 w-5"></i> 诊断与治疗指南
+                    </a>
+                    <a href="/pages/热射病救治体系建设标准专家共识.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                        <i class="fas fa-users-rays mr-2 text-orange-500 w-5"></i> 救治体系建设标准
+                    </a>
+                    <a href="/pages/热耐力评估.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                        <i class="fas fa-clipboard-check mr-2 text-orange-500 w-5"></i> 热耐力评估
+                    </a>
+                    <a href="/pages/热射病核心体温监测与降温方法.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                        <i class="fas fa-temperature-three-quarters mr-2 text-orange-500 w-5"></i> 核心体温监测
+                    </a>
+                    <a href="/pages/热射病现场处置.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                        <i class="fas fa-kit-medical mr-2 text-orange-500 w-5"></i> 现场处置
+                    </a>
+                    <a href="/pages/热射病通关挑战.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                        <i class="fas fa-gamepad mr-2 text-orange-500 w-5"></i> 通关挑战
+                    </a>
+                    <a href="/pages/8-4-6黄金法则.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                        <i class="fas fa-stopwatch-20 mr-2 text-orange-500 w-5"></i> 8-4-6黄金法则
+                    </a>
+                    <a href="/pages/热指数查询.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                        <i class="fas fa-thermometer-half mr-2 text-orange-500 w-5"></i> 热指数查询
+                    </a>
+                </div>
+            </div>
+
+            <!-- 快速链接 -->
+            <div>
+                <h3 class="text-xl font-semibold text-orange-500 mb-4">快速链接</h3>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="关于本项目.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-user-doctor mr-2 text-orange-500 w-5"></i> 关于本项目
+                        </a>
+                    </li>
+                    <li class="text-gray-300 flex items-center">
+                        <i class="fas fa-phone-alt mr-2 text-orange-500 w-5"></i> 紧急情况请拨打 <span class="text-orange-500 font-bold ml-1">120</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 联系我们 -->
+            <div>
+                <h3 class="text-xl font-semibold text-orange-500 mb-4">联系我们</h3>
+                <p class="text-gray-300 flex items-center mb-2">
+                    <i class="fas fa-envelope mr-2 text-orange-500 w-5"></i> 
+                    <a href="mailto:nimrod1990@163.com" class="hover:text-orange-400 transition-colors">nimrod1990@163.com</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- 声明部分 -->
+        <div class="border-t border-gray-800 pt-6 text-center">
+            <p class="text-gray-400 mb-2">
+                <strong class="text-orange-500">版权声明：</strong>©2025 红医师 热射病防治
+            </p>
+            <p class="text-gray-400 mb-2">
+                <strong class="text-orange-500">免责声明：</strong>本网站内容仅供参考，不替代专业医疗建议。如有紧急情况请立即就医。
+            </p>
+            <p class="text-gray-400">
+                <strong class="text-orange-500">转载声明：</strong>所有资料来源于互联网公开资料，已脱密处理，禁止商用，转载请联系作者
+            </p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // 返回顶部按钮脚本
+    const backToTopBtn = document.getElementById('backToTopBtn');
+    
+    // 监听滚动事件
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) { // 当页面滚动超过300px时显示按钮
+            backToTopBtn.classList.remove('opacity-0', 'translate-y-10');
+            backToTopBtn.classList.add('opacity-100', 'translate-y-0');
+        } else {
+            backToTopBtn.classList.remove('opacity-100', 'translate-y-0');
+            backToTopBtn.classList.add('opacity-0', 'translate-y-10');
+        }
+    });
+    
+    // 点击按钮返回顶部
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+</script>
+
+</body>
+</html>

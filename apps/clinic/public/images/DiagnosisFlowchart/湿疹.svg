@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1100">
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .title { font-size: 24px; font-weight: bold; }
+    .subtitle { font-size: 18px; font-weight: bold; }
+    .content { font-size: 14px; }
+  </style>
+  
+  <rect width="100%" height="100%" fill="#fff5ee"/>
+  
+  <text x="200" y="40" class="title" text-anchor="middle" fill="#8b4513">湿疹诊断思维链</text>
+  
+  <g transform="translate(20, 80)">
+    <rect width="360" height="160" rx="10" fill="#ffdab9" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#8b4513">症状特征</text>
+    <text x="10" y="60" class="content" fill="#8b4513">• 皮肤瘙痒：常为首发症状，可剧烈</text>
+    <text x="10" y="80" class="content" fill="#8b4513">• 皮疹：红斑、丘疹、水疱、糜烂</text>
+    <text x="10" y="100" class="content" fill="#8b4513">• 皮肤干燥：可伴有脱屑</text>
+    <text x="10" y="120" class="content" fill="#8b4513">• 反复发作：慢性病程特征</text>
+    <text x="10" y="140" class="content" fill="#8b4513">• 好发部位：因年龄和类型而异</text>
+  </g>
+  
+  <g transform="translate(20, 260)">
+    <rect width="360" height="200" rx="10" fill="#ffdab9" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#8b4513">病因分析</text>
+    <text x="10" y="60" class="content" fill="#8b4513">1. 遗传因素：皮肤屏障功能异常</text>
+    <text x="10" y="80" class="content" fill="#8b4513">2. 环境因素：</text>
+    <text x="10" y="100" class="content" fill="#8b4513">   • 刺激物：肥皂、洗涤剂、化妆品</text>
+    <text x="10" y="120" class="content" fill="#8b4513">   • 过敏原：尘螨、花粉、食物</text>
+    <text x="10" y="140" class="content" fill="#8b4513">3. 免疫系统异常</text>
+    <text x="10" y="160" class="content" fill="#8b4513">4. 心理因素：压力可加重症状</text>
+    <text x="10" y="180" class="content" fill="#8b4513">5. 气候：干燥、寒冷或潮湿环境</text>
+  </g>
+  
+  <g transform="translate(20, 480)">
+    <rect width="360" height="140" rx="10" fill="#ffdab9" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#8b4513">诊断要点</text>
+    <text x="10" y="60" class="content" fill="#8b4513">1. 详细病史：发病时间、诱因、病程</text>
+    <text x="10" y="80" class="content" fill="#8b4513">2. 皮肤检查：观察皮疹特征和分布</text>
+    <text x="10" y="100" class="content" fill="#8b4513">3. 过敏原测试：必要时进行</text>
+    <text x="10" y="120" class="content" fill="#8b4513">4. 鉴别诊断：排除其他皮肤病</text>
+  </g>
+  
+  <g transform="translate(20, 640)">
+    <rect width="360" height="200" rx="10" fill="#ffdab9" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#8b4513">治疗方法</text>
+    <text x="10" y="60" class="content" fill="#8b4513">1. 外用药物：</text>
+    <text x="10" y="80" class="content" fill="#8b4513">   • 糖皮质激素：控制炎症</text>
+    <text x="10" y="100" class="content" fill="#8b4513">   • 钙神经调节剂：如他克莫司</text>
+    <text x="10" y="120" class="content" fill="#8b4513">2. 系统治疗：</text>
+    <text x="10" y="140" class="content" fill="#8b4513">   • 抗组胺药：缓解瘙痒</text>
+    <text x="10" y="160" class="content" fill="#8b4513">   • 免疫抑制剂：严重案例使用</text>
+    <text x="10" y="180" class="content" fill="#8b4513">3. 光疗：中重度湿疹可考虑</text>
+  </g>
+  
+  <g transform="translate(20, 860)">
+    <rect width="360" height="180" rx="10" fill="#ffdab9" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#8b4513">预防和自我管理</text>
+    <text x="10" y="60" class="content" fill="#8b4513">• 保持皮肤湿润：使用无香温和保湿剂</text>
+    <text x="10" y="80" class="content" fill="#8b4513">• 避免已知的刺激物和过敏原</text>
+    <text x="10" y="100" class="content" fill="#8b4513">• 选择柔软、透气的衣物</text>
+    <text x="10" y="120" class="content" fill="#8b4513">• 控制室内温度和湿度</text>
+    <text x="10" y="140" class="content" fill="#8b4513">• 管理压力，保持良好的情绪状态</text>
+    <text x="10" y="160" class="content" fill="#8b4513">• 避免过度清洁和长时间浸泡</text>
+  </g>
+  
+  <text x="200" y="1080" class="content" text-anchor="middle" fill="#8b4513">注意：如出现广泛皮疹、感染迹象或症状加重，需及时就医</text>
+</svg>

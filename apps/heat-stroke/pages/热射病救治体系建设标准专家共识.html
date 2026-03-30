@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>热射病救治体系建设标准专家共识 | Heatstroke Treatment System Consensus</title>
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
+    <script src="../assets/vendors/tailwind.compiler.js"></script>
+    <script src="../assets/vendors/framer-motion.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Custom Styles */
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; /* Apple-like font stack */
+        }
+
+        .highlight { color: #FF6B00; }
+        .highlight-bg { background-color: #FF6B00; }
+        .highlight-border { border-color: #FF6B00; }
+
+        /* Bento Grid Base Item Style */
+        .bento-item {
+            background-color: #111111; /* Slightly lighter than black */
+            border-radius: 1.5rem; /* More rounded corners */
+            padding: 1.5rem; /* Default padding */
+            overflow: hidden;
+            position: relative;
+            border: 1px solid #222; /* Subtle border */
+        }
+
+        /* Large Font Emphasis */
+        .emphasis-lg-text {
+            font-size: clamp(2.5rem, 5vw + 1rem, 5rem); /* Responsive large text */
+            font-weight: 800; /* Extra bold */
+            line-height: 1.1;
+        }
+        .emphasis-huge-text {
+            font-size: clamp(5rem, 15vw + 1rem, 12rem); /* Responsive huge text */
+            font-weight: 900; /* Black */
+            line-height: 1;
+            position: relative;
+            z-index: 1;
+        }
+        .emphasis-huge-text-bg { /* For background huge text/icon */
+            position: absolute;
+            bottom: -10%;
+            right: -5%;
+            font-size: clamp(10rem, 25vw + 1rem, 20rem);
+            font-weight: 900;
+            color: rgba(255, 165, 0, 0.05); /* Very transparent highlight */
+            z-index: 0;
+            line-height: 1;
+            user-select: none;
+        }
+
+
+        /* English Text Style */
+        .en-text {
+            font-size: 0.75rem; /* Small */
+            color: #A0A0A0; /* Lighter Gray */
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: block;
+            margin-top: 0.25rem;
+        }
+
+        /* Gradient Effect */
+        .tech-gradient {
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.3) 0%, rgba(255, 107, 0, 0) 70%);
+        }
+        .highlight-gradient-text {
+            background: linear-gradient(90deg, #FF6B00, #ffb266);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Scroll Animation Base */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .scroll-animate.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Table Style */
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+        }
+        .styled-table th, .styled-table td {
+            border: 1px solid #333;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        .styled-table th {
+            background-color: #222;
+            font-weight: 600;
+            color: #FF6B00;
+        }
+        .styled-table tr:nth-child(even) {
+            background-color: #1a1a1a;
+        }
+
+        /* Line Art Placeholder */
+        .line-art-placeholder {
+            border: 2px dashed #555;
+            padding: 2rem;
+            text-align: center;
+            color: #777;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 150px;
+        }
+
+        /* Recommendation Box Style */
+        .recommendation-box {
+            background-color: rgba(255, 165, 0, 0.05); /* Subtle highlight background */
+            border-left: 4px solid #FFA500;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0.5rem;
+        }
+        .recommendation-box strong {
+            color: #FFA500;
+            font-weight: 700;
+        }
+
+         /* Make specific Bento items larger */
+        .bento-item-large {
+            grid-column: span 1 / span 1; /* Default span */
+        }
+        @media (min-width: 768px) { /* Medium screens */
+             .md\:col-span-2 { grid-column: span 2 / span 2; }
+             .md\:row-span-2 { grid-row: span 2 / span 2; }
+        }
+         @media (min-width: 1024px) { /* Large screens */
+             .lg\:col-span-2 { grid-column: span 2 / span 2; }
+             .lg\:col-span-3 { grid-column: span 3 / span 3; }
+             .lg\:row-span-2 { grid-row: span 2 / span 2; }
+         }
+
+    </style>
+</head>
+<body class="bg-black text-white font-sans">
+    <!-- 导航栏 -->
+    <nav class="bg-black py-4 px-6 sticky top-0 z-50 border-b border-gray-800">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="../index.html" class="flex items-center text-orange-500 hover:text-orange-400 transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i>
+                <span class="font-bold">返回主页</span>
+            </a>
+            <a href="https://www.xiaoyuzhoufm.com/episodes/6818b92c47ebeede7edfae8f" target="_blank" class="flex items-center text-orange-500 hover:text-orange-400 transition-colors">
+                <i class="fas fa-podcast mr-2"></i>
+                <span class="font-bold">收听播客讲解</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-12 md:py-20">
+
+        <!-- Header Section -->
+        <header class="mb-16 text-center scroll-animate">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">
+                热射病救治体系建设<br class="hidden md:block"/> <span class="highlight-gradient-text">专家共识</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
+                Expert Consensus on the Construction Standards for Heatstroke Treatment System
+                <br/> 应对全球变暖，规范救治流程，提升国民健康。
+            </p>
+        </header>
+
+        <!-- Bento Grid Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+
+            <!-- Intro & Mortality -->
+            <div class="bento-item md:col-span-2 lg:col-span-2 scroll-animate">
+                 <i class="fas fa-temperature-full text-3xl highlight absolute top-6 right-6 opacity-50"></i>
+                <h2 class="text-2xl md:text-3xl font-bold mb-3">严峻挑战 <span class="en-text">The Challenge</span></h2>
+                <p class="text-gray-300 mb-4">全球变暖加剧，极端高温频发，热射病（核心体温 > <strong class="highlight">40°C</strong>）发生率显著上升，威胁生命健康。</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+                    <div class="bg-gray-900 p-4 rounded-lg text-center relative overflow-hidden">
+                         <i class="fas fa-procedures emphasis-huge-text-bg"></i>
+                        <div class="emphasis-huge-text highlight z-10">20.7<span class="text-4xl align-top">%</span></div>
+                        <p class="text-lg font-semibold mt-2 z-10 relative">ICU 病死率</p>
+                        <p class="en-text z-10 relative">ICU MORTALITY RATE (SOUTHWEST CHINA, 2024)</p>
+    </div>
+    <script>
+    // Scroll reveal for .scroll-animate
+    (function(){
+      const els=document.querySelectorAll('.scroll-animate');
+      if('IntersectionObserver' in window){
+        const io=new IntersectionObserver((entries)=>{
+          entries.forEach(entry=>{
+            if(entry.isIntersecting){
+              entry.target.classList.add('is-visible');
+              const motionAPI=window.motion||window.framerMotion;
+              if(motionAPI){
+                motionAPI.animate(entry.target,{opacity:[0,1],y:[20,0],scale:[0.98,1]},{duration:0.6,easing:'ease-out'});
+              }
+              io.unobserve(entry.target);
+            }
+          });
+        },{threshold:0.15});
+        els.forEach(el=>io.observe(el));
+      } else { els.forEach(el=>el.classList.add('is-visible')); }
+    })();
+    </script>
+                    <div class="bg-gray-900 p-4 rounded-lg text-center relative overflow-hidden">
+                        <i class="fas fa-cross emphasis-huge-text-bg" style="opacity: 0.04; right: -10%; bottom: -15%"></i>
+                        <div class="emphasis-huge-text highlight z-10">34.1<span class="text-4xl align-top">%</span></div>
+                        <p class="text-lg font-semibold mt-2 z-10 relative">出院病死率</p>
+                        <p class="en-text z-10 relative">DISCHARGE MORTALITY RATE</p>
+                    </div>
+                </div>
+                 <p class="text-sm text-gray-500 mt-4">[1-7] 体育运动、军训、户外作业致死事件屡见报道，加强预防与应对刻不容缓。</p>
+            </div>
+
+            <!-- Military Progress -->
+            <div class="bento-item scroll-animate">
+                <i class="fas fa-shield-halved text-3xl highlight absolute top-6 right-6 opacity-50"></i>
+                <h2 class="text-2xl font-bold mb-3">军队先行 <span class="en-text">Military Progress</span></h2>
+                <ul class="list-none space-y-3 text-gray-300">
+                    <li><i class="fas fa-check-circle text-highlight mr-2"></i><strong class="text-white">2015:</strong> 专家共识 (草案) [8]</li>
+                    <li><i class="fas fa-check-circle text-highlight mr-2"></i><strong class="text-white">2016:</strong> 全军防治专家组成立</li>
+                    <li><i class="fas fa-check-circle text-highlight mr-2"></i><strong class="text-white">2019:</strong> 共识更新 [4]</li>
+                    <li><i class="fas fa-check-circle text-highlight mr-2"></i><strong class="text-white">2024:</strong> 防治规范纳入国军标 [9]</li>
+                    <li><i class="fas fa-sitemap text-highlight mr-2"></i><strong class="text-white">四级体系:</strong> 预防为主, 关口前移 [10]</li>
+                    <li><i class="fas fa-star text-highlight mr-2"></i><strong class="text-white">"8-4-6"法则:</strong> 基层广泛应用 [11]</li>
+                    <li><i class="fas fa-notes-medical text-highlight mr-2"></i><strong class="text-white">"十早一禁":</strong> 院内治疗原则 [4,8]</li>
+                </ul>
+            </div>
+
+             <!-- Local Challenges -->
+            <div class="bento-item lg:col-span-1 scroll-animate">
+                 <i class="fas fa-triangle-exclamation text-3xl highlight absolute top-6 right-6 opacity-50"></i>
+                <h2 class="text-2xl font-bold mb-3">地方挑战 <span class="en-text">Local Challenges</span></h2>
+                <ul class="list-none space-y-3 text-gray-300 text-sm">
+                    <li><i class="fas fa-user-slash text-highlight mr-2"></i>公众认识不足，处理能力有限</li>
+                    <li><i class="fas fa-truck-medical text-highlight mr-2"></i>院前急救存误区，"黄金半小时"难保障</li>
+                    <li><i class="fas fa-hospital-user text-highlight mr-2"></i>院内缺乏专业团队与措施</li>
+                    <li><i class="fas fa-circle-nodes text-highlight mr-2"></i>全病程救治体系空白 [12-14]</li>
+                </ul>
+                 <p class="text-gray-400 text-xs mt-4">亟需建立统一标准与救治网络。</p>
+            </div>
+
+            <!-- Consensus Goal -->
+            <div class="bento-item lg:col-span-2 scroll-animate">
+                <i class="fas fa-bullseye text-3xl highlight absolute top-6 right-6 opacity-50"></i>
+                <h2 class="text-2xl font-bold mb-3">共识目标 <span class="en-text">Consensus Goal</span></h2>
+                <p class="text-gray-300 mb-4">优化<strong class="highlight">全流程防治体系</strong>（预防、现场、院前、院内、康复、慢病管理），提升及时性、规范性、科学性，旨在：</p>
+                <ul class="list-disc list-inside space-y-1 text-gray-300">
+                    <li>降低<strong class="highlight">发生率</strong> <span class="en-text inline">Reduce Incidence</span></li>
+                    <li>提高<strong class="highlight">救治成功率</strong> <span class="en-text inline">Improve Success Rate</span></li>
+                    <li>降低<strong class="highlight">重症病死率</strong> <span class="en-text inline">Reduce Mortality</span></li>
+                    <li>改善<strong class="highlight">远期预后</strong>与<strong class="highlight">生存质量</strong> <span class="en-text inline">Enhance Prognosis & Quality of Life</span></li>
+                </ul>
+                <div class="recommendation-box scroll-animate">
+                    <p><strong>推荐意见 1：</strong>通过建设热射病全流程防治体系，优化防治流程，提升救治的规范性与成功率，进而改善患者的预后和生存质量。</p>
+                </div>
+            </div>
+
+            <!-- Section 2 Title -->
+            <div class="lg:col-span-3 my-8 scroll-animate">
+                <h2 class="text-3xl md:text-4xl font-bold text-center highlight-gradient-text">
+                    <i class="fas fa-tasks mr-3"></i>热射病救治体系建设要求
+                    <span class="en-text block mt-2">System Construction Requirements</span>
+                </h2>
+                <hr class="border-t-2 highlight-border w-24 mx-auto mt-4"/>
+            </div>
+
+             <!-- 2.1 Prevention -->
+            <div class="bento-item md:col-span-2 lg:col-span-2 scroll-animate relative overflow-hidden">
+                 <div class="tech-gradient absolute inset-0 z-0"></div>
+                 <i class="fas fa-shield-virus emphasis-huge-text-bg" style="opacity: 0.03; bottom: -5%; left: -5%;"></i>
+                 <div class="relative z-10">
+                    <h3 class="text-2xl font-bold mb-3"><span class="highlight">2.1</span> 预防为主 · 热不致病 <span class="en-text">Prevention First: Avoid Heat Illness</span></h3>
+                    <p class="text-gray-300 mb-4">预防优于治疗。强调个人防护、组织保障、环境干预[15-19]。</p>
+                     <ul class="list-disc list-inside space-y-1 text-sm text-gray-400 mb-4">
+                        <li><strong class="text-white">个人:</strong> 学习知识，掌握方法 (尤其高风险人群)。</li>
+                        <li><strong class="text-white">政府:</strong> 宣传教育，气象预警，政策保护。</li>
+                        <li><strong class="text-white">社会:</strong> 避暑中心，医疗咨询，社区合作。</li>
+                        <li><strong class="text-white">组织:</strong> 军事训练、赛事活动等做好保障预案。</li>
+                    </ul>
+                    <div class="recommendation-box scroll-animate">
+                        <p><strong>推荐意见 2：</strong>救治坚持预防为主，多方面着手，力求"热不致病"。</p>
+                    </div>
+                 </div>
+            </div>
+
+             <!-- 8-4-6 Rule -->
+            <div class="bento-item lg:row-span-2 scroll-animate flex flex-col">
+                 <i class="fas fa-clipboard-list text-3xl highlight absolute top-6 right-6 opacity-50"></i>
+                <h3 class="text-xl font-bold mb-3">"8-4-6" 黄金法则 [11] <span class="en-text">"8-4-6" Golden Rule</span></h3>
+                <p class="text-sm text-gray-400 mb-4">简明易记，适合普及培训。</p>
+                <div class="flex-grow overflow-x-auto">
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>能不能不发生？<br/><span class="en-text">PREVENTION</span></th><th>能不能早知道？<br/><span class="en-text">WARNING SIGNS</span></th><th>发生了怎么办？<br/><span class="en-text">FIRST AID</span></th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong class="highlight">预防8措施</strong><br>·热习服<br>·不带病<br>·预降温<br>·补水盐<br>·备三宝<br>·配设备<br>·不熬夜<br>·盯重点</td><td><strong class="highlight">预警4信号</strong><br><strong class="text-white">烫</strong>: 自觉身体发烫<br><strong class="text-white">晃</strong>: 异常疲倦、行走不稳<br><strong class="text-white">晕</strong>: 头晕、意识模糊、抽搐<br><strong class="text-white">乱</strong>: 面色异常、心慌气短、恶心呕吐等</td><td><strong class="highlight">急救6步法</strong><br><strong class="text-white">脱</strong>: 脱离热环境、衣物<br><strong class="text-white">泡</strong>: 冷水浸泡降温<br><strong class="text-white">测</strong>: 监测生命体征/核心体温<br><strong class="text-white">补</strong>: 静脉补液<br><strong class="text-white">通</strong>: 气道保护和氧疗<br><strong class="text-white">静</strong>: 控制抽搐</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                 <div class="recommendation-box scroll-animate mt-4 flex-shrink-0">
+                     <p><strong>推荐意见 3：</strong>"8-4-6"黄金法则便于记忆，适合普及培训。</p>
+                </div>
+                 <div class="line-art-placeholder mt-4 flex-shrink-0 scroll-animate">
+                    <i class="fas fa-image text-4xl mr-2"></i>
+                    <span>图1 热射病防治"8-4-6"黄金法则[11] (示意图)</span>
+                 </div>
+            </div>
+
+            <!-- 2.2 Pre-hospital -->
+            <div class="bento-item md:col-span-2 lg:col-span-2 scroll-animate relative overflow-hidden">
+                <i class="fas fa-stopwatch emphasis-huge-text-bg" style="opacity: 0.04; right: 0; bottom: -15%"></i>
+                <div class="relative z-10">
+                    <h3 class="text-2xl font-bold mb-3"><span class="highlight">2.2</span> 院前急救 · 病不致危 <span class="en-text">Pre-hospital: Prevent Deterioration</span></h3>
+                    <p class="text-gray-300 mb-4">关键在于<strong class="highlight">快速识别、评估、降温</strong>和对症支持[4,8,10]。</p>
+                    <div class="bg-highlight/10 p-4 rounded-lg mb-4 text-center">
+                        <p class="emphasis-lg-text highlight">黄金半小时</p>
+                        <p class="text-white mt-1">最初 <strong class="highlight">30-60 min</strong> 内将核心体温降至 <strong class="highlight">38.5°C</strong> 以下</p>
+                        <p class="text-2xl font-bold text-white mt-2"><i class="fas fa-arrow-down mr-2"></i>病死率降至 <strong class="highlight">零</strong> [11,20]</p>
+                        <span class="en-text">"GOLDEN HALF HOUR" FOR COOLING</span>
+                    </div>
+                    <p class="text-gray-300 mb-4">第一目击者自救互救至关重要[21-23]。需加强<strong class="highlight">院前人员培训</strong>，建立区域救治体系，形成<strong class="highlight">"现场自救互救 - 院前急救 - 院内急诊"</strong>链条 [24-25]。</p>
+                    <div class="line-art-placeholder scroll-animate">
+                       <i class="fas fa-diagram-project text-4xl mr-2"></i>
+                       <span>图2 热射病院前院内一体化救治链条 (示意图)</span>
+                    </div>
+                     <p class="text-gray-300 my-4">"先降温，后转运"。基层设降温单元，救护车成移动降温单元，急诊设抢救单元[11,26]。</p>
+                     <div class="recommendation-box scroll-animate">
+                         <p><strong>推荐意见 4：</strong>快速识别、评估、降温和对症支持是成功治疗的关键。</p>
+                         <p class="mt-2"><strong>推荐意见 5：</strong>加强培训，建完善区域体系，形成紧密衔接救治链条。</p>
+                     </div>
+                </div>
+            </div>
+
+            <!-- Haste Rule -->
+            <div class="bento-item scroll-animate">
+                <i class="fas fa-bolt-lightning text-3xl highlight absolute top-6 right-6 opacity-50"></i>
+                <h3 class="text-xl font-bold mb-3">Haste 法则 [27]<span class="en-text">Haste Rule for Rapid Response</span></h3>
+                <p class="text-sm text-gray-400 mb-3">高温/剧烈活动后神志改变时，立即启动。</p>
+                <table class="styled-table text-sm">
+                     <thead><tr><th>要点 <span class="en-text">Point</span></th><th>解释 <span class="en-text">Explanation</span></th></tr></thead>
+                     <tbody>
+                        <tr><td><strong class="highlight">H</strong>eat exposure</td><td>热暴露</td></tr>
+                        <tr><td><strong class="highlight">A</strong>ltered mental status</td><td>精神状态改变评估</td></tr>
+                        <tr><td><strong class="highlight">S</strong>tart cooling</td><td>立即冷水降温 / CPR</td></tr>
+                        <tr><td><strong class="highlight">T</strong>ime</td><td>时间紧迫，快打急救电话</td></tr>
+                        <tr><td><strong class="highlight">E</strong>mergency</td><td>紧急行动，防病情发展</td></tr>
+                     </tbody>
+                </table>
+            </div>
+
+             <!-- 2.3 In-hospital MDT -->
+             <div class="bento-item md:col-span-2 lg:col-span-2 scroll-animate relative overflow-hidden">
+                 <i class="fas fa-hospital emphasis-huge-text-bg" style="opacity: 0.03; bottom: -10%; right: -5%;"></i>
+                 <div class="relative z-10">
+                    <h3 class="text-2xl font-bold mb-3"><span class="highlight">2.3</span> 院内多学科联合 · 危不致死 <span class="en-text">In-hospital MDT: Prevent Death</span></h3>
+                    <p class="text-gray-300 mb-4">急诊科是关键角色，负责快速评估处理[26]。需优化流程，加强院前院内沟通。</p>
+                    <p class="text-gray-300 mb-4">若处置不及时可致<strong class="highlight">多脏器功能衰竭 (MODS)</strong> [4,8,29-32]。危重症由<strong class="highlight">重症医学科 (ICU)</strong> 主导，需<strong class="highlight">多学科团队 (MDT)</strong> 协作。</p>
+                    <p class="text-gray-300 mb-4">倡导<strong class="highlight">"十早一禁"</strong>原则，提供最佳器官功能支持[4]。</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                         <div class="line-art-placeholder scroll-animate">
+                            <i class="fas fa-clipboard-list text-4xl mr-2"></i>
+                            <span>图3 急诊接诊处置流程 (示意图)</span>
+                         </div>
+                         <div class="line-art-placeholder scroll-animate">
+                             <i class="fas fa-users-line text-4xl mr-2"></i>
+                            <span>图4 批量伤处置流程 (示意图)</span>
+                         </div>
+                    </div>
+                     <p class="text-sm text-gray-400 mt-4">高发季/地区，急诊需具备批量救治能力[11,28]。</p>
+                    <div class="recommendation-box scroll-animate">
+                         <p><strong>推荐意见 6：</strong>院内救治以急诊科和重症医学科为主，结合MDT协作。优化流程，加强衔接，具备批量救治能力。</p>
+                    </div>
+                 </div>
+            </div>
+
+            <!-- 2.4 Rehabilitation -->
+            <div class="bento-item scroll-animate">
+                 <i class="fas fa-person-walking text-3xl highlight absolute top-6 right-6 opacity-50"></i>
+                 <h3 class="text-xl font-bold mb-3"><span class="highlight">2.4</span> 康复训练 · 促进恢复 <span class="en-text">Rehabilitation: Promote Recovery</span></h3>
+                 <p class="text-gray-300 mb-3">早期康复重要。ICU患者长期并发症率 <strong class="highlight">3.7%~40.7%</strong>，约 <strong class="highlight">30%</strong> 幸存者有认知/运动障碍 (常为永久性) [33-36]。</p>
+                 <p class="text-gray-300 mb-3">需个体化康复策略 (高压氧、中医、针灸、物理、心理治疗)。</p>
+                 <p class="text-gray-300 mb-3">复工/复赛/复职：尚缺统一方案[37-40]。建议正常后<strong class="highlight">逐步恢复</strong>，可考虑热耐力检测辅助。</p>
+                 <div class="recommendation-box scroll-animate">
+                     <p><strong>推荐意见 7：</strong>康复治疗至关重要，通过个体化方案促进恢复。</p>
+                 </div>
+            </div>
+
+             <!-- 2.5 Chronic Management -->
+            <div class="bento-item scroll-animate relative overflow-hidden">
+                 <div class="tech-gradient absolute inset-0 z-0 opacity-70" style="background: linear-gradient(-135deg, rgba(255, 165, 0, 0.2) 0%, rgba(255, 165, 0, 0) 60%);"></div>
+                 <i class="fas fa-notes-medical emphasis-huge-text-bg" style="opacity: 0.04; bottom: -5%; left: -5%;"></i>
+                 <div class="relative z-10">
+                    <h3 class="text-xl font-bold mb-3"><span class="highlight">2.5</span> 慢病管理 · 关注长期损伤 <span class="en-text">Chronic Management: Long-term Damage</span></h3>
+                    <p class="text-gray-300 mb-3">全病程重要一环。经典型2年病死率达 <strong class="highlight">71%</strong> [41]。</p>
+                    <p class="text-gray-300 mb-3">康复者<strong class="highlight">肾病、认知障碍、心理疾病</strong>风险增加[37-41]。</p>
+                    <p class="text-gray-300 mb-3">心血管事件风险 <strong class="highlight">4倍</strong>，缺血性中风 <strong class="highlight">5.5倍</strong> [42-44]。</p>
+                    <p class="text-gray-300 mb-3">劳力型复发率 <strong class="highlight">4.1%~15.4%</strong> (2年内) [45]。</p>
+                    <p class="text-gray-300 mb-3">建议<strong class="highlight">长期随访管理</strong>，开展慢性病管理措施。</p>
+                     <div class="line-art-placeholder scroll-animate mt-4">
+                         <i class="fas fa-timeline text-4xl mr-2"></i>
+                         <span>图5 热射病全病程救治体系 (示意图)</span>
+                     </div>
+                    <div class="recommendation-box scroll-animate">
+                         <p><strong>推荐意见 8：</strong>康复患者纳入长期随访，关注中长期并发症，进行慢病管理。</p>
+                    </div>
+                 </div>
+            </div>
+
+            <!-- Section 3 Title -->
+            <div class="lg:col-span-3 my-8 scroll-animate">
+                 <h2 class="text-3xl md:text-4xl font-bold text-center highlight-gradient-text">
+                    <i class="fas fa-cogs mr-3"></i>热射病救治体系建设内容
+                    <span class="en-text block mt-2">System Construction Content</span>
+                </h2>
+                 <hr class="border-t-2 highlight-border w-24 mx-auto mt-4"/>
+            </div>
+
+            <!-- 3.1 Network -->
+            <div class="bento-item scroll-animate">
+                 <i class="fas fa-network-wired text-3xl highlight absolute top-6 right-6 opacity-50"></i>
+                <h3 class="text-xl font-bold mb-3"><span class="highlight">3.1</span> 建立救治网络 <span class="en-text">Establish Treatment Network</span></h3>
+                <p class="text-gray-300 mb-3">根据地区特点规划布局。地市/县域至少设一家<strong class="highlight">二级以上医院</strong>为救治中心，联合下级机构形成<strong class="highlight">闭环网络</strong>。</p>
+                <p class="text-gray-300 mb-3">合理布局急救站，统一指挥调度。救护车 <strong class="highlight">30min</strong> 内抵达中心或哨点。</p>
+                <p class="text-gray-300 mb-3">建立<strong class="highlight">信息指挥平台</strong>，加强信息流通，实现紧密联动。</p>
+                <div class="recommendation-box scroll-animate">
+                     <p><strong>推荐意见 9：</strong>建区域网络，规划中心，有效联动，建信息平台，确保及时救治。</p>
+                </div>
+            </div>
+
+             <!-- 3.2 Centers -->
+             <div class="bento-item md:col-span-2 lg:col-span-2 scroll-animate relative overflow-hidden">
+                <i class="fas fa-hospital-alt emphasis-huge-text-bg" style="opacity: 0.03; bottom: -10%; right: -5%;"></i>
+                <div class="relative z-10">
+                    <h3 class="text-xl font-bold mb-3"><span class="highlight">3.2</span> 热射病救治中心 <span class="en-text">Heatstroke Treatment Centers</span></h3>
+                    <p class="text-gray-300 mb-3">体系建设关键。提供综合、循证、标准化服务（预防到慢病管理全流程）。</p>
+                     <h4 class="font-semibold text-lg mt-4 mb-2 text-highlight">3.2.1 功能及定位 (四级体系)</h4>
+                     <p class="text-sm text-gray-400 mb-3">乡镇卫生院等为<strong class="text-white">哨点</strong>。中心分三级：</p>
+                     <div class="overflow-x-auto">
+                        <table class="styled-table text-sm">
+                            <thead><tr><th>级别 <span class="en-text">Level</span></th><th>机构 <span class="en-text">Institution</span></th><th>核心要求 <span class="en-text">Core Requirements</span></th></tr></thead>
+                            <tbody>
+                                <tr><td>三级</td><td>二级及以下医院</td><td>独立急诊科，降温单元，基础/高级生命支持，流程质控，科普。</td></tr>
+                                <tr><td>二级</td><td>三级综合医院</td><td>+高水平重症救治，MDT，信息化，质控体系，培训科研，门诊咨询。</td></tr>
+                                <tr><td>一级</td><td>国域医疗中心/大型三甲</td><td>+全流程一体化模式，区域网络，数据平台，培训基地，热耐力实验室，制定标准，督导，咨询。</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                     <p class="text-sm text-gray-400 mt-3">由行政牵头，急诊/重症负责，多科室参与。建MDT，数据平台，联动机制。</p>
+                     <div class="recommendation-box scroll-animate">
+                         <p><strong>推荐意见 10：</strong>建四级体系，明确功能定位，强化联动，推信息化与MDT。</p>
+                     </div>
+                </div>
+            </div>
+
+            <!-- 3.2.2 Units & Cooling -->
+            <div class="bento-item md:col-span-2 lg:col-span-2 scroll-animate">
+                <i class="fas fa-temperature-arrow-down text-3xl highlight absolute top-6 right-6 opacity-50"></i>
+                <h4 class="font-semibold text-lg mb-2 text-highlight">3.2.2 热射病救治单元 & 降温要点</h4>
+                 <p class="text-gray-300 mb-3">院前、急诊、病房、ICU均需建立。具备<strong class="highlight">快速降温、核心体温监测、急救复苏、生命支持</strong>能力。</p>
+                 <p class="text-gray-300 font-bold mb-3">降温目标:</p>
+                 <ul class="list-disc list-inside space-y-1 text-highlight mb-4">
+                    <li><strong class="text-white">0.5h</strong> 内核心温度降至 <strong class="text-white">39.0°C</strong> 以下</li>
+                    <li><strong class="text-white">2h</strong> 内核心温度降至 <strong class="text-white">38.5°C</strong> 以下</li>
+                 </ul>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                      <div class="line-art-placeholder scroll-animate">
+                         <i class="fas fa-water text-4xl mr-2"></i>
+                         <span>图6 现场降温方式 (示意图: 水池/冰块包裹)</span>
+                      </div>
+                      <div class="line-art-placeholder scroll-animate">
+                          <i class="fas fa-bed-pulse text-4xl mr-2"></i>
+                         <span>图7 急诊科降温方式 (示意图: 冰毯/冰水擦浴)</span>
+                      </div>
+                 </div>
+                 <p class="text-gray-300 mb-2 font-semibold">降温注意要点 (表3):</p>
+                 <ul class="list-disc list-inside text-sm text-gray-400 space-y-1 mb-4">
+                     <li><strong class="text-white">时效性:</strong> 黄金半小时，"先降温后转运"。</li>
+                     <li><strong class="text-white">金标准:</strong> 冷水浸泡 (水温越低越好，20-26°C体感好)。</li>
+                     <li><strong class="text-white">措施:</strong> 无条件时选覆盖面积大、速率快、可及的方式。</li>
+                     <li><strong class="text-white">监测:</strong> 实时核心体温、意识、生命体征。</li>
+                 </ul>
+                 <details class="bg-gray-800 p-3 rounded-lg text-sm scroll-animate">
+                    <summary class="cursor-pointer font-semibold text-highlight">查看: 降温设备物资 (表4)</summary>
+                    <ul class="mt-2 space-y-1 list-disc list-inside">
+                       <li><strong class="text-white">现场:</strong> 降温水池, 温湿度计, 体温计, 指脉氧仪, 冰水, 毛巾等。</li>
+                       <li><strong class="text-white">院前:</strong> 降温担架, 体温计, 冰块, 冰水, 毛巾等。</li>
+                       <li><strong class="text-white">急诊:</strong> 电动冰毯机, 降温水池/马甲/帽, 血滤机, 制冰机, 持续直肠温度监测等。</li>
+                    </ul>
+                 </details>
+                <div class="recommendation-box scroll-animate">
+                    <p><strong>推荐意见 11：</strong>救治单元是核心，确保迅速降温达标，具备监测和生命支持能力。</p>
+                </div>
+            </div>
+
+            <!-- 3.2.3-3.2.5 QC, Training, Data -->
+            <div class="bento-item scroll-animate">
+                <i class="fas fa-chart-line text-3xl highlight absolute top-6 right-6 opacity-50"></i>
+                <h4 class="font-semibold text-lg mb-2 text-highlight">3.2.3 - 3.2.5 中心建设要素</h4>
+                 <ul class="list-none space-y-3 text-gray-300 text-sm">
+                    <li><i class="fas fa-clipboard-check text-highlight mr-2"></i><strong class="text-white">质量控制:</strong> 结构、过程、结局指标。</li>
+                    <li><i class="fas fa-person-chalkboard text-highlight mr-2"></i><strong class="text-white">教育培训与科研:</strong> 提升技能，鼓励研究。</li>
+                    <li><i class="fas fa-database text-highlight mr-2"></i><strong class="text-white">信息化数据管理:</strong> 精确质控，数据互通。</li>
+                 </ul>
+                 <p class="text-xs text-gray-500 mt-4">持续改进的基础。</p>
+            </div>
+
+
+             <!-- 3.3 Heat Tolerance Lab -->
+            <div class="bento-item scroll-animate relative overflow-hidden">
+                 <div class="tech-gradient absolute inset-0 z-0 opacity-50"></div>
+                 <i class="fas fa-thermometer-half emphasis-huge-text-bg" style="opacity: 0.03; bottom: -10%; left: -5%;"></i>
+                <div class="relative z-10">
+                    <h3 class="text-xl font-bold mb-3"><span class="highlight">3.3</span> 热耐力检测实验室 <span class="en-text">Heat Tolerance Lab</span></h3>
+                    <p class="text-gray-300 mb-3">用于客观评估个体热耐力[40,46]。建议在一级或二级中心建设。</p>
+                    <p class="text-gray-300 mb-3">模拟环境：<strong class="highlight">40°C, 40%RH</strong> (±1%) [47]。配备跑步机、生命体征监测设备 (核心体温、心率)。</p>
+                    <div class="line-art-placeholder scroll-animate">
+                        <i class="fas fa-flask-vial text-4xl mr-2"></i>
+                        <span>图8 热耐力检测实验室 (示意图)</span>
+                    </div>
+                    <p class="text-gray-300 mt-3 text-sm">用途：抽查评估、热习服效果、发现高风险人员、辅助康复训练恢复[40,47]。</p>
+                    <div class="recommendation-box scroll-animate">
+                         <p><strong>推荐意见 12：</strong>建议高级中心建热耐力实验室，评估热耐力，支持康复训练。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3.4 Clinic & 3.5 Alliance -->
+            <div class="bento-item scroll-animate">
+                 <i class="fas fa-clinic-medical text-3xl highlight absolute top-6 right-6 opacity-50"></i>
+                 <h3 class="text-xl font-bold mb-3"><span class="highlight">3.4</span> 热射病门诊 <span class="en-text">Heatstroke Clinic</span></h3>
+                 <p class="text-gray-300 mb-3 text-sm">提升规范诊疗，促全病程管理。功能包括：</p>
+                 <ul class="list-disc list-inside space-y-1 text-sm text-gray-400 mb-4">
+                    <li>出院后随诊随访</li>
+                    <li>系统化康复支持</li>
+                    <li>神经与心理功能干预</li>
+                    <li>预防咨询与风险评估</li>
+                 </ul>
+                 <p class="text-gray-300 text-xs mb-3">多学科参与 (急诊、重症、康复、中医、心理、心内、呼吸、消化等)，适时MDT。</p>
+                 <div class="recommendation-box scroll-animate">
+                     <p><strong>推荐意见 13：</strong>建议设热射病门诊，提供全病程管理，提升治愈率和生活质量。</p>
+                 </div>
+
+                 <hr class="border-gray-700 my-6"/>
+
+                 <i class="fas fa-hands-helping text-3xl highlight absolute bottom-6 right-6 opacity-50"></i>
+                 <h3 class="text-xl font-bold mb-3"><span class="highlight">3.5</span> 热射病专科联盟 <span class="en-text">Specialty Alliance</span></h3>
+                 <p class="text-gray-300 mb-3 text-sm">领先医院牵头，形成<strong class="highlight">紧密型学科联合体</strong>。</p>
+                 <p class="text-gray-300 mb-3 text-sm">统筹资源，通过联合诊疗、培训、科研等方式，实现<strong class="highlight">区域联动、同质建设、互补发展</strong>。</p>
+                 <div class="recommendation-box scroll-animate">
+                     <p><strong>推荐意见 14：</strong>建议组建专科联盟，整合资源，推动规范化防治体系建设。</p>
+                 </div>
+            </div>
+
+            <!-- Outlook -->
+            <div class="bento-item md:col-span-2 lg:col-span-3 scroll-animate">
+                <i class="fas fa-binoculars text-3xl highlight absolute top-6 right-6 opacity-50"></i>
+                <h2 class="text-2xl md:text-3xl font-bold mb-3">展望 <span class="en-text">Outlook</span></h2>
+                <p class="text-gray-300 mb-4">最终目标：<strong class="highlight">降低发病率、重症率、病死率、致残率</strong>，减轻高温对健康的冲击。</p>
+                <p class="text-gray-300 mb-4">未来方向：</p>
+                <ul class="list-disc list-inside space-y-2 text-gray-300">
+                    <li>提升公众认知与自我保护</li>
+                    <li>强化院前急救关键作用</li>
+                    <li>深化多学科协作 (MDT)</li>
+                    <li>整合康复训练与慢病管理</li>
+                    <li>建立全国统一、标准化、高效协调的<strong class="highlight">救治网络</strong></li>
+                    <li>发挥<strong class="highlight">救治中心</strong>的关键作用和<strong class="highlight">专科联盟</strong>的联动优势</li>
+                </ul>
+                 <p class="mt-6 text-lg font-semibold text-center highlight-gradient-text">共同努力，提升公共健康水平，保障生命安全。</p>
+            </div>
+
+        </div> <!-- End Bento Grid -->
+
+    </div> <!-- End Container -->
+
+    <!-- 返回顶部按钮 -->
+    <button id="backToTopBtn" class="fixed bottom-20 right-6 z-50 p-3 rounded-full bg-orange-500 text-white shadow-lg transform transition-transform duration-300 opacity-0 translate-y-10">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- 统一页脚 -->
+    <footer class="relative mt-16 pt-10 pb-6 bg-gray-900 border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <!-- 顶部返回主页 -->
+            <div class="flex justify-center mb-8">
+                <a href="../index.html" class="inline-flex items-center px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-lg">
+                    <i class="fas fa-home mr-2"></i> 返回主页
+                </a>
+            </div>
+
+            <!-- 主要内容 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+                <!-- 快速导航 -->
+                <div class="lg:col-span-2">
+                    <h3 class="text-xl font-semibold text-orange-500 mb-4">快速导航</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <a href="/pages/中国热射病诊断与治疗指南.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-book-medical mr-2 text-orange-500 w-5"></i> 诊断与治疗指南
+                        </a>
+                        <a href="/pages/热射病救治体系建设标准专家共识.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-users-rays mr-2 text-orange-500 w-5"></i> 救治体系建设标准
+                        </a>
+                        <a href="/pages/热耐力评估.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-clipboard-check mr-2 text-orange-500 w-5"></i> 热耐力评估
+                        </a>
+                        <a href="/pages/热射病核心体温监测与降温方法.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-temperature-three-quarters mr-2 text-orange-500 w-5"></i> 核心体温监测
+                        </a>
+                        <a href="/pages/热射病现场处置.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-kit-medical mr-2 text-orange-500 w-5"></i> 现场处置
+                        </a>
+                        <a href="/pages/热射病通关挑战.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-gamepad mr-2 text-orange-500 w-5"></i> 通关挑战
+                        </a>
+                        <a href="/pages/8-4-6黄金法则.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-stopwatch-20 mr-2 text-orange-500 w-5"></i> 8-4-6黄金法则
+                        </a>
+                        <a href="/pages/热指数查询.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-thermometer-half mr-2 text-orange-500 w-5"></i> 热指数查询
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 快速链接 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-orange-500 mb-4">快速链接</h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="关于本项目.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                                <i class="fas fa-user-doctor mr-2 text-orange-500 w-5"></i> 关于本项目
+                            </a>
+                        </li>
+                        <li class="text-gray-300 flex items-center">
+                            <i class="fas fa-phone-alt mr-2 text-orange-500 w-5"></i> 紧急情况请拨打 <span class="text-orange-500 font-bold ml-1">120</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 联系我们 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-orange-500 mb-4">联系我们</h3>
+                    <p class="text-gray-300 flex items-center mb-2">
+                        <i class="fas fa-envelope mr-2 text-orange-500 w-5"></i> 
+                        <a href="mailto:nimrod1990@163.com" class="hover:text-orange-400 transition-colors">nimrod1990@163.com</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- 声明部分 -->
+            <div class="border-t border-gray-800 pt-6 text-center">
+                <p class="text-gray-400 mb-2">
+                    <strong class="text-orange-500">版权声明：</strong>©2025 红医师 热射病防治
+                </p>
+                <p class="text-gray-400 mb-2">
+                    <strong class="text-orange-500">免责声明：</strong>本网站内容仅供参考，不替代专业医疗建议。如有紧急情况请立即就医。
+                </p>
+                <p class="text-gray-400">
+                    <strong class="text-orange-500">转载声明：</strong>所有资料来源于互联网公开资料，已脱密处理，禁止商用，转载请联系作者
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Intersection Observer for Scroll Animations ---
+            const observerOptions = {
+                root: null, // use the viewport
+                rootMargin: '0px',
+                threshold: 0.1 // Trigger when 10% is visible
+            };
+
+            const observerCallback = (entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Animate only once
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+            const targets = document.querySelectorAll('.scroll-animate');
+            targets.forEach(target => observer.observe(target));
+
+            // --- Note on Framer Motion ---
+            // Framer Motion library is included via CDN.
+            // However, its typical usage involves React/Vue components (`<motion.div>`).
+            // Direct DOM animation using the UMD build's `motion.animate()` might be possible,
+            // but requires specific knowledge of its API for vanilla JS.
+            // This example uses CSS Transitions triggered by Intersection Observer,
+            // which provides a similar effect and is standard for this tech stack.
+            // Example conceptual Framer Motion usage (check docs for exact UMD API):
+            /*
+            if (typeof motion !== 'undefined' && typeof motion.animate === 'function') {
+                const fmTargets = document.querySelectorAll('.scroll-animate'); // Or a dedicated class
+                fmTargets.forEach(el => {
+                    // This is illustrative - check Framer Motion docs for correct vanilla JS usage
+                     // Observer would trigger this instead of adding 'is-visible' class
+                    // motion.animate(el, { opacity: [0, 1], y: [40, 0] }, { duration: 0.8, ease: [0.16, 1, 0.3, 1] });
+                });
+            } else {
+                 console.log("Framer Motion UMD object or animate function not found as expected.");
+            }
+            */
+        });
+
+        // 返回顶部按钮脚本
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        
+        // 监听滚动事件
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) { // 当页面滚动超过300px时显示按钮
+                backToTopBtn.classList.remove('opacity-0', 'translate-y-10');
+                backToTopBtn.classList.add('opacity-100', 'translate-y-0');
+            } else {
+                backToTopBtn.classList.remove('opacity-100', 'translate-y-0');
+                backToTopBtn.classList.add('opacity-0', 'translate-y-10');
+            }
+        });
+        
+        // 点击按钮返回顶部
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+
+</body>
+</html>

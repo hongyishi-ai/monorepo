@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "name": "环境变量追踪器",
+  "description": "监控项目中的环境变量文件，识别需要替换为实际值的占位符变量，并生成待办事项清单",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/.env*",
+      "**/src/lib/env.ts"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "我注意到您修改了环境变量文件。我将分析这些文件并识别需要替换的占位符环境变量。\n\n## 待替换的环境变量\n\n以下是我发现的可能需要替换为实际值的环境变量：\n{{#each placeholderVars}}\n- `{{this.name}}`: {{this.description}}\n{{/each}}\n\n## 如何获取实际环境变量\n\n1. **Supabase 相关变量**:\n   - 登录 Supabase 控制台 (https://app.supabase.com)\n   - 选择您的项目\n   - 在项目设置中找到 API 部分\n   - 复制 URL 和 anon/service key\n\n2. **API 密钥和端点**:\n   - 联系系统管理员获取正确的 API 密钥和端点\n   - 或查阅项目文档获取测试环境的值\n\n3. **其他服务配置**:\n   - 检查相关服务的管理控制台\n   - 参考项目文档中的配置指南\n\n## 部署指南\n\n1. **本地开发环境**:\n   - 创建 `.env.local` 文件（已在 .gitignore 中）\n   - 添加所有必需的环境变量\n   - 使用 `npm run dev` 启动开发服务器\n\n2. **测试环境部署**:\n   - 在部署平台（如 Vercel、Netlify）上配置环境变量\n   - 确保所有必需的变量都已设置\n   - 部署 develop 分支进行测试\n\n3. **生产环境部署**:\n   - 在生产环境部署平台上配置环境变量\n   - 使用生产环境的实际值（不要使用测试值）\n   - 部署 main 分支到生产环境\n\n如果您需要更多关于特定环境变量的帮助，请告诉我。"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "timestamp": "2025-07-29T14:31:55.359Z",
+  "checks": {
+    "pwaIcons": true,
+    "manifest": true,
+    "serviceWorker": true,
+    "vercelConfig": true
+  },
+  "recommendations": []
+}

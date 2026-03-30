@@ -1,0 +1,126 @@
+{
+  "documentSyncConfig": {
+    "version": "1.0.0",
+    "description": "FMS项目文档同步配置",
+    "lastUpdated": "2024-12-28",
+    
+    "watchedFiles": {
+      "components": {
+        "patterns": [
+          "src/components/**/*.tsx",
+          "src/components/**/*.ts"
+        ],
+        "triggers": ["README.md", "fms-app/README.md"],
+        "sections": ["组件架构", "UI组件"]
+      },
+      
+      "pages": {
+        "patterns": [
+          "src/pages/**/*.tsx"
+        ],
+        "triggers": ["README.md", "fms-app/README.md"],
+        "sections": ["功能模块", "页面结构"]
+      },
+      
+      "stores": {
+        "patterns": [
+          "src/stores/**/*.ts"
+        ],
+        "triggers": ["README.md", "fms-app/README.md"],
+        "sections": ["状态管理", "数据流"]
+      },
+      
+      "features": {
+        "patterns": [
+          "src/lib/**/*.ts",
+          "src/hooks/**/*.ts",
+          "src/data/**/*.ts"
+        ],
+        "triggers": ["README.md", "fms-app/README.md"],
+        "sections": ["核心功能", "已实现的核心功能", "API接口"]
+      },
+      
+      "tests": {
+        "patterns": [
+          "src/test/**/*.tsx",
+          "src/test/**/*.ts"
+        ],
+        "triggers": ["TEST_RESULTS.md", "TESTING.md"],
+        "sections": ["测试覆盖", "测试状态"]
+      },
+      
+      "dependencies": {
+        "patterns": [
+          "package.json"
+        ],
+        "triggers": ["README.md", "fms-app/README.md"],
+        "sections": ["技术栈", "依赖管理"]
+      }
+    },
+    
+    "syncRules": {
+      "featureAddition": {
+        "condition": "新增核心功能文件",
+        "action": "将功能从'未来计划'移至'已实现的核心功能'",
+        "documents": ["README.md", "fms-app/README.md"]
+      },
+      
+      "componentChanges": {
+        "condition": "组件接口或API变更",
+        "action": "更新组件文档和使用示例",
+        "documents": ["README.md", "DESIGN_SYSTEM.md"]
+      },
+      
+      "testUpdates": {
+        "condition": "测试文件变更",
+        "action": "更新测试状态和覆盖率信息",
+        "documents": ["TEST_RESULTS.md", "TESTING.md"]
+      },
+      
+      "storeChanges": {
+        "condition": "状态管理变更",
+        "action": "更新数据流文档和状态图",
+        "documents": ["README.md", "fms-app/README.md"]
+      }
+    },
+    
+    "documentStatus": {
+      "README.md": {
+        "lastSync": "2024-12-28",
+        "syncedWith": ["package.json", "src/pages/*"],
+        "pendingUpdates": []
+      },
+      
+      "fms-app/README.md": {
+        "lastSync": "2024-12-28", 
+        "syncedWith": ["src/components/*", "src/stores/*", "src/lib/*"],
+        "pendingUpdates": []
+      },
+      
+      "TEST_RESULTS.md": {
+        "lastSync": "2024-12-28",
+        "syncedWith": ["src/test/*"],
+        "pendingUpdates": []
+      }
+    },
+    
+    "automationTriggers": {
+      "preCommit": {
+        "enabled": true,
+        "checks": [
+          "documentVersionCheck",
+          "featureSyncCheck",
+          "testStatusUpdate"
+        ]
+      },
+      
+      "postBuild": {
+        "enabled": true,
+        "checks": [
+          "deploymentDocUpdate",
+          "performanceMetricsUpdate"
+        ]
+      }
+    }
+  }
+} 

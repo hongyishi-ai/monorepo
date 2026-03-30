@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>热射病现场处置</title>
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
+    <script src="../assets/vendors/tailwind.compiler.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="../assets/vendors/framer-motion.js"></script>
+    <style>
+        :root {
+            --highlight-color: #FF6B00;
+            --highlight-color-80: rgba(255, 107, 0, 0.8);
+            --highlight-color-60: rgba(255, 107, 0, 0.6);
+            --highlight-color-40: rgba(255, 107, 0, 0.4);
+            --highlight-color-20: rgba(255, 107, 0, 0.2);
+            --highlight-color-10: rgba(255, 107, 0, 0.1);
+        }
+        
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .mega-text {
+            font-size: 8rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+        
+        .large-text {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+        
+        .medium-text {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .highlight {
+            color: var(--highlight-color);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--highlight-color-60), var(--highlight-color-10));
+        }
+        
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1rem;
+            padding: 1rem;
+        }
+        
+        .bento-item {
+            border: 1px solid var(--highlight-color-40);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            background-color: rgba(0, 0, 0, 0.7);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .bento-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 107, 0, 0.2);
+        }
+        
+        .hidden-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .step-container {
+            display: none;
+        }
+        
+        .active-step {
+            display: block;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: var(--highlight-color-20);
+            border-radius: 3px;
+            margin: 1rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--highlight-color);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .btn {
+            background-color: var(--highlight-color);
+            color: #fff;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        
+        .btn:hover {
+            background-color: var(--highlight-color-80);
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            background-color: var(--highlight-color-40);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--highlight-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--highlight-color-20);
+        }
+        
+        .warning-sign {
+            border-left: 4px solid var(--highlight-color);
+            padding-left: 1rem;
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: var(--highlight-color);
+            border-radius: 50%;
+            font-weight: 700;
+            margin-right: 0.75rem;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .custom-checkbox {
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 2px solid var(--highlight-color);
+            border-radius: 0.25rem;
+            margin-right: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .custom-checkbox.checked {
+            background-color: var(--highlight-color);
+        }
+        
+        .custom-checkbox.checked::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: #fff;
+        }
+        
+        .timer {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--highlight-color);
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .temperature-gauge {
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(to right, #3498db, #f1c40f, #e74c3c);
+            border-radius: 10px;
+            position: relative;
+            margin: 20px 0;
+        }
+        
+        .temperature-marker {
+            position: absolute;
+            top: -15px;
+            width: 4px;
+            height: 30px;
+            background-color: #fff;
+            transform: translateX(-50%);
+        }
+        
+        .temperature-label {
+            position: absolute;
+            top: 25px;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+        }
+        
+        /* 可访问性：聚焦可见样式与减少动画支持 */
+        .btn:focus-visible, .btn-secondary:focus-visible, .custom-checkbox:focus-visible, .brand-btn:focus-visible, .fab-btn:focus-visible {
+            outline: 2px solid var(--highlight-color);
+            outline-offset: 2px;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .hidden-element {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+            .bento-item {
+                transition: none;
+            }
+        }
+        
+        /* Brand floating action button */
+        .fab-btn {
+            background-color: var(--highlight-color);
+        }
+        .fab-btn:hover {
+            background-color: var(--highlight-color-80);
+        }
+        
+        /* Brand solid button for footer */
+        .brand-btn {
+            background-color: var(--highlight-color);
+            color: #fff;
+        }
+        .brand-btn:hover {
+            background-color: var(--highlight-color-80);
+        }
+    </style>
+</head>
+
+<body class="bg-black text-gray-300">
+
+<!-- 添加导航栏 -->
+<nav class="bg-black py-4 px-6 sticky top-0 z-50 border-b border-gray-800">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="../index.html" class="flex items-center text-orange-500 hover:text-orange-400 transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i>
+            <span class="font-bold">返回主页</span>
+        </a>
+    </div>
+</nav>
+    <!-- 头部 -->
+    <header class="py-8 px-4">
+        <div class="container mx-auto">
+            <h1 class="large-text hidden-element">热射病<span class="highlight">现场处置</span></h1>
+        </div>
+    </header>
+    <!-- 主要内容 -->
+    <main class="container mx-auto px-4 pb-20">
+        <!-- 开始界面 -->
+        <section id="start-screen" class="py-10">
+            <div class="bento-grid">
+            
+                <div class="bento-item col-span-12 md:col-span-6 hidden-element">
+                    <h2 class="medium-text mb-6"><span class="highlight">8-4-6</span>法则</h2>
+                    <div class="flex items-center mb-4">
+                        <div class="step-number">8</div>
+                        <p class="text-lg">项预防措施</p>
+                    </div>
+                    <div class="flex items-center mb-4">
+                        <div class="step-number">4</div>
+                        <p class="text-lg">个预警信号</p>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="step-number">6</div>
+                        <p class="text-lg">步救治方法</p>
+                    </div>
+                    <button id="start-btn" class="btn mt-8 w-full">立即识别并处置病例</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 处置流程 -->
+        <section id="treatment-flow" class="hidden">
+            <div class="progress-container mb-8">
+                <div class="flex justify-between mb-2">
+                    <span id="current-step-text">步骤 1/6</span>
+                    <span id="timer" class="timer hidden">00:00</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- 步骤1：检查预警信号 -->
+            <div id="step1" class="step-container active-step">
+                <h2 class="medium-text mb-6">第一步：<span class="highlight">检查预警信号</span></h2>
+                <p class="text-lg mb-6">请检查患者是否出现以下预警信号 [citation](1)：</p>
+                
+                <div class="bento-grid" role="group" aria-labelledby="warnings-heading">
+                    <div class="bento-item col-span-12 md:col-span-6 hidden-element">
+                        <h3 id="warnings-heading" class="text-2xl font-bold mb-4"><span class="highlight">烫</span></h3>
+                        <p class="mb-2">自觉身体发烫（从里向外发热）</p>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-warning="hot" role="checkbox" tabindex="0" aria-checked="false" aria-label="患者感觉身体发烫"></div>
+                            <label>患者感觉身体发烫</label>
+                        </div>
+                    </div>
+                    
+                    <div class="bento-item col-span-12 md:col-span-6 hidden-element">
+                        <h3 class="text-2xl font-bold mb-4"><span class="highlight">晃</span></h3>
+                        <p class="mb-2">异常疲倦、行走不稳</p>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-warning="unstable" role="checkbox" tabindex="0" aria-checked="false" aria-label="患者行走不稳或异常疲倦"></div>
+                            <label>患者行走不稳或异常疲倦</label>
+                        </div>
+                    </div>
+                    
+                    <div class="bento-item col-span-12 md:col-span-6 hidden-element">
+                        <h3 class="text-2xl font-bold mb-4"><span class="highlight">晕</span></h3>
+                        <p class="mb-2">头晕、意识模糊、抽搐</p>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-warning="dizzy" role="checkbox" tabindex="0" aria-checked="false" aria-label="患者头晕或意识模糊"></div>
+                            <label>患者头晕或意识模糊</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-warning="seizure" role="checkbox" tabindex="0" aria-checked="false" aria-label="患者出现抽搐"></div>
+                            <label>患者出现抽搐</label>
+                        </div>
+                    </div>
+                    
+                    <div class="bento-item col-span-12 md:col-span-6 hidden-element">
+                        <h3 class="text-2xl font-bold mb-4"><span class="highlight">乱</span></h3>
+                        <p class="mb-2">出现脸白、心慌、气短、恶心、呕吐、腹痛、腹泻等症状</p>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-warning="pale" role="checkbox" tabindex="0" aria-checked="false" aria-label="患者脸色苍白"></div>
+                            <label>患者脸色苍白</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-warning="nausea" role="checkbox" tabindex="0" aria-checked="false" aria-label="患者恶心或呕吐"></div>
+                            <label>患者恶心或呕吐</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-warning="stomach" role="checkbox" tabindex="0" aria-checked="false" aria-label="患者腹痛或腹泻"></div>
+                            <label>患者腹痛或腹泻</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-warning="breath" role="checkbox" tabindex="0" aria-checked="false" aria-label="患者心慌或气短"></div>
+                            <label>患者心慌或气短</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 hidden-element">
+                    <p class="text-lg mb-4">如果患者出现上述任何一种预警信号，可能是热射病先兆，需要立即采取措施！</p>
+                    <button id="next-btn-1" class="btn" disabled>继续下一步</button>
+                </div>
+            </div>
+
+            <!-- 步骤2：脱离热环境 -->
+            <div id="step2" class="step-container">
+                <h2 class="medium-text mb-6">第二步：<span class="highlight">立即脱离热环境</span></h2>
+                <div class="bento-grid">
+                    <div class="bento-item col-span-12 hidden-element">
+                        <div class="flex items-start">
+                            <div class="step-number">1</div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">将患者转移到阴凉处</h3>
+                                <p class="mb-4">如果发现战友跑步时摇摇晃晃或已经摔倒，应立即将其搀扶到树荫下 [citation](1)</p>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-action="move" role="checkbox" tabindex="0" aria-checked="false" aria-label="已将患者转移到阴凉处"></div>
+                                    <label>已将患者转移到阴凉处</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bento-item col-span-12 md:col-span-6 hidden-element">
+                        <div class="flex items-start">
+                            <div class="step-number">2</div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">脱去装具和外衣裤</h3>
+                                <p class="mb-4">脱去装具和外衣裤，便于散热 [citation](1)</p>
+                                <div class="checkbox-container">
+                                    <div class="custom-checkbox" data-action="undress" role="checkbox" tabindex="0" aria-checked="false" aria-label="已脱去患者装具和外衣裤"></div>
+                                    <label>已脱去患者装具和外衣裤</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bento-item col-span-12 md:col-span-6 hidden-element">
+                        <div class="flex items-start">
+                            <div class="step-number">3</div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">评估意识状态</h3>
+                                <p class="mb-4">对患者大声呼叫，以评估意识状态 [citation](1)</p>
+                                <div class="checkbox-container">
+                                    <div class="custom-checkbox" data-action="assess" role="checkbox" tabindex="0" aria-checked="false" aria-label="已评估患者意识状态"></div>
+                                    <label>已评估患者意识状态</label>
+                                </div>
+                                <div class="mt-4">
+                                    <p class="mb-2">患者意识状态：</p>
+                                    <div class="flex space-x-4">
+                                        <button class="btn-secondary px-4 py-2 rounded" id="conscious-btn">清醒</button>
+                                        <button class="btn-secondary px-4 py-2 rounded" id="unconscious-btn">意识不清</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 hidden-element">
+                    <button id="next-btn-2" class="btn" disabled>继续下一步</button>
+                </div>
+            </div>
+
+            <!-- 步骤3：全身降温 -->
+            <div id="step3" class="step-container">
+                <h2 class="medium-text mb-6">第三步：<span class="highlight">用水、冰进行全身降温</span></h2>
+                <p class="text-lg mb-6">选择可用的降温方法（多种方法可同时进行）[citation](1)：</p>
+                
+                <div class="bento-grid">
+                    <div class="bento-item col-span-12 md:col-span-6 hidden-element">
+                        <h3 class="text-xl font-bold mb-4">方法一：浸泡降温</h3>
+                        <p class="mb-4">将患者除头部外的其他身体部位浸泡在20摄氏度左右的浴盆中。此方法降温快速有效。</p>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-cooling="immersion" role="checkbox" tabindex="0" aria-checked="false" aria-label="已将患者浸泡在冷水中"></div>
+                            <label>已将患者浸泡在冷水中</label>
+                        </div>
+                    </div>
+                    
+                    <div class="bento-item col-span-12 md:col-span-6 hidden-element">
+                        <h3 class="text-xl font-bold mb-4">方法二：冰毛巾擦拭</h3>
+                        <p class="mb-4">用冰水浸泡过的毛巾擦拭全身</p>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-cooling="towel" role="checkbox" tabindex="0" aria-checked="false" aria-label="已用冰毛巾擦拭患者全身"></div>
+                            <label>已用冰毛巾擦拭患者全身</label>
+                        </div>
+                    </div>
+                    
+                    <div class="bento-item col-span-12 md:col-span-6 hidden-element">
+                        <h3 class="text-xl font-bold mb-4">方法三：冰块降温</h3>
+                        <p class="mb-4">将冰块放置在患者双腋下、大腿根</p>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-cooling="ice" role="checkbox" tabindex="0" aria-checked="false" aria-label="已在关键部位放置冰块"></div>
+                            <label>已在关键部位放置冰块</label>
+                        </div>
+                    </div>
+                    
+                    <div class="bento-item col-span-12 md:col-span-6 hidden-element">
+                        <h3 class="text-xl font-bold mb-4">方法四：冰帽/冰颈圈</h3>
+                        <p class="mb-4">头部戴冰帽、冰颈圈</p>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-cooling="icecap" role="checkbox" tabindex="0" aria-checked="false" aria-label="已为患者戴上冰帽或冰颈圈"></div>
+                            <label>已为患者戴上冰帽/冰颈圈</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 hidden-element">
+                    <p class="text-lg mb-4 pulse highlight">注意：降温是救治热射病的关键！如果在1小时内患者体温降至38.5摄氏度，即使发生了热射病也不会很严重。</p>
+                    <button id="next-btn-3" class="btn" disabled>继续下一步</button>
+                </div>
+            </div>
+
+            <!-- 步骤4：测量生命体征 -->
+            <div id="step4" class="step-container">
+                <h2 class="medium-text mb-6">第四步：<span class="highlight">测量核心体温、心率、血压</span></h2>
+                
+                <div class="bento-grid">
+                    <div class="bento-item col-span-12 md:col-span-6 hidden-element">
+                        <h3 class="text-xl font-bold mb-4">测量核心体温</h3>
+                        <p class="mb-4">用耳温枪测的耳温即为核心体温 [citation](1)</p>
+                        <div class="mb-6">
+                            <label class="block mb-2">患者体温（°C）：</label>
+                            <input type="number" id="temperature-input" step="0.1" min="35" max="42" class="bg-black border border-gray-600 rounded px-3 py-2 w-full text-white">
+                        </div>
+                        <div class="temperature-gauge">
+                            <div class="temperature-marker" style="left: 0%"></div>
+                            <div class="temperature-label" style="left: 0%">35°C</div>
+                            
+                            <div class="temperature-marker" style="left: 50%"></div>
+                            <div class="temperature-label" style="left: 50%">38.5°C</div>
+                            
+                            <div class="temperature-marker" style="left: 100%"></div>
+                            <div class="temperature-label" style="left: 100%">42°C</div>
+                        </div>
+                        <div id="temperature-warning" class="mt-4 hidden text-red-500"></div>
+                    </div>
+                    
+                    <div class="bento-item col-span-12 md:col-span-6 hidden-element">
+                        <h3 class="text-xl font-bold mb-4">测量心率</h3>
+                        <p class="mb-4">用指脉氧检测仪夹在手指上测心率和指脉氧饱和度，以了解心肺情况 [citation](1)</p>
+                        <div class="mb-6">
+                            <label class="block mb-2">患者心率（次/分）：</label>
+                            <input type="number" id="heart-rate-input" min="40" max="200" class="bg-black border border-gray-600 rounded px-3 py-2 w-full text-white">
+                        </div>
+                        <div class="mb-6">
+                            <label class="block mb-2">血氧饱和度（%）：</label>
+                            <input type="number" id="oxygen-input" min="70" max="100" class="bg-black border border-gray-600 rounded px-3 py-2 w-full text-white">
+                        </div>
+                        <div id="vitals-warning" class="mt-4 hidden text-red-500"></div>
+                    </div>
+                    
+                    <div class="bento-item col-span-12 hidden-element">
+                        <h3 class="text-xl font-bold mb-4">测量血压</h3>
+                        <p class="mb-4">用血压计测血压，以了解体液丢失程度 [citation](1)</p>
+                        <div class="flex space-x-4">
+                            <div class="mb-6 flex-1">
+                                <label class="block mb-2">收缩压（高压，mmHg）：</label>
+                                <input type="number" id="systolic-input" min="60" max="220" class="bg-black border border-gray-600 rounded px-3 py-2 w-full text-white">
+                            </div>
+                            <div class="mb-6 flex-1">
+                                <label class="block mb-2">舒张压（低压，mmHg）：</label>
+                                <input type="number" id="diastolic-input" min="40" max="120" class="bg-black border border-gray-600 rounded px-3 py-2 w-full text-white">
+                            </div>
+                        </div>
+                        <div id="bp-warning" class="mt-4 hidden text-red-500"></div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 hidden-element">
+                    <button id="next-btn-4" class="btn" disabled>继续下一步</button>
+                </div>
+            </div>
+
+            <!-- 步骤5：建立静脉输液通道和气道保护 -->
+            <div id="step5" class="step-container">
+                <h2 class="medium-text mb-6">第五步：<span class="highlight">建立静脉输液通道和气道保护</span></h2>
+                
+                <div class="bento-grid">
+                    <div class="bento-item col-span-12 md:col-span-6 hidden-element">
+                        <h3 class="text-xl font-bold mb-4">建立静脉输液通道</h3>
+                        <p class="mb-4">卫生人员到达后，应立即建立静脉输液通道，视病情可以建立两条静脉输液通道，快速输入林格氏液、生理盐水、糖盐水等 [citation](1)</p>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-action="iv" role="checkbox" tabindex="0" aria-checked="false" aria-label="已联系卫生人员建立静脉输液通道"></div>
+                            <label>已联系卫生人员建立静脉输液通道</label>
+                        </div>
+                    </div>
+                    
+                    <div class="bento-item col-span-12 md:col-span-6 hidden-element">
+                        <h3 class="text-xl font-bold mb-4">气道保护与氧疗</h3>
+                        <p class="mb-4">如指脉氧饱和度小于95%，要给予鼻导管吸氧 [citation](1)</p>
+                        <div id="oxygen-alert" class="hidden" role="alert" aria-live="assertive">
+                            <div class="bg-red-900 p-4 rounded-lg mb-4">
+                                <p class="text-lg font-bold">注意：患者血氧饱和度低于95%，需要给予氧疗！</p>
+                            </div>
+                        </div>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-action="oxygen" role="checkbox" tabindex="0" aria-checked="false" aria-label="已给予患者氧疗"></div>
+                            <label>已给予患者氧疗</label>
+                        </div>
+                    </div>
+                    
+                    <div class="bento-item col-span-12 hidden-element" id="unconscious-care">
+                        <h3 class="text-xl font-bold mb-4">昏迷患者特殊护理</h3>
+                        <p class="mb-4">若患者处于昏迷状态，应将其头部偏向一侧，防止口腔有异物引起窒息。一旦发生呕吐，应立即清除口腔分泌物，确保呼吸道通畅 [citation](1)</p>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-action="airway" role="checkbox" tabindex="0" aria-checked="false" aria-label="已将患者头部偏向一侧"></div>
+                            <label>已将患者头部偏向一侧</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-action="clear" role="checkbox" tabindex="0" aria-checked="false" aria-label="已清除口腔分泌物"></div>
+                            <label>已清除口腔分泌物（如有）</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 hidden-element">
+                    <button id="next-btn-5" class="btn" disabled>继续下一步</button>
+                </div>
+            </div>
+
+            <!-- 步骤6：控制抽搐 -->
+            <div id="step6" class="step-container">
+                <h2 class="medium-text mb-6">第六步：<span class="highlight">控制抽搐</span></h2>
+                
+                <div class="bento-grid">
+                    <div class="bento-item col-span-12 hidden-element" id="seizure-control">
+                        <h3 class="text-xl font-bold mb-4">抽搐处理</h3>
+                        <p class="mb-4">如患者突发抽搐，应立即给予安定注射液（10～20mg肌肉注射或5～10mg静脉注射）[citation](1)</p>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-action="seizure-med" role="checkbox" tabindex="0" aria-checked="false" aria-label="已联系医务人员给予抗抽搐药物"></div>
+                            <label>已联系医务人员给予抗抽搐药物</label>
+                        </div>
+                        <div class="warning-sign mt-6">
+                            <p class="text-lg">注意事项：</p>
+                            <ul class="list-disc pl-6 mt-2">
+                                <li class="mb-2">注射后注意观察患者的呼吸情况、监测指脉氧饱和度</li>
+                                <li class="mb-2">如果出现呼吸抑制、指脉氧饱和度下降的情况，可以通过简易呼吸器辅助呼吸</li>
+                                <li class="mb-2">在按压躁动的患者时，不要按压大关节处，避免造成骨折、脱位和肌肉损伤</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bento-item col-span-12 hidden-element" id="no-seizure">
+                        <h3 class="text-xl font-bold mb-4">患者无抽搐</h3>
+                        <p class="mb-4">患者目前未出现抽搐症状，继续观察患者情况，保持降温措施</p>
+                    </div>
+                    
+                    <div class="bento-item col-span-12 hidden-element">
+                        <h3 class="text-xl font-bold mb-4">持续监测</h3>
+                        <p class="mb-4">持续监测患者体温、心率、血压和血氧饱和度，直到体温降至38.5℃以下</p>
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-action="monitor" role="checkbox" tabindex="0" aria-checked="false" aria-label="已安排人员持续监测患者生命体征"></div>
+                            <label>已安排人员持续监测患者生命体征</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 hidden-element">
+                    <button id="finish-btn" class="btn" disabled>完成处置流程</button>
+                </div>
+            </div>
+
+            <!-- 结果页面 -->
+            <div id="result" class="step-container">
+                <div class="bento-item col-span-12 hidden-element">
+                    <h2 class="medium-text mb-6">处置<span class="highlight">完成</span></h2>
+                    <div id="result-content">
+                        <p class="text-lg mb-4">您已完成热射病现场处置的关键步骤。请继续监测患者情况，并尽快将患者转运至医疗机构进行进一步治疗。</p>
+                        
+                        <div class="warning-sign mt-6 mb-6">
+                            <p class="text-lg font-bold">重要提示：</p>
+                            <p class="mt-2">热射病是一种危及生命的紧急情况，即使完成了现场处置，也必须尽快将患者送往医院进行专业治疗！</p>
+                        </div>
+                        
+                        <h3 class="text-xl font-bold mb-4">处置总结</h3>
+                        <div id="summary-content" class="mb-6">
+                            <!-- 这里将通过JavaScript动态填充内容 -->
+                        </div>
+                        
+                        <button id="restart-btn" class="btn mt-4">重新开始</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <!-- 返回顶部按钮 -->
+    <button id="backToTopBtn" class="fixed bottom-20 right-6 z-50 p-3 rounded-full fab-btn text-white shadow-lg transform transition-transform duration-300 opacity-0 translate-y-10" aria-label="返回顶部">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- 统一页脚 -->
+    <footer class="relative mt-16 pt-10 pb-6 bg-gray-900 border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <!-- 顶部返回主页 -->
+            <div class="flex justify-center mb-8">
+                <a href="../index.html" class="inline-flex items-center px-6 py-3 brand-btn rounded-lg transition-colors shadow-lg">
+                    <i class="fas fa-home mr-2"></i> 返回主页
+                </a>
+            </div>
+
+            <!-- 主要内容 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+                <!-- 快速导航 -->
+                <div class="lg:col-span-2">
+                    <h3 class="text-xl font-semibold text-orange-500 mb-4">快速导航</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <a href="/pages/中国热射病诊断与治疗指南.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-book-medical mr-2 text-orange-500 w-5"></i> 诊断与治疗指南
+                        </a>
+                        <a href="/pages/热射病救治体系建设标准专家共识.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-users-rays mr-2 text-orange-500 w-5"></i> 救治体系建设标准
+                        </a>
+                        <a href="/pages/热耐力评估.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-clipboard-check mr-2 text-orange-500 w-5"></i> 热耐力评估
+                        </a>
+                        <a href="/pages/热射病核心体温监测与降温方法.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-temperature-three-quarters mr-2 text-orange-500 w-5"></i> 核心体温监测
+                        </a>
+                        <a href="/pages/热射病现场处置.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-kit-medical mr-2 text-orange-500 w-5"></i> 现场处置
+                        </a>
+                        <a href="/pages/热射病通关挑战.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-gamepad mr-2 text-orange-500 w-5"></i> 通关挑战
+                        </a>
+                        <a href="/pages/8-4-6黄金法则.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-stopwatch-20 mr-2 text-orange-500 w-5"></i> 8-4-6黄金法则
+                        </a>
+                        <a href="/pages/热指数查询.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                            <i class="fas fa-thermometer-half mr-2 text-orange-500 w-5"></i> 热指数查询
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 快速链接 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-orange-500 mb-4">快速链接</h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="关于本项目.html" class="text-gray-300 hover:text-orange-400 transition-colors flex items-center">
+                                <i class="fas fa-user-doctor mr-2 text-orange-500 w-5"></i> 关于本项目
+                            </a>
+                        </li>
+                        <li class="text-gray-300 flex items-center">
+                            <i class="fas fa-phone-alt mr-2 text-orange-500 w-5"></i> 紧急情况请拨打 <span class="text-orange-500 font-bold ml-1">120</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 联系我们 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-orange-500 mb-4">联系我们</h3>
+                    <p class="text-gray-300 flex items-center mb-2">
+                        <i class="fas fa-envelope mr-2 text-orange-500 w-5"></i> 
+                        <a href="mailto:nimrod1990@163.com" class="hover:text-orange-400 transition-colors">nimrod1990@163.com</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- 声明部分 -->
+            <div class="border-t border-gray-800 pt-6 text-center">
+                <p class="text-gray-400 mb-2">
+                    <strong class="text-orange-500">版权声明：</strong>©2025 红医师 热射病防治
+                </p>
+                <p class="text-gray-400 mb-2">
+                    <strong class="text-orange-500">免责声明：</strong>本网站内容仅供参考，不替代专业医疗建议。如有紧急情况请立即就医。
+                </p>
+                <p class="text-gray-400">
+                    <strong class="text-orange-500">转载声明：</strong>所有资料来源于互联网公开资料，已脱密处理，禁止商用，转载请联系作者
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            const motionAPI = window.motion || window.framerMotion;
+
+            // 显示隐藏元素的动画
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        if (motionAPI) {
+                            motionAPI.animate(entry.target, { opacity: [0, 1], y: [16, 0], scale: [0.98, 1] }, { duration: 0.5, easing: 'ease-out' });
+                        }
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+            document.querySelectorAll('.hidden-element').forEach(el => observer.observe(el));
+
+            // 变量初始化
+            let currentStep = 1;
+            const totalSteps = 6;
+            let warningSignsChecked = false;
+            let step2Completed = false;
+            let step3Completed = false;
+            let step4Completed = false;
+            let step5Completed = false;
+            let timerInterval;
+            let seconds = 0;
+            let patientData = {
+                warnings: [],
+                actions: [],
+                cooling: [],
+                temperature: null,
+                heartRate: null,
+                oxygenSaturation: null,
+                bloodPressure: {
+                    systolic: null,
+                    diastolic: null
+                },
+                isConscious: true,
+                hasSeizure: false,
+                startTime: null
+            };
+            const step5Checkboxes = document.querySelectorAll('#step5 .custom-checkbox');
+            const step6Checkboxes = document.querySelectorAll('#step6 .custom-checkbox');
+
+            // 开始按钮点击事件
+            document.getElementById('start-btn').addEventListener('click', function() {
+                document.getElementById('start-screen').classList.add('hidden');
+                document.getElementById('treatment-flow').classList.remove('hidden');
+                
+                // 启动计时器
+                document.getElementById('timer').classList.remove('hidden');
+                patientData.startTime = new Date();
+                startTimer();
+                
+                // 滚动到顶部
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // 复选框点击事件
+            document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('click', function() {
+                    this.classList.toggle('checked');
+                    // ARIA 同步
+                    if (this.hasAttribute('role')) {
+                        const nowChecked = this.classList.contains('checked');
+                        this.setAttribute('aria-checked', nowChecked ? 'true' : 'false');
+                    }
+                    
+                    // 根据不同步骤处理复选框状态
+                    if (this.hasAttribute('data-warning')) {
+                        const warning = this.getAttribute('data-warning');
+                        if (this.classList.contains('checked')) {
+                            if (!patientData.warnings.includes(warning)) {
+                                patientData.warnings.push(warning);
+                            }
+                        } else {
+                            patientData.warnings = patientData.warnings.filter(w => w !== warning);
+                        }
+                        
+                        // 如果选中了任何警告信号，启用下一步按钮
+                        document.getElementById('next-btn-1').disabled = patientData.warnings.length === 0;
+                        
+                        // 如果选中了抽搐，记录下来
+                        if (warning === 'seizure') {
+                            patientData.hasSeizure = this.classList.contains('checked');
+                        }
+                    }
+                    
+                    if (this.hasAttribute('data-action')) {
+                        const action = this.getAttribute('data-action');
+                        if (this.classList.contains('checked')) {
+                            if (!patientData.actions.includes(action)) {
+                                patientData.actions.push(action);
+                            }
+                        } else {
+                            patientData.actions = patientData.actions.filter(a => a !== action);
+                        }
+                        
+                        // 检查步骤2是否完成
+                        checkStep2Completion();
+                    }
+                    
+                    if (this.closest('#step5')) {
+                        evaluateStep5Completion();
+                    }
+                    
+                    if (this.closest('#step6')) {
+                        evaluateStep6Completion();
+                    }
+                    
+                    if (this.hasAttribute('data-cooling')) {
+                        const cooling = this.getAttribute('data-cooling');
+                        if (this.classList.contains('checked')) {
+                            if (!patientData.cooling.includes(cooling)) {
+                                patientData.cooling.push(cooling);
+                            }
+                        } else {
+                            patientData.cooling = patientData.cooling.filter(c => c !== cooling);
+                        }
+                        
+                        // 如果选择了任何降温方法，启用下一步按钮
+                        document.getElementById('next-btn-3').disabled = patientData.cooling.length === 0;
+                    }
+                });
+                // 键盘可达：Space/Enter 切换
+                checkbox.addEventListener('keydown', function(e){
+                    if (e.key === ' ' || e.key === 'Enter') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+            });
+
+            // 意识状态按钮点击事件
+            document.getElementById('conscious-btn').addEventListener('click', function() {
+                this.classList.add('btn');
+                this.classList.remove('btn-secondary');
+                document.getElementById('unconscious-btn').classList.add('btn-secondary');
+                document.getElementById('unconscious-btn').classList.remove('btn');
+                patientData.isConscious = true;
+                checkStep2Completion();
+            });
+
+            document.getElementById('unconscious-btn').addEventListener('click', function() {
+                this.classList.add('btn');
+                this.classList.remove('btn-secondary');
+                document.getElementById('conscious-btn').classList.add('btn-secondary');
+                document.getElementById('conscious-btn').classList.remove('btn');
+                patientData.isConscious = false;
+                checkStep2Completion();
+            });
+
+            // 检查步骤2是否完成
+            function checkStep2Completion() {
+                const requiredActions = ['move', 'undress', 'assess'];
+                const completedActions = requiredActions.filter(action => patientData.actions.includes(action));
+                
+                // 如果完成了所有必要动作并选择了意识状态，启用下一步按钮
+                step2Completed = completedActions.length === requiredActions.length && 
+                                (document.getElementById('conscious-btn').classList.contains('btn') || 
+                                 document.getElementById('unconscious-btn').classList.contains('btn'));
+                
+                document.getElementById('next-btn-2').disabled = !step2Completed;
+            }
+
+            function evaluateStep5Completion() {
+                const activeCheckboxes = Array.from(step5Checkboxes).filter(cb => !cb.closest('.bento-item').classList.contains('hidden'));
+                const allChecked = activeCheckboxes.every(cb => cb.classList.contains('checked'));
+                step5Completed = allChecked;
+                document.getElementById('next-btn-5').disabled = !step5Completed;
+            }
+
+            function evaluateStep6Completion() {
+                const activeCheckboxes = Array.from(step6Checkboxes).filter(cb => !cb.closest('.bento-item').classList.contains('hidden'));
+                const allChecked = activeCheckboxes.every(cb => cb.classList.contains('checked'));
+                document.getElementById('finish-btn').disabled = !allChecked;
+            }
+
+            // 体温输入事件
+            document.getElementById('temperature-input').addEventListener('input', function() {
+                const temp = parseFloat(this.value);
+                if (temp && temp >= 35 && temp <= 42) {
+                    patientData.temperature = temp;
+                    
+                    // 更新温度计上的标记位置
+                    const percentage = (temp - 35) / (42 - 35) * 100;
+                    document.querySelector('.temperature-marker').style.left = `${percentage}%`;
+                    
+                    // 显示温度警告
+                    const warningEl = document.getElementById('temperature-warning');
+                    if (temp > 40) {
+                        warningEl.textContent = '危险！体温过高，需立即降温！';
+                        warningEl.classList.remove('hidden');
+                    } else if (temp > 38.5) {
+                        warningEl.textContent = '警告：体温升高，需继续降温';
+                        warningEl.classList.remove('hidden');
+                    } else {
+                        warningEl.classList.add('hidden');
+                    }
+                    
+                    checkStep4Completion();
+                }
+            });
+
+            // 心率和血氧输入事件
+            document.getElementById('heart-rate-input').addEventListener('input', function() {
+                const heartRate = parseInt(this.value);
+                if (heartRate && heartRate >= 40 && heartRate <= 200) {
+                    patientData.heartRate = heartRate;
+                    
+                    // 显示心率警告
+                    const warningEl = document.getElementById('vitals-warning');
+                    if (heartRate > 150) {
+                        warningEl.textContent = '警告：心率过快！';
+                        warningEl.classList.remove('hidden');
+                    } else {
+                        warningEl.classList.add('hidden');
+                    }
+                    
+                    checkStep4Completion();
+                }
+            });
+
+            document.getElementById('oxygen-input').addEventListener('input', function() {
+                const oxygen = parseInt(this.value);
+                if (oxygen && oxygen >= 70 && oxygen <= 100) {
+                    patientData.oxygenSaturation = oxygen;
+                    
+                    // 如果血氧低于95%，显示氧疗警告
+                    if (oxygen < 95) {
+                        document.getElementById('oxygen-alert').classList.remove('hidden');
+                    } else {
+                        document.getElementById('oxygen-alert').classList.add('hidden');
+                    }
+                    
+                    checkStep4Completion();
+                }
+            });
+
+            // 血压输入事件
+            document.getElementById('systolic-input').addEventListener('input', function() {
+                const systolic = parseInt(this.value);
+                if (systolic && systolic >= 60 && systolic <= 220) {
+                    patientData.bloodPressure.systolic = systolic;
+                    checkBloodPressure();
+                    checkStep4Completion();
+                }
+            });
+
+            document.getElementById('diastolic-input').addEventListener('input', function() {
+                const diastolic = parseInt(this.value);
+                if (diastolic && diastolic >= 40 && diastolic <= 120) {
+                    patientData.bloodPressure.diastolic = diastolic;
+                    checkBloodPressure();
+                    checkStep4Completion();
+                }
+            });
+
+            // 检查血压并显示警告
+            function checkBloodPressure() {
+                const systolic = patientData.bloodPressure.systolic;
+                const diastolic = patientData.bloodPressure.diastolic;
+                
+                if (systolic && diastolic) {
+                    const warningEl = document.getElementById('bp-warning');
+                    
+                    if (systolic < 90) {
+                        warningEl.textContent = '警告：低血压！可能存在休克风险';
+                        warningEl.classList.remove('hidden');
+                    } else if (systolic > 180 || diastolic > 110) {
+                        warningEl.textContent = '警告：高血压！';
+                        warningEl.classList.remove('hidden');
+                    } else {
+                        warningEl.classList.add('hidden');
+                    }
+                }
+            }
+
+            // 检查步骤4是否完成
+            function checkStep4Completion() {
+                step4Completed = patientData.temperature && 
+                                patientData.heartRate && 
+                                patientData.oxygenSaturation && 
+                                patientData.bloodPressure.systolic && 
+                                patientData.bloodPressure.diastolic;
+                
+                document.getElementById('next-btn-4').disabled = !step4Completed;
+            }
+
+            // 下一步按钮点击事件
+            for (let i = 1; i <= totalSteps; i++) {
+                const nextBtn = document.getElementById(`next-btn-${i}`);
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', function() {
+                        goToStep(i + 1);
+                    });
+                }
+            }
+
+            // 完成按钮点击事件
+            document.getElementById('finish-btn').addEventListener('click', function() {
+                goToStep('result');
+                generateSummary();
+            });
+
+            // 重新开始按钮点击事件
+            document.getElementById('restart-btn').addEventListener('click', function() {
+                // 重置所有状态
+                resetApp();
+                
+                // 返回开始界面
+                document.getElementById('treatment-flow').classList.add('hidden');
+                document.getElementById('start-screen').classList.remove('hidden');
+                document.getElementById('prevention').classList.remove('hidden');
+                
+                // 滚动到顶部
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // 跳转到指定步骤
+            function goToStep(step) {
+                // 隐藏当前步骤
+                document.getElementById(`step${currentStep}`).classList.remove('active-step');
+                
+                // 显示新步骤
+                if (step === 'result') {
+                    document.getElementById('result').classList.add('active-step');
+                    // 停止计时器
+                    clearInterval(timerInterval);
+                } else {
+                    document.getElementById(`step${step}`).classList.add('active-step');
+                    currentStep = step;
+                    
+                    // 更新进度条
+                    updateProgress();
+                    
+                    // 更新步骤文本
+                    document.getElementById('current-step-text').textContent = `步骤 ${currentStep}/${totalSteps}`;
+                    
+                    // 特殊步骤处理
+                    if (step === 5) {
+                        // 根据意识状态显示或隐藏昏迷患者特殊护理
+                        if (!patientData.isConscious) {
+                            document.getElementById('unconscious-care').classList.remove('hidden');
+                        } else {
+                            document.getElementById('unconscious-care').classList.add('hidden');
+                        }
+                        evaluateStep5Completion();
+                    } else if (step === 6) {
+                        // 根据是否有抽搐显示不同内容
+                        if (patientData.hasSeizure) {
+                            document.getElementById('seizure-control').classList.remove('hidden');
+                            document.getElementById('no-seizure').classList.add('hidden');
+                        } else {
+                            document.getElementById('seizure-control').classList.add('hidden');
+                            document.getElementById('no-seizure').classList.remove('hidden');
+                        }
+                        evaluateStep6Completion();
+                    }
+                }
+                
+                // 滚动到顶部
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // 更新进度条
+            function updateProgress() {
+                const progressPercentage = (currentStep - 1) / totalSteps * 100;
+                document.getElementById('progress-fill').style.width = `${progressPercentage}%`;
+            }
+
+            // 启动计时器
+            function startTimer() {
+                seconds = 0;
+                updateTimerDisplay();
+                
+                timerInterval = setInterval(function() {
+                    seconds++;
+                    updateTimerDisplay();
+                }, 1000);
+            }
+
+            // 更新计时器显示
+            function updateTimerDisplay() {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                
+                document.getElementById('timer').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            }
+
+            // 生成处置总结
+            function generateSummary() {
+                const summaryEl = document.getElementById('summary-content');
+                const elapsedTime = Math.floor((new Date() - patientData.startTime) / 1000);
+                const minutes = Math.floor(elapsedTime / 60);
+                const remainingSeconds = elapsedTime % 60;
+                
+                let summaryHTML = `
+                    <p class="mb-2"><strong>处置用时：</strong>${minutes}分${remainingSeconds}秒</p>
+                    <p class="mb-2"><strong>患者体温：</strong>${patientData.temperature ? patientData.temperature + '°C' : '未记录'}</p>
+                    <p class="mb-2"><strong>患者心率：</strong>${patientData.heartRate ? patientData.heartRate + '次/分' : '未记录'}</p>
+                    <p class="mb-2"><strong>患者血氧：</strong>${patientData.oxygenSaturation ? patientData.oxygenSaturation + '%' : '未记录'}</p>
+                    <p class="mb-2"><strong>患者血压：</strong>${patientData.bloodPressure.systolic ? patientData.bloodPressure.systolic + '/' + patientData.bloodPressure.diastolic + ' mmHg' : '未记录'}</p>
+                    <p class="mb-2"><strong>意识状态：</strong>${patientData.isConscious ? '清醒' : '意识不清'}</p>
+                `;
+                
+                // 添加警告信息
+                if (patientData.temperature > 38.5) {
+                    summaryHTML += `<p class="text-red-500 mt-4">注意：患者体温仍高于38.5°C，需继续降温！</p>`;
+                }
+                
+                if (patientData.oxygenSaturation < 95) {
+                    summaryHTML += `<p class="text-red-500 mt-2">注意：患者血氧饱和度低于95%，需继续氧疗！</p>`;
+                }
+                
+                summaryEl.innerHTML = summaryHTML;
+            }
+
+            // 重置应用状态
+            function resetApp() {
+                // 重置变量
+                currentStep = 1;
+                warningSignsChecked = false;
+                step2Completed = false;
+                step3Completed = false;
+                step4Completed = false;
+                step5Completed = false;
+                clearInterval(timerInterval);
+                
+                // 重置患者数据
+                patientData = {
+                    warnings: [],
+                    actions: [],
+                    cooling: [],
+                    temperature: null,
+                    heartRate: null,
+                    oxygenSaturation: null,
+                    bloodPressure: {
+                        systolic: null,
+                        diastolic: null
+                    },
+                    isConscious: true,
+                    hasSeizure: false,
+                    startTime: null
+                };
+                
+                // 重置UI
+                document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
+                    checkbox.classList.remove('checked');
+                });
+                
+                document.querySelectorAll('.step-container').forEach(container => {
+                    container.classList.remove('active-step');
+                });
+                
+                document.getElementById('step1').classList.add('active-step');
+                document.getElementById('current-step-text').textContent = `步骤 1/${totalSteps}`;
+                document.getElementById('progress-fill').style.width = '0%';
+                
+                // 重置按钮状态
+                document.querySelectorAll('.btn').forEach(btn => {
+                    if (btn.id.includes('next-btn') || btn.id === 'finish-btn') {
+                        btn.disabled = true;
+                    }
+                });
+                
+                // 重置输入框
+                document.getElementById('temperature-input').value = '';
+                document.getElementById('heart-rate-input').value = '';
+                document.getElementById('oxygen-input').value = '';
+                document.getElementById('systolic-input').value = '';
+                document.getElementById('diastolic-input').value = '';
+                
+                // 重置警告信息
+                document.getElementById('temperature-warning').classList.add('hidden');
+                document.getElementById('vitals-warning').classList.add('hidden');
+                document.getElementById('bp-warning').classList.add('hidden');
+                document.getElementById('oxygen-alert').classList.add('hidden');
+                
+                // 重置意识状态按钮
+                document.getElementById('conscious-btn').classList.add('btn-secondary');
+                document.getElementById('conscious-btn').classList.remove('btn');
+                document.getElementById('unconscious-btn').classList.add('btn-secondary');
+                document.getElementById('unconscious-btn').classList.remove('btn');
+            }
+        });
+
+        // 返回顶部按钮脚本
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        
+        // 监听滚动事件
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) { // 当页面滚动超过300px时显示按钮
+                backToTopBtn.classList.remove('opacity-0', 'translate-y-10');
+                backToTopBtn.classList.add('opacity-100', 'translate-y-0');
+            } else {
+                backToTopBtn.classList.remove('opacity-100', 'translate-y-0');
+                backToTopBtn.classList.add('opacity-0', 'translate-y-10');
+            }
+        });
+        
+        // 点击按钮返回顶部
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

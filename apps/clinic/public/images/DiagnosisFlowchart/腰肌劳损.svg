@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 900">
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .title { font-size: 24px; font-weight: bold; }
+    .subtitle { font-size: 18px; font-weight: bold; }
+    .content { font-size: 14px; }
+  </style>
+  
+  <rect width="100%" height="100%" fill="#f3f3e6"/>
+  
+  <text x="200" y="40" class="title" text-anchor="middle" fill="#5e5e2c">腰肌劳损诊断思维链</text>
+  
+  <g transform="translate(20, 80)">
+    <rect width="360" height="100" rx="10" fill="#d6d6a0" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e5e2c">症状评估</text>
+    <text x="10" y="60" class="content" fill="#5e5e2c">• 发病特点: 慢性、反复发作</text>
+    <text x="10" y="80" class="content" fill="#5e5e2c">• 性质: 酸痛、胀痛，活动后加重</text>
+  </g>
+  
+  <g transform="translate(20, 200)">
+    <rect width="360" height="120" rx="10" fill="#d6d6a0" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e5e2c">可能原因</text>
+    <text x="10" y="60" class="content" fill="#5e5e2c">• 长期不良姿势</text>
+    <text x="10" y="80" class="content" fill="#5e5e2c">• 过度使用或反复微创伤</text>
+    <text x="10" y="100" class="content" fill="#5e5e2c">• 核心肌群力量不足</text>
+  </g>
+  
+  <g transform="translate(20, 340)">
+    <rect width="360" height="140" rx="10" fill="#d6d6a0" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e5e2c">诊断步骤</text>
+    <text x="10" y="60" class="content" fill="#5e5e2c">1. 详细病史询问（职业、生活习惯）</text>
+    <text x="10" y="80" class="content" fill="#5e5e2c">2. 体格检查（触诊、活动度、肌力测试）</text>
+    <text x="10" y="100" class="content" fill="#5e5e2c">3. 必要时影像学检查（X光、MRI）</text>
+    <text x="10" y="120" class="content" fill="#5e5e2c">4. 排除其他疾病（如腰椎间盘突出）</text>
+  </g>
+  
+  <g transform="translate(20, 500)">
+    <rect width="360" height="140" rx="10" fill="#d6d6a0" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e5e2c">治疗方法</text>
+    <text x="10" y="60" class="content" fill="#5e5e2c">• 改善工作和生活姿势</text>
+    <text x="10" y="80" class="content" fill="#5e5e2c">• 物理治疗（如热疗、按摩、牵引）</text>
+    <text x="10" y="100" class="content" fill="#5e5e2c">• 核心肌群强化训练</text>
+    <text x="10" y="120" class="content" fill="#5e5e2c">• 必要时使用镇痛消炎药物</text>
+  </g>
+  
+  <g transform="translate(20, 660)">
+    <rect width="360" height="100" rx="10" fill="#d6d6a0" opacity="0.6"/>
+    <text x="10" y="30" class="subtitle" fill="#5e5e2c">关键信息</text>
+    <text x="10" y="60" class="content" fill="#5e5e2c">• 预防为主，注意日常保健</text>
+    <text x="10" y="80" class="content" fill="#5e5e2c">• 症状持续或加重需及时就医</text>
+  </g>
+  
+  <text x="200" y="880" class="content" text-anchor="middle" fill="#5e5e2c">注意：此图仅供参考，具体诊断请咨询医生</text>
+</svg>

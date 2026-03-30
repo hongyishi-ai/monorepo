@@ -1,0 +1,48 @@
+{
+  "timestamp": "2025-07-30T02:48:54.703Z",
+  "validation": {
+    "iconFiles": true,
+    "manifest": true,
+    "html": true,
+    "accessibility": true
+  },
+  "statistics": {
+    "totalIcons": 6,
+    "totalSize": 136650,
+    "svgCount": 0,
+    "pngCount": 5,
+    "icoCount": 1
+  },
+  "icons": [
+    {
+      "name": "favicon.ico",
+      "size": 5238,
+      "sizeKB": "5.12"
+    },
+    {
+      "name": "apple-touch-icon.png",
+      "size": 11651,
+      "sizeKB": "11.38"
+    },
+    {
+      "name": "icon-192.png",
+      "size": 12615,
+      "sizeKB": "12.32"
+    },
+    {
+      "name": "icon-192-maskable.png",
+      "size": 11770,
+      "sizeKB": "11.49"
+    },
+    {
+      "name": "icon-512.png",
+      "size": 48922,
+      "sizeKB": "47.78"
+    },
+    {
+      "name": "icon-512-maskable.png",
+      "size": 46454,
+      "sizeKB": "45.37"
+    }
+  ]
+}

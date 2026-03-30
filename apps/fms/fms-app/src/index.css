@@ -1,0 +1,536 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* 布鲁克林极简主义配色方案 */
+    --background: 0 0% 98%;                    /* 温暖的米白色 */
+    --foreground: 240 10% 15%;                 /* 深炭灰色 */
+    --card: 0 0% 100%;                         /* 纯白卡片 */
+    --card-foreground: 240 10% 15%;            /* 深炭灰色 */
+    --popover: 0 0% 100%;                      /* 纯白 */
+    --popover-foreground: 240 10% 15%;         /* 深炭灰色 */
+    --primary: 240 10% 25%;                    /* 深灰作为主色 */
+    --primary-foreground: 0 0% 98%;            /* 米白色前景 */
+    --secondary: 240 5% 92%;                   /* 浅暖灰 */
+    --secondary-foreground: 240 10% 25%;       /* 深灰前景 */
+    --muted: 240 5% 94%;                       /* 极浅暖灰 */
+    --muted-foreground: 240 5% 45%;            /* 中灰 */
+    --accent: 25 35% 88%;                      /* 温暖的米色作为强调 */
+    --accent-foreground: 240 10% 25%;          /* 深灰前景 */
+    --destructive: 0 60% 50%;                  /* 温和的红色 */
+    --destructive-foreground: 0 0% 98%;        /* 米白前景 */
+    --border: 240 5% 88%;                      /* 浅灰边框 */
+    --input: 240 5% 88%;                       /* 浅灰输入框 */
+    --ring: 240 10% 25%;                       /* 深灰焦点环 */
+    --chart-1: 240 10% 35%;                    /* 图表色1 */
+    --chart-2: 25 25% 65%;                     /* 图表色2 */
+    --chart-3: 0 0% 55%;                       /* 图表色3 */
+    --chart-4: 240 5% 75%;                     /* 图表色4 */
+    --chart-5: 25 15% 75%;                     /* 图表色5 */
+    --radius: 4px;                             /* 极小的圆角 */
+    --sidebar-background: 0 0% 96%;
+    --sidebar-foreground: 240 10% 15%;
+    --sidebar-primary: 240 10% 25%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 5% 92%;
+    --sidebar-accent-foreground: 240 10% 25%;
+    --sidebar-border: 240 5% 88%;
+    --sidebar-ring: 240 10% 25%;
+  }
+
+  .dark {
+    /* 深色模式保持极简 */
+    --background: 240 10% 8%;                  /* 深炭色背景 */
+    --foreground: 0 0% 92%;                    /* 浅色前景 */
+    --card: 240 10% 10%;                       /* 深卡片 */
+    --card-foreground: 0 0% 92%;               /* 浅色前景 */
+    --popover: 240 10% 10%;                    /* 深色弹出层 */
+    --popover-foreground: 0 0% 92%;            /* 浅色前景 */
+    --primary: 0 0% 85%;                       /* 浅色主色 */
+    --primary-foreground: 240 10% 15%;         /* 深色前景 */
+    --secondary: 240 10% 15%;                  /* 深次要色 */
+    --secondary-foreground: 0 0% 85%;          /* 浅色前景 */
+    --muted: 240 10% 12%;                      /* 深柔和色 */
+    --muted-foreground: 240 5% 60%;            /* 中性前景 */
+    --accent: 240 10% 15%;                     /* 深强调色 */
+    --accent-foreground: 0 0% 85%;             /* 浅色前景 */
+    --destructive: 0 60% 50%;                  /* 保持温和红色 */
+    --destructive-foreground: 0 0% 92%;        /* 浅色前景 */
+    --border: 240 10% 18%;                     /* 深边框 */
+    --input: 240 10% 18%;                      /* 深输入框 */
+    --ring: 0 0% 85%;                          /* 浅色焦点环 */
+    --chart-1: 0 0% 70%;
+    --chart-2: 25 25% 55%;
+    --chart-3: 240 10% 50%;
+    --chart-4: 0 0% 40%;
+    --chart-5: 25 15% 45%;
+    --sidebar-background: 240 10% 5%;
+    --sidebar-foreground: 0 0% 92%;
+    --sidebar-primary: 0 0% 85%;
+    --sidebar-primary-foreground: 240 10% 15%;
+    --sidebar-accent: 240 10% 12%;
+    --sidebar-accent-foreground: 0 0% 85%;
+    --sidebar-border: 240 10% 18%;
+    --sidebar-ring: 0 0% 85%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-light;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    letter-spacing: -0.01em;
+    line-height: 1.6;
+    /* 统一调大字体一号 */
+    font-size: 1.125rem; /* 从1rem调整到1.125rem (18px) */
+  }
+}
+
+/* 全局可访问性与动效偏好尊重 */
+@layer base {
+  /* 统一 focus-visible 样式，键盘用户有清晰焦点指示 */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* 尊重用户减少动效偏好 */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* 布鲁克林极简主义专用样式 */
+@layer components {
+  /* 极简动画 - 只保留必要的 */
+  .minimal-fade-in {
+    animation: minimalFadeIn 0.6s ease-out;
+  }
+  
+  @keyframes minimalFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* 极简卡片样式 */
+  .brooklyn-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+  }
+  
+  .brooklyn-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+  }
+  
+  /* 极简按钮样式 */
+  .brooklyn-button {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    transition: all 0.2s ease;
+    /* 调大按钮字体 */
+    font-size: 1.125rem;
+  }
+  
+  .brooklyn-button:hover {
+    background: hsl(var(--primary));
+    opacity: 0.9;
+  }
+  
+  /* 响应式布局优化 - 移动端减少大面积留白 */
+  .brooklyn-section {
+    padding: clamp(2rem, 6vw, 8rem) 0; /* 移动端从4rem减少到2rem */
+  }
+  
+  .brooklyn-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 clamp(1rem, 3vw, 2rem); /* 减少移动端左右内边距 */
+  }
+  
+  /* 极简网格 - 移动端间距优化 */
+  .brooklyn-grid {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 3rem); /* 移动端从2rem减少到1.5rem */
+  }
+  
+  /* 排版样式 - 统一调大字体 */
+  .brooklyn-title {
+    font-size: clamp(2.5rem, 5vw, 3.5rem); /* 从2rem调整到2.5rem起始 */
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 0;
+  }
+  
+  .brooklyn-subtitle {
+    font-size: clamp(1.25rem, 2.5vw, 1.375rem); /* 从1rem调整到1.25rem起始 */
+    font-weight: 300;
+    line-height: 1.5;
+    color: hsl(var(--muted-foreground));
+    margin-top: 1.5rem;
+  }
+  
+  .brooklyn-text {
+    font-size: 1.125rem; /* 从1rem调整到1.125rem */
+    font-weight: 300;
+    line-height: 1.6;
+    color: hsl(var(--muted-foreground));
+  }
+
+  /* 导航栏样式 - 布鲁克林极简主义 */
+  .brooklyn-nav {
+    background: hsl(var(--background));
+    border-bottom: 1px solid hsl(var(--border));
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .brooklyn-nav-link {
+    color: hsl(var(--muted-foreground));
+    font-weight: 300;
+    font-size: 1.125rem; /* 调大导航字体 */
+    letter-spacing: 0.01em;
+    transition: all 0.2s ease;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+  }
+
+  .brooklyn-nav-link:hover {
+    color: hsl(var(--foreground));
+    background: hsl(var(--accent));
+  }
+
+  .brooklyn-nav-link.active {
+    color: hsl(var(--primary));
+    font-weight: 400;
+  }
+
+  .brooklyn-logo {
+    font-size: 1.5rem; /* 调大Logo字体 */
+    font-weight: 300;
+    color: hsl(var(--foreground));
+    letter-spacing: -0.02em;
+  }
+
+  /* 页脚样式 - 布鲁克林极简主义 */
+  .brooklyn-footer {
+    background: hsl(var(--muted));
+    border-top: 1px solid hsl(var(--border));
+    padding: 3rem 0; /* 减少页脚内边距 */
+    margin-top: auto;
+  }
+
+  .brooklyn-footer-text {
+    color: hsl(var(--muted-foreground));
+    font-size: 1rem; /* 页脚字体适中 */
+    font-weight: 300;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  /* 移动端优化 */
+  @media (max-width: 768px) {
+    .brooklyn-section {
+      padding: 2rem 0; /* 移动端进一步减少间距 */
+    }
+    
+    .brooklyn-container {
+      padding: 0 1rem; /* 移动端最小内边距 */
+    }
+    
+    .brooklyn-grid {
+      gap: 1.5rem; /* 移动端间距优化 */
+    }
+    
+    .brooklyn-title {
+      font-size: 2rem; /* 移动端标题大小 */
+      line-height: 1.1;
+    }
+    
+    .brooklyn-subtitle {
+      font-size: 1.125rem; /* 移动端副标题 */
+    }
+    
+    .brooklyn-text {
+      font-size: 1rem; /* 移动端正文 */
+    }
+
+    .brooklyn-nav {
+      padding: 0.1rem 0; /* 移动端导航间距 */
+    }
+
+    .brooklyn-nav-link {
+      font-size: 1rem; /* 移动端导航字体 */
+      padding: 0.5rem 0.75rem;
+    }
+
+    .brooklyn-logo {
+      font-size: 1.25rem; /* 移动端Logo字体 */
+    }
+
+    .brooklyn-footer {
+      padding: 2rem 0; /* 移动端页脚间距 */
+    }
+  }
+
+  /* 智能状态指示器动画 */
+  .smart-indicator-pulse {
+    animation: smartPulse 2s infinite ease-in-out;
+  }
+  
+  @keyframes smartPulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+  }
+  
+  .smart-indicator-glow {
+    position: relative;
+  }
+  
+  .smart-indicator-glow::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    padding: 2px;
+    background: linear-gradient(45deg, hsl(var(--primary)), hsl(var(--accent)));
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    animation: glowRing 3s infinite ease-in-out;
+  }
+  
+  @keyframes glowRing {
+    0%, 70%, 100% {
+      opacity: 0;
+      transform: scale(1);
+    }
+    30%, 50% {
+      opacity: 0.6;
+      transform: scale(1.1);
+    }
+  }
+  
+  /* 滚动感知指示器状态 */
+  .indicator-dimmed {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.4;
+    transform: translateY(4px) scale(0.95);
+  }
+  
+  .indicator-focused {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(0) scale(1);
+  }
+
+  /* 键盘可见性样式 */
+  .smart-indicator-keyboard-focus {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
+  }
+
+  /* 悬浮动画增强 - 已移除上下移动效果 */
+
+  /* 状态切换动画 */
+  .smart-status-transition {
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  /* 渐变边框效果 */
+  .smart-indicator-border-glow {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .smart-indicator-border-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.5s;
+  }
+
+  .smart-indicator-border-glow:hover::before {
+    left: 100%;
+  }
+
+  /* 不对称性Alert提醒样式 */
+  .asymmetry-alert-glow {
+    position: relative;
+    animation: asymmetryGlow 3s ease-in-out infinite;
+  }
+
+  @keyframes asymmetryGlow {
+    0%, 100% {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    50% {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  /* Alert专用轮动效果 */
+  .asymmetry-alert-slide {
+    animation: alertSlideIn 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  @keyframes alertSlideIn {
+    from {
+      transform: translateY(-100%) translateX(-50%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0) translateX(-50%);
+      opacity: 1;
+    }
+  }
+
+  /* 风险等级的脉冲效果 */
+  .risk-pulse-high {
+    animation: riskPulseHigh 2s infinite;
+  }
+
+  .risk-pulse-medium {
+    animation: riskPulseMedium 2.5s infinite;
+  }
+
+  .risk-pulse-low {
+    animation: riskPulseLow 3s infinite;
+  }
+
+  @keyframes riskPulseHigh {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+  }
+
+  @keyframes riskPulseMedium {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.02);
+      opacity: 0.95;
+    }
+  }
+
+  @keyframes riskPulseLow {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.01);
+      opacity: 0.98;
+    }
+  }
+
+  /* 自定义动画 - 训练可视化组件 */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  /* AboutPage 淡入动画 */
+  .fade-in-image {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* ----------------------------- */
+/* 视图过渡 API 主题切换动画 */
+/* ----------------------------- */
+
+::view-transition-group(root) {
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 新视图（切换后主题）以圆形遮罩从点击处放大 */
+::view-transition-new(root) {
+  /* 默认为中心点，若 JS 传入 --x, --y 则以点击位置为中心 */
+  mask: radial-gradient(circle 0px at var(--x, 50%) var(--y, 50%), #000 0%, transparent 100%);
+  animation: theme-scale 0.5s ease-out;
+}
+
+/* 旧视图保持不动，并置于底层 */
+::view-transition-old(root),
+.dark::view-transition-old(root) {
+  animation: none;
+  z-index: -1;
+}
+
+/* 深色模式下的新视图同样应用动画 */
+.dark::view-transition-new(root) {
+  animation: theme-scale 0.5s ease-out;
+}
+
+@keyframes theme-scale {
+  to {
+    mask-size: 150vmax;
+  }
+}
