@@ -1,0 +1,49 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "globalDependencies": ["package.json", "pnpm-workspace.yaml"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "build/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
+    },
+    "type-check": {
+      "dependsOn": ["^build"]
+    },
+    "clean": {
+      "cache": false
+    },
+    "pharmacy#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "pharmacy#dev": { "cache": false, "persistent": true },
+    "clinic#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "clinic#dev": { "cache": false, "persistent": true },
+    "fms#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["fms-app/dist/**"]
+    },
+    "fms#dev": { "cache": false, "persistent": true },
+    "heat-stroke#dev": { "cache": false, "persistent": true },
+    "portal#build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!build/**"]
+    },
+    "portal#dev": { "cache": false, "persistent": true }
+  }
+}
