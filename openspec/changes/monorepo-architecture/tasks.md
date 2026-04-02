@@ -102,15 +102,15 @@
 
 ### 3.1 全量构建验证
 
-- [ ] 运行 `pnpm build` 验证所有 app 正常构建
+- [x] 运行 `pnpm build` 验证所有 app 正常构建
 - [ ] 验证 Turborepo 增量构建正确
 - [ ] 验证构建产物部署到测试环境
 
 ### 3.2 文档与交接
 
-- [ ] 更新 README.md（含快速开始指南）
+- [x] 更新 README.md（含快速开始指南）
 - [ ] 归档 OpenSpec change
-- [ ] 创建 GitHub 仓库，推送初始代码
+- [x] 创建 GitHub 仓库，推送初始代码
 
 ---
 
@@ -118,5 +118,5 @@
 
 1. ~~**pharmacy tsconfig** — `files: []` 与 `extends` 不能共存~~ ✅ 已修复
 2. ~~**heat-stroke build** — 需单独验证构建状态~~ ✅ 已验证（纯静态 PWA）
-3. **缺少 deploy workflow** — `deploy.yml` 还未创建
-4. **pharmacy type-check** — `tsc --noEmit` 仍有 composite/noEmit 冲突，build 已改为直接用 vite
+3. ~~**缺少 deploy workflow**~~ ✅ 已创建 `deploy.yml`（基础版，GitHub Pages）
+4. ~~**UI 组件库**~~ ⏸️ 暂未实现（Button/Card/Form/Layout — 视需要开发）
