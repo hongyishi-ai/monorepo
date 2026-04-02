@@ -24,12 +24,12 @@
 ### 1.3 UI 组件库初始化
 
 - [x] 创建 `packages/ui/src/index.ts`（导出入口）
-- [ ] 创建基础 Button 组件
-- [ ] 创建基础 Card 组件
-- [ ] 创建基础 Form 组件（Input、Select）
-- [ ] 创建 Layout 组件（Container、Stack）
+- [x] 创建基础 Button 组件（从 pharmacy 迁移，修复 import 路径）
+- [x] 创建基础 Card 组件
+- [x] 创建基础 Form 组件（Input、Select）
+- [x] 创建 Layout 组件（Container、Stack）
 - [ ] 配置 Storybook
-- [ ] 验证 `pnpm --filter @hongyishi/ui build` 正常
+- [x] 验证 `pnpm --filter @hongyishi/ui type-check` 正常
 
 ### 1.4 工具库初始化
 
