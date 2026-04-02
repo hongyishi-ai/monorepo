@@ -34,11 +34,11 @@
 ### 1.4 工具库初始化
 
 - [x] 创建 `packages/utils/src/index.ts`（导出入口）
-- [ ] 实现 formatDate、formatNumber、formatFileSize
-- [ ] 实现 validatePhone、validateEmail
-- [ ] 实现 createApiClient
-- [ ] 编写单元测试（Vitest）
-- [ ] 验证 `pnpm --filter @hongyishi/utils test` 正常
+- [x] 实现 formatDate、formatNumber、formatFileSize、formatRelativeTime
+- [x] 实现 validatePhone、validateEmail、validateIdCard、validateUrl、validateMoney
+- [x] 实现 createApiClient
+- [x] 编写单元测试（Vitest）— 18 个测试全部通过
+- [x] 验证 `pnpm --filter @hongyishi/utils test` 正常
 
 ### 1.5 配置包初始化
 
