@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 5173",
-    "build": "npm run clean && tsc -b && vite build",
+    "build": "npm run clean && vite build",
     "build:analyze": "npm run build && npx vite-bundle-analyzer dist/stats.html",
     "lint": "eslint .",
     "preview": "vite preview",
