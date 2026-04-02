@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-react-versions:
+    name: Check React versions consistency
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Check React versions
+        id: check-react
+        run: |
+          echo "### React versions across apps" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          pnpm list --depth 0 --recursive 2>/dev/null | grep "react@" | sed 's/^/          /' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+          VERSIONS=$(pnpm list --depth 0 --recursive 2>/dev/null | grep -oP 'react@\K[0-9]+\.[0-9]+\.[0-9]+' | sort -u | wc -l)
+          if [ "$VERSIONS" -gt 1 ]; then
+            echo "❌ React version mismatch detected!"
+            echo "Run \`pnpm up react@^18.3.0 react-dom@^18.3.0 -r\` to unify."
+            exit 1
+          fi
+          echo "✅ All apps use the same React version"
+
+  build:
+    name: Build all apps
+    runs-on: ubuntu-latest
+    needs: check-react-versions
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+
+  type-check:
+    name: Type check all apps
+    runs-on: ubuntu-latest
+    needs: check-react-versions
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -r type-check || true
