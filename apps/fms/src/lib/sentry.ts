@@ -3,12 +3,14 @@ import type { StateCreator } from 'zustand';
 
 // Sentry 配置
 export const initSentry = () => {
+  const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
+
+  if (!sentryDsn) {
+    return;
+  }
+
   Sentry.init({
-    // 在生产环境中，您需要设置真实的 DSN
-    // dsn: "YOUR_SENTRY_DSN_HERE",
-    
-    // 开发环境下使用空 DSN 或配置本地测试
-    dsn: import.meta.env.VITE_SENTRY_DSN || '',
+    dsn: sentryDsn,
     
     environment: import.meta.env.MODE,
     
@@ -17,11 +19,10 @@ export const initSentry = () => {
       Sentry.browserTracingIntegration(),
     ],
     
-    // 性能监控
-    tracesSampleRate: import.meta.env.PROD ? 0.1 : 1.0,
+    // 性能监控必须显式开启，避免免费层默认发送遥测。
+    tracesSampleRate: Number(import.meta.env.VITE_SENTRY_TRACES_SAMPLE_RATE ?? 0),
     
-    // 在开发环境启用调试
-    debug: !import.meta.env.PROD,
+    debug: import.meta.env.DEV && import.meta.env.VITE_SENTRY_DEBUG === 'true',
     
     // 忽略一些常见的非关键错误
     ignoreErrors: [
@@ -47,20 +48,23 @@ export const initSentry = () => {
 export const sentryMiddleware = <T extends object>(
   f: StateCreator<T, [], [], T>,
 ): StateCreator<T, [], [], T> => (set, get, api) => {
+  const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
   const sentrySet = (partial: any, replace?: any) => {
     try {
       return set(partial, replace);
     } catch (error) {
       // 捕获 store 操作中的错误
-      Sentry.captureException(error, {
-        tags: {
-          component: 'zustand-store',
-          action: 'state-update'
-        },
-        extra: {
-          currentState: get(),
-        }
-      });
+      if (sentryDsn) {
+        Sentry.captureException(error, {
+          tags: {
+            component: 'zustand-store',
+            action: 'state-update'
+          },
+          extra: {
+            currentState: get(),
+          }
+        });
+      }
       throw error;
     }
   };
@@ -69,12 +73,14 @@ export const sentryMiddleware = <T extends object>(
     return f(sentrySet, get, api);
   } catch (error) {
     // 捕获 store 初始化错误
-    Sentry.captureException(error, {
-      tags: {
-        component: 'zustand-store',
-        action: 'initialization'
-      }
-    });
+    if (sentryDsn) {
+      Sentry.captureException(error, {
+        tags: {
+          component: 'zustand-store',
+          action: 'initialization'
+        }
+      });
+    }
     throw error;
   }
 };
@@ -86,6 +92,10 @@ export const reportError = (error: Error, context?: {
   userId?: string;
   extra?: Record<string, any>;
 }) => {
+  if (!import.meta.env.VITE_SENTRY_DSN) {
+    return;
+  }
+
   Sentry.captureException(error, {
     tags: {
       component: context?.component || 'unknown',
@@ -98,11 +108,19 @@ export const reportError = (error: Error, context?: {
 
 // 用户上下文设置
 export const setUserContext = (user: { id?: string; email?: string; username?: string }) => {
+  if (!import.meta.env.VITE_SENTRY_DSN) {
+    return;
+  }
+
   Sentry.setUser(user);
 };
 
 // 添加面包屑
 export const addBreadcrumb = (message: string, category?: string, data?: any) => {
+  if (!import.meta.env.VITE_SENTRY_DSN) {
+    return;
+  }
+
   Sentry.addBreadcrumb({
     message,
     category: category || 'custom',
@@ -115,6 +133,10 @@ export const addBreadcrumb = (message: string, category?: string, data?: any) =>
 export const useStoreMonitoring = (storeName: string) => {
   return {
     logStateChange: (action: string, changes: Record<string, any>) => {
+      if (!import.meta.env.VITE_SENTRY_DSN) {
+        return;
+      }
+
       Sentry.addBreadcrumb({
         category: 'state-change',
         message: `${storeName}: ${action}`,
@@ -129,6 +151,10 @@ export const useStoreMonitoring = (storeName: string) => {
     },
     
     logError: (error: Error, action: string) => {
+      if (!import.meta.env.VITE_SENTRY_DSN) {
+        return;
+      }
+
       Sentry.captureException(error, {
         tags: {
           component: storeName,

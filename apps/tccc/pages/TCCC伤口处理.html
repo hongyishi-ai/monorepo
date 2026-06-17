@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCCC伤口处理 | 战术战伤救护算法</title>
+    <link rel="stylesheet" href="/assets/css/tailwind.css">
+    <link rel="stylesheet" href="/assets/css/fontawesome-shim.css">
+    <style>
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            overscroll-behavior: none;
+        }
+
+        .bento-grid-container {
+            display: grid;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .bento-box {
+            background-color: #1a1a1a;
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid #333333;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 20px 40px -20px rgba(255, 107, 0, 0.3);
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        }
+        
+        .bento-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.25), 0 25px 50px -20px rgba(255, 107, 0, 0.4);
+        }
+        
+        .highlight-redEE1C25 { color: #EE1C25; }
+        .highlight-redEE1C25-bg { background-color: #EE1C25; }
+        .highlight-redEE1C25-border { border-color: #EE1C25; }
+
+        .chinese-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+        }
+        
+        .english-subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            color: #a0a0a0;
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .action-text {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+        }
+        
+        .detail-text {
+            font-size: clamp(0.875rem, 2.5vw, 1.1rem);
+            color: #cccccc;
+        }
+
+        .step-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            scroll-snap-align: start;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .decision-button {
+            background-color: #2a2a2a;
+            border: 1px solid #444444;
+            color: #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            margin: 0.5rem;
+            min-width: 180px;
+            text-align: center;
+        }
+        
+        .decision-button:hover {
+            background-color: #EE1C25;
+            border-color: #FF3C44;
+            color: #000000;
+            transform: translateY(-3px);
+        }
+        
+        .decision-button .eng {
+            font-size: 0.8em;
+            opacity: 0.7;
+            display: block;
+            margin-top: 0.15rem;
+        }
+
+        .info-box {
+            background-color: #252525;
+            border-left: 4px solid #EE1C25;
+            padding: 1rem 1.5rem;
+            margin-top: 1.5rem;
+            border-radius: 0.25rem 0.5rem 0.5rem 0.25rem;
+        }
+        
+        .info-box .info-title {
+            font-weight: bold;
+            color: #EE1C25;
+        }
+        
+        .icon-style {
+            font-size: clamp(3rem, 8vw, 6rem);
+            color: #EE1C25;
+            opacity: 0.3;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            z-index: 0;
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 能力级别标记样式 */
+        .capability-green {
+            color: #4ADE80;
+            border: 1px solid #4ADE80;
+            background-color: rgba(74, 222, 128, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+        
+        .capability-yellow {
+            color: #FACC15;
+            border: 1px solid #FACC15;
+            background-color: rgba(250, 204, 21, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+        
+        .capability-red {
+            color: #F87171;
+            border: 1px solid #F87171;
+            background-color: rgba(248, 113, 113, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+
+        .capability-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <div id="tcccMasterContainer">
+        <!-- 内容将通过JavaScript动态加载 -->
+    </div>
+
+    <script>
+        /**
+         * TCCC伤口处理 - 基于TCCC算法的战伤处理流程
+         * 遵循COTCCC官方指南
+         */
+        
+        // 全局配置
+        const CONFIG = {
+            title: "TCCC伤口处理",
+            subtitle: "战术战伤救护算法",
+            themeColor: "#EE1C25",
+            animations: true,
+            language: "zh-CN"
+        };
+        
+        // 用户决策记录
+        let decisions = {};
+        
+        // TCCC伤口处理流程步骤定义
+        const woundCareSteps = [
+            {
+                id: "step-0",
+                title: "TCCC伤口处理",
+                subtitle: "Tactical Combat Casualty Care",
+                secondaryTitle: "战术战伤救护算法",
+                secondarySubtitle: "Wound Care Algorithm",
+                detail: "基于COTCCC官方指南 | Based on COTCCC Guidelines",
+                actionText: "开始流程",
+                actionTextEng: "Start Process",
+                nextStep: "step-1",
+                icon: "fa-kit-medical",
+                highlight: true,
+                type: "intro"
+            },
+            {
+                id: "step-1",
+                title: "检查与处理已知伤口",
+                subtitle: "Inspect & Dress Known Wounds",
+                infoBoxes: [
+                    {
+                        title: "伤口检查要点",
+                        detail: "仔细检查已发现的伤口，准备进行伤口处理"
+                    }
+                ],
+                actionText: "继续",
+                actionTextEng: "Continue",
+                nextStep: "step-2",
+                icon: "fa-search",
+                capabilityLevel: "green",
+                type: "info"
+            },
+            {
+                id: "step-2",
+                title: "检查是否有其他伤口",
+                subtitle: "Check For Additional Wounds",
+                infoBoxes: [
+                    {
+                        title: "全身检查",
+                        detail: "完成全身检查，确认是否存在其他未发现的伤口"
+                    }
+                ],
+                actionText: "继续",
+                actionTextEng: "Continue",
+                nextStep: "step-3",
+                icon: "fa-user-check",
+                capabilityLevel: "green",
+                type: "info"
+            },
+            {
+                id: "step-3",
+                title: "止血与伤口保护",
+                subtitle: "Dress Wounds",
+                infoBoxes: [
+                    {
+                        title: "伤口处理要点",
+                        detail: "处理伤口以确保止血和防止感染",
+                        isList: true,
+                        items: [
+                            "确保出血控制",
+                            "提供伤口保护"
+                        ]
+                    }
+                ],
+                actionText: "继续",
+                actionTextEng: "Continue",
+                nextStep: "step-4",
+                icon: "fa-bandage",
+                capabilityLevel: "green",
+                type: "info"
+            },
+            {
+                id: "step-4",
+                title: "烧伤评估",
+                subtitle: "Burns",
+                actionText: "进行烧伤评估",
+                actionTextEng: "Assess Burns",
+                nextStep: "step-5",
+                icon: "fa-fire",
+                capabilityLevel: "green",
+                type: "info"
+            },
+            {
+                id: "step-5",
+                title: "是否存在烧伤?",
+                subtitle: "Burns Present?",
+                options: [
+                    {
+                        text: "是",
+                        textEng: "Yes",
+                        key: "burns",
+                        value: true,
+                        nextStep: "step-6"
+                    },
+                    {
+                        text: "否",
+                        textEng: "No",
+                        key: "burns",
+                        value: false,
+                        nextStep: "step-13"
+                    }
+                ],
+                icon: "fa-fire-flame-curved",
+                capabilityLevel: "green",
+                type: "decision"
+            },
+            {
+                id: "step-6",
+                title: "是否存在面部/颈部烧伤?",
+                subtitle: "Facial/Neck Burns?",
+                options: [
+                    {
+                        text: "是",
+                        textEng: "Yes",
+                        key: "facialBurns",
+                        value: true,
+                        nextStep: "step-7"
+                    },
+                    {
+                        text: "否",
+                        textEng: "No",
+                        key: "facialBurns",
+                        value: false,
+                        nextStep: "step-8"
+                    }
+                ],
+                icon: "fa-head-side",
+                capabilityLevel: "green",
+                type: "decision"
+            },
+            {
+                id: "step-7",
+                title: "积极监控呼吸道状态与氧饱和度",
+                subtitle: "Aggressively Monitor Airway Status and O2 Saturations",
+                infoBoxes: [
+                    {
+                        title: "面部/颈部烧伤处理",
+                        detail: "面部或颈部烧伤可能导致呼吸道受损"
+                    }
+                ],
+                actionText: "继续",
+                actionTextEng: "Continue",
+                nextStep: "step-8",
+                icon: "fa-lungs",
+                capabilityLevel: "yellow",
+                type: "info"
+            },
+            {
+                id: "step-8",
+                title: "呼吸窘迫或氧饱和度降低",
+                subtitle: "Respiratory Distress or O2 Desaturation",
+                infoBoxes: [
+                    {
+                        title: "呼吸道评估",
+                        detail: "考虑早期外科气道建立"
+                    }
+                ],
+                actionText: "继续",
+                actionTextEng: "Continue",
+                nextStep: "step-9",
+                icon: "fa-wind",
+                capabilityLevel: "yellow",
+                type: "info"
+            },
+            {
+                id: "step-9",
+                title: "估算烧伤面积",
+                subtitle: "Estimate TBSA",
+                infoBoxes: [
+                    {
+                        title: "使用九分法则估算烧伤面积",
+                        detail: "估算烧伤面积至最接近的10%"
+                    }
+                ],
+                actionText: "继续",
+                actionTextEng: "Continue",
+                nextStep: "step-10",
+                icon: "fa-percent",
+                capabilityLevel: "yellow",
+                type: "info"
+            },
+            {
+                id: "step-10",
+                title: "用干燥无菌敷料覆盖烧伤区域",
+                subtitle: "Cover Burned Areas with Dry Sterile Dressing",
+                infoBoxes: [
+                    {
+                        title: "烧伤覆盖",
+                        detail: "使用干燥无菌敷料覆盖所有烧伤区域"
+                    }
+                ],
+                actionText: "继续",
+                actionTextEng: "Continue",
+                nextStep: "step-11",
+                icon: "fa-hand-holding-medical",
+                capabilityLevel: "green",
+                type: "info"
+            },
+            {
+                id: "step-11",
+                title: "烧伤面积是否大于20%?",
+                subtitle: "Burns >20%?",
+                options: [
+                    {
+                        text: "是",
+                        textEng: "Yes",
+                        key: "burnGreaterThan20",
+                        value: true,
+                        nextStep: "step-12"
+                    },
+                    {
+                        text: "否",
+                        textEng: "No",
+                        key: "burnGreaterThan20",
+                        value: false,
+                        nextStep: "step-13"
+                    }
+                ],
+                icon: "fa-fire-flame-curved",
+                capabilityLevel: "yellow",
+                type: "decision"
+            },
+            {
+                id: "step-12",
+                title: "使用USABIR法则进行液体复苏",
+                subtitle: "Initiate Fluid Resuscitation using USABIR Rule of 10",
+                infoBoxes: [
+                    {
+                        title: "USABIR 10法则计算",
+                        subtitle: "TBSA x 10ml/hr = 初始输液率",
+                        detail: "对于每10kg超过80kg的体重，增加每小时输液率100ml/hr",
+                        isList: true,
+                        items: [
+                            "使用LR、NS或Hextend进行输液",
+                            "最大限制为1000ml",
+                            "可根据需要继续使用LR或NS"
+                        ]
+                    },
+                    {
+                        title: "注意事项",
+                        detail: "对烧伤患者应额外注重低体温预防和复温",
+                        isList: false
+                    }
+                ],
+                actionText: "继续",
+                actionTextEng: "Continue",
+                nextStep: "step-13",
+                icon: "fa-iv-bag",
+                capabilityLevel: "yellow",
+                type: "info"
+            },
+            {
+                id: "step-13",
+                title: "固定骨折",
+                subtitle: "Splint Fractures",
+                infoBoxes: [
+                    {
+                        title: "骨折处理",
+                        detail: "固定可疑的骨折并重新检查脉搏"
+                    }
+                ],
+                actionText: "继续",
+                actionTextEng: "Continue",
+                nextStep: "step-14",
+                icon: "fa-bone",
+                capabilityLevel: "green",
+                type: "info"
+            },
+            {
+                id: "step-14",
+                title: "继续战术后送护理",
+                subtitle: "Continue Tactical Evacuation Care",
+                infoBoxes: [
+                    {
+                        title: "后送准备",
+                        detail: "完成伤口处理，准备战术后送"
+                    },
+                    {
+                        title: "人员能力说明:",
+                        isList: true,
+                        items: [
+                            "<span class='capability-green'>绿色标记</span> - 所有作战人员和战斗生命救护员能力等级 (All Combatants and Combat Lifesaver capability level skill)",
+                            "<span class='capability-yellow'>黄色标记</span> - 战斗医护人员能力等级 (Combat Medic capability level skill)",
+                            "<span class='capability-red'>红色标记</span> - 战斗医疗队或特种作战医护人员能力等级 (Combat Paramedic or SOF Medic capability level skill)"
+                        ]
+                    }
+                ],
+                actionText: "返回开始",
+                actionTextEng: "Back to Start",
+                nextStep: "step-0",
+                icon: "fa-helicopter-symbol",
+                hasRestart: true,
+                capabilityLevel: "green",
+                type: "info"
+            }
+        ];
+        
+        /**
+         * 初始化流程框架
+         * @param {Array} steps - 步骤数据数组
+         */
+        function initFlowFramework(steps = woundCareSteps) {
+            // 生成所有步骤的HTML
+            generateAllSteps(steps);
+            
+            // 初始化动画
+            if (CONFIG.animations) {
+                initIntersectionObserver();
+            } else {
+                document.querySelectorAll('.step-section').forEach(section => {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                });
+            }
+            
+            // 显示第一个步骤
+            setTimeout(() => {
+                const firstSection = document.getElementById(steps[0].id);
+                if (firstSection) {
+                    firstSection.style.opacity = '1';
+                    firstSection.style.transform = 'translateY(0)';
+                }
+            }, 100);
+        }
+        
+        /**
+         * 生成所有步骤的HTML
+         * @param {Array} steps - 步骤数据数组
+         */
+        function generateAllSteps(steps) {
+            const container = document.getElementById('tcccMasterContainer');
+            if (!container) return;
+            
+            let html = '';
+            
+            steps.forEach(step => {
+                html += generateStepHTML(step);
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        /**
+         * 生成单个步骤的HTML
+         * @param {Object} step - 步骤数据
+         * @returns {string} - 生成的HTML字符串
+         */
+        function generateStepHTML(step) {
+            let html = `
+                <section id="${step.id}" class="step-section">
+                    <div class="bento-grid-container w-full">
+                        <div class="bento-box col-span-1 md:col-span-2 text-center relative overflow-hidden">
+                            <i class="fas ${step.icon} icon-style"${step.iconColor ? ` style="color: ${step.iconColor}; opacity:0.2;"` : ''}></i>
+            `;
+            
+            // 添加能力标记（如果有）
+            if (step.capabilityLevel) {
+                const capabilityClass = `capability-${step.capabilityLevel}`;
+                const tooltipText = step.capabilityTooltip || getDefaultCapabilityTooltip(step.capabilityLevel);
+                html += `<div class="capability-badge"><span class="${capabilityClass}" title="${tooltipText}">
+                    <i class="fas fa-user-md mr-1"></i>${getCapabilityLevelText(step.capabilityLevel)}</span></div>`;
+            }
+            
+            html += `<div class="content-wrapper">
+            `;
+            
+            // 根据步骤类型生成不同的内容
+            if (step.type === 'intro') {
+                html += `
+                    <h1 class="chinese-title${step.highlight ? ' highlight-redEE1C25' : ''}">${step.title}</h1>
+                    <p class="english-subtitle">${step.subtitle}</p>
+                    <div class="mt-4">
+                        <p class="chinese-title text-3xl font-semibold">${step.secondaryTitle}</p>
+                        <p class="english-subtitle text-lg">${step.secondarySubtitle}</p>
+                    </div>
+                    <p class="detail-text mt-8 mb-4">${step.detail}</p>
+                    <button onclick="scrollToStep('${step.nextStep}')" class="decision-button highlight-redEE1C25-bg text-black font-bold">
+                        ${step.actionText} <span class="eng">${step.actionTextEng}</span>
+                    </button>
+                `;
+            } else if (step.type === 'decision') {
+                html += `
+                    <h2 class="chinese-title">${step.title}</h2>
+                    <p class="english-subtitle">${step.subtitle}</p>
+                    <div class="mt-12 flex flex-col md:flex-row justify-center items-center">
+                `;
+                
+                // 生成选项按钮
+                step.options.forEach(option => {
+                    html += `
+                        <button onclick="decideAndScroll('${option.key}', ${typeof option.value === 'string' ? `'${option.value}'` : option.value}, '${option.nextStep}')" class="decision-button">
+                            ${option.text} <span class="eng">${option.textEng}</span>
+                        </button>
+                    `;
+                });
+                
+                html += `</div>`;
+            } else if (step.type === 'info') {
+                // 生成标题
+                html += `
+                    <h2 class="chinese-title${step.highlight ? ' highlight-redEE1C25' : ''}">${step.title}</h2>
+                    <p class="english-subtitle">${step.subtitle}</p>
+                `;
+                
+                // 可选的行动标签
+                if (step.actionLabel) {
+                    html += `
+                        <div class="my-8">
+                            <p class="action-text text-redEE1C25-500">${step.actionLabel}</p>
+                            <p class="english-subtitle text-gray-400">${step.actionLabelEng}</p>
+                        </div>
+                    `;
+                }
+                
+                // 生成信息框
+                if (step.infoBoxes && step.infoBoxes.length > 0) {
+                    step.infoBoxes.forEach((box, index) => {
+                        html += `<div class="info-box text-left${index === 0 ? ' my-8' : index > 0 ? ' mt-6' : ''}">`;
+                        
+                        if (box.title) {
+                            html += `<p class="${box.isList ? 'info-title text-xl mb-2' : 'action-text text-2xl'}">${box.title}</p>`;
+                        }
+                        
+                        if (box.subtitle) {
+                            html += `<p class="detail-text mt-1">${box.subtitle}</p>`;
+                        }
+                        
+                        if (box.detail) {
+                            html += `<p class="detail-text${box.subtitle ? ' mt-2' : ' mt-1'}">${box.detail}</p>`;
+                        }
+                        
+                        // 生成列表项
+                        if (box.isList && box.items && box.items.length > 0) {
+                            html += `<ul class="list-disc list-inside detail-text space-y-1">`;
+                            box.items.forEach(item => {
+                                html += `<li>${item}</li>`;
+                            });
+                            html += `</ul>`;
+                        }
+                        
+                        html += `</div>`;
+                    });
+                }
+                
+                // 可选的行动详情
+                if (step.actionDetail) {
+                    html += `
+                        <p class="action-text my-6">${step.actionDetail}</p>
+                        <p class="english-subtitle">${step.actionDetailEng}</p>
+                    `;
+                }
+                
+                // 下一步按钮
+                const iconClass = step.hasRestart ? 'fa-redo' : 'fa-arrow-down';
+                html += `
+                    <button onclick="scrollToStep('${step.nextStep}')" class="decision-button mt-8">
+                        ${step.actionText} <span class="eng">${step.actionTextEng}</span> <i class="fas ${iconClass} ml-2"></i>
+                    </button>
+                `;
+            }
+            
+            html += `
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `;
+            
+            return html;
+        }
+        
+        /**
+         * 初始化intersection observer以实现滚动动画
+         */
+        function initIntersectionObserver() {
+            const sections = document.querySelectorAll('.step-section');
+            
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.3
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        }
+        
+        /**
+         * 滚动到指定步骤
+         * @param {string} stepId - 步骤ID
+         */
+        function scrollToStep(stepId) {
+            const element = document.getElementById(stepId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
+        /**
+         * 记录决策并滚动
+         * @param {string} key - 决策键名
+         * @param {any} value - 决策值
+         * @param {string} stepId - 下一步ID
+         */
+        function decideAndScroll(key, value, stepId) {
+            // 记录决策
+            if (!decisions) decisions = {};
+            decisions[key] = value;
+            console.log("Decisions:", decisions);
+            
+            // 执行自定义决策处理函数（如果存在）
+            if (typeof onDecisionMade === 'function') {
+                onDecisionMade(key, value, decisions);
+            }
+            
+            // 滚动到下一步
+            setTimeout(() => {
+                scrollToStep(stepId);
+            }, 100);
+        }
+        
+        /**
+         * 获取能力级别默认显示文本
+         * @param {string} level - 能力级别（green、yellow或red）
+         * @returns {string} - 能力级别显示文本
+         */
+        function getCapabilityLevelText(level) {
+            switch(level) {
+                case 'green':
+                    return '全员';
+                case 'yellow':
+                    return '医护';
+                case 'red':
+                    return '专业';
+                default:
+                    return '';
+            }
+        }
+        
+        /**
+         * 获取能力级别默认提示文本
+         * @param {string} level - 能力级别（green、yellow或red）
+         * @returns {string} - 能力级别提示文本
+         */
+        function getDefaultCapabilityTooltip(level) {
+            switch(level) {
+                case 'green':
+                    return '所有作战人员和战斗生命救护员能力等级';
+                case 'yellow':
+                    return '战斗医护人员能力等级';
+                case 'red':
+                    return '战斗医疗队或特种作战医护人员能力等级';
+                default:
+                    return '';
+            }
+        }
+        
+        // 公开API
+        window.TCCCFlow = {
+            init: initFlowFramework,
+            scrollToStep: scrollToStep,
+            decideAndScroll: decideAndScroll
+        };
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => initFlowFramework());
+    </script>
+</body>
+</html>

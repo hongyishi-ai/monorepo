@@ -19,13 +19,13 @@
  */
 
 // ========== 1. 常量与配置 ==========
-const FALLBACK_API_KEY = '4d8fb5b93d4af21d66a2948710284366'; // OpenWeatherMap免费API密钥（前端演示用）
+const FALLBACK_API_KEY = '';
 const API_KEY = (function() {
     const runtimeKey = window.HS_API_KEY || window.__HS_API_KEY;
     const metaKey = document.querySelector('meta[name="hs-api-key"]')?.getAttribute('content');
     const storedKey = localStorage.getItem('hs_api_key');
     if (!runtimeKey && !metaKey && !storedKey) {
-        console.warn('使用内置演示 API Key，建议通过 window.HS_API_KEY 或 meta[name="hs-api-key"] 注入自己的密钥');
+        console.warn('未发现前端 OpenWeather Key。生产环境应通过 Cloudflare Pages Function 代理请求。');
     }
     return runtimeKey || metaKey || storedKey || FALLBACK_API_KEY;
 })();
@@ -115,36 +115,6 @@ function setLocationLabel(text) {
     if (locationEl) {
         locationEl.textContent = text;
     }
-}
-
-function resolveApiKey() {
-    const runtimeKey = window.HS_API_KEY || window.__HS_API_KEY;
-    const metaKey = document.querySelector('meta[name="hs-api-key"]')?.getAttribute('content');
-    const storedKey = localStorage.getItem('hs_api_key');
-    if (!runtimeKey && !metaKey && !storedKey) {
-        console.warn('使用内置演示 API Key，建议通过 window.HS_API_KEY 或 meta[name=\"hs-api-key\"] 注入自己的密钥');
-    }
-    return runtimeKey || metaKey || storedKey || FALLBACK_API_KEY;
-}
-
-function resolveApiBase() {
-    const runtimeBase = window.HS_API_BASE || window.__HS_API_BASE;
-    const metaBase = document.querySelector('meta[name=\"hs-api-base\"]')?.getAttribute('content');
-    return runtimeBase || metaBase || 'https://api.openweathermap.org';
-}
-
-function buildApiUrl(path, params = {}) {
-    const isProxy = !API_BASE.includes('openweathermap.org');
-    if (isProxy) {
-        const url = new URL(API_BASE, window.location.origin);
-        url.searchParams.set('path', path);
-        Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
-        return url.toString();
-    }
-    const url = new URL(path, 'https://api.openweathermap.org');
-    Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
-    url.searchParams.set('appid', API_KEY);
-    return url.toString();
 }
 
 function buildCacheKey(namespace, key) {

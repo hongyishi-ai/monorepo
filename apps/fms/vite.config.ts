@@ -3,52 +3,68 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import path from 'path'
 
+const normalizeBasePath = (basePath = '/') => {
+  if (basePath === '/') return '/'
+  const withLeadingSlash = basePath.startsWith('/') ? basePath : `/${basePath}`
+  return withLeadingSlash.endsWith('/') ? withLeadingSlash : `${withLeadingSlash}/`
+}
+
+const basePath = normalizeBasePath(process.env.VITE_BASE_PATH)
+
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: basePath,
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'fms-icon.svg', 'apple-touch-icon.svg'],
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'icon-192-maskable.png', 'icon-512-maskable.png'],
       manifest: {
-        name: 'FMS Assessment System',
-        short_name: 'FMS',
-        description: 'Professional Functional Movement Screen Assessment System',
-        theme_color: '#2563eb',
-        background_color: '#ffffff',
+        name: '红医师训练伤防治',
+        short_name: '训练伤防治',
+        description: '红医师功能性动作筛查与训练伤防治系统',
+        theme_color: '#a51f18',
+        background_color: '#f4ecdc',
         display: 'standalone',
         orientation: 'portrait-primary',
-        start_url: '/',
+        start_url: basePath,
+        scope: basePath,
         icons: [
           {
-            src: '/favicon.svg',
-            type: 'image/svg+xml',
-            sizes: 'any',
+            src: 'favicon.ico',
+            type: 'image/x-icon',
+            sizes: '16x16 32x32',
             purpose: 'any'
           },
           {
-            src: '/fms-icon.svg',
-            type: 'image/svg+xml',
-            sizes: '64x64',
-            purpose: 'any'
-          },
-          {
-            src: '/apple-touch-icon.svg',
-            type: 'image/svg+xml',
+            src: 'apple-touch-icon.png',
+            type: 'image/png',
             sizes: '180x180',
             purpose: 'any'
           },
           {
-            src: '/icon-192.svg',
-            type: 'image/svg+xml',
+            src: 'icon-192.png',
+            type: 'image/png',
             sizes: '192x192',
             purpose: 'any'
           },
           {
-            src: '/icon-512.svg',
-            type: 'image/svg+xml',
+            src: 'icon-512.png',
+            type: 'image/png',
             sizes: '512x512',
             purpose: 'any'
+          },
+          {
+            src: 'icon-192-maskable.png',
+            type: 'image/png',
+            sizes: '192x192',
+            purpose: 'maskable'
+          },
+          {
+            src: 'icon-512-maskable.png',
+            type: 'image/png',
+            sizes: '512x512',
+            purpose: 'maskable'
           }
         ]
       },
@@ -77,6 +93,37 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+    },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return undefined
+
+          if (id.includes('lucide-react')) {
+            return 'vendor-icons'
+          }
+
+          if (id.includes('react-dom')) {
+            return 'vendor-react-dom'
+          }
+
+          if (id.includes('react-router') || id.includes('@remix-run')) {
+            return 'vendor-router'
+          }
+
+          if (id.includes('framer-motion') || id.includes('recharts') || id.includes('/d3-')) {
+            return 'vendor-visualization'
+          }
+
+          if (id.includes('dexie') || id.includes('zustand') || id.includes('date-fns')) {
+            return 'vendor-data'
+          }
+
+          return 'vendor'
+        },
+      },
     },
   },
 })

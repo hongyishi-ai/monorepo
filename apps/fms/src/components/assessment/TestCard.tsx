@@ -17,6 +17,8 @@ const TEST_DEMO_MAPPING: Record<string, string> = {
   'spinal-extension-clearance': 'SEC.gif'
 };
 
+const demoAssetUrl = (fileName: string) => `${import.meta.env.BASE_URL}demo/${fileName}`;
+
 interface TestCardProps {
   test: FmsTest;
 }
@@ -55,7 +57,7 @@ const TestCard = ({ test }: TestCardProps) => {
             {TEST_DEMO_MAPPING[test.id] ? (
               <div className="w-full h-full relative">
                 <img 
-                  src={`/demo/${TEST_DEMO_MAPPING[test.id]}`}
+                  src={demoAssetUrl(TEST_DEMO_MAPPING[test.id])}
                   alt={`${test.name} 动作演示`}
                   className="w-full h-full object-cover"
                   loading="lazy"

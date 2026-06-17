@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>骨盆绑带使用流程 | TCCC流程</title>
+    <link rel="stylesheet" href="/assets/css/tailwind.css">
+    <link rel="stylesheet" href="/assets/css/fontawesome-shim.css">
+    <style>
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            overscroll-behavior: none;
+        }
+
+        .bento-grid-container {
+            display: grid;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .bento-box {
+            background-color: #1a1a1a;
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid #333333;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 20px 40px -20px rgba(255, 107, 0, 0.3);
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        }
+        
+        .bento-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.25), 0 25px 50px -20px rgba(255, 107, 0, 0.4);
+        }
+        
+        .highlight-redEE1C25 { color: #EE1C25; }
+        .highlight-redEE1C25-bg { background-color: #EE1C25; }
+        .highlight-redEE1C25-border { border-color: #EE1C25; }
+
+        .chinese-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+        }
+        
+        .english-subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            color: #a0a0a0;
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .action-text {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+        }
+        
+        .detail-text {
+            font-size: clamp(0.875rem, 2.5vw, 1.1rem);
+            color: #cccccc;
+        }
+
+        .step-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            scroll-snap-align: start;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .decision-button {
+            background-color: #2a2a2a;
+            border: 1px solid #444444;
+            color: #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            margin: 0.5rem;
+            min-width: 180px;
+            text-align: center;
+        }
+        
+        .decision-button:hover {
+            background-color: #EE1C25;
+            border-color: #FF3C44;
+            color: #000000;
+            transform: translateY(-3px);
+        }
+        
+        
+        .decision-button .eng {
+            font-size: 0.8em;
+            opacity: 0.7;
+            display: block;
+            margin-top: 0.15rem;
+        }
+
+        .info-box {
+            background-color: #252525;
+            border-left: 4px solid #EE1C25;
+            padding: 1rem 1.5rem;
+            margin-top: 1.5rem;
+            border-radius: 0.25rem 0.5rem 0.5rem 0.25rem;
+        }
+        
+        .info-box .info-title {
+            font-weight: bold;
+            color: #EE1C25;
+        }
+        
+        .icon-style {
+            font-size: clamp(3rem, 8vw, 6rem);
+            color: #EE1C25;
+            opacity: 0.3;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            z-index: 0;
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .capability-green {
+            color: #4ADE80;
+            border: 1px solid #4ADE80;
+            background-color: rgba(74, 222, 128, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+        
+        .capability-yellow {
+            color: #FACC15;
+            border: 1px solid #FACC15;
+            background-color: rgba(250, 204, 21, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+        
+        .capability-red {
+            color: #F87171;
+            border: 1px solid #F87171;
+            background-color: rgba(248, 113, 113, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+
+        .capability-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <div id="tcccMasterContainer">
+        <!-- 内容将通过JavaScript动态加载 -->
+    </div>
+
+    <script>
+        // 骨盆绑带流程数据
+        // 基于CoTCCC 2017版官方算法流程图
+        const pelvicBinderSteps = [
+            {
+                id: "step-0",
+                title: "骨盆绑带使用流程",
+                subtitle: "Pelvic Binder Algorithm",
+                secondaryTitle: "骨盆出血救治决策指南",
+                secondarySubtitle: "Tactical Field Care Continued",
+                detail: "根据 CoTCCC 指南 (31 JAN 2017) | In Accordance with CoTCCC Guidelines",
+                actionText: "开始评估",
+                actionTextEng: "Begin Assessment",
+                nextStep: "step-1",
+                icon: "fa-person-circle-plus",
+                highlight: true,
+                type: "intro"
+            },
+            {
+                id: "step-1",
+                title: "出血评估",
+                subtitle: "BLEEDING ASSESSMENT",
+                infoBoxes: [
+                    {
+                        title: "评估重点: <span class='highlight-redEE1C25'>循环(出血)</span>",
+                        subtitle: "Focus: <span class='highlight-redEE1C25'>CIRCULATION (BLEEDING)</span>",
+                        detail: "<i class='fas fa-exclamation-circle mr-2'></i>检查是否存在骨盆区域出血风险。"
+                    }
+                ],
+                actionText: "继续评估",
+                actionTextEng: "Continue Assessment",
+                nextStep: "step-2",
+                icon: "fa-droplet",
+                iconColor: "#FF0000",
+                highlight: true,
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "需要医护人员级别技能"
+            },
+            {
+                id: "step-2",
+                title: "是否需要使用骨盆绑带?",
+                subtitle: "Pelvic Binder Indicated?",
+                options: [
+                    {
+                        text: "是",
+                        textEng: "YES",
+                        key: "pelvicBinder",
+                        value: true,
+                        nextStep: "step-3a"
+                    },
+                    {
+                        text: "否",
+                        textEng: "NO",
+                        key: "pelvicBinder",
+                        value: false,
+                        nextStep: "step-3b"
+                    }
+                ],
+                icon: "fa-person-circle-question",
+                type: "decision",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "骨盆绑带使用评估需要医护人员技能"
+            },
+            {
+                id: "step-3a",
+                title: "<span class='text-green-500'>应用骨盆绑带</span>",
+                subtitle: "Apply a Pelvic Binder",
+                infoBoxes: [
+                    {
+                        title: "骨盆绑带适应症: <span class='highlight-redEE1C25'>严重钝伤或存在下列情况之一</span>",
+                        subtitle: "Pelvic Binder Indications: Severe blunt trauma or one of the following:",
+                        isList: true,
+                        items: [
+                            "骨盆疼痛 (Pelvic pain)",
+                            "任何主要下肢截肢/近截肢 (Any major lower limb amputation/near amputation)",
+                            "体格检查提示骨盆骨折 (Physical exam suggestive of pelvic fracture)",
+                            "意识不清或休克 (Unconsciousness or Shock)"
+                        ]
+                    },
+                    {
+                        title: "应用骨盆绑带注意事项:",
+                        detail: "每种止血设备工作原理不同。如果一种方法无法控制出血，可移除并尝试不同类型的绑带。(如果相同设备在同一处无法止血，则不能再次使用)"
+                    }
+                ],
+                actionText: "下一步: 重新评估",
+                actionTextEng: "Next: Reassess",
+                nextStep: "step-4",
+                icon: "fa-person-harassing",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "骨盆绑带使用需要医护人员技能"
+            },
+            {
+                id: "step-3b",
+                title: "<span class='text-yellow-500'>重新评估止血设备</span>",
+                subtitle: "Reassess Previously Applied Tourniquets",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>重新评估之前应用的止血带</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Reassess previously applied tourniquets</span>",
+                        detail: "<i class='fas fa-info-circle mr-2'></i>确认之前应用的止血设备是否有效。"
+                    },
+                    {
+                        title: "止血优先原则:",
+                        isList: true,
+                        items: [
+                            "重新评估先前使用的止血带",
+                            "重新评估先前使用的止血敷料/压迫绷带"
+                        ]
+                    }
+                ],
+                actionText: "继续止血评估",
+                actionTextEng: "Continue Assessment",
+                nextStep: "step-4b",
+                icon: "fa-hand-holding-medical",
+                type: "info",
+                capabilityLevel: "green",
+                capabilityTooltip: "止血设备评估为基础能力"
+            },
+            {
+                id: "step-4",
+                title: "暴露伤口并评估是否需要止血带",
+                subtitle: "Expose Wound and Determine if Tourniquet is Needed",
+                options: [
+                    {
+                        text: "否",
+                        textEng: "NO",
+                        key: "needTourniquet",
+                        value: false,
+                        nextStep: "step-5a"
+                    },
+                    {
+                        text: "是",
+                        textEng: "YES",
+                        key: "needTourniquet",
+                        value: true,
+                        nextStep: "step-5b"
+                    }
+                ],
+                icon: "fa-hand-holding-droplet",
+                type: "decision",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "伤口评估需要医护人员技能"
+            },
+            {
+                id: "step-4b",
+                title: "评估伤口并确定治疗方案",
+                subtitle: "Assess Wounds and Determine Treatment",
+                infoBoxes: [
+                    {
+                        title: "终止标准:",
+                        isList: true,
+                        items: [
+                            "轻微撕裂伤处理方法: 包扎",
+                            "割伤: 压迫包扎",
+                            "出血: 压迫止血"
+                        ]
+                    }
+                ],
+                actionText: "继续压力止血",
+                actionTextEng: "Control bleeding with pressure",
+                nextStep: "step-5c",
+                icon: "fa-scissors",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "伤口评估需要医护人员技能"
+            },
+            {
+                id: "step-5a",
+                title: "保留之前使用的止血带",
+                subtitle: "Leave Previous Tourniquet in Place",
+                infoBoxes: [
+                    {
+                        title: "注意: <span class='highlight-redEE1C25'>维持止血带位置</span>",
+                        detail: "如果之前已应用止血带且仍在控制出血，请保持止血带在原位置。"
+                    }
+                ],
+                actionText: "记录止血带使用时间",
+                actionTextEng: "Note time of tourniquet release on card",
+                nextStep: "step-6",
+                icon: "fa-clipboard-check",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "止血带管理需要医护人员技能"
+            },
+            {
+                id: "step-5b",
+                title: "放置第二条止血带",
+                subtitle: "Place Second Tourniquet",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>在高出伤口2-3英寸处放置第二条止血带</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Place second tourniquet 2-3 inches above wound on skin</span>",
+                        detail: "在有效放置第二条止血带后，松开第一条止血带。"
+                    }
+                ],
+                actionText: "松开第一条止血带",
+                actionTextEng: "Loosen first tourniquet",
+                nextStep: "step-6b",
+                icon: "fa-hand-holding-medical",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "止血带放置需要医护人员技能"
+            },
+            {
+                id: "step-5c",
+                title: "使用止血敷料或压力包扎控制出血",
+                subtitle: "Control Bleeding with Hemostatic and/or Pressure Dressing",
+                infoBoxes: [
+                    {
+                        title: "止血选择:",
+                        detail: "可在26小时内拆开止血带。如果能通过其他方式控制出血，应使用止血带，但除非需要进行CPR，否则不要在48小时内移除止血带。"
+                    }
+                ],
+                actionText: "继续观察",
+                actionTextEng: "Continue monitoring",
+                nextStep: "step-7",
+                icon: "fa-kit-medical",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "止血敷料使用需要医护人员技能"
+            },
+            {
+                id: "step-6",
+                title: "出血是否已控制?",
+                subtitle: "Bleeding Controlled?",
+                options: [
+                    {
+                        text: "是",
+                        textEng: "YES",
+                        key: "bleedingControlled",
+                        value: true,
+                        nextStep: "step-7a"
+                    },
+                    {
+                        text: "否",
+                        textEng: "NO",
+                        key: "bleedingControlled",
+                        value: false,
+                        nextStep: "step-7b"
+                    }
+                ],
+                icon: "fa-head-side-virus",
+                type: "decision",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "出血评估需要医护人员技能"
+            },
+            {
+                id: "step-6b",
+                title: "出血是否已控制?",
+                subtitle: "Bleeding Controlled?",
+                options: [
+                    {
+                        text: "是",
+                        textEng: "YES",
+                        key: "bleedingControlled",
+                        value: true,
+                        nextStep: "step-7a"
+                    },
+                    {
+                        text: "否",
+                        textEng: "NO",
+                        key: "bleedingControlled",
+                        value: false,
+                        nextStep: "step-7c"
+                    }
+                ],
+                icon: "fa-head-side-virus",
+                type: "decision",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "出血评估需要医护人员技能"
+            },
+            {
+                id: "step-7",
+                title: "继续监测",
+                subtitle: "Continued Monitoring",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>记录止血带使用时间</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Note time of tourniquet release on tourniquet and/or casualty card</span>"
+                    },
+                    {
+                        title: "持续监测:",
+                        detail: "如有需要，使用止血敷料或压力包扎控制出血。"
+                    }
+                ],
+                actionText: "继续战术救护",
+                actionTextEng: "Continue Tactical Field Care",
+                nextStep: "step-final",
+                icon: "fa-stopwatch",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "伤员监测需要医护人员技能"
+            },
+            {
+                id: "step-7a",
+                title: "保持止血带位置",
+                subtitle: "Leave Tourniquet in Place",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>止血带保持原位 - 最多2小时重新评估一次</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Leave tourniquet in place – maximum 2 hours of tourniquet time until reassessment</span>"
+                    }
+                ],
+                actionText: "继续战术救护",
+                actionTextEng: "Continue Tactical Care",
+                nextStep: "step-final",
+                icon: "fa-stopwatch",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "止血带管理需要医护人员技能"
+            },
+            {
+                id: "step-7b",
+                title: "进一步止血管理",
+                subtitle: "Further Hemorrhage Management",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>暴露伤口，调整止血带位置</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Expose the wound, move tourniquet to directly over the wound</span>",
+                        detail: "如无截肢，使用止血敷料和/或压力包扎控制出血。不要取下止血带。"
+                    }
+                ],
+                actionText: "记录并监测",
+                actionTextEng: "Document and Monitor",
+                nextStep: "step-7",
+                icon: "fa-notes-medical",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "出血管理需要医护人员技能"
+            },
+            {
+                id: "step-7c",
+                title: "调整止血带位置",
+                subtitle: "Adjust Tourniquet Position",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>将原止血带移至最接近伤口的位置</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Move original tourniquet to position next to second tourniquet and tighten until bleeding stopped and distal pulse not palpable</span>"
+                    },
+                    {
+                        title: "记录时间:",
+                        detail: "记录止血带重新应用的时间。"
+                    }
+                ],
+                actionText: "继续监测止血情况",
+                actionTextEng: "Continue monitoring for bleeding",
+                nextStep: "step-7",
+                icon: "fa-hand-holding-medical",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "止血带调整需要医护人员技能"
+            },
+            {
+                id: "step-final",
+                title: "伤员能力评估",
+                subtitle: "Casualty Level Assessment",
+                infoBoxes: [
+                    {
+                        title: "伤员状态评估:",
+                        isList: true,
+                        items: [
+                            "<span class='capability-green'>绿色</span> - 战斗力未受损，自我救治能力完整",
+                            "<span class='capability-yellow'>黄色</span> - 需要医护人员评估",
+                            "<span class='capability-red'>红色</span> - 需要专业医疗队伍救治"
+                        ]
+                    }
+                ],
+                actionText: "重新开始",
+                actionTextEng: "Restart Guide",
+                nextStep: "step-0",
+                icon: "fa-user-nurse",
+                hasRestart: true,
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "伤员评估需要医护人员技能"
+            }
+        ];
+
+        // 添加更多步骤
+        pelvicBinderSteps.push(
+            {
+                id: "step-6",
+                title: "出血是否已控制?",
+                subtitle: "Bleeding Controlled?",
+                options: [
+                    {
+                        text: "是",
+                        textEng: "YES",
+                        key: "bleedingControlled",
+                        value: true,
+                        nextStep: "step-7a"
+                    },
+                    {
+                        text: "否",
+                        textEng: "NO",
+                        key: "bleedingControlled",
+                        value: false,
+                        nextStep: "step-7b"
+                    }
+                ],
+                icon: "fa-head-side-virus",
+                type: "decision",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "出血评估需要医护人员技能"
+            },
+            {
+                id: "step-6b",
+                title: "出血是否已控制?",
+                subtitle: "Bleeding Controlled?",
+                options: [
+                    {
+                        text: "是",
+                        textEng: "YES",
+                        key: "bleedingControlled",
+                        value: true,
+                        nextStep: "step-7a"
+                    },
+                    {
+                        text: "否",
+                        textEng: "NO",
+                        key: "bleedingControlled",
+                        value: false,
+                        nextStep: "step-7c"
+                    }
+                ],
+                icon: "fa-head-side-virus",
+                type: "decision",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "出血评估需要医护人员技能"
+            },
+            {
+                id: "step-7",
+                title: "继续监测",
+                subtitle: "Continued Monitoring",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>记录止血带使用时间</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Note time of tourniquet release on tourniquet and/or casualty card</span>"
+                    },
+                    {
+                        title: "持续监测:",
+                        detail: "如有需要，使用止血敷料或压力包扎控制出血。"
+                    }
+                ],
+                actionText: "继续战术救护",
+                actionTextEng: "Continue Tactical Field Care",
+                nextStep: "step-final",
+                icon: "fa-stopwatch",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "伤员监测需要医护人员技能"
+            },
+            {
+                id: "step-7a",
+                title: "保持止血带位置",
+                subtitle: "Leave Tourniquet in Place",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>止血带保持原位 - 最多2小时重新评估一次</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Leave tourniquet in place – maximum 2 hours of tourniquet time until reassessment</span>"
+                    }
+                ],
+                actionText: "继续战术救护",
+                actionTextEng: "Continue Tactical Care",
+                nextStep: "step-final",
+                icon: "fa-stopwatch",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "止血带管理需要医护人员技能"
+            },
+            {
+                id: "step-7b",
+                title: "进一步止血管理",
+                subtitle: "Further Hemorrhage Management",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>暴露伤口，调整止血带位置</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Expose the wound, move tourniquet to directly over the wound</span>",
+                        detail: "如无截肢，使用止血敷料和/或压力包扎控制出血。不要取下止血带。"
+                    }
+                ],
+                actionText: "记录并监测",
+                actionTextEng: "Document and Monitor",
+                nextStep: "step-7",
+                icon: "fa-notes-medical",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "出血管理需要医护人员技能"
+            },
+            {
+                id: "step-7c",
+                title: "调整止血带位置",
+                subtitle: "Adjust Tourniquet Position",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>将原止血带移至最接近伤口的位置</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Move original tourniquet to position next to second tourniquet and tighten until bleeding stopped and distal pulse not palpable</span>"
+                    },
+                    {
+                        title: "记录时间:",
+                        detail: "记录止血带重新应用的时间。"
+                    }
+                ],
+                actionText: "继续监测止血情况",
+                actionTextEng: "Continue monitoring for bleeding",
+                nextStep: "step-7",
+                icon: "fa-hand-holding-medical",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "止血带调整需要医护人员技能"
+            },
+            {
+                id: "step-final",
+                title: "伤员能力评估",
+                subtitle: "Casualty Level Assessment",
+                infoBoxes: [
+                    {
+                        title: "伤员状态评估:",
+                        isList: true,
+                        items: [
+                            "<span class='capability-green'>绿色</span> - 战斗力未受损，自我救治能力完整",
+                            "<span class='capability-yellow'>黄色</span> - 需要医护人员评估",
+                            "<span class='capability-red'>红色</span> - 需要专业医疗队伍救治"
+                        ]
+                    }
+                ],
+                actionText: "重新开始",
+                actionTextEng: "Restart Guide",
+                nextStep: "step-0",
+                icon: "fa-user-nurse",
+                hasRestart: true,
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "伤员评估需要医护人员技能"
+            }
+        );
+
+        /**
+         * TCCC Flow Framework - 可复用的决策流程框架
+         * 基于官方CoTCCC算法流程，完全匹配2017版CoTCCC指南
+         */
+        
+        // 全局配置
+        const CONFIG = {
+            title: "骨盆绑带使用流程",
+            subtitle: "Pelvic Binder Algorithm",
+            themeColor: "#EE1C25",
+            animations: true,
+            language: "zh-CN"
+        };
+        
+        // 用户决策记录
+        let decisions = {};
+        
+        /**
+         * 初始化流程框架
+         * @param {Array} steps - 步骤数据数组
+         */
+        function initFlowFramework(steps = pelvicBinderSteps) {
+            // 生成所有步骤的HTML
+            generateAllSteps(steps);
+            
+            // 初始化动画
+            if (CONFIG.animations) {
+                initIntersectionObserver();
+            } else {
+                document.querySelectorAll('.step-section').forEach(section => {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                });
+            }
+            
+            // 显示第一个步骤
+            setTimeout(() => {
+                const firstSection = document.getElementById(steps[0].id);
+                if (firstSection) {
+                    firstSection.style.opacity = '1';
+                    firstSection.style.transform = 'translateY(0)';
+                }
+            }, 100);
+        }
+        
+        /**
+         * 生成所有步骤的HTML
+         * @param {Array} steps - 步骤数据数组
+         */
+        function generateAllSteps(steps) {
+            const container = document.getElementById('tcccMasterContainer');
+            if (!container) return;
+            
+            let html = '';
+            
+            steps.forEach(step => {
+                html += generateStepHTML(step);
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        /**
+         * 生成单个步骤的HTML
+         * @param {Object} step - 步骤数据
+         * @returns {string} - 生成的HTML字符串
+         */
+        function generateStepHTML(step) {
+            let html = `
+                <section id="${step.id}" class="step-section">
+                    <div class="bento-grid-container w-full">
+                        <div class="bento-box col-span-1 md:col-span-2 text-center relative overflow-hidden">
+                            <i class="fas ${step.icon} icon-style"${step.iconColor ? ` style="color: ${step.iconColor}; opacity:0.2;"` : ''}></i>
+            `;
+            
+            // 添加能力标记（如果有）
+            if (step.capabilityLevel) {
+                const capabilityClass = `capability-${step.capabilityLevel}`;
+                const tooltipText = step.capabilityTooltip || getDefaultCapabilityTooltip(step.capabilityLevel);
+                html += `<div class="capability-badge"><span class="${capabilityClass}" title="${tooltipText}">
+                    <i class="fas fa-user-md mr-1"></i>${getCapabilityLevelText(step.capabilityLevel)}</span></div>`;
+            }
+            
+            html += `<div class="content-wrapper">
+            `;
+            
+            // 根据步骤类型生成不同的内容
+            if (step.type === 'intro') {
+                html += `
+                    <h1 class="chinese-title${step.highlight ? ' highlight-redEE1C25' : ''}">${step.title}</h1>
+                    <p class="english-subtitle">${step.subtitle}</p>
+                    <div class="mt-4">
+                        <p class="chinese-title text-3xl font-semibold">${step.secondaryTitle}</p>
+                        <p class="english-subtitle text-lg">${step.secondarySubtitle}</p>
+                    </div>
+                    <p class="detail-text mt-8 mb-4">${step.detail}</p>
+                    <button onclick="scrollToStep('${step.nextStep}')" class="decision-button highlight-redEE1C25-bg text-black font-bold">
+                        ${step.actionText} <span class="eng">${step.actionTextEng}</span>
+                    </button>
+                `;
+            } else if (step.type === 'decision') {
+                html += `
+                    <h2 class="chinese-title">${step.title}</h2>
+                    <p class="english-subtitle">${step.subtitle}</p>
+                    <div class="mt-12 flex flex-col md:flex-row justify-center items-center">
+                `;
+                
+                // 生成选项按钮
+                step.options.forEach(option => {
+                    html += `
+                        <button onclick="decideAndScroll('${option.key}', ${typeof option.value === 'string' ? `'${option.value}'` : option.value}, '${option.nextStep}')" class="decision-button">
+                            ${option.text} <span class="eng">${option.textEng}</span>
+                        </button>
+                    `;
+                });
+                
+                html += `</div>`;
+            } else if (step.type === 'info') {
+                // 生成标题
+                html += `
+                    <h2 class="chinese-title${step.highlight ? ' highlight-redEE1C25' : ''}">${step.title}</h2>
+                    <p class="english-subtitle">${step.subtitle}</p>
+                `;
+                
+                // 可选的行动标签
+                if (step.actionLabel) {
+                    html += `
+                        <div class="my-8">
+                            <p class="action-text text-redEE1C25-500">${step.actionLabel}</p>
+                            <p class="english-subtitle text-gray-400">${step.actionLabelEng}</p>
+                        </div>
+                    `;
+                }
+                
+                // 生成信息框
+                if (step.infoBoxes && step.infoBoxes.length > 0) {
+                    step.infoBoxes.forEach((box, index) => {
+                        html += `<div class="info-box text-left${index === 0 ? ' my-8' : index > 0 ? ' mt-6' : ''}">`;
+                        
+                        if (box.title) {
+                            html += `<p class="${box.isList ? 'info-title text-xl mb-2' : 'action-text text-2xl'}">${box.title}</p>`;
+                        }
+                        
+                        if (box.subtitle) {
+                            html += `<p class="detail-text mt-1">${box.subtitle}</p>`;
+                        }
+                        
+                        if (box.detail) {
+                            html += `<p class="detail-text${box.subtitle ? ' mt-2' : ' mt-1'}">${box.detail}</p>`;
+                        }
+                        
+                        // 生成列表项
+                        if (box.isList && box.items && box.items.length > 0) {
+                            html += `<ul class="list-disc list-inside detail-text space-y-1">`;
+                            box.items.forEach(item => {
+                                html += `<li>${item}</li>`;
+                            });
+                            html += `</ul>`;
+                        }
+                        
+                        html += `</div>`;
+                    });
+                }
+                
+                // 可选的行动详情
+                if (step.actionDetail) {
+                    html += `
+                        <p class="action-text my-6">${step.actionDetail}</p>
+                        <p class="english-subtitle">${step.actionDetailEng}</p>
+                    `;
+                }
+                
+                // 下一步按钮
+                const iconClass = step.hasRestart ? 'fa-redo' : 'fa-arrow-down';
+                html += `
+                    <button onclick="scrollToStep('${step.nextStep}')" class="decision-button mt-8">
+                        ${step.actionText} <span class="eng">${step.actionTextEng}</span> <i class="fas ${iconClass} ml-2"></i>
+                    </button>
+                `;
+            }
+            
+            html += `
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `;
+            
+            return html;
+        }
+        
+        /**
+         * 初始化intersection observer以实现滚动动画
+         */
+        function initIntersectionObserver() {
+            const sections = document.querySelectorAll('.step-section');
+            
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.3
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        }
+        
+        /**
+         * 滚动到指定步骤
+         * @param {string} stepId - 步骤ID
+         */
+        function scrollToStep(stepId) {
+            const element = document.getElementById(stepId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
+        /**
+         * 记录决策并滚动
+         * @param {string} key - 决策键名
+         * @param {any} value - 决策值
+         * @param {string} stepId - 下一步ID
+         */
+        function decideAndScroll(key, value, stepId) {
+            // 记录决策
+            if (!decisions) decisions = {};
+            decisions[key] = value;
+            console.log("Decisions:", decisions);
+            
+            // 滚动到下一步
+            setTimeout(() => {
+                scrollToStep(stepId);
+            }, 100);
+        }
+        
+        /**
+         * 获取能力级别默认显示文本
+         * @param {string} level - 能力级别（green、yellow或red）
+         * @returns {string} - 能力级别显示文本
+         */
+        function getCapabilityLevelText(level) {
+            switch(level) {
+                case 'green':
+                    return '全员';
+                case 'yellow':
+                    return '医护';
+                case 'red':
+                    return '专业';
+                default:
+                    return '';
+            }
+        }
+        
+        /**
+         * 获取能力级别默认提示文本
+         * @param {string} level - 能力级别（green、yellow或red）
+         * @returns {string} - 能力级别提示文本
+         */
+        function getDefaultCapabilityTooltip(level) {
+            switch(level) {
+                case 'green':
+                    return '所有作战人员和战斗生命救护员能力等级';
+                case 'yellow':
+                    return '战斗医护人员能力等级';
+                case 'red':
+                    return '战斗医疗队或特种作战医护人员能力等级';
+                default:
+                    return '';
+            }
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => initFlowFramework());
+    </script>
+</body>
+</html> 

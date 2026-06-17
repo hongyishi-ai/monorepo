@@ -45,17 +45,22 @@ const RootLayout = () => {
       >
         跳到主内容
       </a>
-      {/* 布鲁克林极简主义导航栏 */}
+      {/* 红医师海报系统导航栏 */}
       <header className="brooklyn-nav">
         <div className="brooklyn-container">
           <nav className="flex items-center justify-between py-3">
             {/* Logo区域 */}
             <Link to="/" className="brooklyn-logo hover:opacity-80 transition-opacity" onClick={closeMobileMenu}>
-              <span className="text-red-600 font-bold">红</span><span className="font-bold">医师</span> <span className="font-bold">训练伤防治平台</span>
+              <span className="text-primary">红医师</span>
+              <span className="mx-2 text-muted-foreground">/</span>
+              <span>训练伤防治</span>
             </Link>
 
             {/* 桌面端导航 */}
             <div className="hidden lg:flex items-center space-x-2">
+              <a href="/" className="brooklyn-nav-link">
+                总入口
+              </a>
               {navigationItems.map((item) => (
                 <Link key={item.to} to={item.to}>
                   <Button 
@@ -96,6 +101,9 @@ const RootLayout = () => {
           {isMobileMenuOpen && (
             <div className="lg:hidden border-t border-border bg-background">
               <div className="py-4 space-y-2">
+                <a href="/" className="brooklyn-nav-link block">
+                  总入口
+                </a>
                 {navigationItems.map((item) => (
                   <Link key={item.to} to={item.to} className="block" onClick={closeMobileMenu}>
                     <Button 
@@ -113,6 +121,16 @@ const RootLayout = () => {
               </div>
             </div>
           )}
+        </div>
+
+        <div className="border-t border-border bg-muted/40">
+          <div className="brooklyn-container">
+            <div className="flex flex-col gap-2 py-2 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
+              <span className="font-medium text-foreground">当前项目：训练伤防治 / FMS教育评估</span>
+              <span>本机保存 · IndexedDB · 可手动导出</span>
+              <span>非诊断用途 · 仅供训练参考</span>
+            </div>
+          </div>
         </div>
       </header>
 

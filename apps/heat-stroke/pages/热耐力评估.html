@@ -6,11 +6,12 @@
     <title>热耐力评分表</title>
     <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
+    <link rel="stylesheet" href="../assets/css/styles.css">
     <!-- Tailwind CSS CDN -->
     <script src="../assets/vendors/tailwind.compiler.js"></script>
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- NOTE: Framer Motion CDN is loaded near the end of the body, BEFORE the inline script -->
+    <!-- Local animation helper is loaded near the end of the body, before the inline script. -->
     <style>
         /* Base styles */
         html {
@@ -252,17 +253,26 @@
     </style>
 </head>
 <body class="bg-black text-gray-300">
+    <a href="#main" class="skip-link">跳到主内容</a>
 
-<!-- 添加导航栏 -->
-<nav class="bg-black py-4 px-6 sticky top-0 z-50 border-b border-gray-800">
-    <div class="container mx-auto flex justify-between items-center">
-        <a href="../index.html" class="flex items-center text-orange-500 hover:text-orange-400 transition-colors">
-            <i class="fas fa-arrow-left mr-2"></i>
-            <span class="font-bold">返回主页</span>
-        </a>
-    </div>
-</nav>
+    <header class="brand-nav">
+        <nav class="brand-nav-inner" aria-label="热射病防治导航">
+            <a class="brand-mark" href="../index.html">
+                <span class="brand-mark-red">红医师</span>
+                <span class="brand-mark-divider">/</span>
+                <span>热射病防治</span>
+            </a>
+            <div class="brand-nav-links">
+                <a href="/" class="brand-nav-link">总入口</a>
+                <a href="../index.html" class="brand-nav-link">项目首页</a>
+                <a href="热指数查询.html" class="brand-nav-link">热指数</a>
+                <a href="热射病现场处置.html" class="brand-nav-link">现场处置</a>
+                <a href="8-4-6黄金法则.html" class="brand-nav-link">8-4-6法则</a>
+            </div>
+        </nav>
+    </header>
 
+    <div id="main" class="brand-page-anchor" tabindex="-1"></div>
 <div class="container mx-auto px-4 py-8 md:py-16">
 
     <!-- Bento Grid Layout -->
@@ -587,8 +597,8 @@
 
 </div> <!-- End Container -->
 
-<!-- LOAD EXTERNAL LIBRARIES FIRST -->
-<!-- Framer Motion CDN - Placed before the inline script -->
+<!-- LOAD LOCAL LIBRARIES FIRST -->
+<!-- Animation helper - Placed before the inline script -->
 <script src="../assets/vendors/framer-motion.js"></script>
 
 <!-- YOUR CUSTOM SCRIPT BLOCK -->
@@ -600,9 +610,7 @@
 
         // --- Check if Framer Motion loaded ---
         if (typeof Motion === 'undefined') {
-             console.error("CRITICAL ERROR: Framer Motion library (Motion object) not loaded before inline script! Animations might fail.");
-             // Optionally alert the user or disable animation features
-             // alert("页面动画库加载失败，部分效果可能无法显示。");
+             console.log("Framer Motion library not available; CSS fallback animations will be used.");
         } else {
              console.log("Framer Motion object 'Motion' is defined.");
         }
@@ -734,7 +742,7 @@
             });
             console.log("Applied basic scroll animations based on data attributes.");
         } else {
-            console.warn("Framer Motion 'motion' function not available. Scroll animations via data attributes skipped.");
+            console.log("Framer Motion 'motion' function not available. CSS fallback animations applied.");
             // Fallback: Ensure elements are visible if JS animations fail
             document.querySelectorAll('[data-motion-initial]').forEach(el => {
                 el.style.opacity = 1;
@@ -844,7 +852,7 @@
                          }
                      );
                  } else {
-                      console.warn("Framer Motion 'animate' function not available or scoreDisplay missing. Setting score directly.");
+                      console.log("Framer Motion 'animate' function not available or scoreDisplay missing. Setting score directly.");
                       if(scoreDisplay) scoreDisplay.textContent = totalScore; // Fallback to direct setting
                  }
 

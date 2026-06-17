@@ -37,9 +37,10 @@ const FirstVisitDetector = ({ children }: { children: React.ReactNode }) => {
     // 检查URL参数，如果有skip_opening=true则跳过开场动画
     const urlParams = new URLSearchParams(window.location.search);
     const skipOpening = urlParams.get('skip_opening') === 'true';
+    const isRootEntry = location.pathname === '/';
     
-    // 如果是首次访问且当前不在开场页面，且没有跳过参数，则导航到开场页面
-    if (!hasVisitedBefore && location.pathname !== '/opening' && !skipOpening) {
+    // 首次访问根路径时显示开场页；任务深链接必须保持可达。
+    if (!hasVisitedBefore && isRootEntry && !skipOpening) {
       navigate('/opening', { replace: true });
       return;
     }

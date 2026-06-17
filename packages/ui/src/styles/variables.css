@@ -3,6 +3,21 @@
 @tailwind utilities;
 
 :root {
+  /* Hongyishi brand tokens */
+  --hys-color-constructivism-red: #D93025;
+  --hys-color-field-red: #A51F18;
+  --hys-color-signal-orange: #FF6B00;
+  --hys-color-technology-blue: #007AFF;
+  --hys-color-clinical-cyan: #78C7E7;
+  --hys-color-field-navy: #12313C;
+  --hys-color-structure-yellow: #FFD700;
+  --hys-color-ink: #000000;
+  --hys-color-paper: #FFFFFF;
+  --hys-color-aged-paper: #F4ECDC;
+  --hys-color-muted: #737373;
+  --hys-radius-card: 8px;
+  --hys-radius-control: 6px;
+
   /* Border */
   --border: 214.3 31.8% 91.4%;
   --input: 214.3 31.8% 91.4%;

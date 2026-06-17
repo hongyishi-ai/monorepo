@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>战术战斗伤员护理交接 | TCCC官方流程</title>
+    <link rel="stylesheet" href="/assets/css/tailwind.css">
+    <link rel="stylesheet" href="/assets/css/fontawesome-shim.css">
+    <style>
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            overscroll-behavior: none;
+        }
+
+        .bento-grid-container {
+            display: grid;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .bento-box {
+            background-color: #1a1a1a;
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid #333333;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 20px 40px -20px rgba(255, 107, 0, 0.3);
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        }
+        
+        .bento-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.25), 0 25px 50px -20px rgba(255, 107, 0, 0.4);
+        }
+        
+        .highlight-redEE1C25 { color: #EE1C25; }
+        .highlight-redEE1C25-bg { background-color: #EE1C25; }
+        .highlight-redEE1C25-border { border-color: #EE1C25; }
+
+        .chinese-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+        }
+        
+        .english-subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            color: #a0a0a0;
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .action-text {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+        }
+        
+        .detail-text {
+            font-size: clamp(0.875rem, 2.5vw, 1.1rem);
+            color: #cccccc;
+        }
+
+        .step-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            scroll-snap-align: start;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .decision-button {
+            background-color: #2a2a2a;
+            border: 1px solid #444444;
+            color: #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            margin: 0.5rem;
+            min-width: 180px;
+            text-align: center;
+        }
+        
+        .decision-button:hover {
+            background-color: #EE1C25;
+            border-color: #FF3C44;
+            color: #000000;
+            transform: translateY(-3px);
+        }
+        
+        .decision-button .eng {
+            font-size: 0.8em;
+            opacity: 0.7;
+            display: block;
+            margin-top: 0.15rem;
+        }
+
+        .info-box {
+            background-color: #252525;
+            border-left: 4px solid #EE1C25;
+            padding: 1rem 1.5rem;
+            margin-top: 1.5rem;
+            border-radius: 0.25rem 0.5rem 0.5rem 0.25rem;
+        }
+        
+        .info-box .info-title {
+            font-weight: bold;
+            color: #EE1C25;
+        }
+        
+        .icon-style {
+            font-size: clamp(3rem, 8vw, 6rem);
+            color: #EE1C25;
+            opacity: 0.3;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            z-index: 0;
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .capability-green {
+            color: #4ADE80;
+            border: 1px solid #4ADE80;
+            background-color: rgba(74, 222, 128, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+        
+        .capability-yellow {
+            color: #FACC15;
+            border: 1px solid #FACC15;
+            background-color: rgba(250, 204, 21, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+        
+        .capability-red {
+            color: #F87171;
+            border: 1px solid #F87171;
+            background-color: rgba(248, 113, 113, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+
+        .capability-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <div id="tcccMasterContainer">
+        <!-- 内容将通过JavaScript动态加载 -->
+    </div>
+
+    <script>
+        // TACEVAC护理交接流程数据
+        // 基于CoTCCC 2017版官方算法流程图
+        const tcccFlowSteps = [
+            {
+                id: "step-0",
+                title: "战术战斗伤员护理交接",
+                subtitle: "Tactical Combat Casualty Care Transition",
+                secondaryTitle: "战场医疗交接算法",
+                secondarySubtitle: "Tactical Evacuation Care Algorithm",
+                detail: "根据 CoTCCC 指南 (31 JAN 2017) | In Accordance with CoTCCC Guidelines",
+                actionText: "开始评估",
+                actionTextEng: "Begin Assessment",
+                nextStep: "step-1",
+                icon: "fa-exchange-alt",
+                highlight: true,
+                type: "intro"
+            },
+            {
+                id: "step-1",
+                title: "战术救护交接",
+                subtitle: "TACTICAL EVACUATION CARE (TACEVAC)",
+                infoBoxes: [
+                    {
+                        title: "核心目标：<span class='highlight-redEE1C25'>伤员救护交接</span>",
+                        subtitle: "Primary Goal: <span class='highlight-redEE1C25'>Transition of care for casualties</span>",
+                        detail: "确保伤员从战术区域救治顺利过渡到后送医疗环境 (Ensure smooth transition from tactical field care to evacuation medical environment)."
+                    }
+                ],
+                actionText: "开始护理交接",
+                actionTextEng: "Begin Care Transition",
+                nextStep: "step-2",
+                icon: "fa-hospital-symbol",
+                type: "info",
+                capabilityLevel: "yellow"
+            },
+            {
+                id: "step-2",
+                title: "护理交接",
+                subtitle: "TRANSITION OF CARE",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>执行战术医疗交接程序</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Execute tactical medical handover procedures</span>"
+                    }
+                ],
+                actionText: "继续到战术力量",
+                actionTextEng: "Continue to Tactical Force",
+                nextStep: "step-3",
+                icon: "fa-hands-helping",
+                type: "info",
+                capabilityLevel: "green"
+            },
+            {
+                id: "step-3",
+                title: "战术力量",
+                subtitle: "TACTICAL FORCE",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>建立撤离点安全保障</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Establish evacuation point security</span>",
+                        detail: "为伤员撤离做准备并提供安全保障 (Establish evacuation point security and stage casualties for evacuation)."
+                    }
+                ],
+                actionText: "继续执行",
+                actionTextEng: "Continue",
+                nextStep: "step-4",
+                icon: "fa-shield-alt",
+                type: "info",
+                capabilityLevel: "green"
+            },
+            {
+                id: "step-4",
+                title: "伤员信息沟通",
+                subtitle: "CASUALTY INFORMATION COMMUNICATION",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>向TACEVAC人员传递伤员信息</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Communicate patient information to TACEVAC personnel</span>",
+                        detail: "尽可能清晰地传递伤员信息和状态 (Communicate patient information and status to TACEVAC personnel as clearly as possible)."
+                    },
+                    {
+                        title: "最低通报信息要求:",
+                        isList: true,
+                        items: [
+                            "稳定或不稳定状态 (Stable or unstable)",
+                            "已识别的伤情 (Injuries identified)",
+                            "已实施的治疗 (Treatments rendered)"
+                        ]
+                    }
+                ],
+                actionText: "查看撤离点指南",
+                actionTextEng: "View Evacuation Guidelines",
+                nextStep: "step-5",
+                icon: "fa-comments-medical",
+                type: "info",
+                capabilityLevel: "green"
+            },
+            {
+                id: "step-5",
+                title: "撤离点指南",
+                subtitle: "EVACUATION GUIDELINES",
+                infoBoxes: [
+                    {
+                        title: "参考指南:",
+                        detail: "参考适当的手册了解直升机着陆区(HLZ)、救护车交换点(AXP)、海上撤离点(MEP)的具体程序，或按照部队任务要求执行。(Refer to appropriate manuals for specifics and procedures for Helicopter Landing Zones (HLZ), Ambulance Exchange Point (AXP), Maritime Evacuation Point (MEP) or as dictated by unit mission.)"
+                    }
+                ],
+                actionText: "继续到TACEVAC人员",
+                actionTextEng: "Continue to TACEVAC Personnel",
+                nextStep: "step-6",
+                icon: "fa-file-medical-alt",
+                type: "info",
+                capabilityLevel: "green"
+            },
+            {
+                id: "step-6",
+                title: "TACEVAC人员",
+                subtitle: "TACEVAC PERSONNEL",
+                infoBoxes: [
+                    {
+                        title: "核心职责:",
+                        detail: "接管伤员护理并准备伤员撤离 (Take over casualty care and prepare for evacuation)."
+                    }
+                ],
+                actionText: "伤员分类和准备",
+                actionTextEng: "Triage and Staging",
+                nextStep: "step-7",
+                icon: "fa-user-md",
+                type: "info",
+                capabilityLevel: "yellow"
+            },
+            {
+                id: "step-7",
+                title: "伤员分类与准备",
+                subtitle: "TRIAGE AND STAGING",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>在撤离平台上对伤员进行分类和准备</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Triage and stage casualties on evacuation platform as required</span>"
+                    }
+                ],
+                actionText: "确保伤员安全",
+                actionTextEng: "Secure Casualties",
+                nextStep: "step-8",
+                icon: "fa-procedures",
+                type: "info",
+                capabilityLevel: "yellow"
+            },
+            {
+                id: "step-8",
+                title: "确保伤员在撤离平台安全",
+                subtitle: "SECURE CASUALTIES IN EVACUATION PLATFORM",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>依据IAW部队政策确保伤员安全</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Secure casualties IAW unit policies, configuration and safety requirements</span>"
+                    }
+                ],
+                actionText: "重新评估伤情",
+                actionTextEng: "Re-Assess Casualties",
+                nextStep: "step-9",
+                icon: "fa-ambulance",
+                type: "info",
+                capabilityLevel: "yellow"
+            },
+            {
+                id: "step-9",
+                title: "重新评估伤情",
+                subtitle: "RE-ASSESS CASUALTIES",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>重新评估伤情和之前的干预措施</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Re-assess casualties and re-evaluate all injuries and previous interventions</span>"
+                    }
+                ],
+                actionText: "状态通报指南",
+                actionTextEng: "SIT Report Guidelines",
+                nextStep: "step-10",
+                icon: "fa-clipboard-check",
+                type: "info",
+                capabilityLevel: "yellow"
+            },
+            {
+                id: "step-10",
+                title: "SIT状态通报指南",
+                subtitle: "SITUATION REPORT GUIDELINES",
+                infoBoxes: [
+                    {
+                        title: "通报方法:",
+                        detail: "<span class='highlight-redEE1C25'>识别接收护理提供者</span> - 确认撤离平台上接收护理的医护人员 (Identify receiving care provider on evac platform)."
+                    },
+                    {
+                        title: "建立直接联系:",
+                        detail: "<span class='highlight-redEE1C25'>与接收提供者建立直接联系</span> - 无线电通信/目视接触/手势联系 (Establish direct contact with receiving provider - Radio Comms/Eye Contact/Hand Contact)."
+                    },
+                    {
+                        title: "提供SIT状态:",
+                        detail: "为每位伤员提供状态通报，始于最严重伤情: (Provide a SIT Status on each casualty beginning with most serious)"
+                    },
+                    {
+                        isList: true,
+                        items: [
+                            "稳定或不稳定 (Stable or Unstable)",
+                            "伤情(生命威胁与MOI) (Injuries - Life threats & MOI)",
+                            "治疗(药物与干预) (Treatments - Drugs & Interventions)"
+                        ]
+                    },
+                    {
+                        title: "通信提示:",
+                        detail: "若口头沟通困难，指向每处伤情和治疗并确认接收方理解 (If verbal communication is difficult, point to each injury and treatment and confirm acknowledgement)."
+                    }
+                ],
+                actionText: "继续战术救护",
+                actionTextEng: "Continue Tactical Evacuation Care",
+                nextStep: "step-11",
+                icon: "fa-file-medical",
+                type: "info",
+                capabilityLevel: "yellow"
+            },
+            {
+                id: "step-11",
+                title: "继续战术救护交接",
+                subtitle: "CONTINUE TACTICAL EVACUATION CARE",
+                infoBoxes: [
+                    {
+                        title: "能力级别说明:",
+                        isList: true,
+                        items: [
+                            "<span class='capability-green'>绿色标记</span> - 所有作战人员和战斗生命救护员能力等级 (All Combatants and Combat Lifesaver capability level skill)",
+                            "<span class='capability-yellow'>黄色标记</span> - 战斗医护人员能力等级 (Combat Medic capability level skill)",
+                            "<span class='capability-red'>红色标记</span> - 战斗医疗队或特种作战医护人员能力等级 (Combat Paramedic or SOF Medic capability level skill)"
+                        ]
+                    }
+                ],
+                actionText: "重新开始",
+                actionTextEng: "Restart Guide",
+                nextStep: "step-0",
+                icon: "fa-sync-alt",
+                hasRestart: true,
+                type: "info",
+                capabilityLevel: "red"
+            }
+        ];
+
+        /**
+         * TACEVAC护理交接流程框架 - 可复用的决策流程框架
+         * 基于官方CoTCCC算法流程，完全匹配2017版CoTCCC指南
+         */
+        
+        // 全局配置
+        const CONFIG = {
+            title: "战术战斗伤员护理交接",
+            subtitle: "Tactical Combat Casualty Care Transition",
+            themeColor: "#EE1C25",
+            animations: true,
+            language: "zh-CN"
+        };
+        
+        // 用户决策记录
+        let decisions = {};
+        
+        /**
+         * 初始化流程框架
+         * @param {Array} steps - 步骤数据数组
+         */
+        function initFlowFramework(steps = tcccFlowSteps) {
+            // 生成所有步骤的HTML
+            generateAllSteps(steps);
+            
+            // 初始化动画
+            if (CONFIG.animations) {
+                initIntersectionObserver();
+            } else {
+                document.querySelectorAll('.step-section').forEach(section => {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                });
+            }
+            
+            // 显示第一个步骤
+            setTimeout(() => {
+                const firstSection = document.getElementById(steps[0].id);
+                if (firstSection) {
+                    firstSection.style.opacity = '1';
+                    firstSection.style.transform = 'translateY(0)';
+                }
+            }, 100);
+        }
+        
+        /**
+         * 生成所有步骤的HTML
+         * @param {Array} steps - 步骤数据数组
+         */
+        function generateAllSteps(steps) {
+            const container = document.getElementById('tcccMasterContainer');
+            if (!container) return;
+            
+            let html = '';
+            
+            steps.forEach(step => {
+                html += generateStepHTML(step);
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        /**
+         * 生成单个步骤的HTML
+         * @param {Object} step - 步骤数据
+         * @returns {string} - 生成的HTML字符串
+         */
+        function generateStepHTML(step) {
+            let html = `
+                <section id="${step.id}" class="step-section">
+                    <div class="bento-grid-container w-full">
+                        <div class="bento-box col-span-1 md:col-span-2 text-center relative overflow-hidden">
+                            <i class="fas ${step.icon} icon-style"${step.iconColor ? ` style="color: ${step.iconColor}; opacity:0.2;"` : ''}></i>
+            `;
+            
+            // 添加能力标记（如果有）
+            if (step.capabilityLevel) {
+                const capabilityClass = `capability-${step.capabilityLevel}`;
+                const tooltipText = step.capabilityTooltip || getDefaultCapabilityTooltip(step.capabilityLevel);
+                html += `<div class="capability-badge"><span class="${capabilityClass}" title="${tooltipText}">
+                    <i class="fas fa-user-md mr-1"></i>${getCapabilityLevelText(step.capabilityLevel)}</span></div>`;
+            }
+            
+            html += `<div class="content-wrapper">
+            `;
+            
+            // 根据步骤类型生成不同的内容
+            if (step.type === 'intro') {
+                html += `
+                    <h1 class="chinese-title${step.highlight ? ' highlight-redEE1C25' : ''}">${step.title}</h1>
+                    <p class="english-subtitle">${step.subtitle}</p>
+                    <div class="mt-4">
+                        <p class="chinese-title text-3xl font-semibold">${step.secondaryTitle}</p>
+                        <p class="english-subtitle text-lg">${step.secondarySubtitle}</p>
+                    </div>
+                    <p class="detail-text mt-8 mb-4">${step.detail}</p>
+                    <button onclick="scrollToStep('${step.nextStep}')" class="decision-button highlight-redEE1C25-bg text-black font-bold">
+                        ${step.actionText} <span class="eng">${step.actionTextEng}</span>
+                    </button>
+                `;
+            } else if (step.type === 'decision') {
+                html += `
+                    <h2 class="chinese-title">${step.title}</h2>
+                    <p class="english-subtitle">${step.subtitle}</p>
+                    <div class="mt-12 flex flex-col md:flex-row justify-center items-center">
+                `;
+                
+                // 生成选项按钮
+                step.options.forEach(option => {
+                    html += `
+                        <button onclick="decideAndScroll('${option.key}', ${typeof option.value === 'string' ? `'${option.value}'` : option.value}, '${option.nextStep}')" class="decision-button">
+                            ${option.text} <span class="eng">${option.textEng}</span>
+                        </button>
+                    `;
+                });
+                
+                html += `</div>`;
+            } else if (step.type === 'info') {
+                // 生成标题
+                html += `
+                    <h2 class="chinese-title${step.highlight ? ' highlight-redEE1C25' : ''}">${step.title}</h2>
+                    <p class="english-subtitle">${step.subtitle}</p>
+                `;
+                
+                // 可选的行动标签
+                if (step.actionLabel) {
+                    html += `
+                        <div class="my-8">
+                            <p class="action-text text-redEE1C25-500">${step.actionLabel}</p>
+                            <p class="english-subtitle text-gray-400">${step.actionLabelEng}</p>
+                        </div>
+                    `;
+                }
+                
+                // 生成信息框
+                if (step.infoBoxes && step.infoBoxes.length > 0) {
+                    step.infoBoxes.forEach((box, index) => {
+                        html += `<div class="info-box text-left${index === 0 ? ' my-8' : index > 0 ? ' mt-6' : ''}">`;
+                        
+                        if (box.title) {
+                            html += `<p class="${box.isList ? 'info-title text-xl mb-2' : 'action-text text-2xl'}">${box.title}</p>`;
+                        }
+                        
+                        if (box.subtitle) {
+                            html += `<p class="detail-text mt-1">${box.subtitle}</p>`;
+                        }
+                        
+                        if (box.detail) {
+                            html += `<p class="detail-text${box.subtitle ? ' mt-2' : ' mt-1'}">${box.detail}</p>`;
+                        }
+                        
+                        // 生成列表项
+                        if (box.isList && box.items && box.items.length > 0) {
+                            html += `<ul class="list-disc list-inside detail-text space-y-1">`;
+                            box.items.forEach(item => {
+                                html += `<li>${item}</li>`;
+                            });
+                            html += `</ul>`;
+                        }
+                        
+                        html += `</div>`;
+                    });
+                }
+                
+                // 可选的行动详情
+                if (step.actionDetail) {
+                    html += `
+                        <p class="action-text my-6">${step.actionDetail}</p>
+                        <p class="english-subtitle">${step.actionDetailEng}</p>
+                    `;
+                }
+                
+                // 下一步按钮
+                const iconClass = step.hasRestart ? 'fa-redo' : 'fa-arrow-down';
+                html += `
+                    <button onclick="scrollToStep('${step.nextStep}')" class="decision-button mt-8">
+                        ${step.actionText} <span class="eng">${step.actionTextEng}</span> <i class="fas ${iconClass} ml-2"></i>
+                    </button>
+                `;
+            }
+            
+            html += `
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `;
+            
+            return html;
+        }
+        
+        /**
+         * 初始化intersection observer以实现滚动动画
+         */
+        function initIntersectionObserver() {
+            const sections = document.querySelectorAll('.step-section');
+            
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.3
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        }
+        
+        /**
+         * 滚动到指定步骤
+         * @param {string} stepId - 步骤ID
+         */
+        function scrollToStep(stepId) {
+            const element = document.getElementById(stepId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
+        /**
+         * 记录决策并滚动
+         * @param {string} key - 决策键名
+         * @param {any} value - 决策值
+         * @param {string} stepId - 下一步ID
+         */
+        function decideAndScroll(key, value, stepId) {
+            // 记录决策
+            if (!decisions) decisions = {};
+            decisions[key] = value;
+            console.log("Decisions:", decisions);
+            
+            // 滚动到下一步
+            setTimeout(() => {
+                scrollToStep(stepId);
+            }, 100);
+        }
+        
+        /**
+         * 获取能力级别默认显示文本
+         * @param {string} level - 能力级别（green、yellow或red）
+         * @returns {string} - 能力级别显示文本
+         */
+        function getCapabilityLevelText(level) {
+            switch(level) {
+                case 'green':
+                    return '全员';
+                case 'yellow':
+                    return '医护';
+                case 'red':
+                    return '专业';
+                default:
+                    return '';
+            }
+        }
+        
+        /**
+         * 获取能力级别默认提示文本
+         * @param {string} level - 能力级别（green、yellow或red）
+         * @returns {string} - 能力级别提示文本
+         */
+        function getDefaultCapabilityTooltip(level) {
+            switch(level) {
+                case 'green':
+                    return '所有作战人员和战斗生命救护员能力等级';
+                case 'yellow':
+                    return '战斗医护人员能力等级';
+                case 'red':
+                    return '战斗医疗队或特种作战医护人员能力等级';
+                default:
+                    return '';
+            }
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => initFlowFramework());
+    </script>
+</body>
+</html> 

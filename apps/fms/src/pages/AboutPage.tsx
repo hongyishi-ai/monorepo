@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 
 const AboutPage = () => {
+  const assetBase = import.meta.env.BASE_URL;
+
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
@@ -27,7 +29,7 @@ const AboutPage = () => {
               <div className="sticky top-16 mb-6 md:mb-8">
                 <div className="relative w-[110%] -ml-[5%] pb-[55%] overflow-hidden rounded-xl md:rounded-2xl">
                   <img 
-                    src="/about.png" 
+                    src={`${assetBase}about.png`} 
                     alt="FMS功能性动作筛查系统项目图片，展示医疗救援与健康防护理念"
                     loading="eager"
                     decoding="async"

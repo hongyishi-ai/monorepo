@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TACEVAC呼吸管理 | 战术后送呼吸评估与处理</title>
+    <link rel="stylesheet" href="/assets/css/tailwind.css">
+    <link rel="stylesheet" href="/assets/css/fontawesome-shim.css">
+    <style>
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            overscroll-behavior: none;
+        }
+
+        .bento-grid-container {
+            display: grid;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .bento-box {
+            background-color: #1a1a1a;
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid #333333;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 20px 40px -20px rgba(255, 107, 0, 0.3);
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        }
+        
+        .bento-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.25), 0 25px 50px -20px rgba(255, 107, 0, 0.4);
+        }
+        
+        .highlight-redEE1C25 { color: #EE1C25; }
+        .highlight-redEE1C25-bg { background-color: #EE1C25; }
+        .highlight-redEE1C25-border { border-color: #EE1C25; }
+
+        .chinese-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+        }
+        
+        .english-subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            color: #a0a0a0;
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .action-text {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+        }
+        
+        .detail-text {
+            font-size: clamp(0.875rem, 2.5vw, 1.1rem);
+            color: #cccccc;
+        }
+
+        .step-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            scroll-snap-align: start;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .decision-button {
+            background-color: #2a2a2a;
+            border: 1px solid #444444;
+            color: #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            margin: 0.5rem;
+            min-width: 180px;
+            text-align: center;
+        }
+        
+        .decision-button:hover {
+            background-color: #EE1C25;
+            border-color: #FF3C44;
+            color: #000000;
+            transform: translateY(-3px);
+        }
+        
+        .decision-button .eng {
+            font-size: 0.8em;
+            opacity: 0.7;
+            display: block;
+            margin-top: 0.15rem;
+        }
+
+        .info-box {
+            background-color: #252525;
+            border-left: 4px solid #EE1C25;
+            padding: 1rem 1.5rem;
+            margin-top: 1.5rem;
+            border-radius: 0.25rem 0.5rem 0.5rem 0.25rem;
+        }
+        
+        .info-box .info-title {
+            font-weight: bold;
+            color: #EE1C25;
+        }
+        
+        .icon-style {
+            font-size: clamp(3rem, 8vw, 6rem);
+            color: #EE1C25;
+            opacity: 0.3;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            z-index: 0;
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .capability-green {
+            color: #4ADE80;
+            border: 1px solid #4ADE80;
+            background-color: rgba(74, 222, 128, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+        
+        .capability-yellow {
+            color: #FACC15;
+            border: 1px solid #FACC15;
+            background-color: rgba(250, 204, 21, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+        
+        .capability-red {
+            color: #F87171;
+            border: 1px solid #F87171;
+            background-color: rgba(248, 113, 113, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+
+        .capability-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <div id="tcccMasterContainer">
+        <!-- 内容将通过JavaScript动态加载 -->
+    </div>
+
+    <script>
+        // TACEVAC呼吸管理流程数据
+        // 基于TCCC战术后送呼吸管理流程图
+        const tcccFlowSteps = [
+            {
+                id: "step-0",
+                title: "战术后送伤员救护",
+                subtitle: "Tactical Evacuation Care",
+                secondaryTitle: "呼吸/呼吸管理",
+                secondarySubtitle: "RESPIRATION / BREATHING",
+                detail: "根据 CoTCCC 指南 (31 JAN 2017) | In Accordance with CoTCCC Guidelines",
+                actionText: "开始评估",
+                actionTextEng: "Begin Assessment",
+                nextStep: "step-1",
+                icon: "fa-lungs",
+                highlight: true,
+                type: "intro"
+            },
+            {
+                id: "step-1",
+                title: "呼吸评估",
+                subtitle: "Assess Respiration / Breathing",
+                actionDetail: "评估呼吸状态与胸部伤情",
+                actionDetailEng: "Assess respiratory status and chest injuries",
+                infoBoxes: [
+                    {
+                        title: "注意事项:",
+                        detail: "专注于呼吸频率、深度、费力程度和氧合状态。查找胸部创伤的体征，如挫伤、开放性伤口或其他异常。"
+                    }
+                ],
+                actionText: "开始问诊",
+                actionTextEng: "Begin Assessment",
+                nextStep: "step-2",
+                icon: "fa-stethoscope",
+                type: "info",
+                capabilityLevel: "green",
+                capabilityTooltip: "基础呼吸评估为所有人员必须掌握的能力"
+            },
+            {
+                id: "step-2",
+                title: "进行性呼吸窘迫和已知或疑似胸部创伤?",
+                subtitle: "Progressive Respiratory Distress and Known or Suspected Torso Trauma?",
+                options: [
+                    {
+                        text: "是",
+                        textEng: "YES",
+                        key: "respiratory_distress",
+                        value: true,
+                        nextStep: "step-3a"
+                    },
+                    {
+                        text: "否",
+                        textEng: "NO",
+                        key: "respiratory_distress",
+                        value: false,
+                        nextStep: "step-4"
+                    }
+                ],
+                icon: "fa-lungs-virus",
+                type: "decision",
+                capabilityLevel: "green",
+                capabilityTooltip: "识别呼吸窘迫和胸部创伤为基础能力"
+            },
+            {
+                id: "step-3a",
+                title: "疑似/考虑张力性气胸",
+                subtitle: "Suspect/Consider Tension Pneumothorax",
+                infoBoxes: [
+                    {
+                        title: "临床表现:",
+                        isList: true,
+                        items: [
+                            "进行性呼吸窘迫",
+                            "缺氧",
+                            "呼吸困难",
+                            "单侧呼吸音减弱或消失",
+                            "可能伴有气管偏移和颈静脉充盈"
+                        ]
+                    }
+                ],
+                actionText: "进行针胸减压",
+                actionTextEng: "Perform Needle Decompression",
+                nextStep: "step-3b",
+                icon: "fa-syringe",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "张力性气胸识别为战斗医护人员能力等级"
+            },
+            {
+                id: "step-3b",
+                title: "针胸减压",
+                subtitle: "Needle Decompress Chest",
+                infoBoxes: [
+                    {
+                        title: "操作步骤: <span class='highlight-redEE1C25'>在伤侧主要或备选部位进行针胸减压</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>at Primary or Alternate Site on injured side</span>",
+                        detail: "必要时重复操作。"
+                    },
+                    {
+                        title: "穿刺部位:",
+                        isList: true,
+                        items: [
+                            "<span class='font-bold'>主要部位</span>: 第2肋间隙/锁骨中线（2nd Intercostal Space/Midclavicular line）",
+                            "<span class='font-bold'>备选部位</span>: 第4/5肋间隙/前腋窝线（4th or 5th Intercostal Space/Anterior Axillary Line）"
+                        ]
+                    },
+                    {
+                        title: "减压针规格:",
+                        detail: "14号针，3.25英寸针/导管装置（14-gauge, 3.25 inch needle/catheter unit）"
+                    }
+                ],
+                actionText: "继续监测",
+                actionTextEng: "Continue Monitoring",
+                nextStep: "step-6",
+                icon: "fa-procedures",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "针胸减压操作为战斗医护人员能力等级"
+            },
+            {
+                id: "step-4",
+                title: "开放性/吸气性胸部伤口?",
+                subtitle: "Open/Sucking Chest Wound?",
+                options: [
+                    {
+                        text: "是",
+                        textEng: "YES",
+                        key: "open_chest_wound",
+                        value: true,
+                        nextStep: "step-5"
+                    },
+                    {
+                        text: "否",
+                        textEng: "NO",
+                        key: "open_chest_wound",
+                        value: false,
+                        nextStep: "step-6"
+                    }
+                ],
+                icon: "fa-wind",
+                type: "decision",
+                capabilityLevel: "green",
+                capabilityTooltip: "识别开放性胸部伤口为基础能力"
+            },
+            {
+                id: "step-5",
+                title: "应用带气门胸封",
+                subtitle: "Apply Vented Chest Seal",
+                infoBoxes: [
+                    {
+                        title: "操作步骤: <span class='highlight-redEE1C25'>为所有开放性/吸气性胸部伤口应用带气门胸封</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>to all open/sucking chest wounds</span>"
+                    },
+                    {
+                        title: "重要提示:",
+                        detail: "带气门胸封优于无气门胸封。(Vented chest seals are preferred over non-vented.)"
+                    }
+                ],
+                actionText: "继续监测",
+                actionTextEng: "Continue Monitoring",
+                nextStep: "step-6",
+                icon: "fa-hand-holding-medical",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "胸封应用为战斗医护人员能力等级"
+            },
+            {
+                id: "step-6",
+                title: "启动脉搏血氧监测",
+                subtitle: "Initiate Pulse Oximetry Monitoring",
+                infoBoxes: [
+                    {
+                        title: "操作步骤: <span class='highlight-redEE1C25'>如之前未进行，开始脉搏血氧监测</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>if not previously done</span>"
+                    }
+                ],
+                actionText: "继续监测张力性气胸",
+                actionTextEng: "Monitor for Tension Pneumothorax",
+                nextStep: "step-7",
+                icon: "fa-heartbeat",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "脉搏血氧监测为战斗医护人员能力等级"
+            },
+            {
+                id: "step-7",
+                title: "监测张力性气胸",
+                subtitle: "Monitor for Tension Pneumothorax",
+                infoBoxes: [
+                    {
+                        title: "警惕体征:",
+                        detail: "关注伤员呼吸状态变化，包括呼吸困难加重、单侧呼吸音减弱、氧合不良等"
+                    }
+                ],
+                actionText: "继续评估",
+                actionTextEng: "Continue Assessment",
+                nextStep: "step-8",
+                icon: "fa-user-md",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "持续监测为战斗医护人员能力等级"
+            },
+            {
+                id: "step-8",
+                title: "疑似张力性气胸?",
+                subtitle: "Tension Pneumothorax Suspected?",
+                infoBoxes: [
+                    {
+                        title: "张力性气胸指征:",
+                        isList: true,
+                        items: [
+                            "加重的缺氧",
+                            "呼吸窘迫",
+                            "低血压"
+                        ]
+                    }
+                ],
+                options: [
+                    {
+                        text: "是",
+                        textEng: "YES",
+                        key: "tension_pneumothorax",
+                        value: true,
+                        nextStep: "step-9a"
+                    },
+                    {
+                        text: "否",
+                        textEng: "NO",
+                        key: "tension_pneumothorax",
+                        value: false,
+                        nextStep: "step-10"
+                    }
+                ],
+                icon: "fa-exclamation-triangle",
+                type: "decision",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "张力性气胸识别为战斗医护人员能力等级"
+            },
+            {
+                id: "step-9a",
+                title: "胸封处理",
+                subtitle: "Chest Seal Management",
+                infoBoxes: [
+                    {
+                        title: "操作步骤: <span class='highlight-redEE1C25'>如已应用胸封则穿刺或移除</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Burp or remove chest seal if applied</span>",
+                        detail: "必要时重复操作。"
+                    }
+                ],
+                actionText: "进行针胸减压",
+                actionTextEng: "Perform Needle Decompression",
+                nextStep: "step-9b",
+                icon: "fa-first-aid",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "胸封处理为战斗医护人员能力等级"
+            },
+            {
+                id: "step-9b",
+                title: "进行针胸减压",
+                subtitle: "Needle Decompress Chest",
+                infoBoxes: [
+                    {
+                        title: "操作步骤: <span class='highlight-redEE1C25'>在主要或备选部位进行针胸减压(如指征)</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>at Primary or Alternate Site if indicated</span>",
+                        detail: "必要时重复操作。"
+                    }
+                ],
+                actionText: "继续其他处理步骤",
+                actionTextEng: "Continue with Other Interventions",
+                nextStep: "step-10",
+                icon: "fa-syringe",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "针胸减压为战斗医护人员能力等级"
+            },
+            {
+                id: "step-10",
+                title: "如条件允许给氧",
+                subtitle: "Administer Oxygen when possible",
+                infoBoxes: [
+                    {
+                        title: "给氧指征:",
+                        isList: true,
+                        items: [
+                            "脉搏血氧仪显示低氧饱和度",
+                            "与氧合不良相关的伤害",
+                            "意识不清的伤员",
+                            "休克状态的伤员",
+                            "高海拔环境下的伤员",
+                            "已知或疑似烟雾吸入"
+                        ]
+                    },
+                    {
+                        title: "TBI处理建议:",
+                        detail: "如怀疑中度或重度TBI，提供补充氧气以维持SpO2>90%"
+                    }
+                ],
+                actionText: "考虑胸管插入",
+                actionTextEng: "Consider Chest Tube",
+                nextStep: "step-11",
+                icon: "fa-mask",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "氧气管理为战斗医护人员能力等级"
+            },
+            {
+                id: "step-11",
+                title: "考虑胸管插入",
+                subtitle: "Consider Chest Tube Insertion",
+                infoBoxes: [
+                    {
+                        title: "操作考虑: <span class='highlight-redEE1C25'>如无改善且/或预期长途转运，考虑胸管插入</span>",
+                        subtitle: "Consideration: <span class='highlight-redEE1C25'>if no improvement and/or long transport anticipated</span>"
+                    }
+                ],
+                actionText: "继续战术后送护理",
+                actionTextEng: "Continue Tactical Evacuation Care",
+                nextStep: "step-12",
+                icon: "fa-procedures",
+                type: "info",
+                capabilityLevel: "red",
+                capabilityTooltip: "胸管插入为战斗医疗队或特种作战医护人员能力等级"
+            },
+            {
+                id: "step-12",
+                title: "后送优先级评估",
+                subtitle: "Evacuation Priority Assessment",
+                infoBoxes: [
+                    {
+                        title: "优先级考虑因素:",
+                        isList: true,
+                        items: [
+                            "呼吸窘迫或低氧血症的伤员需要优先后送",
+                            "张力性气胸得到控制但未完全解决的伤员需要紧急后送",
+                            "开放性胸部伤口的伤员需要尽快转运至外科干预能力的医疗机构"
+                        ]
+                    },
+                    {
+                        title: "能力标识说明:",
+                        isList: true,
+                        items: [
+                            "<span class='capability-green'>绿色标记</span> - 所有作战人员和战斗生命救护员能力等级",
+                            "<span class='capability-yellow'>黄色标记</span> - 战斗医护人员能力等级",
+                            "<span class='capability-red'>红色标记</span> - 战斗医疗队或特种作战医护人员能力等级"
+                        ]
+                    }
+                ],
+                actionText: "重新开始",
+                actionTextEng: "Restart Protocol",
+                nextStep: "step-0",
+                icon: "fa-helicopter-symbol",
+                hasRestart: true,
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "后送优先级评估为战斗医护人员能力等级"
+            }
+        ];
+
+        /**
+         * TCCC Flow Framework - 可复用的决策流程框架
+         * 基于官方CoTCCC算法流程，完全匹配2017版CoTCCC指南
+         */
+        
+        // 全局配置
+        const CONFIG = {
+            title: "TACEVAC呼吸管理",
+            subtitle: "TACEVAC Respiration Management",
+            themeColor: "#EE1C25",
+            animations: true,
+            language: "zh-CN"
+        };
+        
+        // 用户决策记录
+        let decisions = {};
+        
+        /**
+         * 初始化流程框架
+         * @param {Array} steps - 步骤数据数组
+         */
+        function initFlowFramework(steps = tcccFlowSteps) {
+            // 生成所有步骤的HTML
+            generateAllSteps(steps);
+            
+            // 初始化动画
+            if (CONFIG.animations) {
+                initIntersectionObserver();
+            } else {
+                document.querySelectorAll('.step-section').forEach(section => {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                });
+            }
+            
+            // 显示第一个步骤
+            setTimeout(() => {
+                const firstSection = document.getElementById(steps[0].id);
+                if (firstSection) {
+                    firstSection.style.opacity = '1';
+                    firstSection.style.transform = 'translateY(0)';
+                }
+            }, 100);
+        }
+        
+        /**
+         * 生成所有步骤的HTML
+         * @param {Array} steps - 步骤数据数组
+         */
+        function generateAllSteps(steps) {
+            const container = document.getElementById('tcccMasterContainer');
+            if (!container) return;
+            
+            let html = '';
+            
+            steps.forEach(step => {
+                html += generateStepHTML(step);
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        /**
+         * 生成单个步骤的HTML
+         * @param {Object} step - 步骤数据
+         * @returns {string} - 生成的HTML字符串
+         */
+        function generateStepHTML(step) {
+            let html = `
+                <section id="${step.id}" class="step-section">
+                    <div class="bento-grid-container w-full">
+                        <div class="bento-box col-span-1 md:col-span-2 text-center relative overflow-hidden">
+                            <i class="fas ${step.icon} icon-style"${step.iconColor ? ` style="color: ${step.iconColor}; opacity:0.2;"` : ''}></i>
+            `;
+            
+            // 添加能力标记（如果有）
+            if (step.capabilityLevel) {
+                const capabilityClass = `capability-${step.capabilityLevel}`;
+                const tooltipText = step.capabilityTooltip || getDefaultCapabilityTooltip(step.capabilityLevel);
+                html += `<div class="capability-badge"><span class="${capabilityClass}" title="${tooltipText}">
+                    <i class="fas fa-user-md mr-1"></i>${getCapabilityLevelText(step.capabilityLevel)}</span></div>`;
+            }
+            
+            html += `<div class="content-wrapper">
+            `;
+            
+            // 根据步骤类型生成不同的内容
+            if (step.type === 'intro') {
+                html += `
+                    <h1 class="chinese-title${step.highlight ? ' highlight-redEE1C25' : ''}">${step.title}</h1>
+                    <p class="english-subtitle">${step.subtitle}</p>
+                    <div class="mt-4">
+                        <p class="chinese-title text-3xl font-semibold">${step.secondaryTitle}</p>
+                        <p class="english-subtitle text-lg">${step.secondarySubtitle}</p>
+                    </div>
+                    <p class="detail-text mt-8 mb-4">${step.detail}</p>
+                    <button onclick="scrollToStep('${step.nextStep}')" class="decision-button highlight-redEE1C25-bg text-black font-bold">
+                        ${step.actionText} <span class="eng">${step.actionTextEng}</span>
+                    </button>
+                `;
+            } else if (step.type === 'decision') {
+                html += `
+                    <h2 class="chinese-title">${step.title}</h2>
+                    <p class="english-subtitle">${step.subtitle}</p>
+                    <div class="mt-12 flex flex-col md:flex-row justify-center items-center">
+                `;
+                
+                // 生成选项按钮
+                step.options.forEach(option => {
+                    html += `
+                        <button onclick="decideAndScroll('${option.key}', ${typeof option.value === 'string' ? `'${option.value}'` : option.value}, '${option.nextStep}')" class="decision-button">
+                            ${option.text} <span class="eng">${option.textEng}</span>
+                        </button>
+                    `;
+                });
+                
+                html += `</div>`;
+            } else if (step.type === 'info') {
+                // 生成标题
+                html += `
+                    <h2 class="chinese-title${step.highlight ? ' highlight-redEE1C25' : ''}">${step.title}</h2>
+                    <p class="english-subtitle">${step.subtitle}</p>
+                `;
+                
+                // 可选的行动标签
+                if (step.actionLabel) {
+                    html += `
+                        <div class="my-8">
+                            <p class="action-text text-redEE1C25-500">${step.actionLabel}</p>
+                            <p class="english-subtitle text-gray-400">${step.actionLabelEng}</p>
+                        </div>
+                    `;
+                }
+                
+                // 生成信息框
+                if (step.infoBoxes && step.infoBoxes.length > 0) {
+                    step.infoBoxes.forEach((box, index) => {
+                        html += `<div class="info-box text-left${index === 0 ? ' my-8' : index > 0 ? ' mt-6' : ''}">`;
+                        
+                        if (box.title) {
+                            html += `<p class="${box.isList ? 'info-title text-xl mb-2' : 'action-text text-2xl'}">${box.title}</p>`;
+                        }
+                        
+                        if (box.subtitle) {
+                            html += `<p class="detail-text mt-1">${box.subtitle}</p>`;
+                        }
+                        
+                        if (box.detail) {
+                            html += `<p class="detail-text${box.subtitle ? ' mt-2' : ' mt-1'}">${box.detail}</p>`;
+                        }
+                        
+                        // 生成列表项
+                        if (box.isList && box.items && box.items.length > 0) {
+                            html += `<ul class="list-disc list-inside detail-text space-y-1">`;
+                            box.items.forEach(item => {
+                                html += `<li>${item}</li>`;
+                            });
+                            html += `</ul>`;
+                        }
+                        
+                        html += `</div>`;
+                    });
+                }
+                
+                // 可选的行动详情
+                if (step.actionDetail) {
+                    html += `
+                        <p class="action-text my-6">${step.actionDetail}</p>
+                        <p class="english-subtitle">${step.actionDetailEng}</p>
+                    `;
+                }
+                
+                // 下一步按钮
+                const iconClass = step.hasRestart ? 'fa-redo' : 'fa-arrow-down';
+                html += `
+                    <button onclick="scrollToStep('${step.nextStep}')" class="decision-button mt-8">
+                        ${step.actionText} <span class="eng">${step.actionTextEng}</span> <i class="fas ${iconClass} ml-2"></i>
+                    </button>
+                `;
+            }
+            
+            html += `
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `;
+            
+            return html;
+        }
+        
+        /**
+         * 初始化intersection observer以实现滚动动画
+         */
+        function initIntersectionObserver() {
+            const sections = document.querySelectorAll('.step-section');
+            
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.3
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        }
+        
+        /**
+         * 滚动到指定步骤
+         * @param {string} stepId - 步骤ID
+         */
+        function scrollToStep(stepId) {
+            const element = document.getElementById(stepId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
+        /**
+         * 记录决策并滚动
+         * @param {string} key - 决策键名
+         * @param {any} value - 决策值
+         * @param {string} stepId - 下一步ID
+         */
+        function decideAndScroll(key, value, stepId) {
+            // 记录决策
+            if (!decisions) decisions = {};
+            decisions[key] = value;
+            console.log("Decisions:", decisions);
+            
+            // 滚动到下一步
+            setTimeout(() => {
+                scrollToStep(stepId);
+            }, 100);
+        }
+        
+        /**
+         * 获取能力级别默认显示文本
+         * @param {string} level - 能力级别（green、yellow或red）
+         * @returns {string} - 能力级别显示文本
+         */
+        function getCapabilityLevelText(level) {
+            switch(level) {
+                case 'green':
+                    return '全员';
+                case 'yellow':
+                    return '医护';
+                case 'red':
+                    return '专业';
+                default:
+                    return '';
+            }
+        }
+        
+        /**
+         * 获取能力级别默认提示文本
+         * @param {string} level - 能力级别（green、yellow或red）
+         * @returns {string} - 能力级别提示文本
+         */
+        function getDefaultCapabilityTooltip(level) {
+            switch(level) {
+                case 'green':
+                    return '所有作战人员和战斗生命救护员能力等级';
+                case 'yellow':
+                    return '战斗医护人员能力等级';
+                case 'red':
+                    return '战斗医疗队或特种作战医护人员能力等级';
+                default:
+                    return '';
+            }
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => initFlowFramework());
+    </script>
+</body>
+</html>

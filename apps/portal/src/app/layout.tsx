@@ -18,6 +18,7 @@ const notoSansSC = Noto_Sans_SC({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://hongyishi.cn"),
   title: "红医师 | 官方博客",
   description:
     "红医师是一个医疗软件与资源共享项目，涵盖训练伤防治、辅助诊断、热射病防治、移动药房、博客与播客等内容。",

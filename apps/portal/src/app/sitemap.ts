@@ -1,5 +1,8 @@
 import { MetadataRoute } from 'next';
 import { getAllPosts } from '@/lib/api';
+import { platformProjects } from '@/lib/projects';
+
+export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://hongyishi.cn';
@@ -15,6 +18,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
+  const integratedProjectPages = platformProjects
+    .filter((project) => project.status === 'integrated')
+    .map((project) => ({
+      url: `${baseUrl}${project.href}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.85,
+    }));
+
   return [
     {
       url: baseUrl,
@@ -28,7 +40,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.8,
     },
+    ...integratedProjectPages,
     ...blogPosts,
   ];
 }
-

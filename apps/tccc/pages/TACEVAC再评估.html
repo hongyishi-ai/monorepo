@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>战术后送再评估 | TACEVAC | TCCC官方流程</title>
+    <link rel="stylesheet" href="/assets/css/tailwind.css">
+    <link rel="stylesheet" href="/assets/css/fontawesome-shim.css">
+    <style>
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            overscroll-behavior: none;
+        }
+
+        .bento-grid-container {
+            display: grid;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .bento-box {
+            background-color: #1a1a1a;
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid #333333;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 20px 40px -20px rgba(255, 107, 0, 0.3);
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        }
+        
+        .bento-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.25), 0 25px 50px -20px rgba(255, 107, 0, 0.4);
+        }
+        
+        .highlight-redEE1C25 { color: #EE1C25; }
+        .highlight-redEE1C25-bg { background-color: #EE1C25; }
+        .highlight-redEE1C25-border { border-color: #EE1C25; }
+
+        .chinese-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+        }
+        
+        .english-subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            color: #a0a0a0;
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .action-text {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+        }
+        
+        .detail-text {
+            font-size: clamp(0.875rem, 2.5vw, 1.1rem);
+            color: #cccccc;
+        }
+
+        .step-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            scroll-snap-align: start;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .decision-button {
+            background-color: #2a2a2a;
+            border: 1px solid #444444;
+            color: #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            margin: 0.5rem;
+            min-width: 180px;
+            text-align: center;
+        }
+        
+        .decision-button:hover {
+            background-color: #EE1C25;
+            border-color: #FF3C44;
+            color: #000000;
+            transform: translateY(-3px);
+        }
+        
+        .decision-button .eng {
+            font-size: 0.8em;
+            opacity: 0.7;
+            display: block;
+            margin-top: 0.15rem;
+        }
+
+        .info-box {
+            background-color: #252525;
+            border-left: 4px solid #EE1C25;
+            padding: 1rem 1.5rem;
+            margin-top: 1.5rem;
+            border-radius: 0.25rem 0.5rem 0.5rem 0.25rem;
+        }
+        
+        .info-box .info-title {
+            font-weight: bold;
+            color: #EE1C25;
+        }
+        
+        .icon-style {
+            font-size: clamp(3rem, 8vw, 6rem);
+            color: #EE1C25;
+            opacity: 0.3;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            z-index: 0;
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .capability-green {
+            color: #4ADE80;
+            border: 1px solid #4ADE80;
+            background-color: rgba(74, 222, 128, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+        
+        .capability-yellow {
+            color: #FACC15;
+            border: 1px solid #FACC15;
+            background-color: rgba(250, 204, 21, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+        
+        .capability-red {
+            color: #F87171;
+            border: 1px solid #F87171;
+            background-color: rgba(248, 113, 113, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+
+        .capability-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <div id="tacevacMasterContainer">
+        <!-- 内容将通过JavaScript动态加载 -->
+    </div>
+
+    <script>
+        // TACEVAC再评估流程数据
+        // 基于CoTCCC 2017版官方算法流程图
+        const tacevacFlowSteps = [
+            {
+                id: "step-0",
+                title: "战术后送伤员再评估",
+                subtitle: "Tactical Evacuation Care (TACEVAC)",
+                secondaryTitle: "再评估流程",
+                secondarySubtitle: "Re-assessment Algorithm",
+                detail: "根据 CoTCCC 指南 (31 JAN 2017) | In Accordance with CoTCCC Guidelines",
+                actionText: "开始评估",
+                actionTextEng: "Begin Assessment",
+                nextStep: "step-1",
+                icon: "fa-helicopter-symbol",
+                highlight: true,
+                type: "intro"
+            },
+            {
+                id: "step-1",
+                title: "再评估所有伤员",
+                subtitle: "Re-Assess Casualties and Re-evaluate Injuries",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>重新评估所有伤员情况并再次评价所有伤势和之前的干预措施</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Re-assess casualties and re-evaluate all injuries and previous interventions</span>"
+                    },
+                    {
+                        title: "评估要点:",
+                        detail: "确认之前处置的有效性，包括止血带、止血敷料、气道管理、针胸等。同时持续监测生命体征和意识水平变化。",
+                        isList: true,
+                        items: [
+                            "再次检查之前应用的止血带",
+                            "评估止血敷料的效果",
+                            "确认气道通畅度",
+                            "评估胸部穿透伤及胸部减压效果",
+                            "检查伤员意识状态变化"
+                        ]
+                    }
+                ],
+                actionText: "下一步",
+                actionTextEng: "Next Step",
+                nextStep: "step-2",
+                icon: "fa-clipboard-check",
+                type: "info",
+                capabilityLevel: "green",
+                capabilityTooltip: "所有作战人员必须能够对伤员进行基本再评估"
+            },
+            {
+                id: "step-2",
+                title: "精神状态改变伤员处置",
+                subtitle: "Casualties with Altered Mental Status",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>精神状态改变的伤员应收缴其武器和通讯设备</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Casualties with altered mental status should have weapons and radios taken away</span>"
+                    },
+                    {
+                        title: "重要提示:",
+                        detail: "精神状态改变的伤员可能会错误使用武器或者无意中传递错误情报，应立即收缴其武器和通讯设备，确保安全。",
+                        isList: true,
+                        items: [
+                            "卸除弹药",
+                            "确保枪械安全",
+                            "收缴所有武器装备",
+                            "确保通讯设备已被移交给队友或指挥人员"
+                        ]
+                    }
+                ],
+                actionText: "下一步",
+                actionTextEng: "Next Step",
+                nextStep: "step-3",
+                icon: "fa-brain",
+                type: "info",
+                capabilityLevel: "green",
+                capabilityTooltip: "所有作战人员必须掌握伤员精神状态评估基本技能"
+            },
+            {
+                id: "step-3",
+                title: "大出血评估",
+                subtitle: "Massive Hemorrhage Assessment",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>评估大出血控制情况</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Assess for massive hemorrhage control</span>"
+                    }
+                ],
+                actionText: "下一步",
+                actionTextEng: "Next Step",
+                nextStep: "step-4",
+                icon: "fa-droplet",
+                iconColor: "#FF0000",
+                type: "info",
+                capabilityLevel: "green",
+                capabilityTooltip: "所有作战人员必须能够评估大出血控制情况"
+            },
+            {
+                id: "step-4",
+                title: "是否有难以控制的大量外部出血或创伤性截肢?",
+                subtitle: "Uncontrolled Massive External Hemorrhage or Traumatic Amputation Present?",
+                options: [
+                    {
+                        text: "是",
+                        textEng: "YES",
+                        key: "massiveHemorrhage",
+                        value: true,
+                        nextStep: "step-5"
+                    },
+                    {
+                        text: "否",
+                        textEng: "NO",
+                        key: "massiveHemorrhage",
+                        value: false,
+                        nextStep: "step-8a"
+                    }
+                ],
+                icon: "fa-hand-holding-droplet",
+                iconColor: "#FF0000",
+                type: "decision",
+                capabilityLevel: "green",
+                capabilityTooltip: "所有作战人员必须掌握大出血识别技能"
+            },
+            {
+                id: "step-5",
+                title: "是否适合使用肢体止血带?",
+                subtitle: "Amenable to Limb Tourniquet?",
+                options: [
+                    {
+                        text: "是",
+                        textEng: "YES",
+                        key: "tourniquetAmenable",
+                        value: true,
+                        nextStep: "step-6"
+                    },
+                    {
+                        text: "否",
+                        textEng: "NO",
+                        key: "tourniquetAmenable",
+                        value: false,
+                        nextStep: "step-7"
+                    }
+                ],
+                icon: "fa-band-aid",
+                type: "decision",
+                capabilityLevel: "green",
+                capabilityTooltip: "所有作战人员必须掌握止血带适应症判断技能"
+            },
+            {
+                id: "step-6",
+                title: "加固或应用止血带",
+                subtitle: "Tighten Previously Applied Tourniquet or Apply a Tourniquet",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>加固之前应用的止血带或使用CoTCCC推荐的肢体止血带</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Tighten previously applied tourniquet or apply a CoTCCC-recommended Limb Tourniquet</span>"
+                    },
+                    {
+                        title: "重要提示:",
+                        detail: "如果第一个止血带未能有效控制出血，应在其近端应用第二个止血带。"
+                    }
+                ],
+                actionText: "评估止血效果",
+                actionTextEng: "Assess Bleeding Control",
+                nextStep: "step-6a",
+                icon: "fa-band-aid",
+                type: "info",
+                capabilityLevel: "green",
+                capabilityTooltip: "所有作战人员必须掌握止血带使用技能"
+            },
+            {
+                id: "step-6a",
+                title: "出血是否已控制?",
+                subtitle: "Hemorrhage Controlled?",
+                options: [
+                    {
+                        text: "是",
+                        textEng: "YES",
+                        key: "hemorrhageControlled1",
+                        value: true,
+                        nextStep: "step-8a"
+                    },
+                    {
+                        text: "否",
+                        textEng: "NO",
+                        key: "hemorrhageControlled1",
+                        value: false,
+                        nextStep: "step-7"
+                    }
+                ],
+                icon: "fa-check-circle",
+                type: "decision",
+                capabilityLevel: "green",
+                capabilityTooltip: "所有作战人员必须掌握出血控制评估技能"
+            },
+            {
+                id: "step-7",
+                title: "使用止血敷料",
+                subtitle: "Use Hemostatic Dressing/Agent",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>使用CoTCCC推荐的止血敷料/止血剂</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Use CoTCCC-recommended Hemostatic Dressing/Agent</span>"
+                    },
+                    {
+                        title: "推荐止血产品:",
+                        isList: true,
+                        items: [
+                            "Combat Gauze",
+                            "Celox Gauze",
+                            "ChitoGauze",
+                            "其他CoTCCC认可的止血敷料"
+                        ]
+                    }
+                ],
+                actionText: "下一步",
+                actionTextEng: "Next Step",
+                nextStep: "step-7a",
+                icon: "fa-capsules",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "战斗医护人员能力等级"
+            },
+            {
+                id: "step-7a",
+                title: "是否适合使用连接伤口装置?",
+                subtitle: "Amenable to Junctional Device?",
+                options: [
+                    {
+                        text: "是",
+                        textEng: "YES",
+                        key: "junctionalDevice",
+                        value: true,
+                        nextStep: "step-7b"
+                    },
+                    {
+                        text: "否",
+                        textEng: "NO",
+                        key: "junctionalDevice",
+                        value: false,
+                        nextStep: "step-7c"
+                    }
+                ],
+                icon: "fa-toilet-paper",
+                type: "decision",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "战斗医护人员能力等级"
+            },
+            {
+                id: "step-7b",
+                title: "使用连接伤口装置",
+                subtitle: "Apply CoTCCC-recommended Junctional Device",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>使用CoTCCC推荐的连接伤口装置</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Apply CoTCCC-recommended Junctional Device</span>"
+                    },
+                    {
+                        title: "推荐连接伤口装置:",
+                        isList: true,
+                        items: [
+                            "Combat Ready Clamp (CRoC)",
+                            "SAM Junctional Tourniquet",
+                            "Junctional Emergency Treatment Tool (JETT)",
+                            "其他CoTCCC认可的连接伤口装置"
+                        ]
+                    }
+                ],
+                actionText: "评估止血效果",
+                actionTextEng: "Assess Bleeding Control",
+                nextStep: "step-7b1",
+                icon: "fa-toolbox",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "战斗医护人员能力等级"
+            },
+            {
+                id: "step-7b1",
+                title: "出血是否已控制?",
+                subtitle: "Hemorrhage Controlled?",
+                options: [
+                    {
+                        text: "是",
+                        textEng: "YES",
+                        key: "hemorrhageControlled2",
+                        value: true,
+                        nextStep: "step-8a"
+                    },
+                    {
+                        text: "否",
+                        textEng: "NO",
+                        key: "hemorrhageControlled2",
+                        value: false,
+                        nextStep: "step-7c"
+                    }
+                ],
+                icon: "fa-check-circle",
+                type: "decision",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "战斗医护人员能力等级"
+            },
+            {
+                id: "step-7c",
+                title: "维持直接压力",
+                subtitle: "Maintain Pressure with Hemostatic Dressing and Direct Pressure",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>用CoTCCC推荐的止血敷料/止血剂维持压力并施加直接压力</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Maintain Pressure with CoTCCC-recommended Hemostatic Dressing/Agent and Direct Pressure</span>"
+                    },
+                    {
+                        title: "使用说明:",
+                        detail: "应用止血敷料后，至少需要持续施加3-5分钟的直接压力，然后使用压力敷料固定。"
+                    }
+                ],
+                actionText: "下一步",
+                actionTextEng: "Next Step",
+                nextStep: "step-8a",
+                icon: "fa-hand",
+                type: "info",
+                capabilityLevel: "green",
+                capabilityTooltip: "所有作战人员必须掌握直接压力止血技能"
+            },
+            {
+                id: "step-8a",
+                title: "评估气道和呼吸管理",
+                subtitle: "Assess Minimal Bleeding After Airway and Breathing Management",
+                infoBoxes: [
+                    {
+                        title: "行动: <span class='highlight-redEE1C25'>确保气道通畅并评估呼吸情况后的其他微小出血</span>",
+                        subtitle: "Action: <span class='highlight-redEE1C25'>Assess for minimal bleeding after ensuring patent airway and adequate breathing</span>"
+                    },
+                    {
+                        title: "评估要点:",
+                        detail: "在确保气道通畅和呼吸管理后，应评估之前可能忽略的微小出血点。",
+                        isList: true,
+                        items: [
+                            "头部伤口 (Head Wounds)",
+                            "颈部伤口 (Neck Wounds)",
+                            "连接处伤口 (Junctional Wounds)"
+                        ]
+                    }
+                ],
+                actionText: "继续后送护理",
+                actionTextEng: "Continue Tactical Evacuation Care",
+                nextStep: "step-9",
+                icon: "fa-lungs",
+                type: "info",
+                capabilityLevel: "yellow",
+                capabilityTooltip: "战斗医护人员能力等级"
+            },
+            {
+                id: "step-9",
+                title: "人员能力说明",
+                subtitle: "Personnel Capability Explanation",
+                infoBoxes: [
+                    {
+                        title: "能力等级标识:",
+                        isList: true,
+                        items: [
+                            "<span class='capability-green'>绿色标记</span> - 所有作战人员和战斗生命救护员能力等级 (All Combatants and Combat Lifesaver capability level skill)",
+                            "<span class='capability-yellow'>黄色标记</span> - 战斗医护人员能力等级 (Combat Medic capability level skill)",
+                            "<span class='capability-red'>红色标记</span> - 战斗医疗队或特种作战医护人员能力等级 (Combat Paramedic or SOF Medic capability level skill)"
+                        ]
+                    }
+                ],
+                actionDetail: "战术后送护理继续...",
+                actionDetailEng: "Tactical Evacuation Care continues...",
+                actionText: "重新开始",
+                actionTextEng: "Restart Guide",
+                nextStep: "step-0",
+                icon: "fa-user-md",
+                hasRestart: true,
+                type: "info",
+                capabilityLevel: "yellow"
+            }
+        ];
+
+        /**
+         * TACEVAC Flow Framework - 可复用的决策流程框架
+         * 基于官方CoTCCC算法流程，完全匹配2017版CoTCCC指南
+         */
+        
+        // 全局配置
+        const CONFIG = {
+            title: "战术后送伤员再评估",
+            subtitle: "Tactical Evacuation Care Re-assessment",
+            themeColor: "#EE1C25",
+            animations: true,
+            language: "zh-CN"
+        };
+        
+        // 用户决策记录
+        let decisions = {};
+        
+        /**
+         * 初始化流程框架
+         * @param {Array} steps - 步骤数据数组
+         */
+        function initFlowFramework(steps = tacevacFlowSteps) {
+            // 生成所有步骤的HTML
+            generateAllSteps(steps);
+            
+            // 初始化动画
+            if (CONFIG.animations) {
+                initIntersectionObserver();
+            } else {
+                document.querySelectorAll('.step-section').forEach(section => {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                });
+            }
+            
+            // 显示第一个步骤
+            setTimeout(() => {
+                const firstSection = document.getElementById(steps[0].id);
+                if (firstSection) {
+                    firstSection.style.opacity = '1';
+                    firstSection.style.transform = 'translateY(0)';
+                }
+            }, 100);
+        }
+        
+        /**
+         * 生成所有步骤的HTML
+         * @param {Array} steps - 步骤数据数组
+         */
+        function generateAllSteps(steps) {
+            const container = document.getElementById('tacevacMasterContainer');
+            if (!container) return;
+            
+            let html = '';
+            
+            steps.forEach(step => {
+                html += generateStepHTML(step);
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        /**
+         * 生成单个步骤的HTML
+         * @param {Object} step - 步骤数据
+         * @returns {string} - 生成的HTML字符串
+         */
+        function generateStepHTML(step) {
+            let html = `
+                <section id="${step.id}" class="step-section">
+                    <div class="bento-grid-container w-full">
+                        <div class="bento-box col-span-1 md:col-span-2 text-center relative overflow-hidden">
+                            <i class="fas ${step.icon} icon-style"${step.iconColor ? ` style="color: ${step.iconColor}; opacity:0.2;"` : ''}></i>
+            `;
+            
+            // 添加能力标记（如果有）
+            if (step.capabilityLevel) {
+                const capabilityClass = `capability-${step.capabilityLevel}`;
+                const tooltipText = step.capabilityTooltip || getDefaultCapabilityTooltip(step.capabilityLevel);
+                html += `<div class="capability-badge"><span class="${capabilityClass}" title="${tooltipText}">
+                    <i class="fas fa-user-md mr-1"></i>${getCapabilityLevelText(step.capabilityLevel)}</span></div>`;
+            }
+            
+            html += `<div class="content-wrapper">
+            `;
+            
+            // 根据步骤类型生成不同的内容
+            if (step.type === 'intro') {
+                html += `
+                    <h1 class="chinese-title${step.highlight ? ' highlight-redEE1C25' : ''}">${step.title}</h1>
+                    <p class="english-subtitle">${step.subtitle}</p>
+                    <div class="mt-4">
+                        <p class="chinese-title text-3xl font-semibold">${step.secondaryTitle}</p>
+                        <p class="english-subtitle text-lg">${step.secondarySubtitle}</p>
+                    </div>
+                    <p class="detail-text mt-8 mb-4">${step.detail}</p>
+                    <button onclick="scrollToStep('${step.nextStep}')" class="decision-button highlight-redEE1C25-bg text-black font-bold">
+                        ${step.actionText} <span class="eng">${step.actionTextEng}</span>
+                    </button>
+                `;
+            } else if (step.type === 'decision') {
+                html += `
+                    <h2 class="chinese-title">${step.title}</h2>
+                    <p class="english-subtitle">${step.subtitle}</p>
+                    <div class="mt-12 flex flex-col md:flex-row justify-center items-center">
+                `;
+                
+                // 生成选项按钮
+                step.options.forEach(option => {
+                    html += `
+                        <button onclick="decideAndScroll('${option.key}', ${typeof option.value === 'string' ? `'${option.value}'` : option.value}, '${option.nextStep}')" class="decision-button">
+                            ${option.text} <span class="eng">${option.textEng}</span>
+                        </button>
+                    `;
+                });
+                
+                html += `</div>`;
+            } else if (step.type === 'info') {
+                // 生成标题
+                html += `
+                    <h2 class="chinese-title${step.highlight ? ' highlight-redEE1C25' : ''}">${step.title}</h2>
+                    <p class="english-subtitle">${step.subtitle}</p>
+                `;
+                
+                // 可选的行动标签
+                if (step.actionLabel) {
+                    html += `
+                        <div class="my-8">
+                            <p class="action-text text-redEE1C25-500">${step.actionLabel}</p>
+                            <p class="english-subtitle text-gray-400">${step.actionLabelEng}</p>
+                        </div>
+                    `;
+                }
+                
+                // 生成信息框
+                if (step.infoBoxes && step.infoBoxes.length > 0) {
+                    step.infoBoxes.forEach((box, index) => {
+                        html += `<div class="info-box text-left${index === 0 ? ' my-8' : index > 0 ? ' mt-6' : ''}">`;
+                        
+                        if (box.title) {
+                            html += `<p class="${box.isList ? 'info-title text-xl mb-2' : 'action-text text-2xl'}">${box.title}</p>`;
+                        }
+                        
+                        if (box.subtitle) {
+                            html += `<p class="detail-text mt-1">${box.subtitle}</p>`;
+                        }
+                        
+                        if (box.detail) {
+                            html += `<p class="detail-text${box.subtitle ? ' mt-2' : ' mt-1'}">${box.detail}</p>`;
+                        }
+                        
+                        // 生成列表项
+                        if (box.isList && box.items && box.items.length > 0) {
+                            html += `<ul class="list-disc list-inside detail-text space-y-1">`;
+                            box.items.forEach(item => {
+                                html += `<li>${item}</li>`;
+                            });
+                            html += `</ul>`;
+                        }
+                        
+                        html += `</div>`;
+                    });
+                }
+                
+                // 可选的行动详情
+                if (step.actionDetail) {
+                    html += `
+                        <p class="action-text my-6">${step.actionDetail}</p>
+                        <p class="english-subtitle">${step.actionDetailEng}</p>
+                    `;
+                }
+                
+                // 下一步按钮
+                const iconClass = step.hasRestart ? 'fa-redo' : 'fa-arrow-down';
+                html += `
+                    <button onclick="scrollToStep('${step.nextStep}')" class="decision-button mt-8">
+                        ${step.actionText} <span class="eng">${step.actionTextEng}</span> <i class="fas ${iconClass} ml-2"></i>
+                    </button>
+                `;
+            }
+            
+            html += `
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `;
+            
+            return html;
+        }
+        
+        /**
+         * 初始化intersection observer以实现滚动动画
+         */
+        function initIntersectionObserver() {
+            const sections = document.querySelectorAll('.step-section');
+            
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.3
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        }
+        
+        /**
+         * 滚动到指定步骤
+         * @param {string} stepId - 步骤ID
+         */
+        function scrollToStep(stepId) {
+            const element = document.getElementById(stepId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
+        /**
+         * 记录决策并滚动
+         * @param {string} key - 决策键名
+         * @param {any} value - 决策值
+         * @param {string} stepId - 下一步ID
+         */
+        function decideAndScroll(key, value, stepId) {
+            // 记录决策
+            if (!decisions) decisions = {};
+            decisions[key] = value;
+            console.log("Decisions:", decisions);
+            
+            // 滚动到下一步
+            setTimeout(() => {
+                scrollToStep(stepId);
+            }, 100);
+        }
+        
+        /**
+         * 获取能力级别默认显示文本
+         * @param {string} level - 能力级别（green、yellow或red）
+         * @returns {string} - 能力级别显示文本
+         */
+        function getCapabilityLevelText(level) {
+            switch(level) {
+                case 'green':
+                    return '全员';
+                case 'yellow':
+                    return '医护';
+                case 'red':
+                    return '专业';
+                default:
+                    return '';
+            }
+        }
+        
+        /**
+         * 获取能力级别默认提示文本
+         * @param {string} level - 能力级别（green、yellow或red）
+         * @returns {string} - 能力级别提示文本
+         */
+        function getDefaultCapabilityTooltip(level) {
+            switch(level) {
+                case 'green':
+                    return '所有作战人员和战斗生命救护员能力等级';
+                case 'yellow':
+                    return '战斗医护人员能力等级';
+                case 'red':
+                    return '战斗医疗队或特种作战医护人员能力等级';
+                default:
+                    return '';
+            }
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => initFlowFramework());
+    </script>
+</body>
+</html> 

@@ -4,11 +4,20 @@ dist/
 build/
 .turbo/
 coverage/
+.cloudflare/
+.wrangler/
+.dev.vars*
 *.local
+*.tsbuildinfo
+*.d.ts.map
+*.js.map
 .DS_Store
 .env
 .env.local
 .vercel
+playwright-report/
+test-results/
+storybook-static/
 
 # Apps
 apps/*/node_modules/
@@ -16,6 +25,7 @@ apps/*/.git/
 apps/*/dist/
 apps/*/build/
 apps/*/.next/
+apps/*/out/
 
 # Packages
 packages/*/node_modules/

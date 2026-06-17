@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCCC战术战伤救护流程</title>
+    
+    <!-- PWA相关元标签 -->
+    <meta name="description" content="基于CoTCCC 2017版官方指南的交互式战术战伤救护决策流程">
+    <meta name="theme-color" content="#EE1C25">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="TCCC流程">
+    
+    <!-- PWA图标 -->
+    <link rel="icon" href="/icons/favicon.ico">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- 样式表 -->
+    <link rel="stylesheet" href="/assets/css/tailwind.css">
+    <link rel="stylesheet" href="/assets/css/fontawesome-shim.css">
+    <style>
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            overscroll-behavior: none;
+        }
+
+        .skip-link {
+            position: fixed;
+            left: 1rem;
+            top: 1rem;
+            z-index: 200;
+            transform: translateY(-200%);
+            background: #FFFFFF;
+            color: #000000;
+            padding: 0.75rem 1rem;
+            border: 2px solid #EE1C25;
+            border-radius: 0.5rem;
+            font-weight: 800;
+            transition: transform 0.2s ease;
+        }
+
+        .skip-link:focus {
+            transform: translateY(0);
+            outline: none;
+        }
+
+        .platform-bar {
+            border-bottom: 1px solid #2a2a2a;
+            background: #090909;
+        }
+
+        .platform-bar-inner {
+            max-width: 1200px;
+            margin: auto;
+            padding: 0.875rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            font-size: 0.8rem;
+            color: #a0a0a0;
+        }
+
+        .platform-bar a {
+            color: #FFFFFF;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .source-strip {
+            margin: 1.5rem auto 0;
+            display: grid;
+            gap: 0.75rem;
+            max-width: 860px;
+            color: #cccccc;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .source-strip strong {
+            color: #FFFFFF;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 1.5rem;
+            padding: 1.5rem;
+            max-width: 1200px;
+            margin: auto;
+        }
+        
+        @media (min-width: 768px) {
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .bento-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .bento-box {
+            background-color: #1a1a1a;
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid #333333;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 20px 40px -20px rgba(238, 28, 37, 0.3);
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .bento-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.25), 0 25px 50px -20px rgba(238, 28, 37, 0.4);
+        }
+        
+        .highlight-red { color: #EE1C25; }
+        .highlight-red-bg { background-color: #EE1C25; }
+        .highlight-red-border { border-color: #EE1C25; }
+
+        .main-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+        }
+        
+        .subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            color: #a0a0a0;
+            margin-top: 0.5rem;
+        }
+
+        .box-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .box-subtitle {
+            font-size: clamp(0.8rem, 1.5vw, 1rem);
+            color: #a0a0a0;
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .box-detail {
+            font-size: clamp(0.875rem, 1.5vw, 1rem);
+            color: #cccccc;
+            margin-top: 1rem;
+        }
+
+        .action-button {
+            background-color: #2a2a2a;
+            border: 1px solid #444444;
+            color: #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        
+        .action-button:hover {
+            background-color: #EE1C25;
+            border-color: #EE1C25;
+            color: #FFFFFF;
+            transform: translateY(-3px);
+        }
+        
+        .icon-style {
+            font-size: clamp(4rem, 10vw, 6rem);
+            color: #EE1C25;
+            opacity: 0.2;
+            position: absolute;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            transform: rotate(-15deg);
+            z-index: 0;
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .bento-grid section:first-child {
+            grid-column: 1 / -1;
+            text-align: center;
+            min-height: auto;
+            padding: 4rem 2rem;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #777777;
+        }
+        
+        /* PWA安装按钮样式 */
+        #installPWA {
+            background-color: #EE1C25;
+            color: #FFFFFF;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            display: none; /* 默认隐藏，通过JS控制显示 */
+            margin: 2rem auto;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        #installPWA:hover {
+            background-color: #ff3c44;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -5px rgba(238, 28, 37, 0.4);
+        }
+        
+        /* 离线状态指示器 */
+        .offline-indicator {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #EE1C25;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.9rem;
+            z-index: 100;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid #EE1C25;
+        }
+        
+        .offline-indicator.visible {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <a href="#main" class="skip-link">跳到主内容</a>
+
+    <header class="platform-bar">
+        <div class="platform-bar-inner">
+            <a href="/">红医师 / 总入口</a>
+            <span>当前项目：战场救护 TCCC</span>
+            <span>离线静态流程 · 仅供教育训练 · 内容需更新复核</span>
+        </div>
+    </header>
+
+    <main id="main" class="bento-grid">
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h1 class="main-title"><span class="highlight-red">TCCC</span> 战术战伤救护流程</h1>
+                <p class="subtitle">基于 CoTCCC 2017版官方指南的交互式决策流程</p>
+                <div class="source-strip">
+                    <p><strong>内容状态：</strong>CoTCCC 2017 基础内容，需按 JTS / Deployed Medicine 最新资料更新复核。</p>
+                    <p><strong>使用边界：</strong>仅供教育训练和流程学习，不能替代现行作战医疗规范、医疗指挥链或正式认证课程。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">TCCC标准流程</h2>
+                <p class="box-subtitle">TCCC Standard Algorithm</p>
+                <p class="box-detail">全面的战术战斗伤员救护流程，包含从交火中救治到战术区域救护的完整步骤。</p>
+                <a href="pages/TCCC标准流程.html" class="action-button block">查看流程</a>
+            </div>
+            <i class="fas fa-medkit icon-style"></i>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">静脉通路与止血酸</h2>
+                <p class="box-subtitle">Circulation Algorithm</p>
+                <p class="box-detail">静脉通路建立与止血酸使用的专项流程，包括适应症判断和操作步骤。</p>
+                <a href="pages/TCCC静脉通路与止血酸.html" class="action-button block">查看流程</a>
+            </div>
+            <i class="fas fa-tint icon-style"></i>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">骨盆绑带流程</h2>
+                <p class="box-subtitle">Pelvic Binder Algorithm</p>
+                <p class="box-detail">针对骨盆出血的专项救治流程，详细说明骨盆绑带的使用适应症和操作步骤。</p>
+                <a href="pages/TCCC骨盆绑带流程.html" class="action-button block">查看流程</a>
+            </div>
+            <i class="fas fa-person-harassing icon-style"></i>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">大出血流程</h2>
+                <p class="box-subtitle">Massive Hemorrhage Algorithm</p>
+                <p class="box-detail">针对大出血情况的紧急处理流程，包括止血工具选择和操作步骤。</p>
+                <a href="pages/TFC大出血算法.html" class="action-button block">查看流程</a>
+            </div>
+            <i class="fas fa-heartbeat icon-style"></i>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">气道管理算法</h2>
+                <p class="box-subtitle">Airway Management Algorithm</p>
+                <p class="box-detail">气道评估与管理流程，包括基础气道处理和高级气道技术的应急管理。</p>
+                <a href="pages/TFC气道算法.html" class="action-button block">查看流程</a>
+            </div>
+            <i class="fas fa-lungs icon-style"></i>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">疼痛管理与镇痛</h2>
+                <p class="box-subtitle">Pain Management & Analgesia</p>
+                <p class="box-detail">战场疼痛评估与镇痛处理流程，包含不同程度疼痛的药物选择和给药剂量。</p>
+                <a href="pages/TCCC疼痛管理.html" class="action-button block">查看流程</a>
+            </div>
+            <i class="fas fa-pills icon-style"></i>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">休克与液体复苏</h2>
+                <p class="box-subtitle">Shock & Fluid Resuscitation</p>
+                <p class="box-detail">针对出血性休克的液体复苏决策流程，包括血制品使用和复苏目标。</p>
+                <a href="pages/TCCC休克与液体复苏.html" class="action-button block">查看流程</a>
+            </div>
+            <i class="fas fa-syringe icon-style"></i>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">战术后送开放气道</h2>
+                <p class="box-subtitle">TACEVAC Airway Algorithm</p>
+                <p class="box-detail">战术后送阶段的气道再评估与开放气道流程，和 TFC 气道入口区分维护。</p>
+                <a href="pages/TACEVAC开放气道.html" class="action-button block">查看流程</a>
+            </div>
+            <i class="fas fa-helicopter-medical icon-style"></i>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">伤口处理</h2>
+                <p class="box-subtitle">Wound Care Algorithm</p>
+                <p class="box-detail">战伤伤口处理流程，包括烧伤评估、液体复苏和伤口包扎的决策路径。</p>
+                <a href="pages/TCCC伤口处理.html" class="action-button block">查看流程</a>
+            </div>
+            <i class="fas fa-bandage icon-style"></i>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">呼吸管理算法</h2>
+                <p class="box-subtitle">Breathing Management Algorithm</p>
+                <p class="box-detail">战伤呼吸问题的评估与处理流程，包括胸部伤情的识别和紧急处理措施。</p>
+                <a href="pages/TCCC呼吸管理算法.html" class="action-button block">查看流程</a>
+            </div>
+            <i class="fas fa-wind icon-style"></i>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">战术后送脑损伤</h2>
+                <p class="box-subtitle">TACEVAC TBI Algorithm</p>
+                <p class="box-detail">战术后送阶段创伤性脑损伤的评估与处理流程，包括脑疝识别与紧急处置。</p>
+                <a href="pages/TACEVAC创伤性脑损伤.html" class="action-button block">查看流程</a>
+            </div>
+            <i class="fas fa-helicopter-medical icon-style"></i>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">伤员沟通</h2>
+                <p class="box-subtitle">Casualty Communication</p>
+                <p class="box-detail">与伤员、指挥链和医疗后送链的有效沟通流程，包括伤情报告格式。</p>
+                <a href="pages/TCCC伤员沟通.html" class="action-button block">查看流程</a>
+            </div>
+            <i class="fas fa-comment-medical icon-style"></i>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">预防低体温</h2>
+                <p class="box-subtitle">Hypothermia Prevention</p>
+                <p class="box-detail">预防战场低体温的专项流程，详细说明温度管理措施及其重要性。</p>
+                <a href="pages/TCCC预防低体温.html" class="action-button block">查看流程</a>
+            </div>
+            <i class="fas fa-temperature-low icon-style"></i>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">TACEVAC预防低体温与眼外伤</h2>
+                <p class="box-subtitle">TACEVAC Hypothermia & Eye Trauma</p>
+                <p class="box-detail">战术后送护理阶段的低体温预防与贯通性眼外伤专项流程，包含体温管理和眼外伤处理流程。</p>
+                <a href="pages/TACEVAC预防低体温.html" class="action-button block">查看流程</a>
+            </div>
+            <i class="fas fa-temperature-low icon-style"></i>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">TACEVAC再评估</h2>
+                <p class="box-subtitle">TACEVAC Re-assessment</p>
+                <p class="box-detail">战术后送过程中伤员再评估流程，包括干预措施效果检查和出血再评估。</p>
+                <a href="pages/TACEVAC再评估.html" class="action-button block">查看流程</a>
+            </div>
+            <i class="fas fa-helicopter icon-style"></i>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">流程框架</h2>
+                <p class="box-subtitle">Flow Framework Demo</p>
+                <p class="box-detail">可复用的决策流程框架示例，展示如何创建和定制自己的TCCC流程。</p>
+                <a href="pages/TCCC流程框架.html" class="action-button block">查看示例</a>
+            </div>
+            <i class="fas fa-code icon-style"></i>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">循环系统教案</h2>
+                <p class="box-subtitle">Circulatory System Course</p>
+                <p class="box-detail">战斗环境下的循环系统：从生理学到前沿复苏的系统性教学内容，包含解剖学、病理生理学和临床应用。</p>
+                <a href="pages/循环系统教案.html" class="action-button block">查看教案</a>
+            </div>
+            <i class="fas fa-heart icon-style"></i>
+        </section>
+        
+        <section class="bento-box">
+            <div class="content-wrapper">
+                <h2 class="box-title">使用说明</h2>
+                <p class="box-subtitle">Documentation</p>
+                <p class="box-detail">详细的项目说明文档，包含功能介绍、使用指南和开发扩展建议。</p>
+                <a href="README.md" class="action-button block">查看文档</a>
+            </div>
+            <i class="fas fa-book icon-style"></i>
+        </section>
+    </main>
+    
+    <!-- PWA安装按钮 -->
+    <button id="installPWA" class="block">安装应用以便离线使用</button>
+    
+    <!-- 离线状态指示器 -->
+    <div class="offline-indicator" id="offlineIndicator">
+        <i class="fas fa-wifi"></i>
+        <span>离线模式</span>
+    </div>
+    
+    <footer class="footer">
+        <p>基于 CoTCCC 2017版官方指南 | 仅供教育和训练目的使用</p>
+        <p class="mt-2">© 2023 TCCC流程项目 | <a href="README.md" class="highlight-red hover:underline">查看README</a></p>
+    </footer>
+    
+    <!-- 添加PWA注册脚本 -->
+    <script src="/pwa-register.js"></script>
+    
+    <!-- 添加离线状态检测脚本 -->
+    <script>
+        // 离线状态指示器
+        window.addEventListener('DOMContentLoaded', () => {
+            const offlineIndicator = document.getElementById('offlineIndicator');
+            
+            // 检查初始网络状态
+            if (!navigator.onLine) {
+                offlineIndicator.classList.add('visible');
+            }
+            
+            // 监听网络状态变化
+            window.addEventListener('online', () => {
+                offlineIndicator.classList.remove('visible');
+            });
+            
+            window.addEventListener('offline', () => {
+                offlineIndicator.classList.add('visible');
+            });
+        });
+    </script>
+</body>
+</html> 

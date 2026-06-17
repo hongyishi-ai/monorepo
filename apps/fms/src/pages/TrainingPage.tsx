@@ -13,6 +13,8 @@ import { useStorage } from '@/hooks/use-storage';
 import { generateComprehensiveTrainingPlan, type Exercise } from '@/lib/trainingAlgorithm';
 import { BASIC_TESTS } from '@/data/fms-tests';
 
+const assetUrl = (assetPath: string) => `${import.meta.env.BASE_URL}${assetPath.replace(/^\/+/, '')}`;
+
 const TrainingPage = () => {
   // 使用Zustand store获取训练数据
   const { reportData, setLastVisitedPage, setReportData } = useAppStore();
@@ -140,7 +142,7 @@ const TrainingPage = () => {
 
   // 检查视频文件是否存在的函数
   const getVideoPath = (exerciseId: string) => {
-    return `/demo/exercises/${exerciseId}.webm`;
+    return assetUrl(`demo/exercises/${exerciseId}.webm`);
   };
 
   // 检查是否应该显示视频

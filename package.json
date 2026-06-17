@@ -6,6 +6,10 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
+    "build:cloudflare": "node scripts/build-cloudflare.mjs",
+    "preview:cloudflare": "npx wrangler pages dev .cloudflare/site --compatibility-date=2026-06-16 --install-skills=false",
+    "test:cloudflare": "node --test scripts/build-cloudflare.test.mjs scripts/project-registry.test.mjs scripts/cloudflare-config.test.mjs scripts/brand-tokens.test.mjs functions/api/openweather.test.mjs functions/fms/fallback.test.mjs",
+    "test:cloudflare-build": "node --test scripts/build-cloudflare.test.mjs",
     "lint": "turbo lint",
     "test": "turbo test",
     "type-check": "turbo type-check",

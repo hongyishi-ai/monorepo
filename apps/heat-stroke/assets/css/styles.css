@@ -1,19 +1,156 @@
-/* 
-   原有样式已被移除。
-   页面主要样式现在由 Tailwind CSS (通过 CDN 引入 index.html) 控制。
-   可以在此处添加少量无法用 Tailwind 实现的自定义样式或覆盖。
-*/
-
-/* 全局基础样式 */
-body {
-    /* 设置字体平滑 */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    /* 添加平滑滚动效果 */
-    scroll-behavior: smooth;
+:root {
+    --hys-red: #D93025;
+    --hys-field-red: #A51F18;
+    --hys-heat: #FF6B00;
+    --hys-field-navy: #12313C;
+    --hys-clinical-blue: #78C7E7;
+    --hys-paper: #F4ECDC;
+    --hys-ink: #000000;
+    --hys-muted: #737373;
+    --highlight-color: var(--hys-heat);
+    --highlight-color-rgb: 255, 107, 0;
 }
 
-/* Chart.js 图表样式调整 */
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    min-height: 100vh;
+    background-color: var(--hys-paper);
+    background-image:
+        linear-gradient(rgba(18, 49, 60, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(18, 49, 60, 0.06) 1px, transparent 1px);
+    background-size: 72px 72px, 72px 72px;
+    color: var(--hys-field-navy);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "Microsoft YaHei", Arial, sans-serif;
+    letter-spacing: 0;
+}
+
+.skip-link {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 1000;
+    transform: translateY(-160%);
+    background: var(--hys-paper);
+    color: var(--hys-field-navy);
+    border: 2px solid var(--hys-red);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-weight: 800;
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+}
+
+.brand-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding: 0;
+    text-align: initial;
+    background: rgba(244, 236, 220, 0.98);
+    border-bottom: 3px solid var(--hys-red);
+}
+
+.brand-page-anchor {
+    scroll-margin-top: 88px;
+}
+
+.brand-page-anchor:focus {
+    outline: none;
+}
+
+.brand-nav-inner {
+    width: min(1200px, calc(100% - 32px));
+    min-height: 64px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.brand-mark {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--hys-field-navy);
+    font-size: 1.35rem;
+    font-weight: 900;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.brand-mark-red {
+    color: var(--hys-red);
+}
+
+.brand-mark-divider {
+    margin: 0 8px;
+    color: var(--hys-muted);
+}
+
+.brand-nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+.brand-nav-link {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 4px;
+    color: var(--hys-field-navy);
+    font-size: 0.95rem;
+    font-weight: 800;
+    text-decoration: none;
+    transition-property: background-color, color, transform;
+    transition-duration: 160ms;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.brand-nav-link:hover,
+.brand-nav-link:focus {
+    background: var(--hys-red);
+    color: var(--hys-paper);
+}
+
+.brand-nav-link:active {
+    transform: scale(0.96);
+}
+
+.highlight-text,
+.highlight-text-red,
+.highlight-orange,
+.text-brand-orange,
+.text-orange-500,
+.text-orange-400 {
+    color: var(--hys-heat);
+}
+
+.highlight-bg,
+.bg-brand-orange,
+.bg-orange-500,
+.bg-orange-600 {
+    background-color: var(--hys-heat);
+}
+
+.border-brand-orange,
+.border-orange-500 {
+    border-color: var(--hys-heat);
+}
+
+.rounded-lg,
+.rounded-xl,
+.rounded-2xl {
+    border-radius: 6px;
+}
+
 canvas#heat-index-chart {
     width: 100% !important;
     height: 100% !important;
@@ -26,11 +163,12 @@ canvas#heat-index-chart {
     min-height: 250px;
 }
 
-/* 滚动动画相关样式 */
 .animated-item {
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    transition-property: opacity, transform;
+    transition-duration: 0.8s;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .animated-item.visible {
@@ -38,17 +176,17 @@ canvas#heat-index-chart {
     transform: translateY(0) !important;
 }
 
-/* 为不同元素设置不同的动画延迟，创造错落有致的效果 */
 .animated-item:nth-child(1) { transition-delay: 0.1s; }
 .animated-item:nth-child(2) { transition-delay: 0.2s; }
 .animated-item:nth-child(3) { transition-delay: 0.3s; }
 .animated-item:nth-child(4) { transition-delay: 0.4s; }
 .animated-item:nth-child(5) { transition-delay: 0.5s; }
 
-/* 为资源链接添加悬停效果 */
 .bento-item {
-    transition: all 0.3s ease;
-    border-radius: 0.5rem;
+    transition-property: transform, box-shadow, background-color, border-color;
+    transition-duration: 180ms;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 6px;
 }
 
 .bento-item:hover {
@@ -57,28 +195,27 @@ canvas#heat-index-chart {
     box-shadow: 0 10px 15px -3px rgba(255, 107, 0, 0.1), 0 4px 6px -2px rgba(255, 107, 0, 0.05);
 }
 
-/* 确保内容正常显示，即使JS未加载 */
-.loading, .weather-info {
+.loading,
+.weather-info {
     min-height: 150px;
 }
 
-/* 修复天气图标显示问题 */
 #weather-icon {
     display: inline-block;
     width: 64px;
     height: 64px;
 }
 
-/* 热指数警告颜色 */
-.alert.alert-comfort { background-color: rgba(74, 222, 128, 0.2); color: rgb(74, 222, 128); }
-.alert.alert-caution { background-color: rgba(250, 204, 21, 0.2); color: rgb(250, 204, 21); }
-.alert.alert-extreme-caution { background-color: rgba(249, 115, 22, 0.2); color: rgb(249, 115, 22); }
-.alert.alert-danger { background-color: rgba(239, 68, 68, 0.2); color: rgb(239, 68, 68); }
-.alert.alert-extreme-danger { background-color: rgba(220, 38, 38, 0.2); color: rgb(220, 38, 38); }
+.alert.alert-comfort { background-color: rgba(74, 222, 128, 0.2); color: rgb(22, 101, 52); }
+.alert.alert-caution { background-color: rgba(250, 204, 21, 0.2); color: rgb(133, 77, 14); }
+.alert.alert-extreme-caution { background-color: rgba(249, 115, 22, 0.2); color: rgb(154, 52, 18); }
+.alert.alert-danger { background-color: rgba(239, 68, 68, 0.2); color: rgb(153, 27, 27); }
+.alert.alert-extreme-danger { background-color: rgba(220, 38, 38, 0.2); color: rgb(127, 29, 29); }
 
-/* 热射病预防检查清单样式 */
 .checklist-item {
-    transition: all 0.3s ease;
+    transition-property: transform, background-color, border-color;
+    transition-duration: 180ms;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .checklist-item:hover {
@@ -93,12 +230,14 @@ canvas#heat-index-chart {
     border-radius: 4px;
     display: inline-block;
     position: relative;
-    transition: all 0.3s ease;
+    transition-property: background-color, border-color;
+    transition-duration: 180ms;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .checklist-item input[type="checkbox"]:checked {
-    background-color: #FF6B00;
-    border-color: #FF6B00;
+    background-color: var(--hys-heat);
+    border-color: var(--hys-heat);
 }
 
 .checklist-item input[type="checkbox"]:checked::after {
@@ -113,7 +252,7 @@ canvas#heat-index-chart {
 }
 
 .checklist-item.completed {
-    border-left-color: #FF6B00;
+    border-left-color: var(--hys-heat);
     background-color: rgba(255, 107, 0, 0.1);
 }
 
@@ -122,11 +261,47 @@ canvas#heat-index-chart {
     opacity: 0.7;
 }
 
-/* 确保Framer Motion动画正常工作的备用方案 */
+button,
+a {
+    touch-action: manipulation;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+    outline: 2px solid var(--hys-clinical-blue);
+    outline-offset: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .animated-item {
+    .animated-item,
+    .fade-in {
         opacity: 1 !important;
         transform: none !important;
         transition: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .brand-nav-inner {
+        width: min(100% - 24px, 1200px);
+        min-height: auto;
+        padding: 10px 0;
+        display: block;
+    }
+
+    .brand-mark {
+        font-size: 1.2rem;
+    }
+
+    .brand-nav-links {
+        justify-content: flex-start;
+        margin-top: 8px;
+    }
+
+    .brand-nav-link {
+        min-height: 38px;
+        padding: 7px 9px;
+        font-size: 0.9rem;
     }
 }

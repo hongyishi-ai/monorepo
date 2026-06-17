@@ -2,11 +2,14 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { render } from '@testing-library/react'
 import { screen, waitFor } from '@testing-library/dom'
-import { createMemoryRouter, RouterProvider } from 'react-router-dom'
+import { createMemoryRouter, MemoryRouter, Route, RouterProvider, Routes, useLocation } from 'react-router-dom'
 // import userEvent from '@testing-library/user-event'
+
+import { RouteLoading } from '../App'
 
 // 导入页面组件
 import RootLayout from '../components/shared/RootLayout'
+import FirstVisitDetector from '../components/shared/FirstVisitDetector'
 import HomePage from '../pages/HomePage'
 import AssessmentPage from '../pages/AssessmentPage'
 import ReportPage from '../pages/ReportPage'
@@ -21,6 +24,24 @@ vi.mock('framer-motion', () => ({
   },
   AnimatePresence: ({ children }: any) => children,
 }))
+
+vi.mock('@/components/ui/product-tour', () => ({
+  ProductTour: () => null,
+}))
+
+vi.mock('@/hooks/useProductTour', () => ({
+  useProductTour: () => ({
+    isOpen: false,
+    currentPageTour: { steps: [] },
+    closeTour: () => undefined,
+  }),
+}))
+
+const PathProbe = () => {
+  const location = useLocation()
+
+  return <div data-testid="current-path">{location.pathname}</div>
+}
 
 // Helper function to render App with router
 const renderApp = (initialEntries = ['/']) => {
@@ -120,6 +141,63 @@ describe('App 路由测试', () => {
     // 检查训练页面是否正确渲染 - 使用实际存在的文本
     await waitFor(() => {
       expect(screen.getByText('个性化纠正训练方案')).toBeInTheDocument()
+    })
+  })
+})
+
+describe('App 路由加载状态', () => {
+  it('应该提供可访问的路由加载提示', () => {
+    render(<RouteLoading />)
+
+    expect(screen.getByRole('status', { name: '正在载入训练伤防治模块' })).toBeInTheDocument()
+    expect(screen.getByText('模块载入中')).toBeInTheDocument()
+  })
+})
+
+describe('首次访问开场页拦截', () => {
+  const renderFirstVisitDetector = (initialEntries = ['/']) => {
+    return render(
+      <MemoryRouter initialEntries={initialEntries}>
+        <Routes>
+          <Route
+            path="/"
+            element={(
+              <FirstVisitDetector>
+                <PathProbe />
+              </FirstVisitDetector>
+            )}
+          />
+          <Route
+            path="/assessment"
+            element={(
+              <FirstVisitDetector>
+                <PathProbe />
+              </FirstVisitDetector>
+            )}
+          />
+          <Route path="/opening" element={<PathProbe />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+  }
+
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
+  it('首次访问根路径时显示开场页', async () => {
+    renderFirstVisitDetector(['/'])
+
+    await waitFor(() => {
+      expect(screen.getByTestId('current-path')).toHaveTextContent('/opening')
+    })
+  })
+
+  it('首次访问任务深链接时不跳转到开场页', async () => {
+    renderFirstVisitDetector(['/assessment'])
+
+    await waitFor(() => {
+      expect(screen.getByTestId('current-path')).toHaveTextContent('/assessment')
     })
   })
 })

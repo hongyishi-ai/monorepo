@@ -126,13 +126,7 @@ const ReportPage = () => {
     testNameMap
   } = reportAnalysis;
 
-  // 降低重复与干扰：
-  // 1) 当存在排除测试异常时，疼痛提示由 PathologyAnalysis 负责，RiskAlerts 不再重复展示疼痛项
-  const painfulForRiskAlerts = (clearanceAnalysis.failedTests.length > 0)
-    ? []
-    : (reportData?.painfulTests || []);
-
-  // 2) 不对称分析卡片仅展示中/高风险项（轻度不对称只在详细结果中以 Badge 标注）
+  // 不对称分析卡片仅展示中/高风险项（轻度不对称只在详细结果中以 Badge 标注）
   const filteredAsymmetryIssues = Object.fromEntries(
     Object.entries(reportData?.asymmetryIssues || {}).filter(([, v]: any) => v && v.riskLevel && v.riskLevel !== 'low')
   );
@@ -161,7 +155,7 @@ const ReportPage = () => {
         {/* 风险警告组件 - 遵循React哲学的条件渲染原则 */}
         <div role="region" aria-label="风险警告区域">
           <RiskAlerts
-            painfulTests={painfulForRiskAlerts}
+            painfulTests={reportData?.painfulTests || []}
             testNameMap={testNameMap}
             highRiskAsymmetry={asymmetryAnalysis.highRiskCount}
             failedClearanceTests={clearanceAnalysis.failedTests}

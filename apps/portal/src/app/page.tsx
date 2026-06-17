@@ -5,17 +5,17 @@ import { PortfolioFooter } from './_components/portfolio/PortfolioFooter';
 
 export const metadata = {
   title: '红医师',
-  description: '以代码为手术刀，解决棘手问题。专注军事医学、应急响应与技术创新的作品集。',
+  description: '红医师医疗软件、训练伤防治与热射病防治工具的统一入口平台。',
   openGraph: {
     title: '红医师',
-    description: '以代码为手术刀，解决棘手问题',
+    description: '红医师医疗工具统一入口平台',
     type: 'website',
   },
 };
 
 export default function Home() {
   return (
-    <div className="bg-white dark:bg-black text-black dark:text-white min-h-screen transition-colors duration-300">
+    <div className="bg-[#f4ecdc] dark:bg-black text-black dark:text-white min-h-screen transition-colors duration-300">
       <PortfolioHero />
       <main className="py-16 md:py-20">
         <div className="animate-on-load animate-fade-in-up">
@@ -29,4 +29,3 @@ export default function Home() {
     </div>
   );
 }
-

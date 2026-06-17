@@ -1,0 +1,44 @@
+name: React Version Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  detect-react:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Get React versions
+        id: react-versions
+        run: |
+          for dir in apps/*/; do
+            app=$(basename "$dir")
+            react_version=$(grep '"react":' "$dir/package.json" 2>/dev/null | sed -E 's/.*"react": *"\^?([^"]+)".*/\1/' || echo "NOT FOUND")
+            react_18_required="18.3.0"
+            if [[ "$react_version" != "NOT FOUND" ]]; then
+              echo "✅ $app: React $react_version"
+            else
+              echo "⚪ $app: No React dependency"
+            fi
+          done
+
+      - name: Check React 18.3.0 usage
+        run: |
+          echo ""
+          echo "=== React Version Report ==="
+          for dir in apps/*/; do
+            app=$(basename "$dir")
+            react_version=$(grep '"react":' "$dir/package.json" 2>/dev/null | sed -E 's/.*"react": *"\^?([^"]+)".*/\1/' || echo "")
+            if [[ -n "$react_version" && "$react_version" != "NOT FOUND" ]]; then
+              echo "$app: $react_version"
+            fi
+          done

@@ -6,10 +6,9 @@
     <title>热射病核心体温监测与降温方法</title>
     <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
+    <link rel="stylesheet" href="../assets/css/styles.css">
     <!-- Tailwind CSS CDN -->
     <script src="../assets/vendors/tailwind.compiler.js"></script>
-    <!-- Framer Motion CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/framer-motion/11.2.10/motion.umd.min.js" integrity="sha512-/S9lAhJNLcsru5fD20p5Kszm7F9EqkfEVbuAXFvnvBXRG/IBxzf7YUbMqjUjPSLTOVksLKvAy4g1/k0a3sH7RA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
@@ -132,19 +131,27 @@
     </style>
 </head>
 <body class="antialiased">
+    <a href="#main" class="skip-link">跳到主内容</a>
 
-<!-- 添加导航栏 -->
-<nav class="bg-black py-4 px-6 sticky top-0 z-50 border-b border-gray-800">
-    <div class="container mx-auto flex justify-between items-center">
-        <a href="../index.html" class="flex items-center text-orange-500 hover:text-orange-400 transition-colors">
-            <i class="fas fa-arrow-left mr-2"></i>
-            <span class="font-bold">返回主页</span>
-        </a>
-    </div>
-</nav>
+    <header class="brand-nav">
+        <nav class="brand-nav-inner" aria-label="热射病防治导航">
+            <a class="brand-mark" href="../index.html">
+                <span class="brand-mark-red">红医师</span>
+                <span class="brand-mark-divider">/</span>
+                <span>热射病防治</span>
+            </a>
+            <div class="brand-nav-links">
+                <a href="/" class="brand-nav-link">总入口</a>
+                <a href="../index.html" class="brand-nav-link">项目首页</a>
+                <a href="热指数查询.html" class="brand-nav-link">热指数</a>
+                <a href="热射病现场处置.html" class="brand-nav-link">现场处置</a>
+                <a href="8-4-6黄金法则.html" class="brand-nav-link">8-4-6法则</a>
+            </div>
+        </nav>
+    </header>
 
-    <!-- Note: motion.* attributes require Framer Motion library and potentially JS initialization -->
-    <!-- The UMD script is included, basic animations using attributes like whileInView should work -->
+    <div id="main" class="brand-page-anchor" tabindex="-1"></div>
+    <!-- Motion-flavored tags are kept as static custom elements; no external animation runtime is required. -->
     <div id="app" class="container mx-auto px-4 py-12 max-w-7xl">
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
 

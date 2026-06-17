@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>战斗环境下的循环系统：从生理学到前沿复苏</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="/assets/css/fontawesome-shim.css">
+
+    <!-- CDNs -->
+    <link rel="stylesheet" href="/assets/css/tailwind.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #FDFDFD;
+            --text-color: #161615;
+            --accent-color: #CC0000;
+            --subtle-gray: #f3f4f6;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .huge-text {
+            font-family: 'Manrope', "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 600;
+            letter-spacing: -0.025em;
+        }
+
+        h2 {
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+        }
+
+        h3 {
+            font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+            font-weight: 600;
+        }
+
+        h4 {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: rgba(22, 22, 21, 0.85);
+        }
+
+        .prose-text {
+            max-width: 65ch;
+        }
+
+        .highlight {
+            color: var(--accent-color);
+        }
+
+        .english-accent {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(0.8rem, 1.5vw, 1rem);
+            font-weight: 500;
+            color: var(--accent-color);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+            border: 2px solid transparent;
+        }
+
+        .btn:hover {
+            background-color: transparent;
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 25px rgba(87, 81, 213, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .scroll-anim {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+        }
+
+        .scroll-anim.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .subtle-divider {
+            border-top: 1px solid rgba(22, 22, 21, 0.1);
+        }
+
+        .image-placeholder {
+            background-color: var(--subtle-gray);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #b0b0b0;
+            font-size: 1rem;
+            font-weight: 500;
+            width: 100%;
+            min-height: 350px;
+            border: 1px dashed #ddd;
+            text-align: center;
+            padding: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .image-placeholder:hover {
+            background-color: #e9e9e9;
+        }
+
+        .image-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 2rem;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(22, 22, 21, 0.1);
+        }
+
+        th {
+            font-weight: 600;
+        }
+
+        thead {
+            border-bottom: 2px solid rgba(22, 22, 21, 0.2);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-wrapper {
+            border: 1px solid rgba(22, 22, 21, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .huge-display {
+            font-size: clamp(5rem, 15vw, 12rem);
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            line-height: 1;
+            color: var(--subtle-gray);
+            transition: color 0.5s ease;
+        }
+
+        .is-visible .huge-display {
+            color: #e9e9e9;
+        }
+    </style>
+</head>
+
+<body class="w-full" id="top">
+
+    <main class="mx-auto">
+
+        <!-- HERO SECTION -->
+        <header class="min-h-screen flex flex-col justify-center px-6 md:px-10 lg:px-16 scroll-anim">
+            <p class="english-accent mb-4">COMBAT CIRCULATORY SYSTEM</p>
+            <h1 class="max-w-4xl text-6xl">循环系统：从生理学到战斗前沿</h1>
+            <p class="mt-8 text-lg md:text-xl max-w-3xl opacity-80 prose-text">
+                本次授课对循环系统的基础生理学及其在现代战场救护中的核心应用进行了系统性、多层次的综合调研。分析表明，对循环系统的理解必须超越基础解剖学，深入到其在创伤应激下的动态病理生理变化，以及由此催生的战术医学干预原则。
+            </p>
+        </header>
+
+        <!-- SECTION 1 -->
+        <section class="py-20 md:py-32">
+            <div class="px-6 md:px-10 lg:px-16 mb-24 text-center scroll-anim">
+                <p class="english-accent">SECTION 01</p>
+                <h2 class="mt-4 max-w-4xl mx-auto text-4xl">生命的引擎：基础解剖学与生理学</h2>
+            </div>
+
+            <div class="relative grid grid-cols-1 lg:grid-cols-2 gap-16 items-start px-6 md:px-10 lg:px-16 scroll-anim">
+                <div class="lg:sticky lg:top-1/4">
+                    <h3 class="leading-tight text-4xl">1.1 作为<span class="highlight">双重泵</span>的心脏</h3>
+                    <p class="english-accent mt-2">THE HEART AS A DUAL PUMP</p>
+                    <p class="prose-text mt-6 opacity-80">循环系统的核心是心脏，它是一个高效、不知疲倦的肌肉泵。</p>
+                </div>
+                <div class="space-y-6 prose-text">
+                    <p>从功能上讲，心脏可以被理解为一个“双重泵” 。驱动体循环和肺循环这两个独立但相互关联的回路。</p>
+                    <p>心脏由四个心腔组成：两个上方的、壁较薄的心房（右心房和左心房）和两个下方的、壁较厚的、肌肉发达的心室（右心室和左心室）
+                        。右心房接收来自全身的缺氧血，而左心房接收来自肺部的富氧血。心室则是主要的泵血腔室，右心室将缺氧血泵入肺部，左心室则将富氧血泵入全身。</p>
+                    <p>为了确保血液的单向流动，心脏内部有四个精密的瓣膜：三尖瓣（位于右心房和右心室之间）、肺动脉瓣（位于右心室和肺动脉之间）、二尖瓣（位于左心房和左心室之间）以及主动脉瓣（位于左心室和主动脉之间）
+                        。这些瓣膜的顺序性开放和关闭构成了心动周期的机械基础，即心音的来源，确保血液在系统中高效、无回流地推进 。</p>
+                    <img src="../images/01_heart_valves_diagram.webp"
+                        alt="心脏瓣膜示意图" class="mt-8 w-full h-auto rounded-xl shadow-md">
+                    <p>心脏壁本身由三层组织构成：外层的心外膜（即脏层心包）、中层厚实的心肌层和内层的心内膜 。心肌层是功能核心，由特殊的心肌细胞组成，这些细胞通过扭曲和盘绕形成环状结构，使其能够以高效的方式收缩和泵血
+                        。在微观层面，心肌的收缩依赖于肌球蛋白和肌动蛋白丝的相互作用，这一过程由钙离子的浓度精确调控，为理解休克状态下的心肌功能变化和复苏药物（如正性肌力药物）的作用机制提供了生理学基础 。</p>
+                    <img src="../images/02_heart_wall_structure.jpg" alt="心脏壁结构示意图"
+                        class="mt-8 w-full h-auto rounded-xl shadow-md">
+                </div>
+            </div>
+
+            <div class="mt-32 space-y-24 px-6 md:px-10 lg:px-16">
+                <div class="scroll-anim">
+                    <div class="max-w-4xl mx-auto text-center">
+                        <h3 class="text-4xl">1.2 血管网络</h3>
+                        <p class="english-accent mt-2">VASCULAR NETWORK: ARTERIES, VEINS & CAPILLARIES</p>
+                        <img src="../images/03_blood_vessels_network.jpg"
+                            alt="血管网络示意图" class="mt-8 w-full h-auto rounded-xl shadow-md">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                        <div class="prose-text">
+                            <h4 class="highlight text-2xl">动脉</h4>
+                            <p>负责将血液从心脏输送出去。它们必须承受心脏泵血产生的高压，因此其管壁厚实、富有弹性和肌肉组织
+                                。最大的动脉是主动脉，它直接与左心室相连，并逐渐分支成更小的动脉，最终形成微动脉，将血液导入毛细血管床。</p>
+                            <img src="../images/04_arteries_diagram.jpg"
+                                alt="动脉示意图" class="mt-8 w-full h-auto rounded-xl shadow-md">
+                        </div>
+                        <div class="prose-text">
+                            <h4 class="highlight text-2xl">静脉</h4>
+                            <p>负责将血液输送回心脏。与动脉相比，静脉系统是一个低压、高容量的系统。因此，静脉的管壁更薄，弹性较小
+                                。许多静脉，特别是四肢的静脉，内部有瓣膜，以防止血液在重力作用下倒流。血液从毛细血管汇入微静脉，然后汇入更大的静脉，最终通过上腔静脉和下腔静脉返回右心房 。</p>
+                            <img src="../images/05_veins_diagram.jpg"
+                                alt="静脉示意图" class="mt-8 w-full h-auto rounded-xl shadow-md">
+                        </div>
+                        <div class="prose-text">
+                            <h4 class="highlight text-2xl">毛细血管</h4>
+                            <p>是连接动脉和静脉的微观血管网络，是循环系统实现其主要功能的场所
+                                。它们的管壁极薄，仅由一层内皮细胞构成，这使得氧气、二氧化碳、营养物质和代谢废物能够在血液和周围组织细胞之间进行高效交换。毛细血管前括约肌可以调节进入毛细血管床的血流量，从而根据组织的代谢需求精确地分配血液
+                                。</p>
+                            <img src="../images/06_capillaries_diagram.png"
+                                alt="血管网络示意图" class="mt-8 w-full h-auto rounded-xl shadow-md">
+                        </div>
+                    </div>
+                    <p class="mt-8 prose-text mx-auto text-center">
+                        整个血管系统形成了一个从心脏出发，经过动脉、微动脉、毛细血管、微静脉、静脉，最终返回心脏的完整层级结构，确保了血液的持续循环 。</p>
+                </div>
+
+                <div class="scroll-anim">
+                    <h3 class="text-4xl text-center">1.3 两大循环</h3>
+                    <p class="english-accent text-center mt-2">PULMONARY & SYSTEMIC CIRCUITS</p>
+                    <img src="../images/07_circulation_types.jpg"
+                        alt="循环系统类型示意图" class="mt-8 w-full h-auto rounded-xl shadow-md">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 mt-12">
+                        <div class="prose-text">
+                            <h4 class="highlight text-2xl">肺循环 <span class="text-sm text-gray-400 font-normal">低压回路</span></h4>
+                            <p>是一个较短的、低压的回路，其唯一目的是进行气体交换 。其路径如下：缺氧的静脉血从全身返回右心房，通过三尖瓣进入右心室 。右心室收缩，将缺氧血泵出，通过肺动脉瓣进入肺动脉
+                                。肺动脉随即分支，将血液输送到左右两肺的毛细血管网。在这里，血液释放二氧化碳并重新摄取氧气 。富含氧气的新鲜血液通过四条肺静脉（每侧肺两条）返回左心房，完成肺循环 。</p>
+                            <img src="../images/08_pulmonary_circulation.jpg"
+                                alt="肺循环示意图" class="mt-8 w-full h-auto rounded-xl shadow-md">
+                        </div>
+                        <div class="prose-text">
+                            <h4 class="highlight text-2xl">体循环 <span class="text-sm text-gray-400 font-normal">高压回路</span></h4>
+                            <p>是一个更长的、高压的回路，负责向身体所有其他组织和器官供应氧气和营养物质 。其路径如下：富氧血从左心房通过二尖瓣进入左心室
+                                。左心室作为心脏最强有力的泵，收缩时将富氧血通过主动脉瓣泵入主动脉 。主动脉及其不断分支的动脉系统将血液输送到全身各处，包括大脑、内脏器官和四肢
+                                。在各组织的毛细血管床，血液再次进行物质交换，释放氧气和营养，并带走二氧化碳和废物，变为缺氧血
+                                。这些缺氧血通过静脉系统汇集，最终经由上腔静脉（收集上半身血液）和下腔静脉（收集下半身血液）返回右心房，完成体循环，并准备再次进入肺循环 。</p>
+                        </div>
+                    </div>
+                    <p class="mt-8 prose-text mx-auto text-center">
+                        这种双循环设计极大地提高了氧气输送效率，将富氧血和缺氧血完全分开，这是维持恒温动物（如人类）高代谢率生活方式所必需的 。</p>
+                </div>
+
+                <div class="scroll-anim">
+                    <h3 class="text-4xl text-center">1.4 血液：生命的运输载体</h3>
+                    <p class="english-accent text-center mt-2">BLOOD: THE TRANSPORT MEDIUM OF LIFE</p>
+                    <p class="prose-text mt-6 mx-auto text-center">血液是循环系统中的运输介质，其复杂的成分共同维持着人体的内环境稳定
+                        。血液的主要功能是运输，它承载着氧气、营养物质、细胞废物、激素以及对身体稳态至关重要的许多其他物质，往返于细胞之间 。</p>
+                    <img src="../images/09_blood_vessels_overview.jpg"
+                        alt="血液组成示意图" class="mt-8 w-full h-auto rounded-xl shadow-md">
+                    <p class="prose-text mt-4 mx-auto">血液由血浆和血细胞组成。</p>
+                    <img src="../images/10_blood_components.jpg"
+                        alt="血液组成示意图" class="mt-8 w-full h-auto rounded-xl shadow-md">
+                    <p class="prose-text mt-4 mx-auto">
+                        血细胞主要包括：<strong>红细胞（Erythrocytes）</strong>：是血液中最丰富的细胞，其主要功能是通过细胞表面的血红蛋白分子结合并运输氧气
+                        。血红蛋白是血液呈现红色的原因，也是循环系统输送氧气能力的核心。</p>
+                    <img src="../images/11_red_blood_cells.jpg"
+                        alt="红细胞示意图" class="mt-8 w-full h-auto rounded-xl shadow-md">
+                    <p class="prose-text mt-4 mx-auto"><strong>白细胞（Leukocytes）</strong>：是免疫系统的重要组成部分，负责抵抗感染和疾病 。</p>
+                    <img src="../images/12_white_blood_cells.jpg"
+                        alt="白细胞示意图" class="mt-8 w-full h-auto rounded-xl shadow-md">
+                    <p class="prose-text mt-4 mx-auto">
+                        <strong>血小板（Thrombocytes）</strong>：是微小的细胞碎片，在血管受损时启动凝血过程，形成血栓以阻止出血 。</p>
+                    <img src="../images/13_platelets.jpg"
+                        alt="血小板示意图" class="mt-8 w-full h-auto rounded-xl shadow-md">
+                    <p class="prose-text mt-4 mx-auto">
+                        血浆是血液的液体基质，主要成分是水，其中溶解了多种物质，包括蛋白质（如白蛋白、凝血因子）、电解质、营养物质（如葡萄糖、氨基酸）和激素。在创伤性出血中，伤员不仅丢失了携带氧气的红细胞，还丢失了对于凝血至关重要的血小板和凝血因子，这解释了为什么现代创伤复苏强调使用全血或平衡比例的血液成分。
+                    </p>
+                </div>
+
+                <div class="bg-gray-900 text-white rounded-2xl p-8 md:p-16 scroll-anim">
+                    <div class="max-w-4xl mx-auto">
+                        <h3 class="text-4xl text-center">1.5 实用血液动力学</h3>
+                        <p class="english-accent text-center mt-2">PRACTICAL HEMODYNAMICS</p>
+                        <p class="prose-text mt-6 mx-auto text-center opacity-80 text-white">
+                            解剖结构为生理功能提供了框架，而血液动力学则是描述血液在血管系统中流动的物理学原理。对于战斗医务人员来说，掌握几个核心概念至关重要，因为它们是评估伤员和指导复苏的基础。</p>
+                        <div class="my-12 text-center">
+                            <p class="text-4xl md:text-6xl font-mono highlight">流量 ∝ 压力 / 阻力</p>
+                            <p class="mt-4 opacity-80 text-white">流量正比于压力，反比于阻力。在创伤护理中，这意味着维持足够的血压对于确保重要器官的灌注至关重要。当失血导致血压下降时，身体会通过收缩外周血管（增加阻力）来尝试维持核心器官的灌注压力，这是休克代偿机制的关键部分 。</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 prose-text">
+                            <div><strong>血压（Blood
+                                    Pressure）：</strong>是血液对血管壁施加的侧向压力，通常以毫米汞柱（mmHg）为单位。它有两个组成部分：收缩压（心脏收缩泵血时的峰值压力）和舒张压（心脏舒张充盈时的最低压力）
+                                。血压是驱动血液流动的根本动力。</div>
+                            <div><strong>组织灌注（Tissue Perfusion）：</strong>指的是血液流经组织毛细血管床的过程，即向细胞输送氧气和营养物质
+                                。充足的组织灌注是维持细胞和器官功能的先决条件。休克的本质就是组织灌注不足。</div>
+                            <div><strong>血管阻力（Vascular Resistance）：</strong>是血流在血管中遇到的阻力，主要由血管的直径决定（特别是微动脉）
+                                。血管收缩会增加阻力，而血管舒张则会降低阻力。</div>
+                        </div>
+                        <p class="prose-text mt-12 mx-auto text-white">
+                            从根本上看，循环系统不仅仅是一个简单的管道系统，它是一个动态的、高压的、闭环网络。这种闭环特性是其高效输送氧气和营养的优势所在。然而，这也使其在创伤面前显得异常脆弱。在一个封闭的加压系统中，任何一个破口（即出血）都会导致整个系统的压力和容量迅速、灾难性地丧失。这一物理现实解释了为什么在战斗创伤中，不受控制的大出血能够比气道阻塞更快地导致死亡。因此，对循环系统解剖学的理解，必须从纯粹的描述性知识，升华为对该系统固有脆弱性的战术性认知，这对于战斗医务人员来说至关重要。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="subtle-divider my-20 scroll-anim"></div>
+
+        <!-- SECTION 2 -->
+        <section class="py-20 md:py-32">
+            <div class="px-6 md:px-10 lg:px-16 mb-24 text-center scroll-anim">
+                <p class="english-accent">SECTION 02</p>
+                <h2 class="mt-4 max-w-4xl mx-auto text-4xl">当系统崩溃时：创伤性失血性休克</h2>
+                <p class="mt-6 opacity-80 prose-text mx-auto">
+                    战斗创伤最直接和致命的威胁之一就是大出血，它会迅速破坏循环系统的稳态，导致失血性休克。理解休克从细胞层面到全身反应的病理生理过程，是有效实施战术战斗伤员救护（TCCC）干预措施的理论基础。</p>
+            </div>
+
+            <div class="px-6 md:px-10 lg:px-16 space-y-24">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center scroll-anim">
+                    <div>
+                        <h3 class="text-4xl">2.1 失血的级联反应</h3>
+                        <p class="english-accent mt-2">CASCADE OF HEMORRHAGE</p>
+                        <div class="prose-text mt-6 space-y-4">
+                            <p>失血性休克被定义为由于大量失血导致循环血量严重不足，从而无法满足组织对氧气的需求，造成组织灌注不足和缺氧的状态
+                                。当血液和氧气输送中断时，细胞的能量代谢会发生根本性的转变。在正常情况下，细胞通过有氧代谢，高效地将葡萄糖转化为三磷酸腺苷（ATP），为所有生命活动提供能量。然而，在缺氧条件下，细胞被迫转向效率低得多的无氧代谢
+                                。</p>
+                            <p>在无氧代谢过程中，丙酮酸被转化为乳酸，这一过程虽然能产生少量ATP以维持最基本的细胞功能，但其副产品乳酸会在组织和血液中迅速累积
+                                。乳酸的堆积导致了代谢性酸中毒，这是休克状态下最早出现的生化紊乱之一
+                                。这种细胞层面的能量危机和酸中毒环境，是引发后续一系列全身性病理生理变化的起点，标志着伤员开始进入一个危险的下行螺旋。</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <p class="huge-display">ATP</p>
+                        <p class="text-2xl font-semibold -mt-4">能量危机</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center scroll-anim">
+                    <div class="lg:order-2">
+                        <h3 class="text-4xl">2.2 & 2.3 从代偿到失代偿</h3>
+                        <p class="english-accent mt-2">COMPENSATION TO DECOMPENSATION</p>
+                        <div class="prose-text mt-6 space-y-4">
+                            <p><strong>代偿机制：</strong>面对失血导致的循环血量下降，身体会立即启动一系列强大的自主神经和体液调节机制，试图维持对核心器官的灌注。</p>
+                            <p>主要的代偿机制包括：</p>
+                            <ul class="list-disc list-inside space-y-2 mt-4 pl-4 text-base">
+                                <li><strong>交感神经系统激活：</strong>血压下降被颈动脉窦和主动脉弓的压力感受器感知，信号传入中枢，迅速激活交感神经系统 。</li>
+                                <li><strong>心率和心肌收缩力增加：</strong>交感神经兴奋和肾上腺释放的儿茶酚胺（肾上腺素和去甲肾上腺素）直接作用于心脏，导致心率加快（心动过速）和心肌收缩力增强，以期在血容量减少的情况下维持心输出量
+                                    。</li>
+                                <li><strong>外周血管收缩：</strong>交感神经激活导致皮肤、肌肉和胃肠道等非关键区域的血管强烈收缩。这种“中心化”反应将有限的血液重新分配，优先保证心脏、大脑和肾脏等重要器官的血供
+                                    。临床上表现为皮肤湿冷、苍白和毛细血管再充盈时间延长。</li>
+                                <li><strong>肾素-血管紧张素-醛固酮系统（RAAS）激活：</strong>肾脏灌注下降会刺激肾素的释放，进而激活RAAS。血管紧张素II是一种强效的血管收缩剂，进一步增强外周阻力；而醛固酮则促进肾脏对钠和水的重吸收，以保存血管内容量
+                                    。</li>
+                            </ul>
+                            <p>在休克的代偿期，由于心率增加和外周血管收缩，伤员的收缩压可能维持在正常或接近正常的水平，这极具欺骗性。然而，脉压差（收缩压与舒张压之差）的变窄和心动过速往往是更早出现的警示信号。外周血管强烈收缩导致舒张压显著升高。而另一方面，由于实际血容量不足或心脏回心血量减少，心脏的每搏输出量是下降的，这导致收缩压的上升动力不足，甚至可能轻微下降。因此，收缩压与舒张压之间的差值（即脉压差）会明显缩小。
+                                。</p>
+                        </div>
+                        <div class="prose-text mt-6 space-y-4">
+                            <p><strong>失代偿转折点：</strong>当失血持续，超过了身体代偿能力的极限时，伤员便会进入失代偿期休克。这是一个关键的转折点，心输出量急剧减少，收缩压开始显著下降（低血压），这是休克失代偿期的标志性表现。严重的组织缺氧和不断加深的代谢性酸中毒会损害细胞功能，形成恶性循环。一旦进入这个阶段，如果不进行迅速有效的干预，伤员将很快进展到不可逆性休克和死亡。
+                            </p>
+                        </div>
+                    </div>
+                    <div class="text-center lg:order-1">
+                        <p class="huge-display opacity-50" style="font-size: clamp(8rem, 20vw, 18rem);">BP↓</p>
+                        <p class="text-2xl font-semibold -mt-12">关键转折点</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-24 bg-[var(--subtle-gray)] py-16 md:py-24 scroll-anim">
+                <div class="px-6 md:px-10 lg:px-16">
+                    <div class="max-w-4xl mx-auto text-center">
+                        <h3 class="text-4xl">2.4 创伤的“<span class="highlight">致死三联征</span>”</h3>
+                        <p class="english-accent mt-2">THE LETHAL TRIAD OF TRAUMA</p>
+                        <p class="prose-text mt-6 opacity-80">
+                            在严重创伤中，一个自我放大的恶性循环——“致死三联征”——是导致伤员死亡的主要驱动力。它们并非三个独立的问题，而是一个紧密相连、相互加剧的病理生理过程。</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 max-w-6xl mx-auto">
+                        <div class="bg-white p-8 rounded-xl shadow-sm">
+                            <p class="text-2xl font-bold highlight">1. 酸中毒</p>
+                            <h4 class="mt-4"><span class="text-sm font-normal text-gray-400">Acidosis</span></h4>
+                            <p class="prose-text mt-2 text-sm">
+                                组织灌注不足导致的无氧代谢是酸中毒的主要原因。酸性环境会直接抑制凝血酶的活性，并损害血小板的功能，从而严重削弱血液的凝固能力。</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-xl shadow-sm">
+                            <p class="text-2xl font-bold highlight">2. 低温</p>
+                            <h4 class="mt-4"><span class="text-sm font-normal text-gray-400">Hypothermia</span></h4>
+                            <p class="prose-text mt-2 text-sm">
+                                创伤伤员极易发生低温。凝血过程依赖于一系列酶促反应，而这些反应在低温下效率会急剧下降。体温每下降1°C，凝血因子的活性就会降低约10%。</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-xl shadow-sm">
+                            <p class="text-2xl font-bold highlight">3. 凝血功能障碍</p>
+                            <h4 class="mt-4"><span class="text-sm font-normal text-gray-400">Coagulopathy</span>
+                            </h4>
+                            <p class="prose-text mt-2 text-sm">除了凝血因子和血小板的物理性丢失，还存在"急性创伤性凝血病"。这种凝血障碍随后会被酸中毒和低温进一步放大。</p>
+                        </div>
+                    </div>
+                    <p class="prose-text mt-12 text-center mx-auto">
+                        这三者形成了一个致命的反馈循环：酸中毒和低温加剧了凝血障碍，凝血障碍导致了更多的出血，更多的出血又加重了组织灌注不足，从而使酸中毒和低温更加严重。这个循环一旦启动，就会迅速加速，将伤员推向死亡。
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-24 px-6 md:px-10 lg:px-16 scroll-anim">
+                <h3 class="text-4xl text-center">表1：失血性休克的分类</h3>
+                <p class="prose-text mt-6 mx-auto text-center opacity-80">
+                    为了在战场上快速评估伤情并指导干预，通常将失血性休克根据失血量和临床表现分为四级。这张表格综合了多个来源的数据，为医务人员提供了一个实用的临床评估工具 。</p>
+                <div id="shock-chart" class="w-full h-[400px] md:h-[500px] mt-8"></div>
+                <div class="table-wrapper mt-8">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>等级</th>
+                                <th>估算失血量 (mL)</th>
+                                <th>估算失血量 (%)</th>
+                                <th>心率 (次/分钟)</th>
+                                <th>血压</th>
+                                <th>脉压差</th>
+                                <th>呼吸频率 (次/分钟)</th>
+                                <th>精神状态/临床体征</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>I级</td>
+                                <td>&lt; 750</td>
+                                <td>&lt; 15%</td>
+                                <td>&lt; 100</td>
+                                <td>正常</td>
+                                <td>正常或略降</td>
+                                <td>14-20</td>
+                                <td>轻微焦虑</td>
+                            </tr>
+                            <tr>
+                                <td>II级</td>
+                                <td>750 - 1500</td>
+                                <td>15% - 30%</td>
+                                <td>&gt; 100</td>
+                                <td>正常</td>
+                                <td>变窄</td>
+                                <td>20-30</td>
+                                <td>中度焦虑，皮肤湿冷</td>
+                            </tr>
+                            <tr>
+                                <td>III级</td>
+                                <td>1500 - 2000</td>
+                                <td>30% - 40%</td>
+                                <td>&gt; 120</td>
+                                <td>下降</td>
+                                <td>显著变窄</td>
+                                <td>30-40</td>
+                                <td>焦虑，意识模糊，尿量减少</td>
+                            </tr>
+                            <tr>
+                                <td>IV级</td>
+                                <td>&gt; 2000</td>
+                                <td>&gt; 40%</td>
+                                <td>&gt; 140</td>
+                                <td>显著下降</td>
+                                <td>极窄或无法测出</td>
+                                <td>&gt; 35</td>
+                                <td>意识模糊，嗜睡，濒死感</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="prose-text text-center mx-auto mt-6 opacity-80">
+                    这张表格将抽象的病理生理过程与具体的临床指标联系起来，为战斗医务人员提供了将观察数据转化为行动决策的关键工具。</p>
+            </div>
+        </section>
+
+        <div class="subtle-divider my-20 scroll-anim"></div>
+
+        <!-- SECTION 3 -->
+        <section class="py-20 md:py-32">
+            <div class="px-6 md:px-10 lg:px-16 mb-24 text-center scroll-anim">
+                <p class="english-accent">SECTION 03</p>
+                <h2 class="mt-4 max-w-4xl mx-auto text-4xl">TCCC循环管理方法：原则与实践</h2>
+                <p class="mt-6 opacity-80 prose-text mx-auto">
+                    战术战斗伤员救护（TCCC）指南是基于数十年战斗经验和循证医学提炼出的一套救生原则，其核心是根据战场环境的特殊性，对救治的优先级进行重新排序。</p>
+            </div>
+
+            <div
+                class="bg-[var(--accent-color)] text-white py-16 md:py-24 my-24 text-center overflow-hidden scroll-anim">
+                <h3 class="text-8xl md:text-9xl font-extrabold tracking-tighter opacity-90"
+                    style="font-size: clamp(4rem, 15vw, 12rem);">MARCH</h3>
+                <p class="mt-4 text-lg font-semibold tracking-wider">Massive Hemorrhage, Airway, Respiration,
+                    Circulation, Hypothermia/Head Injury</p>
+                <div class="mt-8 prose-text mx-auto px-6 opacity-90">
+                    <p><strong>3.1
+                            大出血（“M”）：首要优先事项。</strong>TCCC最革命性的贡献之一，就是将传统急救的“ABC”原则，转变为适应战场现实的“MARCH”流程。这一转变的背后，是来自战场的大量数据证明，可预防的战斗死亡中，首要原因是由四肢大出血导致的失血过多。一名伤员可能在短短几分钟内因股动脉破裂而死亡，这比因气道阻塞而窒息要快得多。
+                    </p>
+                    <p>因此，在TCCC的所有阶段，控制大出血都是压倒一切的优先事项。这种将大出血控制置于气道管理之前的做法，是TCCC理念的基石。</p>
+                </div>
+            </div>
+
+            <div class="px-6 md:px-10 lg:px-16 space-y-24">
+                <div class="scroll-anim">
+                    <h3 class="text-4xl text-center">3.2-3.4 战术区域救护核心技能</h3>
+                    <p class="prose-text mt-6 mx-auto text-center opacity-80">当伤员被转移到相对安全的TFC环境后，医务人员可以开始进行更全面、系统的评估和处理。
+                    </p>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-12">
+                        <div>
+                            <h4 class="highlight">3.2 循环评估 (“C”)</h4>
+                            <p class="prose-text mt-4">
+                                其核心是识别并处理所有出血来源，并判断伤员是否进入休克状态。在战术环境下，两个最可靠的休克指标是：<strong>意识状态改变</strong>（在没有脑外伤的情况下）和<strong>桡动脉搏动微弱或消失</strong>。如果伤员出现烦躁、嗜睡或意识模糊，或者触摸不到桡动脉搏动，就必须假定其已进入失血性休克，并立即启动复苏流程。
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="highlight">3.3 体外出血控制</h4>
+                            <p class="prose-text mt-4">
+                                <strong>止血带的重新评估与转换：</strong>在TFC阶段，任何隔着制服放置的止血带都应被取下，并在伤口上方2-3英寸处的裸露皮肤上重新放置，确保出血完全停止。<strong>止血敷料的应用：</strong>对于无法使用止血带的部位（如腹股沟、腋窝），使用含高岭土的止血纱布，尽可能深地填塞入伤口，直接接触出血点，然后用至少3分钟的持续直接按压。
+                            </p>
+                        </div>
+                        <div class="lg:col-span-2">
+                            <h4 class="highlight">3.4 建立通路 (IV/IO)</h4>
+                            <video width="560" height="315" controls class="mt-4 rounded-xl">
+                                <source src="../videos/01_iv_access_technique.webm" type="video/webm">
+                                您的浏览器不支持视频播放。
+                            </video>
+                            <video width="560" height="315" controls class="mt-4 rounded-xl">
+                                <source src="../videos/02_io_access_technique.mp4" type="video/mp4">
+                                您的浏览器不支持视频播放。
+                            </video>
+                            <p class="prose-text mt-4">
+                                TCCC明确指出：<strong>并非所有伤员都需要建立静脉通路！</strong>这是一个重要的战术和医疗原则。只有当伤员处于休克状态、有发生休克的重大风险，或者需要静脉给药时，才应建立血管通路。首选18号静脉留置针连接肝素帽。若无法快速建立，应毫不犹豫地使用骨内（IO）通路作为替代方案。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center scroll-anim">
+                    <div class="lg:sticky lg:top-1/4">
+                        <h3 class="leading-tight">3.5 氨甲环酸(<span class="highlight">TXA</span>)</h3>
+                        <p class="english-accent mt-2">STOPPING INTERNAL BLEEDING</p>
+                        <p class="prose-text mt-6 opacity-80">对于躯干等部位的非可压迫性内出血，TXA通过抑制纤溶酶的活性来稳定已形成的血凝块，从而减少内出血。</p>
+                        <img src="../images/14_tranexamic_acid.jpg" alt="氨甲环酸" class="mt-8 w-full h-auto rounded-xl shadow-md">
+                        <div class="text-center mt-8 bg-gray-100 p-8 rounded-xl">
+                            <p class="text-6xl font-bold highlight">&lt; 3 HR</p>
+                            <p class="mt-2 font-semibold">黄金时间窗口</p>
+                        </div>
+                    </div>
+                    <div class="prose-text space-y-4">
+                        <p><strong>适应症：</strong>TCCC指南建议，对于预计需要大量输血的伤员（例如，表现出失血性休克、一处或多处主要截肢、躯干穿透伤或有严重出血证据的伤员），应给予TXA 。
+                        </p>
+                        <p><strong>剂量与时机：</strong>标准剂量为1克TXA溶于100毫升生理盐水或林格氏液中，在10分钟内静脉输注完毕。最关键的一点是，TXA必须在受伤后尽快给予，且不得晚于伤后3小时。研究表明，伤后1小时内给予TXA的生存获益最大，而超过3小时后给予不仅无效，反而可能增加死亡率
+                            。</p>
+                    </div>
+                </div>
+
+                <div class="scroll-anim">
+                    <h3 class="text-4xl text-center">3.6 低血压复苏原则</h3>
+                    <p class="english-accent text-center mt-2">PERMISSIVE HYPOTENSION</p>
+                    <p class="prose-text mt-6 mx-auto opacity-80">
+                        TCCC的液体复苏策略是现代创伤救治的另一项核心变革。其目标不是将血压恢复到正常水平，而是实施所谓的“低血压复苏”。在出血源头尚未得到外科手术控制之前，过早、过快地将血压升至正常水平，可能会冲掉刚刚形成的脆弱血凝块，导致再次出血。
+                    </p>
+                    <p class="prose-text mt-4 mx-auto">
+                        <strong>复苏终点：</strong>可触及的桡动脉搏动、意识状态改善或收缩压达到<strong>80-90 mmHg</strong>。</p>
+                    <p class="prose-text mt-8 mx-auto font-semibold">复苏液体优先顺序（核心是“用血来补血”）：</p>
+                    <ol class="list-decimal list-inside space-y-2 mt-4 prose-text mx-auto">
+                        <li>全血（特别是低温保存的低滴度O型全血）是首选 。</li>
+                        <li>若无全血，则使用1:1:1比例的血浆、红细胞和血小板 。</li>
+                        <li>再次，是1:1比例的血浆和红细胞。</li>
+                        <li>再次，是单独的血浆或红细胞。</li>
+                        <li>若无血液制品，可使用胶体液（如赫斯淀）。</li>
+                        <li>最后选择才是晶体液（如乳酸林格氏液或等离子液） 。</li>
+                    </ol>
+                </div>
+
+                <div class="scroll-anim">
+                    <h3 class="text-4xl text-center">表2：TCCC循环管理决策摘要</h3>
+                    <div class="table-wrapper mt-8">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>评估发现</th>
+                                    <th>优先TFC干预措施</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>危及生命的肢体出血</td>
+                                    <td>在伤口上方2-3英寸皮肤处应用CoTCCC推荐的止血带。确保出血停止且远端脉搏消失。</td>
+                                </tr>
+                                <tr>
+                                    <td>桡动脉搏动微弱/消失和/或意识状态改变</td>
+                                    <td>假定为休克。建立IV/IO通路。按优先顺序启动液体复苏，目标是恢复桡动脉搏动或改善意识。</td>
+                                </tr>
+                                <tr>
+                                    <td>预计需要大量输血（休克、躯干穿透伤等）</td>
+                                    <td>尽快（伤后3小时内）给予1克氨甲环酸（TXA）静脉输注。</td>
+                                </tr>
+                                <tr>
+                                    <td>非肢体部位的可压迫性出血</td>
+                                    <td>用止血纱布填塞伤口，并施加至少3分钟的直接压力，然后用压力绷带包扎。</td>
+                                </tr>
+                                <tr>
+                                    <td>伤员需要静脉用药但未处于休克状态</td>
+                                    <td>建立一个18号静脉留置针和肝素帽（盐水锁），按需给药。无需立即输液。</td>
+                                </tr>
+                                <tr>
+                                    <td>伤员情况稳定，无休克迹象，无需静脉用药</td>
+                                    <td>无需建立IV/IO通路。 如果伤员清醒且能吞咽，可鼓励其口服补液。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="subtle-divider my-20 scroll-anim"></div>
+
+        <!-- SECTION 4 -->
+        <section class="py-20 md:py-32">
+            <div class="px-6 md:px-10 lg:px-16 mb-24 text-center scroll-anim">
+                <p class="english-accent">SECTION 04</p>
+                <h2 class="mt-4 max-w-4xl mx-auto text-4xl">损伤控制复苏 (DCR) 的先进策略</h2>
+                <p class="mt-6 opacity-80 prose-text mx-auto">DCR是一种综合性的方法，旨在通过早期、积极的干预来对抗“致死三联征”，为伤员赢得接受确定性外科手术的时间。</p>
+            </div>
+
+            <div class="px-6 md:px-10 lg:px-16 space-y-24">
+                <div class="scroll-anim">
+                    <h3 class="text-4xl text-center">4.1 DCR 哲学：三大支柱</h3>
+                    <p class="prose-text mt-6 mx-auto text-center">DCR的核心是三大支柱的同时实施，而非线性顺序。这是从“先手术后复苏”到“复苏与手术同步”的转变。</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                        <div class="prose-text border-t-4 border-highlight pt-4">
+                            <strong>低血压复苏：</strong>限制液体输入，将血压维持在一个足以保证核心器官灌注但又不至于冲掉血栓的较低水平。</div>
+                        <div class="prose-text border-t-4 border-highlight pt-4">
+                            <strong>止血性复苏：</strong>优先使用全血或高比例的血液成分进行复苏，以补充丢失的氧气载体和凝血物质，主动预防和纠正凝血功能障碍。</div>
+                        <div class="prose-text border-t-4 border-highlight pt-4"><strong>损伤控制手术
+                                (DCS)：</strong>外科干预的重点是快速控制大出血和清除污染源，然后用临时方法关闭体腔，待伤员状态好转后再进行二期确定性手术。</div>
+                    </div>
+                    <img src="../images/15_dcr_three_pillars.png" alt="DCR三大支柱协同工作示意图" class="mt-8 w-full h-auto rounded-xl shadow-md">
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center scroll-anim">
+                    <div>
+                        <h3 class="text-4xl">4.2 黄金标准：<span class="highlight">全血</span>输注</h3>
+                        <p class="prose-text mt-6 space-y-4">
+                            <strong>原理：</strong>创伤伤员丢失的是全血，因此最符合生理的替代品就是全血。它以天然的1:1:1比例提供了红细胞、血浆和血小板，以及所有必需的凝血因子。<strong>类型与应用：</strong>低温保存的低滴度O型全血（LTOWB）是战区预置和前沿复苏的首选产品。新鲜全血（FWB）则是在紧急情况下的最后手段。<strong>后勤与效果：</strong>LTOWB显著简化了战地血库的后勤保障，临床研究表明其安全性和生存率与传统成分输血相当，甚至更具优势。
+                        </p>
+                    </div>
+                    <img src="../images/16_whole_blood.jpg" alt="全血" class="mt-8 w-full h-auto rounded-xl shadow-md">
+                </div>
+
+                <div class="scroll-anim">
+                    <h3 class="text-4xl text-center">表3：不同复苏液体的性能比较</h3>
+                    <div class="table-wrapper mt-8">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>复苏液体</th>
+                                    <th>携氧能力</th>
+                                    <th>凝血因子/血小板</th>
+                                    <th>对凝血功能的影响</th>
+                                    <th>所需容量</th>
+                                    <th>后勤考虑</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>低滴度O型全血 (LTOWB)</td>
+                                    <td>高</td>
+                                    <td>全部含有</td>
+                                    <td>恢复/支持</td>
+                                    <td>低</td>
+                                    <td>单一制品，需冷藏，后勤简化</td>
+                                </tr>
+                                <tr>
+                                    <td>1:1:1 成分血</td>
+                                    <td>高</td>
+                                    <td>全部含有</td>
+                                    <td>恢复/支持</td>
+                                    <td>中</td>
+                                    <td>三种制品，储存条件不同，后勤复杂</td>
+                                </tr>
+                                <tr>
+                                    <td>胶体液 (如赫斯淀)</td>
+                                    <td>无</td>
+                                    <td>无</td>
+                                    <td>稀释/可能损害</td>
+                                    <td>中</td>
+                                    <td>无需冷藏，但有剂量限制和副作用</td>
+                                </tr>
+                                <tr>
+                                    <td>晶体液 (如盐水)</td>
+                                    <td>无</td>
+                                    <td>无</td>
+                                    <td>严重稀释/加重</td>
+                                    <td>高</td>
+                                    <td>易于获取和储存，但生理效果最差</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="prose-text text-center mx-auto mt-6 opacity-80">
+                        此表清晰地揭示了为什么DCR理念强烈推荐使用全血。它不仅是唯一能够同时解决氧气输送和凝血功能障碍的液体，而且在后勤上也更适应战场需求。</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 scroll-anim">
+                    <div>
+                        <h3 class="text-4xl">4.3 应对非可压迫性躯干出血 (NCTH)</h3>
+                        <p class="prose-text mt-6">NCTH是战斗中导致可预防死亡的主要原因之一。为此，军事医学发展了一系列先进的干预手段。</p>
+                        <h4 class="mt-8 highlight">骨盆固定带与连接处止血带</h4>
+                        <p class="prose-text mt-4">对于严重骨盆骨折，立即使用骨盆固定带缩小骨盆容积，稳定骨折。对于腹股沟或腋窝等连接处的出血，使用专门设计的连接处止血带进行控制。</p>
+                        <h4 class="mt-8 highlight">主动脉血管内球囊阻断术 (REBOA)</h4>
+                        <p class="prose-text mt-4"><strong>概念：</strong>通过股动脉将带球囊的导管送入主动脉，在特定区域（Zone 1或Zone
+                            3）充盈球囊，阻断远端动脉血流，为外科止血争取时间。<strong>适应症与挑战：</strong>用于难治性失血性休克，但有巨大的缺血性损伤和再灌注损伤风险，使用有严格的时间限制，并要求快速后送。
+                        
+                        </p>
+                        
+                    </div>
+                    <video width="560" height="315" controls class="mt-4 rounded-xl">
+                        <source src="../videos/03_reboa_technique.webm" type="video/webm">
+                        您的浏览器不支持视频播放。
+                    </video>
+
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center scroll-anim">
+                    <div class="lg:order-2">
+                        <h3 class="text-4xl">4.4 诊断辅助: POCUS</h3>
+                        <p class="english-accent mt-2">POINT-OF-CARE ULTRASOUND</p>
+                        <p class="prose-text mt-6">
+                            将先进的诊断能力前移是现代军事医学的重要趋势。便携式床旁超声（POCUS）设备使医务人员能够在战场上“透视”伤员的身体。创伤重点超声评估（FAST）及扩展的eFAST检查，可以快速识别心包积血、腹腔内出血、气胸和血胸，极大地影响治疗决策和后送优先级。
+                        </p>
+                        <p class="prose-text mt-4">这些先进技术（全血, REBOA, POCUS）的出现，标志着前沿医疗能力的根本性变革，正在重新定义战场上“可存活”的伤害范畴。</p>
+                    </div>
+                    <img src="../images/17_pocus_ultrasound.jpg" alt="诊断辅助: POCUS" class="mt-8 w-full h-auto rounded-xl shadow-md">
+                </div>
+            </div>
+        </section>
+
+        <div class="subtle-divider my-20 scroll-anim"></div>
+
+        <!-- SECTION 5 -->
+        <section class="py-20 md:py-32">
+            <div class="px-6 md:px-10 lg:px-16 mb-24 text-center scroll-anim">
+                <p class="english-accent">SECTION 05</p>
+                <h2 class="mt-4 max-w-4xl mx-auto text-4xl">出血控制与伤员救护的未来</h2>
+                <p class="mt-6 opacity-80 prose-text mx-auto">未来发展将由数据、人工智能和尖端技术的融合所驱动。目标是创建一个更快速、更高效、甚至部分自主化的救生系统。</p>
+            </div>
+
+            <div class="px-6 md:px-10 lg:px-16 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-100 p-8 rounded-xl scroll-anim">
+                    <h3 class="highlight">5.1 自动化生存链</h3>
+                    <p class="english-accent mt-2">THE SURVIVAL CHAIN</p>
+                    <p class="prose-text mt-6">
+                        一个与“杀伤链”相对应的概念，通过融合传感器数据、人类护理者和智能技术，优化和加速医疗决策过程。其核心是实现人机协同，将救护从被动反应转变为主动预测和干预的、由数据驱动的系统。</p>
+                </div>
+                <div class="bg-gray-100 p-8 rounded-xl scroll-anim">
+                    <h3 class="highlight">5.2 AI 与机器学习</h3>
+                    <p class="english-accent mt-2">AI & MACHINE LEARNING</p>
+                    <p class="prose-text mt-6">
+                        <strong>决策支持：</strong>AI算法将提供强大的决策支持，如伤员分类、病情预测和后送规划。<strong>自主记录：</strong>通过传感器自动识别和记录医疗干预措施，极大减轻医务人员的认知负担，并确保数据的完整性。
+                    </p>
+                </div>
+                <div class="bg-gray-100 p-8 rounded-xl scroll-anim">
+                    <h3 class="highlight">5.3 先进止血技术</h3>
+                    <p class="english-accent mt-2">NEXT-GEN HEMOSTATICS</p>
+                    <p class="prose-text mt-6">
+                        <strong>先进止血剂：</strong>如无需加压即可封闭伤口的粘性液体止血剂，以及可注射的、能在体内膨胀的止血泡沫。<strong>纳米技术：</strong>能够模仿血小板功能、在出血部位自动聚集并加速凝血的纳米颗粒，有望实现更快速、更有效的靶向止血。
+                    </p>
+                </div>
+                <div class="bg-gray-100 text-white p-8 rounded-xl scroll-anim">
+                    <h3 class="highlight">5.4 克服“数据沙漠”</h3>
+                    <p class="english-accent mt-2">OVERCOMING THE DATA DESERT</p>
+                    <p class="prose-text mt-6 opacity-80">
+                        实现这一切的最大障碍是数据。当前军事医疗体系是一个“数据沙漠”，信息依赖手动输入，质量参差不齐。未来取决于能否建立一个能够被动、持续采集大量高质量数据的架构。最关键的近期“医学”进步，可能不是一种新药或新设备，而是为战场创建一个安全、高容量的数据采集和通信架构。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONCLUSION -->
+        <section class="py-20 md:py-32 px-6 md:px-10 lg:px-16 text-center bg-gray-100 scroll-anim">
+            <h2 class="max-w-4xl mx-auto text-4xl">结论：一种现代战伤救治哲学</h2>
+            <div class="mt-12 max-w-3xl mx-auto prose-text text-left space-y-4 opacity-80 text-white">
+                <p>本次理论课对循环系统的基础生理学及其在现代战场救护中的核心应用进行了系统性、多层次的讲述。我们对循环系统的理解必须超越基础解剖学，深入到其在创伤应激下的动态病理生理变化，以及由此催生的战术医学干预原则。
+                </p>
+                <p>首先，循环系统作为一个高效的闭环高压网络，其结构本身就决定了创伤性出血的快速致命性。这一根本性的脆弱点，是军事医学将大出血控制置于所有救治措施最优先地位的理论基石，并直接促成了从传统“ABC”到战场“MARCH”救治流程的范式转变。
+                </p>
+                <p>其次，对失血性休克病理生理学的深入理解，特别是对“致死三联征”（酸中毒、低温、凝血障碍）作为一个自我放大的恶性反馈循环的认识，构成了现代创伤复苏策略的理论核心。这解释了为什么<strong>损伤控制复苏（DCR）</strong>强调必须同时、协同地进行干预，以打破这一致命循环，其措施包括低血压复苏、积极预防和处理低温，以及优先使用全血进行止血性复苏。
+                </p>
+                <p>再次，TCCC指南和DCR原则共同推动了先进医疗能力的战略性前移。将全血输注、床旁超声诊断（POCUS/FAST）、乃至主动脉血管内球囊阻断术（REBOA）等以往仅限于后方医院的干预手段，推向更靠近伤点的救治梯队，正在从根本上改变战斗医务人员的角色和能力范围，并重新定义了战场生存的极限。
+                </p>
+                <p>最后，展望未来，战斗伤员救护的下一次革命将由数据驱动。人工智能、自主系统和“伤员数字孪生”等概念虽然前景广阔，但其实现完全依赖于克服当前军事医疗体系面临的“数据沙漠”挑战。因此，建立一个能够被动、持续、安全地采集高质量生理和医疗数据的基础设施，是未来所有技术进步的先决条件。这标志着军事医学的关注点需要从纯粹的生物医学研究，扩展到信息技术、数据科学和系统工程的深度融合。
+                </p>
+                <p>综上所述，从基础生理到前沿科技，对循环系统及其在战斗创伤中应用的理解和干预，已经形成了一个逻辑严密、证据驱动且不断演进的知识体系。为下一代军事医疗人员传授这一体系，不仅是教授一套技能，更是灌输一种基于战场现实、以数据为核心、以系统化思维为导向的现代战伤救治哲学。
+                </p>
+            </div>
+            <div class="mt-12">
+                <a href="#top" class="btn">返回顶部</a>
+            </div>
+        </section>
+
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- ADVANCED SCROLL ANIMATION ---
+            const scrollTargets = document.querySelectorAll('.scroll-anim');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            scrollTargets.forEach(target => { observer.observe(target); });
+
+            // --- ECHARTS INITIALIZATION ---
+            const chartDom = document.getElementById('shock-chart');
+            if (chartDom) {
+                const myChart = echarts.init(chartDom);
+                const option = {
+                    tooltip: { trigger: 'axis', backgroundColor: 'rgba(22, 22, 21, 0.9)', borderColor: '#5751D5', textStyle: { color: '#5751D5' } },
+                    legend: { data: ['心率', '呼吸频率', '收缩压'], textStyle: { color: '#161615' }, bottom: 0 },
+                    grid: { top: '10%', left: '3%', right: '4%', bottom: '15%', containLabel: true },
+                    xAxis: { type: 'category', boundaryGap: false, data: ['I级 (<15%)', 'II级 (15-30%)', 'III级 (30-40%)', 'IV级 (>40%)'], axisLine: { lineStyle: { color: '#161615' } } },
+                    yAxis: [
+                        { type: 'value', name: '次/分', min: 0, max: 160, axisLine: { show: true, lineStyle: { color: '#161615' } }, splitLine: { show: false } },
+                        { type: 'value', name: 'mmHg', min: 0, max: 140, axisLine: { show: true, lineStyle: { color: '#161615' } }, splitLine: { lineStyle: { type: 'dashed', color: 'rgba(22, 22, 21, 0.1)' } } }
+                    ],
+                    series: [
+                        { name: '心率', type: 'line', smooth: true, yAxisIndex: 0, itemStyle: { color: '#161615' }, data: [90, 110, 130, 145] },
+                        { name: '呼吸频率', type: 'line', smooth: true, yAxisIndex: 0, itemStyle: { color: 'rgba(22, 22, 21, 0.5)' }, lineStyle: { type: 'dashed' }, data: [18, 25, 35, 38] },
+                        {
+                            name: '收缩压', type: 'line', smooth: true, yAxisIndex: 1, symbol: 'circle', symbolSize: 8, itemStyle: { color: '#5751D5' },
+                            areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(87, 81, 213, 0.4)' }, { offset: 1, color: 'rgba(87, 81, 213, 0)' }]) },
+                            data: [120, 110, 80, 60]
+                        }
+                    ]
+                };
+                myChart.setOption(option);
+                new ResizeObserver(() => myChart.resize()).observe(chartDom);
+            }
+        });
+    </script>
+</body>
+
+</html>

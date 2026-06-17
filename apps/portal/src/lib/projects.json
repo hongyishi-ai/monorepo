@@ -1,0 +1,129 @@
+{
+  "platformProjects": [
+    {
+      "id": "heat-stroke",
+      "title": "热射病防治平台",
+      "shortTitle": "热射病防治",
+      "type": "[指南解读 / 一线工具]",
+      "description": "热射病风险评估、预防、处置资源整合平台",
+      "href": "/heat-stroke/",
+      "legacyHref": "https://reshebing.hongyishi.cn",
+      "logo": "/assets/portfolio/reshebing/logo.png",
+      "coverImage": "/assets/portfolio/covers/reshebing.jpg",
+      "color": "red",
+      "featured": true,
+      "status": "integrated",
+      "content": {
+        "sourceName": "热射病防治指南与现场处置资料",
+        "version": "指南/专家共识汇编，本地训练工具版",
+        "reviewedAt": "2026-06-17",
+        "status": "review-required",
+        "audience": "训练组织者、一线处置人员、医学教育使用者",
+        "disclaimer": "仅供训练和现场处置参考，不替代急救指挥、临床诊疗和当地规范。",
+        "entryLabel": "训练前风险评估与现场处置",
+        "dataPolicy": "天气查询经 Pages Function 代理；清单和训练状态仅保存在本机。",
+        "officialUpdateUrl": "https://www.nhc.gov.cn/"
+      }
+    },
+    {
+      "id": "fms",
+      "title": "训练伤防治平台",
+      "shortTitle": "训练伤防治",
+      "type": "[动作筛查 / 康复训练]",
+      "description": "基于FMS评估的训练伤风险筛查和康复训练",
+      "href": "/fms/",
+      "legacyHref": "https://fms.hongyishi.cn",
+      "logo": "/assets/portfolio/fms/logo.png",
+      "coverImage": "/assets/portfolio/covers/fms.jpg",
+      "color": "gray",
+      "status": "integrated",
+      "content": {
+        "sourceName": "Functional Movement Screen 教育评估流程",
+        "version": "本地 FMS 评估与训练建议实现",
+        "reviewedAt": "2026-06-17",
+        "status": "reference-only",
+        "audience": "训练管理者、康复训练使用者、运动筛查学习者",
+        "disclaimer": "FMS 结果仅供训练参考，不构成临床诊断、治疗建议或伤病处置指令。",
+        "entryLabel": "动作筛查、报告与训练建议",
+        "dataPolicy": "评估记录保存在本机 IndexedDB，可手动导出和导入。"
+      }
+    },
+    {
+      "id": "tccc",
+      "title": "战场救护TCCC平台",
+      "shortTitle": "战场救护",
+      "type": "[TCCC / 战术救护]",
+      "description": "战术战伤救护流程、TFC与TACEVAC训练资源",
+      "href": "/tccc/",
+      "legacyHref": "https://github.com/nimrod1990/hongyishi-TCCC",
+      "logo": "/assets/portfolio/tccc/logo.png",
+      "coverImage": "/assets/portfolio/covers/tccc.jpg",
+      "color": "red",
+      "status": "integrated",
+      "content": {
+        "sourceName": "CoTCCC 2017 战术战伤救护流程资料",
+        "version": "CoTCCC 2017 基础内容，需按 JTS/Deployed Medicine 更新复核",
+        "reviewedAt": "2026-06-17",
+        "status": "review-required",
+        "audience": "战术救护训练、流程教学和复盘使用者",
+        "disclaimer": "仅供教育训练和流程学习，不能替代现行作战医疗规范、医疗指挥链或正式认证课程。",
+        "entryLabel": "MARCH、TFC 与 TACEVAC 流程查询",
+        "dataPolicy": "离线流程内容不上传；训练记录如后续启用，默认仅保存在本机。",
+        "officialUpdateUrl": "https://jts.health.mil/index.cfm/committees/cotccc"
+      }
+    },
+    {
+      "id": "clinic",
+      "title": "基层疾病辅助诊断平台",
+      "shortTitle": "辅助诊断",
+      "type": "[AI医疗 / 基层应用]",
+      "description": "人工智能辅助基层进行疾病诊断和治疗决策",
+      "href": "https://clinic.hongyishi.cn",
+      "logo": "/assets/portfolio/clinic/logo.png",
+      "coverImage": "/assets/portfolio/covers/clinic.jpg",
+      "color": "blue",
+      "status": "external",
+      "content": {
+        "sourceName": "基层疾病辅助诊断项目原站点",
+        "version": "外部运行版本",
+        "reviewedAt": "2026-06-17",
+        "status": "review-required",
+        "audience": "基层医疗辅助决策场景评估者",
+        "disclaimer": "当前仍为外部入口，未纳入统一本地数据和部署合同。"
+      }
+    },
+    {
+      "id": "pharmacy",
+      "title": "便携式药品管理系统",
+      "shortTitle": "移动药房",
+      "type": "[数字化药房 / 移动场景]",
+      "description": "移动场景下的智能药品管理与使用",
+      "href": "https://yf.hongyishi.cn",
+      "logo": "/assets/portfolio/yf/logo.png",
+      "coverImage": "/assets/portfolio/covers/yf.jpg",
+      "color": "yellow",
+      "status": "external",
+      "content": {
+        "sourceName": "便携式药品管理系统原站点",
+        "version": "外部运行版本",
+        "reviewedAt": "2026-06-17",
+        "status": "review-required",
+        "audience": "移动药房和药品管理场景评估者",
+        "disclaimer": "当前仍为外部入口，未纳入统一本地数据和部署合同。"
+      }
+    }
+  ],
+  "auxiliaryEntries": [
+    {
+      "id": "podcast",
+      "title": "红医师播客",
+      "shortTitle": "播客",
+      "type": "[音频访谈 / 主题讨论]",
+      "description": "音频访谈与主题讨论。",
+      "href": "https://www.xiaoyuzhoufm.com/podcast/6818ac762ad01a51a25ce2c9",
+      "logo": "/assets/portfolio/podcast/logo.png",
+      "color": "gray",
+      "status": "external"
+    }
+  ]
+}

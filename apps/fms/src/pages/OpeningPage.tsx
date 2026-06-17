@@ -76,12 +76,27 @@ const OpeningPage: FC = () => {
   }
 
   return (
-    <div ref={targetRef} className="relative">
+    <div ref={targetRef} className="relative min-h-screen">
       {/* 开场动画区域 - 全屏固定 */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background">
-        <div className="mx-auto flex max-w-6xl items-center justify-center px-8 py-20">
+      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-background">
+        <div className="pointer-events-none absolute inset-0 opacity-80">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_12%,rgba(217,48,37,0.18),transparent_24rem),linear-gradient(rgba(18,49,60,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(18,49,60,0.06)_1px,transparent_1px)] bg-[length:auto,72px_72px,72px_72px]" />
+          <div className="absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 bg-primary/70 shadow-[0_0_18px_rgba(217,48,37,0.38)]" />
+          <div className="absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-primary bg-background" />
+        </div>
+
+        <div className="absolute left-5 top-5 z-10 flex items-end gap-3 md:left-8 md:top-8">
+          <div className="font-black leading-none text-primary">红医师</div>
+          <div className="font-mono text-xs font-bold uppercase tracking-[0.24em] text-secondary">FMS</div>
+        </div>
+
+        <div className="absolute bottom-5 right-5 z-10 hidden font-mono text-xs font-bold uppercase tracking-[0.28em] text-secondary/70 md:block">
+          XUN LIAN SHANG FANG ZHI
+        </div>
+
+        <div className="relative z-10 mx-auto flex max-w-6xl items-center justify-center px-6 py-20 md:px-8">
           {/* 左对齐的多行文字布局 */}
-          <div className="text-left space-y-4 md:space-y-6">
+          <div className="text-left space-y-2 md:space-y-4">
             {lines.map((line, lineIndex) => (
               <div key={lineIndex} className="flex flex-wrap">
                 {line.split(" ").map((word, wordIndex) => {
@@ -107,12 +122,12 @@ const OpeningPage: FC = () => {
         </div>
 
         {/* 底部提示信息 */}
-        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 text-center">
+        <div className="fixed bottom-8 left-1/2 z-10 -translate-x-1/2 transform text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 1 }}
-            className="text-sm text-muted-foreground space-y-2"
+            className="space-y-2 font-mono text-sm font-bold text-secondary/75"
           >
             <p className="hidden md:block">向下滚动继续</p>
             <p className="md:hidden">向下滑动继续</p>
@@ -144,7 +159,7 @@ interface OpeningWordProps {
 
 const OpeningWord: FC<OpeningWordProps> = ({ children, progress, range, isFirstWord = false }) => {
   // 首行文字初始有轻微可见性，其他文字完全隐藏
-  const initialOpacity = isFirstWord ? 0.50 : 0;
+  const initialOpacity = isFirstWord ? 0.72 : 0;
   const opacity = useTransform(progress, range, [initialOpacity, 1]);
   const scale = useTransform(progress, range, [0.9, 1]);
   const y = useTransform(progress, range, [20, 0]);
@@ -152,17 +167,12 @@ const OpeningWord: FC<OpeningWordProps> = ({ children, progress, range, isFirstW
   return (
     <motion.span 
       style={{ opacity, scale, y }}
-      className="relative mr-4 mb-3 inline-block text-4xl font-light tracking-widest text-black/15 dark:text-white/15 md:mr-6 md:mb-4 md:text-5xl lg:mr-8 lg:mb-5 lg:text-6xl xl:mr-10 xl:mb-6 xl:text-7xl"
+      className="relative mr-3 mb-2 inline-block text-5xl font-black tracking-normal text-primary/20 md:mr-5 md:mb-3 md:text-7xl lg:mr-7 lg:mb-4 lg:text-8xl"
     >
-      {/* 背景文字 - 更淡的效果 */}
-      <span className="absolute inset-0 opacity-25 blur-[0.5px]">{children}</span>
       {/* 前景文字 - 更强的对比 */}
-      <motion.span
-        style={{ opacity }}
-        className="relative z-10 font-medium text-black dark:text-white drop-shadow-sm"
-      >
+      <span className="relative z-10 font-black text-primary drop-shadow-sm">
         {children}
-      </motion.span>
+      </span>
     </motion.span>
   );
 };

@@ -4,8 +4,8 @@
   "description": "热射病防治与热指数查询",
   "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#F97316",
+  "background_color": "#F4ECDC",
+  "theme_color": "#A51F18",
   "orientation": "portrait",
   "icons": [
     {

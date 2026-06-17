@@ -1,0 +1,38 @@
+[
+  {
+    "id": "heat-field-action",
+    "projectId": "heat-stroke",
+    "label": "立即处置热射病",
+    "intent": "进入现场处置流程，优先看核心体温、降温和转运动作。",
+    "href": "/heat-stroke/pages/field-treatment.html",
+    "urgency": "immediate",
+    "sourceNote": "热射病防治资料，本地工具版，2026-06-17 复核。"
+  },
+  {
+    "id": "fms-assessment",
+    "projectId": "fms",
+    "label": "开始 FMS 评估",
+    "intent": "记录动作筛查，生成训练建议和可导出的报告。",
+    "href": "/fms/assessment",
+    "urgency": "guided",
+    "sourceNote": "FMS 教育评估流程，本机记录，不作临床诊断。"
+  },
+  {
+    "id": "tccc-flow",
+    "projectId": "tccc",
+    "label": "查询 TCCC 流程",
+    "intent": "按 MARCH、TFC 与 TACEVAC 路径快速定位战术救护流程。",
+    "href": "/tccc/pages/tccc-standard.html",
+    "urgency": "lookup",
+    "sourceNote": "CoTCCC 2017 基础内容，需按 JTS 最新资料更新复核。"
+  },
+  {
+    "id": "local-records",
+    "projectId": "fms",
+    "label": "继续本机记录/导出报告",
+    "intent": "回到历史记录、报告和本地导出入口，保持数据不上云。",
+    "href": "/fms/history",
+    "urgency": "local",
+    "sourceNote": "IndexedDB 本地保存；用户手动导入、导出。"
+  }
+]

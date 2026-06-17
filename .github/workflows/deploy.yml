@@ -1,28 +1,23 @@
-name: Deploy
+name: Cloudflare Build Check
 
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 jobs:
-  deploy:
-    name: Deploy apps
+  build:
+    name: Build Cloudflare Pages output
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 10.33.0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -33,29 +28,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build all apps
-        run: pnpm build
+      - name: Test Cloudflare helpers
+        run: pnpm test:cloudflare
 
-      - name: Upload pharmacy artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: apps/pharmacy/dist
-
-      - name: Upload clinic artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: apps/clinic/dist
-
-      - name: Upload fms artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: apps/fms/dist
-
-      - name: Upload portal artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: apps/portal/.next
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Build Cloudflare Pages output
+        run: pnpm build:cloudflare

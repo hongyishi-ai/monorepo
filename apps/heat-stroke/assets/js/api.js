@@ -4,7 +4,7 @@
  */
 
 // API 配置
-const FALLBACK_API_KEY = '4d8fb5b93d4af21d66a2948710284366'; // OpenWeatherMap免费API密钥（前端演示用）
+const FALLBACK_API_KEY = '';
 const REQUEST_TIMEOUT = 12000; // 网络请求超时阈值(ms)
 
 // 运行时解析 API Key
@@ -13,7 +13,7 @@ function resolveApiKey() {
     const metaKey = document.querySelector('meta[name="hs-api-key"]')?.getAttribute('content');
     const storedKey = localStorage.getItem('hs_api_key');
     if (!runtimeKey && !metaKey && !storedKey) {
-        console.warn('使用内置演示 API Key，建议通过 window.HS_API_KEY 或 meta[name="hs-api-key"] 注入自己的密钥');
+        console.warn('未发现前端 OpenWeather Key。生产环境应通过 Cloudflare Pages Function 代理请求。');
     }
     return runtimeKey || metaKey || storedKey || FALLBACK_API_KEY;
 }

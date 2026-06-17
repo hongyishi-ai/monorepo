@@ -1,5 +1,49 @@
 /* 新构成主义风格样式模块 */
 
+.posterSurface {
+  background-color: #f4ecdc;
+  background-image:
+    linear-gradient(rgba(18, 49, 60, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(18, 49, 60, 0.06) 1px, transparent 1px),
+    radial-gradient(circle at 20% 10%, rgba(217, 48, 37, 0.10) 0 1px, transparent 1px),
+    radial-gradient(circle at 80% 30%, rgba(18, 49, 60, 0.10) 0 1px, transparent 1px);
+  background-size: 72px 72px, 72px 72px, 9px 9px, 13px 13px;
+}
+
+:global(.dark) .posterSurface {
+  background-color: #050505;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    radial-gradient(circle at 20% 10%, rgba(217, 48, 37, 0.22) 0 1px, transparent 1px),
+    radial-gradient(circle at 80% 30%, rgba(0, 122, 255, 0.16) 0 1px, transparent 1px);
+}
+
+.ecgLine {
+  height: 42px;
+  transform: translateY(-50%);
+  background:
+    linear-gradient(90deg, transparent 0 28%, #d93025 28% 29%, transparent 29% 31%, #d93025 31% 32%, transparent 32% 34%, #d93025 34% 35%, transparent 35% 100%),
+    linear-gradient(90deg, transparent 0 63%, #007aff 63% 64%, transparent 64% 66%, #007aff 66% 67%, transparent 67% 100%);
+  clip-path: polygon(
+    0 52%,
+    26% 52%,
+    27% 25%,
+    28% 76%,
+    29% 42%,
+    30% 52%,
+    62% 52%,
+    63% 31%,
+    64% 70%,
+    65% 45%,
+    66% 52%,
+    100% 52%,
+    100% 55%,
+    0 55%
+  );
+  opacity: 0.95;
+}
+
 /* 作品集卡片基础样式 */
 .portfolioCard {
   position: relative;
@@ -202,4 +246,3 @@
     padding: 1.5rem;
   }
 }
-

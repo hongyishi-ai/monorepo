@@ -1,6 +1,8 @@
 // @hongyishi/ui - 共享 UI 组件库
 
 export { cn } from './lib/utils';
+export { hongyishiBrand, hongyishiBrandCssVariables, hongyishiPlatformPaths } from './brand';
+export type { HongyishiBrand } from './brand';
 
 // Layout
 export { Container } from './components/layout/container';

@@ -26,6 +26,8 @@ const TEST_DEMO_MAPPING: Record<string, string> = {
   'spinal-extension-clearance': 'SEC.gif'
 };
 
+const demoAssetUrl = (fileName: string) => `${import.meta.env.BASE_URL}demo/${fileName}`;
+
 interface DemoFloatingButtonProps {
   test: any
   className?: string
@@ -311,7 +313,7 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
                       {TEST_DEMO_MAPPING[test.id] && !imageError ? (
                         <div className="w-full h-full relative">
                           <img 
-                            src={`/demo/${TEST_DEMO_MAPPING[test.id]}`}
+                            src={demoAssetUrl(TEST_DEMO_MAPPING[test.id])}
                             alt={`${test.name} 动作演示`}
                             className="w-full h-full object-cover"
                             loading="lazy"

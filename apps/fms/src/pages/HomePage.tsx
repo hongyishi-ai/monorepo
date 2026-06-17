@@ -8,6 +8,7 @@ import { useStorage } from '@/hooks/use-storage';
 import { format } from 'date-fns';
 import type { AssessmentRecord } from '@/lib/storage';
 
+const assetUrl = (fileName: string) => `${import.meta.env.BASE_URL}${fileName.replace(/^\/+/, '')}`;
 
 const HomePage = () => {
   const { getLatestAssessment, getStatistics } = useStorage();
@@ -57,13 +58,16 @@ const HomePage = () => {
       <div className="brooklyn-container">
         {/* 主标题区域 - 极简布局 */}
         <div className="text-center mb-16 md:mb-20 minimal-fade-in" role="region" aria-label="首页标题与描述">
-          <h1 className="brooklyn-title">
+          <p className="mb-4 font-mono text-sm font-bold text-muted-foreground">
             功能性动作筛查
+          </p>
+          <h1 className="brooklyn-title">
+            训练伤防治
           </h1>
           <p className="brooklyn-subtitle max-w-3xl mx-auto">
             科学评估动作模式，
             <br className="hidden sm:inline" />
-            获取个性化改善建议。
+            获取个性化改善建议，从评估到训练方案。
           </p>
         </div>
 
@@ -76,7 +80,7 @@ const HomePage = () => {
               // iconSize="xl" 
               // iconPosition="bottom-right" 
               // iconOpacity={0.06}
-              backgroundImage="/start_test.webp"
+              backgroundImage={assetUrl('start_test.webp')}
               gradientOverlay="linear-gradient(135deg, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.60) 60%, rgba(0,0,0,0) 100%)"
               className="brooklyn-card p-8 md:p-12 text-center h-full hover:scale-[1.02] transition-transform"
             >
@@ -104,7 +108,7 @@ const HomePage = () => {
               // iconSize="xl" 
               // iconPosition="bottom-right" 
               // iconOpacity={0.06}
-              backgroundImage="/learning.webp"
+              backgroundImage={assetUrl('learning.webp')}
               gradientOverlay="linear-gradient(135deg, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.60) 60%, rgba(0,0,0,0) 100%)"
               className="brooklyn-card p-8 md:p-12 text-center h-full hover:scale-[1.02] transition-transform"
             >
@@ -135,7 +139,7 @@ const HomePage = () => {
               // iconSize="lg" 
               // iconPosition="top-right" 
               // iconOpacity={0.08}
-              backgroundImage="/history.webp"
+              backgroundImage={assetUrl('history.webp')}
               gradientOverlay="linear-gradient(135deg, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.60) 60%, rgba(0,0,0,0) 100%)"
               className="brooklyn-card p-6 hover:shadow-lg transition-shadow"
             >
@@ -160,7 +164,7 @@ const HomePage = () => {
               // iconSize="lg" 
               // iconPosition="top-right" 
               // iconOpacity={0.08}
-              backgroundImage="/training_plan.webp"
+              backgroundImage={assetUrl('training_plan.webp')}
               gradientOverlay="linear-gradient(135deg, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.60) 60%, rgba(0,0,0,0) 100%)"
               className="brooklyn-card p-6 hover:shadow-lg transition-shadow"
             >
@@ -181,7 +185,7 @@ const HomePage = () => {
               // iconSize="lg" 
               // iconPosition="top-right" 
               // iconOpacity={0.08}
-              backgroundImage="/report.webp"
+              backgroundImage={assetUrl('report.webp')}
               gradientOverlay="linear-gradient(135deg, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.60) 60%, rgba(0,0,0,0) 100%)"
               className="brooklyn-card p-6 hover:shadow-lg transition-shadow"
             >
