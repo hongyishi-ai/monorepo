@@ -129,15 +129,14 @@ Sitemap: https://hongyishi.cn/sitemap.xml
 
 **准备工作**:
 - 创建 README.md 说明文档
-- 列出需要下载的 4 张图片
+- 列出需要下载的项目封面图片
 - 提供图片优化建议（WebP, 1200x800px, 80-85%质量）
 - 说明如何替换 Unsplash CDN 链接
 
 **图片清单**:
 1. `reshebing.jpg` - 热射病防治平台
-2. `clinic.jpg` - 基层疾病诊断平台
-3. `yf.jpg` - 移动药房系统
-4. `fms.jpg` - 训练伤防治平台
+2. `fms.jpg` - 训练伤防治平台
+3. `tccc.jpg` - 战场救护 TCCC 平台
 
 ## 技术改进
 
@@ -266,4 +265,3 @@ Sitemap: https://hongyishi.cn/sitemap.xml
 ---
 
 **项目状态：✅ 优化完成，构建成功，生产就绪！**
-

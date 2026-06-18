@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { formatDate, formatNumber, formatFileSize, formatRelativeTime } from './index';
+import { formatDate, formatNumber, formatFileSize } from './index';
 import { validatePhone, validateEmail, validateIdCard, validateUrl, validateMoney } from '../validation/index';
-import { createApiClient } from '../api/index';
 
 describe('format', () => {
   describe('formatDate', () => {

@@ -71,46 +71,6 @@
         "dataPolicy": "离线流程内容不上传；训练记录如后续启用，默认仅保存在本机。",
         "officialUpdateUrl": "https://jts.health.mil/index.cfm/committees/cotccc"
       }
-    },
-    {
-      "id": "clinic",
-      "title": "基层疾病辅助诊断平台",
-      "shortTitle": "辅助诊断",
-      "type": "[AI医疗 / 基层应用]",
-      "description": "人工智能辅助基层进行疾病诊断和治疗决策",
-      "href": "https://clinic.hongyishi.cn",
-      "logo": "/assets/portfolio/clinic/logo.png",
-      "coverImage": "/assets/portfolio/covers/clinic.jpg",
-      "color": "blue",
-      "status": "external",
-      "content": {
-        "sourceName": "基层疾病辅助诊断项目原站点",
-        "version": "外部运行版本",
-        "reviewedAt": "2026-06-17",
-        "status": "review-required",
-        "audience": "基层医疗辅助决策场景评估者",
-        "disclaimer": "当前仍为外部入口，未纳入统一本地数据和部署合同。"
-      }
-    },
-    {
-      "id": "pharmacy",
-      "title": "便携式药品管理系统",
-      "shortTitle": "移动药房",
-      "type": "[数字化药房 / 移动场景]",
-      "description": "移动场景下的智能药品管理与使用",
-      "href": "https://yf.hongyishi.cn",
-      "logo": "/assets/portfolio/yf/logo.png",
-      "coverImage": "/assets/portfolio/covers/yf.jpg",
-      "color": "yellow",
-      "status": "external",
-      "content": {
-        "sourceName": "便携式药品管理系统原站点",
-        "version": "外部运行版本",
-        "reviewedAt": "2026-06-17",
-        "status": "review-required",
-        "audience": "移动药房和药品管理场景评估者",
-        "disclaimer": "当前仍为外部入口，未纳入统一本地数据和部署合同。"
-      }
     }
   ],
   "auxiliaryEntries": [

@@ -1,6 +1,6 @@
 # 红医师 monorepo
 
-整合红医师旗下多个医疗相关平台的统一代码仓库。当前优先将门户、训练伤防治、热射病防治整合为单一入口平台。
+整合红医师旗下医疗训练、热风险处置和战场救护工具的统一代码仓库。当前主站已将门户、训练伤防治、热射病防治和战场救护整合为单一入口平台。
 
 [![CI](https://github.com/hongyishi-ai/monorepo/actions/workflows/ci.yml/badge.svg)](https://github.com/hongyishi-ai/monorepo/actions)
 
@@ -10,10 +10,9 @@
 hongyishi-monorepo/
 ├── apps/
 │   ├── portal/        # 红医师门户（Next.js 15 + React 18）
-│   ├── pharmacy/      # 移动药房系统（Vite + React 18）
-│   ├── clinic/        # 门诊辅助诊断（Vite + React 18）
 │   ├── fms/           # 训练伤防治平台（Vite + PWA + React 18）
-│   └── heat-stroke/   # 热射病防治平台（静态 PWA）
+│   ├── heat-stroke/   # 热射病防治平台（静态 PWA）
+│   └── tccc/          # 战场救护 TCCC 平台（静态 PWA）
 ├── packages/
 │   ├── ui/            # 共享 UI 组件库
 │   ├── utils/         # 共享工具库（含 format/validation/api）
@@ -54,7 +53,7 @@ pnpm dev
 # 构建所有项目
 pnpm build
 
-# 构建统一 Cloudflare Pages 站点（portal + fms + heat-stroke）
+# 构建统一 Cloudflare Pages 站点（portal + fms + heat-stroke + tccc）
 pnpm build:cloudflare
 
 # 本地预览 Cloudflare Pages 输出
@@ -67,21 +66,19 @@ pnpm type-check
 pnpm test
 
 # 开发单个项目
-pnpm --filter pharmacy dev
-pnpm --filter clinic dev
 pnpm --filter portal dev
 pnpm --filter fms dev
+pnpm --filter @hongyishi/heat-stroke dev
 ```
 
 ## 应用端口
 
 | App | 端口 | 访问 |
 |-----|------|------|
-| pharmacy | 5173 | http://localhost:5173 |
-| clinic | 3001 | http://localhost:3001 |
 | portal | 3000 | http://localhost:3000 |
-| fms | 5174 | http://localhost:5174 |
+| fms | 5175 | http://localhost:5175 |
 | heat-stroke | 3000 | `npx serve apps/heat-stroke -l 3000` |
+| tccc | 静态文件 | 由 `pnpm build:cloudflare` 拼装到 `/tccc/` |
 
 ## 统一入口平台
 
@@ -92,6 +89,7 @@ Cloudflare Pages 单站输出目录为 `.cloudflare/site`：
 | `/` | `apps/portal` 静态导出 |
 | `/fms/` | `apps/fms` Vite PWA |
 | `/heat-stroke/` | `apps/heat-stroke` 静态 PWA |
+| `/tccc/` | `apps/tccc` 静态 PWA |
 | `/api/openweather` | `functions/api/openweather.js` |
 
 `pnpm build:cloudflare` 会生成：
@@ -100,6 +98,7 @@ Cloudflare Pages 单站输出目录为 `.cloudflare/site`：
 - `.cloudflare/site/_headers`：静态资源缓存、安全响应头和 CSP 基线
 - `.cloudflare/site/fms`：带 `/fms/` base path 的 FMS 产物
 - `.cloudflare/site/heat-stroke`：带 `/heat-stroke/` 路径重写的热射病静态产物
+- `.cloudflare/site/tccc`：带 `/tccc/` 路径重写的 TCCC 静态产物
 
 新增项目入口时，优先更新 `apps/portal/src/lib/projects.ts`。首页项目网格与博客页项目入口共用该注册表，避免链接、封面、颜色和状态分散维护。
 
@@ -137,6 +136,8 @@ pnpm preview:cloudflare
 - `/heat-stroke/pages/heat-index.html`
 - `/heat-stroke/pages/field-treatment.html`
 - `/heat-stroke/pages/8-4-6-rule.html`
+- `/tccc/`
+- `/tccc/pages/tccc-standard.html`
 
 检查标准：
 

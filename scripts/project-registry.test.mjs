@@ -39,8 +39,9 @@ test('project registry entries use stable ids, colors, statuses, and paths', asy
   const registry = await readRegistry();
   const entries = allEntries(registry);
   const ids = new Set();
+  const platformIds = registry.platformProjects.map((project) => project.id).sort();
 
-  assert.ok(registry.platformProjects.length >= 4, 'expected primary platform project entries');
+  assert.deepEqual(platformIds, ['fms', 'heat-stroke', 'tccc'], 'expected current platform project entries');
   assert.ok(entries.length >= registry.platformProjects.length, 'expected auxiliary entries to merge with platform entries');
 
   for (const project of entries) {

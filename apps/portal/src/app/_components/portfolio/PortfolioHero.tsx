@@ -44,7 +44,7 @@ export function PortfolioHero() {
           </div>
 
           <p className="mt-8 max-w-2xl text-lg md:text-xl leading-8 text-neutral-800 dark:text-neutral-300">
-            以赤诚，护生命。训练伤防治、热射病防治、战场救护、辅助诊断、移动药房与内容系统归入同一品牌入口，先接好可用工具，再统一体验和部署边界。
+            以赤诚，护生命。训练伤防治、热射病防治、战场救护与内容系统归入同一品牌入口，先接好可用工具，再统一体验和部署边界。
           </p>
 
           <div className="mt-10 grid gap-3 sm:grid-cols-2">

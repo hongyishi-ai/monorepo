@@ -24,16 +24,6 @@
     "clean": {
       "cache": false
     },
-    "pharmacy#build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
-    },
-    "pharmacy#dev": { "cache": false, "persistent": true },
-    "clinic#build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
-    },
-    "clinic#dev": { "cache": false, "persistent": true },
     "fms#build": {
       "dependsOn": ["^build"],
       "outputs": ["fms-app/dist/**"]

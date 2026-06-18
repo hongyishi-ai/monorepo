@@ -6,10 +6,9 @@
 
 - 作品集首页（本站）：`https://hongyishi.cn`
 - 博客文章：`https://hongyishi.cn/blog`
-- 训练伤防治：`https://fms.hongyishi.cn`
-- 辅助诊断：`https://clinic.hongyishi.cn`
-- 热射病防治：`https://reshebing.hongyishi.cn`
-- 移动药房：`https://yf.hongyishi.cn`
+- 训练伤防治：`https://hongyishi.cn/fms/`
+- 热射病防治：`https://hongyishi.cn/heat-stroke/`
+- 战场救护：`https://hongyishi.cn/tccc/`
 - 播客：`https://www.xiaoyuzhoufm.com/podcast/6818ac762ad01a51a25ce2c9`
 
 ## 技术栈
