@@ -53,8 +53,9 @@ test('buildHeaders adds security headers and long-lived hashed asset caching', (
   assert.match(headers, /Content-Security-Policy: default-src 'self'/);
   assert.match(
     headers,
-    /script-src 'self' 'unsafe-inline' https:\/\/cdnjs\.cloudflare\.com https:\/\/cdn\.jsdelivr\.net/,
+    /script-src 'self' 'unsafe-inline' https:\/\/cdnjs\.cloudflare\.com https:\/\/cdn\.jsdelivr\.net https:\/\/static\.cloudflareinsights\.com/,
   );
+  assert.match(headers, /connect-src 'self' https:\/\/api\.openweathermap\.org https:\/\/cloudflareinsights\.com/);
   assert.doesNotMatch(headers, /cdn\.tailwindcss\.com/);
   assert.match(headers, /\/_next\/static\/\*/);
   assert.match(headers, /\/fms\/assets\/\*/);
