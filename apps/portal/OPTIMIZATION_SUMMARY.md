@@ -125,18 +125,19 @@ Sitemap: https://hongyishi.cn/sitemap.xml
 
 #### 7. 本地图片准备
 
-**创建目录**: `public/assets/portfolio/covers/`
+**当前主视觉目录**: `public/assets/brand-posters/`
 
-**准备工作**:
-- 创建 README.md 说明文档
-- 列出需要下载的项目封面图片
-- 提供图片优化建议（WebP, 1200x800px, 80-85%质量）
-- 说明如何替换 Unsplash CDN 链接
+**已完成工作**:
+- 接入用户提供的红医师品牌海报
+- 将项目封面从通用图片切换为品牌海报
+- 提供图片优化建议（WebP, 906x1280px, 80-85%质量）
+- 说明如何替换品牌海报资产
 
 **图片清单**:
-1. `reshebing.jpg` - 热射病防治平台
-2. `fms.jpg` - 训练伤防治平台
-3. `tccc.jpg` - 战场救护 TCCC 平台
+1. `heat-stroke.jpg` - 热射病防治平台
+2. `training-injury.jpg` - 训练伤防治平台
+3. `combat-rescue.jpg` - 战场救护 TCCC 平台
+4. `hongyishi-brand.jpg` - 红医师品牌主视觉
 
 ## 技术改进
 
@@ -196,10 +197,10 @@ Sitemap: https://hongyishi.cn/sitemap.xml
    - 当前构建成功，但开发服务器有错误
    - 需要排查 Next.js 15 + Turbopack 兼容性问题
 
-2. **下载并替换本地图片**
-   - 从 Unsplash 下载 4 张封面图
-   - 使用 WebP 格式压缩
-   - 更新 PortfolioGrid.tsx 中的图片路径
+2. **继续优化品牌海报资产**
+   - 将当前 JPG 海报转换为 WebP
+   - 为社交分享图复用红医师主视觉
+   - 为新增项目补齐同一风格海报
 
 3. **Lighthouse 性能测试**
    - 运行生产构建

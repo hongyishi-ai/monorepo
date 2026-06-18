@@ -11,7 +11,7 @@ export function PortfolioGrid() {
         工具阵列
       </h2>
       <p className="mb-8 max-w-2xl text-base leading-7 text-neutral-700 dark:text-neutral-300">
-        已整合项目直接进入站内工具，外部运行项目保留原入口。后续重构以保留功能和统一视觉为前提逐步迁移。
+        选择现场需要的工具，快速进入评估、处置流程或训练资料。
       </p>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">

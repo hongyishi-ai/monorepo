@@ -14,7 +14,7 @@
 - **样式**: Tailwind CSS 3.4.4
 - **语言**: TypeScript 5.5.2
 - **字体**: Inter, Bebas Neue, Roboto Mono
-- **图片**: Unsplash CDN (可迁移到本地)
+- **图片**: 本地红医师品牌海报与项目资产
 
 ## 本地开发
 
@@ -169,24 +169,22 @@ Settings → Environment variables
 
 ### 图片优化
 
-**当前状态**: 使用 Unsplash CDN
+**当前状态**: 使用 `/public/assets/brand-posters/` 下的本地红医师品牌海报
 
 **优化建议**:
-1. 下载图片到 `public/assets/portfolio/covers/`
-2. 使用 WebP 格式
-3. 建议尺寸：1200x800px
+1. 后续新增项目优先补齐同一风格的品牌海报
+2. 可将 JPG 进一步转换为 WebP
+3. 当前海报尺寸：906x1280px
 4. 质量：80-85%
 
 **替换步骤**:
 
-1. 下载图片（参考 `public/assets/portfolio/covers/README.md`）
-2. 修改 `src/app/_components/portfolio/PortfolioGrid.tsx`：
+1. 保存新海报到 `public/assets/brand-posters/`
+2. 修改 `src/lib/projects.json`：
 
 ```typescript
-// 从
-coverImage: 'https://images.unsplash.com/...'
 // 改为
-coverImage: '/assets/portfolio/covers/reshebing.webp'
+coverImage: '/assets/brand-posters/new-project.webp'
 ```
 
 ### Lighthouse 测试
@@ -309,9 +307,9 @@ npm run build
 ### 问题 4: 图片加载失败
 
 **检查**:
-- `next.config.js` 中的 `remotePatterns` 配置
-- 图片路径是否正确
-- Unsplash URL 是否可访问
+- 自有品牌图片是否已保存到 `public/assets/brand-posters/`
+- `projects.json` 中的图片路径是否正确
+- 文件名大小写是否与实际图片一致
 
 ## 备份和回滚
 
@@ -386,4 +384,3 @@ const securityHeaders = [
 ---
 
 **部署状态：✅ 生产就绪！**
-

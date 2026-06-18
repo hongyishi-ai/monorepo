@@ -26,7 +26,6 @@ type HongyishiProjectBase = {
   legacyHref?: string;
   logo: string;
   color: HongyishiProjectColor;
-  featured?: boolean;
   status: HongyishiProjectStatus;
   content?: HongyishiProjectContent;
 };

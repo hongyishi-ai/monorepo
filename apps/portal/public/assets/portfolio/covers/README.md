@@ -1,50 +1,35 @@
 # 作品集封面图片
 
-此目录用于存储作品集项目的封面图片。
+此目录保留早期作品集项目封面图片。当前主站首页已经优先使用 `/assets/brand-posters/` 下的红医师品牌海报作为项目封面和首屏视觉资产。
 
-## 当前使用的图片
+## 当前主站使用的品牌海报
 
-项目目前使用 Unsplash CDN 图片。为了提升性能和稳定性，建议下载这些图片到本地。
+1. **热射病防治平台**
+   - 当前封面: `/assets/brand-posters/heat-stroke.jpg`
+   - 来源: 用户提供的“热射病防治”品牌海报
 
-### 需要下载的图片
+2. **训练伤防治平台**
+   - 当前封面: `/assets/brand-posters/training-injury.jpg`
+   - 来源: 用户提供的“训练伤防治”品牌海报
 
-1. **热射病防治平台** (`reshebing.jpg`)
-   - Unsplash URL: https://images.unsplash.com/photo-1518186225049-a3a89322c36a?q=80&w=1200&auto=format&fit=crop
-   - 建议尺寸: 1200x800px
-   - 主题: 炎热天气、沙漠、医疗
+3. **战场救护 TCCC 平台**
+   - 当前封面: `/assets/brand-posters/combat-rescue.jpg`
+   - 来源: 用户提供的“战伤救护”品牌海报
 
-2. **训练伤防治平台** (`fms.jpg`)
-   - Unsplash URL: https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1200&auto=format&fit=crop
-   - 建议尺寸: 1200x800px
-   - 主题: 运动、训练、健康评估
+4. **红医师品牌主视觉**
+   - 当前首屏视觉: `/assets/brand-posters/hongyishi-brand.jpg`
+   - 来源: 用户提供的“红医师”品牌海报
 
-3. **战场救护 TCCC 平台** (`tccc.jpg`)
-   - 建议尺寸: 1200x800px
-   - 主题: 战术救护、战伤流程、医疗训练
+## 如何替换项目封面
 
-## 如何使用本地图片
-
-1. 下载上述图片并保存到此目录
-2. 修改 `src/app/_components/portfolio/PortfolioGrid.tsx` 中的 `coverImage` 路径：
-
-```typescript
-// 从
-coverImage: 'https://images.unsplash.com/photo-...'
-
-// 改为
-coverImage: '/assets/portfolio/covers/reshebing.jpg'
-```
+1. 优先将新品牌海报保存到 `/assets/brand-posters/`
+2. 修改 `apps/portal/src/lib/projects.json` 中对应项目的 `coverImage`
+3. 保持路径为根相对路径，例如 `/assets/brand-posters/heat-stroke.jpg`
 
 ## 图片优化建议
 
 - 格式: WebP (更好的压缩率) 或 JPG
-- 尺寸: 1200x800px (3:2 比例)
+- 当前海报尺寸: 906x1280px
 - 质量: 80-85%
 - 使用 Next.js Image 组件自动优化
 - 提供多种尺寸的响应式图片
-
-## 工具推荐
-
-- **下载**: wget 或浏览器直接下载
-- **压缩**: TinyPNG, ImageOptim
-- **转换**: Squoosh (webp 转换)

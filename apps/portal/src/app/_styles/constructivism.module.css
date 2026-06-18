@@ -48,7 +48,7 @@
 .portfolioCard {
   position: relative;
   overflow: hidden;
-  min-height: 380px;
+  aspect-ratio: 906 / 1280;
   border: 3px solid #000;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.25);
@@ -232,7 +232,6 @@
 /* 响应式调整 */
 @media (max-width: 768px) {
   .portfolioCard {
-    min-height: 320px;
     border-width: 2px;
     box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.25);
   }

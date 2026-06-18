@@ -17,7 +17,6 @@ type PortfolioCardProps = {
   href: string;
   coverImage: string;
   color: HongyishiProjectColor;
-  featured?: boolean;
   status: HongyishiProjectStatus;
   content?: HongyishiProjectContent;
 };
@@ -29,7 +28,6 @@ export function PortfolioCard({
   href,
   coverImage,
   color,
-  featured = false,
   status,
   content,
 }: PortfolioCardProps) {
@@ -49,7 +47,7 @@ export function PortfolioCard({
       href={href}
       target={isExternal ? '_blank' : undefined}
       rel={isExternal ? 'noopener noreferrer' : undefined}
-      className={`${styles.portfolioCard} ${colorClass} ${featured ? 'md:col-span-2' : ''}`}
+      className={`${styles.portfolioCard} ${colorClass}`}
     >
       {/* 封面图片 */}
       <Image
@@ -57,7 +55,7 @@ export function PortfolioCard({
         alt={`${title}封面`}
         fill
         className={styles.portfolioCardCover}
-        sizes={featured ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 100vw, 33vw"}
+        sizes="(max-width: 768px) 100vw, 33vw"
       />
       
       {/* 叠加层 */}

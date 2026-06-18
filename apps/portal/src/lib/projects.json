@@ -9,9 +9,8 @@
       "href": "/heat-stroke/",
       "legacyHref": "https://reshebing.hongyishi.cn",
       "logo": "/assets/portfolio/reshebing/logo.png",
-      "coverImage": "/assets/portfolio/covers/reshebing.jpg",
+      "coverImage": "/assets/brand-posters/heat-stroke.jpg",
       "color": "red",
-      "featured": true,
       "status": "integrated",
       "content": {
         "sourceName": "热射病防治指南与现场处置资料",
@@ -34,7 +33,7 @@
       "href": "/fms/",
       "legacyHref": "https://fms.hongyishi.cn",
       "logo": "/assets/portfolio/fms/logo.png",
-      "coverImage": "/assets/portfolio/covers/fms.jpg",
+      "coverImage": "/assets/brand-posters/training-injury.jpg",
       "color": "gray",
       "status": "integrated",
       "content": {
@@ -57,7 +56,7 @@
       "href": "/tccc/",
       "legacyHref": "https://github.com/nimrod1990/hongyishi-TCCC",
       "logo": "/assets/portfolio/tccc/logo.png",
-      "coverImage": "/assets/portfolio/covers/tccc.jpg",
+      "coverImage": "/assets/brand-posters/combat-rescue.jpg",
       "color": "red",
       "status": "integrated",
       "content": {
