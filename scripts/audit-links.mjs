@@ -64,6 +64,10 @@ function extractLinks(html, currentPath) {
   return links;
 }
 
+function shouldIgnoreInternalPath(pathname) {
+  return pathname.startsWith('/cdn-cgi/');
+}
+
 async function fetchPage(pathname) {
   const response = await fetch(new URL(pathname, baseUrl), { redirect: 'follow' });
   const contentType = response.headers.get('content-type') ?? '';
@@ -104,7 +108,7 @@ async function crawlInternalLinks() {
       if (url.origin === origin) {
         const nextPath = `${url.pathname}${url.search}`;
 
-        if (!visited.has(nextPath) && !queue.includes(nextPath)) {
+        if (!shouldIgnoreInternalPath(url.pathname) && !visited.has(nextPath) && !queue.includes(nextPath)) {
           queue.push(nextPath);
         }
       } else if (shouldCheckExternal && /^https?:$/.test(url.protocol)) {
