@@ -139,6 +139,8 @@ pnpm preview:cloudflare
 pnpm audit:links -- --base=http://127.0.0.1:8788
 ```
 
+每次代码变更完成并重新部署 Cloudflare Pages 后，必须更新 `docs/deployment-log.md`，记录 Git commit、Cloudflare Pages 部署 URL、生产域名和验证结果。只修改文档且未触发生产部署时，也应在相关提交说明中明确“未触发生产部署”。
+
 本地预览至少检查以下路径：
 
 - `/`
