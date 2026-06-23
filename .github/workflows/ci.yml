@@ -108,7 +108,7 @@ jobs:
 
       - name: Audit built links
         run: |
-          npx wrangler pages dev .cloudflare/site --compatibility-date=2026-06-16 --port=8788 --inspector-port=0 --install-skills=false > /tmp/hongyishi-wrangler.log 2>&1 &
+          npx wrangler@4.103.0 pages dev .cloudflare/site --compatibility-date=2026-06-16 --port=8788 --inspector-port=0 > /tmp/hongyishi-wrangler.log 2>&1 &
           WRANGLER_PID=$!
           trap 'kill $WRANGLER_PID' EXIT
           READY=0
