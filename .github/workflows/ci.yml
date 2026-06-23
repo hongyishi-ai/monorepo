@@ -27,18 +27,48 @@ jobs:
       - name: Check React versions
         id: check-react
         run: |
-          echo "### React versions across apps" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          pnpm list --depth 0 --recursive 2>/dev/null | grep "react@" | sed 's/^/          /' >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          node <<'NODE'
+          const fs = require('node:fs');
+          const { execFileSync } = require('node:child_process');
 
-          VERSIONS=$(pnpm list --depth 0 --recursive 2>/dev/null | grep -oP 'react@\K[0-9]+\.[0-9]+\.[0-9]+' | sort -u | wc -l)
-          if [ "$VERSIONS" -gt 1 ]; then
-            echo "❌ React version mismatch detected!"
-            echo "Run \`pnpm up react@^18.3.0 react-dom@^18.3.0 -r\` to unify."
-            exit 1
-          fi
-          echo "✅ All apps use the same React version"
+          const projects = JSON.parse(
+            execFileSync('pnpm', ['list', '--depth', '0', '--recursive', '--json'], {
+              encoding: 'utf8',
+            }),
+          );
+          const rows = [];
+          const reactVersions = new Set();
+          const reactDomVersions = new Set();
+
+          for (const project of projects) {
+            const dependencies = {
+              ...(project.dependencies ?? {}),
+              ...(project.devDependencies ?? {}),
+            };
+
+            for (const packageName of ['react', 'react-dom']) {
+              const dependency = dependencies[packageName];
+              if (!dependency?.version) continue;
+
+              rows.push(`${project.name ?? project.path}: ${packageName}@${dependency.version}`);
+              if (packageName === 'react') reactVersions.add(dependency.version);
+              if (packageName === 'react-dom') reactDomVersions.add(dependency.version);
+            }
+          }
+
+          const report = ['### React versions across workspaces', '', '```', ...rows, '```', ''].join('\n');
+          if (process.env.GITHUB_STEP_SUMMARY) {
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, report);
+          }
+          console.log(report);
+
+          if (reactVersions.size > 1 || reactDomVersions.size > 1) {
+            console.error('React version mismatch detected.');
+            process.exit(1);
+          }
+
+          console.log('All direct React dependencies use one version.');
+          NODE
 
   active-platform:
     name: Build active Cloudflare platform
