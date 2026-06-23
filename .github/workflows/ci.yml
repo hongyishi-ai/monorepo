@@ -108,13 +108,23 @@ jobs:
 
       - name: Audit built links
         run: |
-          pnpm exec wrangler pages dev .cloudflare/site --compatibility-date=2026-06-16 --port=8788 --install-skills=false > /tmp/hongyishi-wrangler.log 2>&1 &
+          npx wrangler pages dev .cloudflare/site --compatibility-date=2026-06-16 --port=8788 --inspector-port=0 --install-skills=false > /tmp/hongyishi-wrangler.log 2>&1 &
           WRANGLER_PID=$!
           trap 'kill $WRANGLER_PID' EXIT
+          READY=0
           for i in {1..30}; do
             if curl -sf http://127.0.0.1:8788/ >/dev/null; then
+              READY=1
               break
+            fi
+            if ! kill -0 $WRANGLER_PID 2>/dev/null; then
+              cat /tmp/hongyishi-wrangler.log
+              exit 1
             fi
             sleep 1
           done
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/hongyishi-wrangler.log
+            exit 1
+          fi
           pnpm audit:links -- --base=http://127.0.0.1:8788
