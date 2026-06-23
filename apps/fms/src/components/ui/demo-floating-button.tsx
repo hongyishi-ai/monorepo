@@ -133,7 +133,7 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
             >
               <Card 
                 className={cn(
-                  "brooklyn-card bg-card/95 backdrop-blur-md border shadow-lg hover:shadow-xl cursor-pointer overflow-hidden",
+                  "hys-card bg-card/95 backdrop-blur-md border shadow-lg hover:shadow-xl cursor-pointer overflow-hidden",
                   "active:scale-95 touch-manipulation smart-status-transition",
                   isScrollingDown && "indicator-dimmed",
                   !isScrollingDown && "indicator-focused",
@@ -233,7 +233,7 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
 
         {/* 抽屉组件 */}
         <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-          <DrawerContent className="max-h-[85vh] brooklyn-card">
+          <DrawerContent className="max-h-[85vh] hys-card">
             <DrawerHeader className="text-center pb-4">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Eye className="w-5 h-5 text-primary" />
@@ -246,7 +246,7 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
               <DrawerTitle className="text-lg font-medium">
                 {test.name.split(' (')[0]} - 动作指引
               </DrawerTitle>
-              <DrawerDescription className="brooklyn-text">
+              <DrawerDescription className="hys-text">
                 {isClearanceTest ? '排除测试详细指导' : '标准动作演示与评分说明'}
               </DrawerDescription>
             </DrawerHeader>
@@ -465,7 +465,7 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
 
             {/* 底部提示 */}
             <div className="text-center p-4 bg-muted/20 rounded-lg border mx-4 mb-4">
-              <div className="brooklyn-text text-sm space-y-2">
+              <div className="hys-text text-sm space-y-2">
                 <div>向下滑动或点击外部区域可关闭</div>
                 <div className="flex items-center justify-center gap-2 text-xs">
                   <kbd className="px-2 py-1 text-xs font-mono bg-muted rounded border">Alt</kbd>

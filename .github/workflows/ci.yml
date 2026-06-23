@@ -57,5 +57,34 @@ jobs:
           cache: 'pnpm'
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm test:cloudflare
-      - run: pnpm build:cloudflare
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Type check
+        run: pnpm type-check
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Cloudflare contract tests
+        run: pnpm test:cloudflare
+
+      - name: Build Cloudflare Pages output
+        run: pnpm build:cloudflare
+
+      - name: Size budget
+        run: pnpm size:budget
+
+      - name: Audit built links
+        run: |
+          pnpm exec wrangler pages dev .cloudflare/site --compatibility-date=2026-06-16 --port=8788 --install-skills=false > /tmp/hongyishi-wrangler.log 2>&1 &
+          WRANGLER_PID=$!
+          trap 'kill $WRANGLER_PID' EXIT
+          for i in {1..30}; do
+            if curl -sf http://127.0.0.1:8788/ >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          pnpm audit:links -- --base=http://127.0.0.1:8788

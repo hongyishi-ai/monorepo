@@ -68,10 +68,21 @@ export default defineConfig({
           }
         ]
       },
-            workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,webm,gif}'],
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB limit
         runtimeCaching: [
+          {
+            urlPattern: ({ request, sameOrigin }) => sameOrigin && request.destination === 'video',
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'fms-runtime-video-cache',
+              expiration: {
+                maxEntries: 8,
+                maxAgeSeconds: 60 * 60 * 24 * 30,
+              },
+            },
+          },
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'CacheFirst',

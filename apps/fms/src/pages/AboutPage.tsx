@@ -10,7 +10,7 @@ const AboutPage = () => {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <article className="pt-12 pb-20 px-3 md:pt-28 md:pb-48 md:px-8">
+      <article className="overflow-x-hidden pt-12 pb-20 px-3 md:pt-28 md:pb-48 md:px-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <header className="text-center px-4">
@@ -27,7 +27,7 @@ const AboutPage = () => {
             <section className="max-w-4xl mx-auto relative">
               {/* Sticky Image */}
               <div className="sticky top-16 mb-6 md:mb-8">
-                <div className="relative w-[110%] -ml-[5%] pb-[55%] overflow-hidden rounded-xl md:rounded-2xl">
+                <div className="relative w-full pb-[55%] overflow-hidden rounded-xl md:w-[110%] md:-ml-[5%] md:rounded-2xl">
                   <img 
                     src={`${assetBase}about.png`} 
                     alt="FMS功能性动作筛查系统项目图片，展示医疗救援与健康防护理念"
@@ -39,7 +39,7 @@ const AboutPage = () => {
               </div>
 
               {/* Content Card */}
-              <div className="bg-card p-8 md:p-16 lg:p-20 relative -mt-32 md:-mt-72 shadow-xl border border-border rounded-xl md:rounded-2xl max-w-[70ch] mx-auto">
+              <div className="bg-card p-6 md:p-16 lg:p-20 relative -mt-24 md:-mt-72 shadow-xl border border-border rounded-xl md:rounded-2xl max-w-[70ch] mx-auto">
                 <p className="mb-5 md:mb-8 text-lg text-foreground dark:text-gray-200 leading-relaxed md:leading-loose">
                   训练伤，大多不是意外。
                 </p>

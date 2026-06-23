@@ -26,6 +26,7 @@ apps/*/dist/
 apps/*/build/
 apps/*/.next/
 apps/*/out/
+apps/*/assets/css/tailwind.css
 
 # Packages
 packages/*/node_modules/

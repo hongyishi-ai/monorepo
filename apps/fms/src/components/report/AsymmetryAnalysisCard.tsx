@@ -98,7 +98,7 @@ export const AsymmetryAnalysisCard = ({
   };
 
   return (
-    <Card className="brooklyn-card mb-20" style={{ position: 'relative' }}>
+    <Card className="hys-card mb-20" style={{ position: 'relative' }}>
       {/* 背景图标 */}
       <ArrowLeftRight 
         className="absolute bottom-4 right-6 w-24 h-24 text-blue-600 opacity-5 z-0"
@@ -107,8 +107,8 @@ export const AsymmetryAnalysisCard = ({
       
       <CardContent className="px-4 md:px-6 py-8 md:py-12 relative z-10">
         <div className="text-center mb-8 md:mb-12">
-          <h2 className="brooklyn-title text-2xl mb-4">不对称性风险分析</h2>
-          <p className="brooklyn-subtitle">
+          <h2 className="hys-title text-2xl mb-4">不对称性风险分析</h2>
+          <p className="hys-subtitle">
             检测到左右侧功能差异，这是运动损伤风险的重要指标
           </p>
         </div>
@@ -133,7 +133,7 @@ export const AsymmetryAnalysisCard = ({
                 iconPosition="top-right"
                 iconOpacity={0.1}
                 as={Card}
-                className={`brooklyn-card ${getRiskBgStyle(asymmetryData.riskLevel)}`}
+                className={`hys-card ${getRiskBgStyle(asymmetryData.riskLevel)}`}
               >
                 <CardContent className="p-4 md:p-6">
                   <div className="space-y-3 md:space-y-4">
@@ -141,7 +141,7 @@ export const AsymmetryAnalysisCard = ({
                       <h4 className={`font-medium mb-2 ${getRiskTextColor(asymmetryData.riskLevel)}`}>
                         {test.name} - {riskAssessment.title}
                       </h4>
-                      <p className={`brooklyn-text leading-relaxed mb-3 ${getRiskDescriptionColor(asymmetryData.riskLevel)}`}>
+                      <p className={`hys-text leading-relaxed mb-3 ${getRiskDescriptionColor(asymmetryData.riskLevel)}`}>
                         {riskAssessment.description}
                       </p>
                       
@@ -149,20 +149,20 @@ export const AsymmetryAnalysisCard = ({
                       <div className="grid grid-cols-3 gap-2 md:gap-4 text-center mb-3 md:mb-4 p-3 md:p-4 bg-white/50 rounded-lg">
                         <div>
                           <div className="text-xl md:text-2xl font-light text-blue-600">{bilateralData.left}</div>
-                          <div className="brooklyn-text text-xs">左侧</div>
+                          <div className="hys-text text-xs">左侧</div>
                         </div>
                         <div className="flex items-center justify-center">
                           <ArrowLeftRight className="w-4 md:w-5 h-4 md:h-5 text-gray-400" />
                         </div>
                         <div>
                           <div className="text-xl md:text-2xl font-light text-blue-600">{bilateralData.right}</div>
-                          <div className="brooklyn-text text-xs">右侧</div>
+                          <div className="hys-text text-xs">右侧</div>
                         </div>
                       </div>
 
                       {/* 风险等级指示器 */}
                       <div className="flex items-center gap-2 mb-3 md:mb-4">
-                        <span className="brooklyn-text text-xs">风险等级：</span>
+                        <span className="hys-text text-xs">风险等级：</span>
                         <span className={`text-xs font-medium px-2 py-1 rounded ${
                           asymmetryData.riskLevel === 'high' ? 'bg-red-100 text-red-800' :
                           asymmetryData.riskLevel === 'medium' ? 'bg-amber-100 text-amber-800' :
@@ -179,7 +179,7 @@ export const AsymmetryAnalysisCard = ({
                           <h5 className="text-sm font-medium mb-2">专业建议：</h5>
                           <ul className="space-y-1">
                             {riskAssessment.recommendations.map((recommendation, index) => (
-                              <li key={index} className="text-xs brooklyn-text flex items-start gap-2">
+                              <li key={index} className="text-xs hys-text flex items-start gap-2">
                                 <span className="w-1 h-1 bg-gray-400 rounded-full mt-2 flex-shrink-0"></span>
                                 <span>{recommendation}</span>
                               </li>

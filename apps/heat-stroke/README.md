@@ -183,7 +183,8 @@
 
 *   **问题**：API Key 硬编码且重复请求影响响应速度。
 *   **解决方案**：
-    *   支持通过 `window.HS_API_KEY`、`meta[name="hs-api-key"]` 或 `localStorage.hs_api_key` 注入密钥，仍保留演示用默认值。
+    *   生产环境默认通过 Cloudflare Pages Function `/api/openweather` 代理请求，由服务端 `OPENWEATHER_API_KEY` Secret 追加密钥。
+    *   前端不保留演示默认 key；若代理或网络不可用，热指数页会突出提示用户使用现场温湿度手动计算。
     *   为地理反查、城市搜索、当前天气、小时预报增加 10 分钟本地缓存；请求失败时可优先回退缓存数据。
     *   统一 Chart 注解插件注册与容器检查，避免空节点时报错。
 
@@ -194,17 +195,18 @@
     *   IntersectionObserver 结合 Framer Motion 实现淡入缩放，触发后解绑，减少开销。
     *   步骤 5/6 完成度判定改为单点监听 + 显示态过滤，避免多次进入步骤导致监听器累积。
 
-### 12. 部署到 Vercel + API 代理
+### 12. 部署到 Cloudflare Pages + API 代理
 
-*   **部署平台**: Vercel
-*   `api/openweather.js` 作为 Vercel Serverless Function：限制允许的 OpenWeatherMap 路径，并在服务端追加 `OPENWEATHER_API_KEY`。
-*   环境变量：在 Vercel 项目设置中添加 `OPENWEATHER_API_KEY`。
-*   前端配置：天气页已添加 `<meta name="hs-api-base" content="/api/openweather">`，`assets/js/script.js` 会优先走代理；若未检测到代理则回退直连。
+*   **部署平台**: Cloudflare Pages 统一主站
+*   `functions/api/openweather.js` 作为 Cloudflare Pages Function：限制允许的 OpenWeatherMap 路径，并在服务端追加 `OPENWEATHER_API_KEY`。
+*   环境变量：在 Cloudflare Pages 项目设置中添加 `OPENWEATHER_API_KEY` Secret。
+*   本地预览：在仓库根目录创建私有 `.dev.vars`，写入 `OPENWEATHER_API_KEY=<your-openweather-key>`。
+*   前端配置：天气页已添加 `<meta name="hs-api-base" content="/api/openweather">`，`assets/js/script.js` 固定通过代理请求；生产环境不允许前端直连 OpenWeather API。
 
 ## 潜在改进
 
 *   **错误处理**：可以进一步增强 API 调用失败或数据格式异常时的错误处理和用户提示。
-*   **API 密钥管理**：目前 API 密钥硬编码在 `script.js` 中，更好的做法是将其存储在配置文件或环境变量中（但这对于纯前端项目较难实现安全管理，当前方式适用于简单演示）。
+*   **API 密钥管理**：密钥只允许存在于 Cloudflare Pages Secret 或本地 `.dev.vars`，不得写入前端源码和部署产物。
 *   **加载状态**：可以为图表加载过程添加更细致的加载指示。
 *   **代码模块化**：随着功能增加，可以将 `script.js` 中的不同功能（如 API 调用、图表绘制、UI 更新）拆分成更小的模块或函数。
 *   **依赖管理**：目前所有库通过 CDN 引入，对于更大型的项目，可以考虑使用 npm/yarn 等包管理器来管理依赖。

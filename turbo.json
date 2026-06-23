@@ -18,22 +18,38 @@
       "dependsOn": ["^build"],
       "outputs": ["coverage/**"]
     },
+    "test:run": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
     "type-check": {
       "dependsOn": ["^build"]
     },
     "clean": {
       "cache": false
     },
-    "fms#build": {
+    "@hongyishi/fms#build": {
       "dependsOn": ["^build"],
-      "outputs": ["fms-app/dist/**"]
+      "outputs": ["dist/**"]
     },
-    "fms#dev": { "cache": false, "persistent": true },
-    "heat-stroke#dev": { "cache": false, "persistent": true },
-    "portal#build": {
+    "@hongyishi/fms#dev": { "cache": false, "persistent": true },
+    "@hongyishi/heat-stroke#build": {
+      "outputs": ["assets/css/tailwind.css"]
+    },
+    "@hongyishi/heat-stroke#dev": { "cache": false, "persistent": true },
+    "@hongyishi/tccc#build": {
+      "outputs": ["assets/css/tailwind.css"]
+    },
+    "@hongyishi/ui#build": {
+      "outputs": []
+    },
+    "@hongyishi/utils#build": {
+      "outputs": []
+    },
+    "@hongyishi/portal#build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!build/**"]
+      "outputs": [".next/**", "out/**", "!build/**"]
     },
-    "portal#dev": { "cache": false, "persistent": true }
+    "@hongyishi/portal#dev": { "cache": false, "persistent": true }
   }
 }

@@ -62,7 +62,7 @@ export const FixedProgressOverview = React.forwardRef<HTMLDivElement, FixedProgr
             {...props}
           >
             <Card 
-              className="brooklyn-card bg-card/95 backdrop-blur-md border shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer"
+              className="hys-card bg-card/95 backdrop-blur-md border shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer"
               onClick={() => setIsExpanded(!isExpanded)}
               role="status"
               aria-live="polite"
@@ -173,7 +173,7 @@ export const FixedProgressOverview = React.forwardRef<HTMLDivElement, FixedProgr
                           <div className="text-lg font-light text-primary">
                             {completedBasicTests}
                           </div>
-                          <div className="text-xs brooklyn-text">基础测试</div>
+                          <div className="text-xs hys-text">基础测试</div>
                           <div className="text-xs text-muted-foreground/70">
                             /{totalBasicTests}
                           </div>
@@ -184,7 +184,7 @@ export const FixedProgressOverview = React.forwardRef<HTMLDivElement, FixedProgr
                           <div className="text-lg font-light text-amber-600">
                             {completedClearanceTests}
                           </div>
-                          <div className="text-xs brooklyn-text">排除测试</div>
+                          <div className="text-xs hys-text">排除测试</div>
                           <div className="text-xs text-muted-foreground/70">
                             /{totalClearanceTests}
                           </div>
@@ -196,7 +196,7 @@ export const FixedProgressOverview = React.forwardRef<HTMLDivElement, FixedProgr
                             <div className="text-lg font-light text-blue-600">
                               {asymmetryCount}
                             </div>
-                            <div className="text-xs brooklyn-text">不对称项</div>
+                            <div className="text-xs hys-text">不对称项</div>
                           </div>
                         )}
 
@@ -206,7 +206,7 @@ export const FixedProgressOverview = React.forwardRef<HTMLDivElement, FixedProgr
                             <div className="text-lg font-light text-red-500">
                               {painfulCount}
                             </div>
-                            <div className="text-xs brooklyn-text">疼痛项</div>
+                            <div className="text-xs hys-text">疼痛项</div>
                           </div>
                         )}
                       </div>

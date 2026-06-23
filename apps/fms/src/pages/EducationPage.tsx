@@ -44,18 +44,18 @@ const EducationPage = () => {
           <div className={`w-16 h-16 mx-auto mb-6 rounded-full ${accentColor} flex items-center justify-center`}>
             <Icon className="w-8 h-8" />
           </div>
-          <h2 className="brooklyn-title text-xl md:text-2xl mb-4">{title}</h2>
-          <p className="brooklyn-subtitle max-w-3xl mx-auto">{description}</p>
+          <h2 className="hys-title text-xl md:text-2xl mb-4">{title}</h2>
+          <p className="hys-subtitle max-w-3xl mx-auto">{description}</p>
         </div>
       
-      <Card className="brooklyn-card">
+      <Card className="hys-card">
         <CardContent className="p-0">
           <Accordion type="single" collapsible className="w-full">
             {items.map((item, index) => (
               <AccordionItem value={item.id} key={item.id} className="border-b border-border last:border-0">
                 <AccordionTrigger className="px-6 md:px-8 py-6 text-left hover:no-underline hover:bg-accent/50 transition-colors">
                   <div className="flex items-center gap-4">
-                    <span className="brooklyn-text w-8 text-sm md:text-base">
+                    <span className="hys-text w-8 text-sm md:text-base">
                       {String(index + 1).padStart(2, '0')}
                     </span>
                     <span className="text-base md:text-lg font-normal">{item.question}</span>
@@ -63,7 +63,7 @@ const EducationPage = () => {
                 </AccordionTrigger>
                 <AccordionContent className="px-6 md:px-8 pb-8">
                   <div className="pl-8 md:pl-12">
-                    <div className="brooklyn-text whitespace-pre-line leading-relaxed">
+                    <div className="hys-text whitespace-pre-line leading-relaxed">
                       {item.answer}
                     </div>
                   </div>
@@ -77,12 +77,12 @@ const EducationPage = () => {
   );
 
   return (
-    <div className="brooklyn-section">
-      <div className="brooklyn-container max-w-6xl">
+    <div className="hys-section">
+      <div className="hys-container max-w-6xl">
         {/* 页面标题 */}
         <div className="text-center mb-16 md:mb-20 minimal-fade-in">
-          <h1 className="brooklyn-title">FMS 知识库</h1>
-          <p className="brooklyn-subtitle max-w-3xl mx-auto mt-6">
+          <h1 className="hys-title">FMS 知识库</h1>
+          <p className="hys-subtitle max-w-3xl mx-auto mt-6">
             深入了解功能性动作筛查的理论基础、评分标准和实际应用，
             <br className="hidden sm:inline" />
             为您的评估和训练提供科学依据。
@@ -121,7 +121,7 @@ const EducationPage = () => {
         </div>
 
         {/* 学习建议 */}
-        <Card className="brooklyn-card bg-accent/20 border-accent/30">
+        <Card className="hys-card bg-accent/20 border-accent/30">
           <CardContent className="p-8 md:p-12">
             <div className="text-center space-y-6 md:space-y-8">
               <h3 className="text-xl md:text-2xl font-normal">学习建议</h3>
@@ -131,7 +131,7 @@ const EducationPage = () => {
                     <span className="text-primary font-medium text-lg">1</span>
                   </div>
                   <h4 className="font-medium mb-2 text-lg">先学理论</h4>
-                  <p className="brooklyn-text">
+                  <p className="hys-text">
                     建议先学习基础理论，理解FMS的科学原理
                   </p>
                 </div>
@@ -140,7 +140,7 @@ const EducationPage = () => {
                     <span className="text-primary font-medium text-lg">2</span>
                   </div>
                   <h4 className="font-medium mb-2 text-lg">掌握评分</h4>
-                  <p className="brooklyn-text">
+                  <p className="hys-text">
                     熟练掌握各项测试的评分标准和判断方法
                   </p>
                 </div>
@@ -149,7 +149,7 @@ const EducationPage = () => {
                     <span className="text-primary font-medium text-lg">3</span>
                   </div>
                   <h4 className="font-medium mb-2 text-lg">实践应用</h4>
-                  <p className="brooklyn-text">
+                  <p className="hys-text">
                     将所学知识应用到实际测试和训练中
                   </p>
                 </div>

@@ -1,5 +1,6 @@
 import type { FMSAssessmentData } from '@/types/fms-data';
 import { FMSDataProcessor } from './fms-data-processor';
+import { safeLocalStorage } from './safe-storage';
 
 /**
  * FMS错误处理和数据恢复工具
@@ -35,7 +36,7 @@ export class FMSErrorHandler {
 
     // 尝试从localStorage恢复数据
     try {
-      const savedData = localStorage.getItem('fms_last_assessment');
+      const savedData = safeLocalStorage.getItem('fms_last_assessment');
       if (savedData) {
         fallbackData = JSON.parse(savedData);
         canRecover = true;
@@ -154,7 +155,7 @@ export class FMSErrorHandler {
         data: FMSDataProcessor.normalizeRouteState(data)
       };
       
-      localStorage.setItem('fms_last_assessment', JSON.stringify(saveData));
+      safeLocalStorage.setItem('fms_last_assessment', JSON.stringify(saveData));
       console.log(`💾 自动保存FMS数据 [${source}]`);
     } catch (error) {
       console.warn('保存FMS数据失败:', error);
@@ -166,7 +167,7 @@ export class FMSErrorHandler {
    */
   static getSavedAssessmentData(): FMSAssessmentData | null {
     try {
-      const savedData = localStorage.getItem('fms_last_assessment');
+      const savedData = safeLocalStorage.getItem('fms_last_assessment');
       if (!savedData) return null;
 
       const parsed = JSON.parse(savedData);

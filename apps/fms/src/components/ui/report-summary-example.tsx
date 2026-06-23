@@ -59,10 +59,10 @@ export const ReportSummaryExample = ({
   };
 
   return (
-    <Card className="brooklyn-card">
+    <Card className="hys-card">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="brooklyn-title text-xl">评估摘要</CardTitle>
+          <CardTitle className="hys-title text-xl">评估摘要</CardTitle>
           {getStatusIcon(assessmentStatus.status)}
         </div>
       </CardHeader>
@@ -75,7 +75,7 @@ export const ReportSummaryExample = ({
               {assessmentStatus.status}
             </Badge>
           </div>
-          <p className="brooklyn-text text-sm">
+          <p className="hys-text text-sm">
             {assessmentStatus.description}
           </p>
         </div>

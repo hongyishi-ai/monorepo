@@ -34,12 +34,6 @@ export const AsymmetryAlert = React.forwardRef<HTMLDivElement, AsymmetryAlertPro
   }, ref) => {
     const [shouldShow, setShouldShow] = React.useState(false)
 
-    // 安全检查：如果存在疼痛（0分），不显示此Alert
-    const hasPain = leftScore === 0 || rightScore === 0;
-    if (hasPain) {
-      return null; // 疼痛优先级更高，不显示不对称Alert
-    }
-
     // 自动隐藏逻辑
     React.useEffect(() => {
       if (isVisible) {
@@ -59,6 +53,12 @@ export const AsymmetryAlert = React.forwardRef<HTMLDivElement, AsymmetryAlertPro
         setShouldShow(false)
       }
     }, [isVisible, autoHideDuration, onDismiss])
+
+    // 安全检查：如果存在疼痛（0分），不显示此Alert
+    const hasPain = leftScore === 0 || rightScore === 0;
+    if (hasPain) {
+      return null; // 疼痛优先级更高，不显示不对称Alert
+    }
 
     // 根据风险等级获取配置
     const getAlertConfig = () => {

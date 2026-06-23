@@ -30,15 +30,15 @@ export const ReportSummary = ({
   
   return (
     <div className="text-center mb-16 md:mb-20 minimal-fade-in" role="region" aria-label="报告摘要">
-      <h1 className="brooklyn-title mb-6">FMS 评估报告</h1>
-      <p className="brooklyn-subtitle mb-12 max-w-3xl mx-auto">
+      <h1 className="hys-title mb-6">FMS 评估报告</h1>
+      <p className="hys-subtitle mb-12 max-w-3xl mx-auto">
         基于您的功能性动作筛查结果生成，
         <br className="hidden sm:inline" />
         为您的运动健康提供科学依据和专业建议。
       </p>
       
       {/* 总分展示卡片 - 遵循"条件渲染"原则 */}
-      <Card className={`brooklyn-card ${assessmentStatus.bg} max-w-2xl mx-auto`}>
+      <Card className={`hys-card ${assessmentStatus.bg} max-w-2xl mx-auto`}>
         <CardContent className="p-8" aria-live="polite" aria-label={`FMS总分 ${totalScore} / ${maxScore}，功能状态：${assessmentStatus.status}`}>
           <div className="text-center space-y-4">
             {/* 分数圆形显示 */}
@@ -59,7 +59,7 @@ export const ReportSummary = ({
             </div>
             
             {/* 状态描述 */}
-            <p className="brooklyn-text text-sm">
+            <p className="hys-text text-sm">
               {assessmentStatus.description}
             </p>
           </div>

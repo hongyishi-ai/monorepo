@@ -293,7 +293,7 @@ DARPA则代表了美国高风险、高回报的研发方向，其项目聚焦于
 
 <a id="ref-8"></a>8. Groundbreaking Military Health Research Recognized with 2025 ...,  https://health.mil/News/Dvids-Articles/2025/08/06/news544927
 
-<a id="ref-9"></a>9. Tactical casualty care simulators boost air guard readiness - DHA.mil,  https://dha.mil/News/2025/03/10/16/37/Tactical-casualty-care-simulators-boost-air-guard-readiness
+<a id="ref-9"></a>9. Tactical Casualty Care Simulators Boost Air Guard Readiness - Air National Guard, https://www.ang.af.mil/Media/Article-Display/Article/4114520/tactical-casualty-care-simulators-boost-air-guard-readiness/
 
 <a id="ref-10"></a>10. SPP leverages civilian partnerships to boost medics' combat readiness - DVIDS,  https://www.dvidshub.net/news/549074/spp-leverages-civilian-partnerships-boost-medics-combat-readiness
 
@@ -367,7 +367,7 @@ DARPA则代表了美国高风险、高回报的研发方向，其项目聚焦于
 
 <a id="ref-45"></a>45. Medical CBRN Defense Consortium: MCDC,  https://www.medcbrn.org/
 
-<a id="ref-46"></a>46. Products - USAMRICD - Health.mil,  https://usamricd.health.mil/research/Products/
+<a id="ref-46"></a>46. Health Readiness & Combat Support - Health.mil, https://www.health.mil/Military-Health-Topics/Health-Readiness
 
 <a id="ref-47"></a>47. Department of Defense Fiscal Year (FY) 2025 ... - Justification Book,  https://comptroller.defense.gov/Portals/45/Documents/defbudget/FY2025/budget_justification/pdfs/03_RDT_and_E/RDTE_Vol1_DARPA_MasterJustificationBook_PB_2025.pdf
 

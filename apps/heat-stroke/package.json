@@ -5,10 +5,12 @@
   "type": "module",
   "description": "热射病防治平台 - 静态 PWA",
   "scripts": {
+    "build": "tailwindcss -c tailwind.config.cjs -i ./src/tailwind.css -o ./assets/css/tailwind.css --minify",
     "dev": "npx serve . -l 3000",
     "preview": "npx serve . -l 3000"
   },
   "devDependencies": {
+    "tailwindcss": "3.4.17",
     "serve": "^14.2.0"
   }
 }

@@ -31,5 +31,14 @@ jobs:
       - name: Test Cloudflare helpers
         run: pnpm test:cloudflare
 
+      - name: Run production gates
+        run: |
+          pnpm lint
+          pnpm type-check
+          pnpm test
+
       - name: Build Cloudflare Pages output
         run: pnpm build:cloudflare
+
+      - name: Check size budget
+        run: pnpm size:budget

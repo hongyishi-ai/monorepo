@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ProductTour } from '@/components/ui/product-tour';
 import { useProductTour } from '@/hooks/useProductTour';
+import { safeLocalStorage } from '@/lib/safe-storage';
 
 const FirstVisitDetector = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const FirstVisitDetector = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     // 检查是否是首次访问网站
-    const hasVisitedBefore = localStorage.getItem('fms_has_visited');
+    const hasVisitedBefore = safeLocalStorage.getItem('fms_has_visited');
     
     // 检查URL参数，如果有skip_opening=true则跳过开场动画
     const urlParams = new URLSearchParams(window.location.search);
@@ -47,7 +48,7 @@ const FirstVisitDetector = ({ children }: { children: React.ReactNode }) => {
     
     // 如果有跳过参数，设置已访问标记
     if (skipOpening && !hasVisitedBefore) {
-      localStorage.setItem('fms_has_visited', 'true');
+      safeLocalStorage.setItem('fms_has_visited', 'true');
     }
   }, [navigate, location.pathname]);
 

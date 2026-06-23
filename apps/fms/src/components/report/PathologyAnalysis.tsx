@@ -41,12 +41,12 @@ export const PathologyAnalysis: React.FC<PathologyAnalysisProps> = ({
       iconSize="xl" 
       iconPosition="bottom-right" 
       iconOpacity={0.05}
-      className="brooklyn-card bg-red-50/30"
+      className="hys-card bg-red-50/30"
     >
       <CardContent className="px-4 md:px-6 py-8 md:py-12 relative z-10">
         <div className="text-center mb-12">
-          <h2 className="brooklyn-title text-2xl mb-4 text-red-800">疼痛的临床意义解读</h2>
-          <p className="brooklyn-text text-center max-w-2xl mx-auto text-red-700">
+          <h2 className="hys-title text-2xl mb-4 text-red-800">疼痛的临床意义解读</h2>
+          <p className="hys-text text-center max-w-2xl mx-auto text-red-700">
             以下排除性测试出现阳性结果，表明存在潜在的病理状态，需要专业医学评估和干预。<br/>
             <span className="font-medium">注意：相关的基础测试已被自动判定为0分</span>
           </p>

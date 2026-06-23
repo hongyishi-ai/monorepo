@@ -166,18 +166,18 @@ const HistoryPage = () => {
 
   if (error) {
     return (
-      <div className="brooklyn-section">
+      <div className="hys-section">
         <ContainerWithIcon
           icon={AlertTriangle}
           iconColor="text-red-600"
           iconSize="2xl"
           iconPosition="center"
           iconOpacity={0.1}
-          className="brooklyn-container max-w-2xl text-center"
+          className="hys-container max-w-2xl text-center"
         >
-          <h1 className="brooklyn-title text-2xl mb-4 text-red-600">加载失败</h1>
-          <p className="brooklyn-text mb-8">{error}</p>
-          <Button onClick={() => window.location.reload()} className="brooklyn-button">
+          <h1 className="hys-title text-2xl mb-4 text-red-600">加载失败</h1>
+          <p className="hys-text mb-8">{error}</p>
+          <Button onClick={() => window.location.reload()} className="hys-button">
             重新加载
           </Button>
         </ContainerWithIcon>
@@ -186,12 +186,12 @@ const HistoryPage = () => {
   }
 
   return (
-    <div className="brooklyn-section" role="region" aria-label="历史评估记录">
-      <div className="brooklyn-container max-w-6xl">
+    <div className="hys-section" role="region" aria-label="历史评估记录">
+      <div className="hys-container max-w-6xl">
         {/* 页面标题和统计信息 */}
         <div className="text-center mb-16 md:mb-20 minimal-fade-in" role="region" aria-label="页面标题与说明">
-          <h1 className="brooklyn-title">历史评估记录</h1>
-          <p className="brooklyn-subtitle max-w-3xl mx-auto mt-6">
+          <h1 className="hys-title">历史评估记录</h1>
+          <p className="hys-subtitle max-w-3xl mx-auto mt-6">
             管理您的所有FMS评估记录，支持查看详细报告、数据导入导出和记录管理功能。
           </p>
         </div>
@@ -199,28 +199,28 @@ const HistoryPage = () => {
         {/* 统计卡片 */}
         <div className="mb-16 md:mb-20" role="region" aria-label="统计概览">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12">
-            <Card className="brooklyn-card">
+            <Card className="hys-card">
               <CardContent className="p-4 text-center">
                 <Archive className="w-8 h-8 mx-auto mb-2 text-blue-600" />
                 <div className="text-2xl font-light text-blue-600">{statistics.totalAssessments}</div>
                 <div className="text-sm text-muted-foreground">总记录数</div>
               </CardContent>
             </Card>
-            <Card className="brooklyn-card">
+            <Card className="hys-card">
               <CardContent className="p-4 text-center">
                 <Star className="w-8 h-8 mx-auto mb-2 text-amber-600" />
                 <div className="text-2xl font-light text-amber-600">{statistics.starredAssessments}</div>
                 <div className="text-sm text-muted-foreground">收藏记录</div>
               </CardContent>
             </Card>
-            <Card className="brooklyn-card">
+            <Card className="hys-card">
               <CardContent className="p-4 text-center">
                 <Activity className="w-8 h-8 mx-auto mb-2 text-green-600" />
                 <div className="text-2xl font-light text-green-600">{statistics.avgScore}</div>
                 <div className="text-sm text-muted-foreground">平均得分</div>
               </CardContent>
             </Card>
-            <Card className="brooklyn-card">
+            <Card className="hys-card">
               <CardContent className="p-4 text-center">
                 <Clock className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
                 <div className="text-sm font-light text-muted-foreground">
@@ -237,7 +237,7 @@ const HistoryPage = () => {
           {/* 操作按钮 */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center" role="region" aria-label="导入导出与新建操作">
             <Link to="/assessment">
-              <Button className="brooklyn-button px-8">新建评估</Button>
+              <Button className="hys-button px-8">新建评估</Button>
             </Link>
             <Button onClick={handleExport} variant="outline" className="px-8">
               <Download className="w-4 h-4 mr-2" />
@@ -317,7 +317,7 @@ const HistoryPage = () => {
         {isLoading ? (
           <div className="text-center py-12" role="status" aria-live="polite">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="brooklyn-text">加载中...</p>
+            <p className="hys-text">加载中...</p>
           </div>
         ) : assessments.length === 0 ? (
           <ContainerWithIcon
@@ -328,12 +328,12 @@ const HistoryPage = () => {
             iconOpacity={0.1}
             className="text-center py-20"
           >
-            <h3 className="brooklyn-title text-xl mb-4">暂无评估记录</h3>
-            <p className="brooklyn-text mb-8 max-w-md mx-auto">
+            <h3 className="hys-title text-xl mb-4">暂无评估记录</h3>
+            <p className="hys-text mb-8 max-w-md mx-auto">
               您还没有保存任何评估记录。完成评估后，系统会自动保存您的结果。
             </p>
             <Link to="/assessment">
-              <Button className="brooklyn-button px-8">开始第一次评估</Button>
+              <Button className="hys-button px-8">开始第一次评估</Button>
             </Link>
           </ContainerWithIcon>
         ) : (
@@ -343,14 +343,14 @@ const HistoryPage = () => {
               const StatusIcon = status.icon;
 
               return (
-                <Card key={record.id} className="brooklyn-card group hover:shadow-lg transition-all duration-300" role="listitem">
+                <Card key={record.id} className="hys-card group hover:shadow-lg transition-all duration-300" role="listitem">
                   <CardHeader className="pb-6">
                     <div className="space-y-4">
                       {/* 标题行 */}
                       <div className="flex items-start justify-between">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-3 mb-3">
-                            <h3 className="brooklyn-title text-xl font-light truncate">{record.title}</h3>
+                            <h3 className="hys-title text-xl font-light truncate">{record.title}</h3>
                             {record.isStarred && (
                               <Star className="w-5 h-5 text-amber-500 fill-current flex-shrink-0" />
                             )}
@@ -380,13 +380,13 @@ const HistoryPage = () => {
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 py-4 border-t border-border/40">
                         <div className="flex items-center gap-2 text-sm">
                           <Calendar className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                          <span className="brooklyn-text">
+                          <span className="hys-text">
                             {format(new Date(record.createdAt), 'yyyy年MM月dd日')}
                           </span>
                         </div>
                         <div className="flex items-center gap-2 text-sm">
                           <Activity className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                          <span className="brooklyn-text font-medium">
+                          <span className="hys-text font-medium">
                             总分: {record.assessmentData.totalScore}/21
                           </span>
                         </div>
@@ -402,7 +402,7 @@ const HistoryPage = () => {
 
                       {/* 描述 */}
                       {record.description && (
-                        <p className="brooklyn-text text-sm text-muted-foreground leading-relaxed">
+                        <p className="hys-text text-sm text-muted-foreground leading-relaxed">
                           {record.description}
                         </p>
                       )}
@@ -422,7 +422,7 @@ const HistoryPage = () => {
                       <div className="flex items-center gap-3 pt-4 border-t border-border/40">
                         <Button
                           onClick={() => viewAssessment(record)}
-                          className="brooklyn-button flex-1 sm:flex-none"
+                          className="hys-button flex-1 sm:flex-none"
                         >
                           查看详情
                         </Button>

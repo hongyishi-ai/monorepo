@@ -41,20 +41,20 @@ const ReportPage = () => {
   // 历史记录加载状态处理 - 遵循"条件渲染"原则
   if (isLoadingHistory) {
     return (
-      <div className="brooklyn-section">
+      <div className="hys-section">
         <ContainerWithIcon
           icon={Loader2}
           iconColor="text-primary"
           iconSize="2xl"
           iconPosition="center"
           iconOpacity={0.8}
-          className="brooklyn-container max-w-2xl text-center"
+          className="hys-container max-w-2xl text-center"
         >
           <div className="animate-spin mb-4">
             <Loader2 className="w-8 h-8 mx-auto text-primary" />
           </div>
-          <h1 className="brooklyn-title text-2xl mb-4">加载历史记录中...</h1>
-          <p className="brooklyn-text">正在恢复评估数据，请稍候</p>
+          <h1 className="hys-title text-2xl mb-4">加载历史记录中...</h1>
+          <p className="hys-text">正在恢复评估数据，请稍候</p>
         </ContainerWithIcon>
       </div>
     );
@@ -63,25 +63,25 @@ const ReportPage = () => {
   // 历史记录加载错误处理 - 遵循"错误边界"原则
   if (historyLoadError) {
     return (
-      <div className="brooklyn-section">
+      <div className="hys-section">
         <ContainerWithIcon
           icon={AlertTriangle}
           iconColor="text-red-500"
           iconSize="2xl"
           iconPosition="center"
           iconOpacity={0.1}
-          className="brooklyn-container max-w-2xl text-center"
+          className="hys-container max-w-2xl text-center"
         >
-          <h1 className="brooklyn-title text-2xl mb-4 text-red-600">加载失败</h1>
-          <p className="brooklyn-text mb-8 max-w-md mx-auto text-red-500">
+          <h1 className="hys-title text-2xl mb-4 text-red-600">加载失败</h1>
+          <p className="hys-text mb-8 max-w-md mx-auto text-red-500">
             {historyLoadError}
           </p>
           <div className="flex gap-4 justify-center">
             <Link to="/history">
-              <Button variant="outline" className="brooklyn-button">返回历史记录</Button>
+              <Button variant="outline" className="hys-button">返回历史记录</Button>
             </Link>
             <Link to="/assessment">
-              <Button className="brooklyn-button">开始新评估</Button>
+              <Button className="hys-button">开始新评估</Button>
             </Link>
           </div>
         </ContainerWithIcon>
@@ -92,21 +92,21 @@ const ReportPage = () => {
   // 无数据状态处理 - 遵循"防御性渲染"原则
   if (!hasData || !reportAnalysis) {
     return (
-      <div className="brooklyn-section">
+      <div className="hys-section">
         <ContainerWithIcon
           icon={AlertTriangle}
           iconColor="text-muted-foreground"
           iconSize="2xl"
           iconPosition="center"
           iconOpacity={0.1}
-          className="brooklyn-container max-w-2xl text-center"
+          className="hys-container max-w-2xl text-center"
         >
-          <h1 className="brooklyn-title text-2xl mb-4">暂无评估数据</h1>
-          <p className="brooklyn-text mb-8 max-w-md mx-auto">
+          <h1 className="hys-title text-2xl mb-4">暂无评估数据</h1>
+          <p className="hys-text mb-8 max-w-md mx-auto">
             请先完成FMS功能性动作筛查，我们将为您生成详细的专业分析报告。
           </p>
           <Link to="/assessment">
-            <Button className="brooklyn-button px-8">开始 FMS 评估</Button>
+            <Button className="hys-button px-8">开始 FMS 评估</Button>
           </Link>
         </ContainerWithIcon>
       </div>
@@ -132,8 +132,8 @@ const ReportPage = () => {
   );
 
   return (
-    <div className="brooklyn-section">
-      <div className="brooklyn-container max-w-7xl">
+    <div className="hys-section">
+      <div className="hys-container max-w-7xl">
         {/* 报告摘要组件 - 遵循React哲学的组合原则 */}
         <div role="region" aria-label="报告摘要">
           <ReportSummary
@@ -146,7 +146,7 @@ const ReportPage = () => {
         {/* 顶部显眼的“查看专业康复方案”按钮 */}
         <div className="hidden md:flex justify-center mb-12 md:mb-16" role="region" aria-label="前往训练方案">
           <Link to={`/training${getRecordId() ? `?recordId=${getRecordId()}` : ''}`}>
-            <Button className="brooklyn-button px-8" aria-label="查看专业康复方案">
+            <Button className="hys-button px-8" aria-label="查看专业康复方案">
               查看专业康复方案
             </Button>
           </Link>
@@ -224,14 +224,14 @@ const ReportPage = () => {
         {/* 操作按钮 - 遵循"用户体验一致性"原则 */}
         <div className="flex flex-col sm:flex-row justify-center gap-4 items-center mt-12 md:mt-16">
           <Link to="/assessment">
-            <Button variant="outline" className="brooklyn-button px-8 text-foreground border-primary/20 hover:border-primary/40 hover:bg-primary/5 hover:text-foreground">
+            <Button variant="outline" className="hys-button px-8 text-foreground border-primary/20 hover:border-primary/40 hover:bg-primary/5 hover:text-foreground">
               <RotateCcw className="w-4 h-4 mr-2" />
               重新评估
             </Button>
           </Link>
           <Button 
             onClick={() => window.print()} 
-            className="brooklyn-button px-8 hidden sm:inline-flex"
+            className="hys-button px-8 hidden sm:inline-flex"
           >
             <Download className="w-4 h-4 mr-2" />
             打印报告

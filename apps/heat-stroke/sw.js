@@ -1,11 +1,12 @@
 // 缓存名称和版本
-const CACHE_NAME = 'hongys-cache-v2';
+const CACHE_NAME = 'hongys-cache-v3';
 
 // 需要缓存的资源列表
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
+  '/assets/css/tailwind.css',
   '/assets/css/styles.css',
   '/assets/js/script.js',
   '/assets/images/favicon.ico',
@@ -29,6 +30,7 @@ self.addEventListener('install', event => {
         console.log('已打开缓存');
         return cache.addAll(urlsToCache);
       })
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -45,6 +47,7 @@ self.addEventListener('activate', event => {
         })
       );
     })
+    .then(() => self.clients.claim())
   );
 });
 

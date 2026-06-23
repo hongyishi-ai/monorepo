@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { FC } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { safeLocalStorage } from "@/lib/safe-storage";
 
 const OpeningPage: FC = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const OpeningPage: FC = () => {
   // 导航到主页的函数
   const navigateToHome = () => {
     // 设置已访问标记，防止重复触发开场动画
-    localStorage.setItem('fms_has_visited', 'true');
+    safeLocalStorage.setItem('fms_has_visited', 'true');
     
     // 先滚动到顶部，然后导航
     window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -136,7 +136,7 @@
     }
   }
   
-  .brooklyn-card {
+  .hys-card {
     background: hsl(var(--card));
     border: 2px solid hsl(var(--border));
     border-radius: var(--radius);
@@ -144,13 +144,13 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   }
   
-  .brooklyn-card:hover {
+  .hys-card:hover {
     border-color: hsl(var(--primary));
     box-shadow: 3px 3px 0 rgba(217, 48, 37, 0.35);
     transform: translate(3px, 3px);
   }
   
-  .brooklyn-button {
+  .hys-button {
     background: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
     border: 2px solid hsl(var(--primary));
@@ -162,29 +162,29 @@
     box-shadow: 4px 4px 0 rgba(18, 49, 60, 0.25);
   }
   
-  .brooklyn-button:hover {
+  .hys-button:hover {
     background: hsl(var(--primary));
     opacity: 1;
     transform: translate(2px, 2px);
     box-shadow: 2px 2px 0 rgba(18, 49, 60, 0.35);
   }
   
-  .brooklyn-section {
+  .hys-section {
     padding: 5rem 0;
   }
   
-  .brooklyn-container {
+  .hys-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
   }
   
-  .brooklyn-grid {
+  .hys-grid {
     display: grid;
     gap: 2.5rem;
   }
   
-  .brooklyn-title {
+  .hys-title {
     font-size: 4rem;
     font-weight: 900;
     line-height: 0.95;
@@ -193,7 +193,7 @@
     color: hsl(var(--primary));
   }
   
-  .brooklyn-subtitle {
+  .hys-subtitle {
     font-size: 1.375rem;
     font-weight: 500;
     line-height: 1.5;
@@ -201,14 +201,14 @@
     margin-top: 1.5rem;
   }
   
-  .brooklyn-text {
+  .hys-text {
     font-size: 1.125rem;
     font-weight: 400;
     line-height: 1.6;
     color: hsl(var(--muted-foreground));
   }
 
-  .brooklyn-nav {
+  .hys-nav {
     background: hsl(var(--background));
     border-bottom: 3px solid hsl(var(--primary));
     position: sticky;
@@ -216,7 +216,7 @@
     z-index: 50;
   }
 
-  .brooklyn-nav-link {
+  .hys-nav-link {
     color: hsl(var(--muted-foreground));
     font-weight: 700;
     font-size: 1rem;
@@ -226,26 +226,26 @@
     border-radius: var(--radius);
   }
 
-  .brooklyn-nav-link:hover {
+  .hys-nav-link:hover {
     color: hsl(var(--foreground));
     background: hsl(var(--accent));
   }
 
-  .brooklyn-nav-link.active {
+  .hys-nav-link.active {
     color: hsl(var(--primary));
     font-weight: 900;
     background: hsl(var(--card));
     box-shadow: inset 0 -3px 0 hsl(var(--primary));
   }
 
-  .brooklyn-logo {
+  .hys-logo {
     font-size: 1.5rem;
     font-weight: 900;
     color: hsl(var(--foreground));
     letter-spacing: 0;
   }
 
-  .brooklyn-footer {
+  .hys-footer {
     background: hsl(var(--secondary));
     color: hsl(var(--secondary-foreground));
     border-top: 4px solid hsl(var(--primary));
@@ -253,7 +253,7 @@
     margin-top: auto;
   }
 
-  .brooklyn-footer-text {
+  .hys-footer-text {
     color: hsl(var(--secondary-foreground));
     font-size: 1rem;
     font-weight: 500;
@@ -263,45 +263,45 @@
 
   /* 移动端优化 */
   @media (max-width: 768px) {
-    .brooklyn-section {
+    .hys-section {
       padding: 2rem 0; /* 移动端进一步减少间距 */
     }
     
-    .brooklyn-container {
+    .hys-container {
       padding: 0 1rem; /* 移动端最小内边距 */
     }
     
-    .brooklyn-grid {
+    .hys-grid {
       gap: 1.5rem; /* 移动端间距优化 */
     }
     
-    .brooklyn-title {
+    .hys-title {
       font-size: 2.5rem;
       line-height: 1.1;
     }
     
-    .brooklyn-subtitle {
+    .hys-subtitle {
       font-size: 1.125rem; /* 移动端副标题 */
     }
     
-    .brooklyn-text {
+    .hys-text {
       font-size: 1rem; /* 移动端正文 */
     }
 
-    .brooklyn-nav {
+    .hys-nav {
       padding: 0.1rem 0; /* 移动端导航间距 */
     }
 
-    .brooklyn-nav-link {
+    .hys-nav-link {
       font-size: 1rem; /* 移动端导航字体 */
       padding: 0.5rem 0.75rem;
     }
 
-    .brooklyn-logo {
+    .hys-logo {
       font-size: 1.25rem; /* 移动端Logo字体 */
     }
 
-    .brooklyn-footer {
+    .hys-footer {
       padding: 2rem 0; /* 移动端页脚间距 */
     }
   }

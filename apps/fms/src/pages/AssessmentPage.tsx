@@ -306,8 +306,8 @@ const AssessmentPage = () => {
     : scores[currentTest.id] !== undefined;
 
   return (
-    <div className="brooklyn-section min-h-screen" role="region" aria-label="FMS评估流程">
-      <div className="brooklyn-container max-w-6xl">
+    <div className="hys-section min-h-screen" role="region" aria-label="FMS评估流程">
+      <div className="hys-container max-w-6xl">
         {/* 紧凑的头部区域 - 只保留智能状态指示器 */}
         <div className="mb-6 md:mb-8" role="region" aria-label="评估进度与当前测试" aria-live="polite">
           <SmartStatusIndicator
@@ -345,21 +345,21 @@ const AssessmentPage = () => {
           </div>
         ) : (
           // 传统单一评分
-          <Card className="brooklyn-card mb-6 md:mb-8" role="region" aria-label="动作评分">
+          <Card className="hys-card mb-6 md:mb-8" role="region" aria-label="动作评分">
             <CardContent className="p-4 md:p-8">
               <div className="text-center mb-4 md:mb-6">
                 <h2 className="text-lg font-normal mb-2">
                   {isClearanceTest ? '排除测试评分' : '动作质量评分'}
                 </h2>
-                <p className="brooklyn-text text-sm mb-2">
+                <p className="hys-text text-sm mb-2">
                   请根据您的实际表现选择相应分数
                 </p>
                 {/* 移动端与桌面端分别显示更贴切的提示文案，降低困惑 */}
-                <p className="brooklyn-text text-xs text-muted-foreground flex items-center justify-center gap-1 md:hidden">
+                <p className="hys-text text-xs text-muted-foreground flex items-center justify-center gap-1 md:hidden">
                   <Eye className="w-3 h-3" />
                   请点击左下角演示指引查看评分标准
                 </p>
-                <p className="brooklyn-text text-xs text-muted-foreground hidden md:flex items-center justify-center gap-1">
+                <p className="hys-text text-xs text-muted-foreground hidden md:flex items-center justify-center gap-1">
                   <Eye className="w-3 h-3" />
                   查看评分标准请参阅上方动作卡片
                 </p>
@@ -373,7 +373,7 @@ const AssessmentPage = () => {
                     onClick={() => handleScoreSelect(score)}
                     variant={scores[currentTest.id] === score ? 'default' : 'outline'}
                     className={cn(
-                      "h-auto p-3 md:p-4 text-left brooklyn-button transition-all duration-200 flex flex-col items-center gap-2",
+                      "h-auto p-3 md:p-4 text-left hys-button transition-all duration-200 flex flex-col items-center gap-2",
                       score === 0 && "border-red-200 hover:border-red-300",
                       scores[currentTest.id] === score && score === 0 && "bg-red-500 hover:bg-red-600 text-white",
                       scores[currentTest.id] === score && score !== 0 && "bg-primary text-primary-foreground"
@@ -416,11 +416,11 @@ const AssessmentPage = () => {
 
               {/* 疼痛提示 */}
               {scores[currentTest.id] === 0 && (
-                <div className="mt-6 p-4 bg-red-50 border border-red-200 brooklyn-card">
+                <div className="mt-6 p-4 bg-red-50 border border-red-200 hys-card">
                   <div className="text-center space-y-2">
                     <AlertTriangle className="w-6 h-6 text-red-500 mx-auto" />
                     <h4 className="font-medium text-red-800 text-sm">检测到疼痛</h4>
-                    <p className="brooklyn-text text-red-700 max-w-xl mx-auto text-sm">
+                    <p className="hys-text text-red-700 max-w-xl mx-auto text-sm">
                       建议您暂停剧烈运动，并咨询专业医疗人员或物理治疗师的意见。
                     </p>
                   </div>
@@ -439,7 +439,7 @@ const AssessmentPage = () => {
               variant="outline"
               disabled={currentTestIndex === 0}
               className={cn(
-                "brooklyn-button px-8 border-2 shadow-sm text-foreground",
+                "hys-button px-8 border-2 shadow-sm text-foreground",
                 currentTestIndex === 0 
                   ? "opacity-50 cursor-not-allowed border-muted text-muted-foreground" 
                   : "border-primary/20 hover:border-primary/40 hover:bg-primary/5 hover:text-foreground"
@@ -450,7 +450,7 @@ const AssessmentPage = () => {
             </Button>
           </div>
 
-          <div className="brooklyn-text text-center">
+          <div className="hys-text text-center">
             <p className="text-xs">
               {currentTestIndex + 1} / {FMS_TESTS.length}
             </p>
@@ -463,7 +463,7 @@ const AssessmentPage = () => {
             onClick={goToNextTest}
             disabled={!hasScore}
             className={cn(
-              "brooklyn-button px-8",
+              "hys-button px-8",
               !hasScore && "opacity-50 cursor-not-allowed"
             )}
           >
@@ -474,7 +474,7 @@ const AssessmentPage = () => {
 
         {/* 调试信息和重置按钮（在开发环境显示） */}
         {!import.meta.env.PROD && (
-          <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 brooklyn-card">
+          <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 hys-card">
             <h3 className="text-sm font-medium mb-2">调试信息:</h3>
             <p className="text-xs mb-1">当前测试索引: {currentTestIndex}</p>
             <p className="text-xs mb-1">当前测试ID: {currentTest.id}</p>

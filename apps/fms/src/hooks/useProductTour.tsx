@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { tourConfigs, defaultTourConfig } from '@/data/tour-config';
 import type { TourConfig } from '@/components/ui/product-tour';
+import { safeLocalStorage } from '@/lib/safe-storage';
 
 // 本地存储键值
 const STORAGE_KEYS = {
@@ -28,15 +29,15 @@ export const useProductTour = () => {
     }
 
     // 检查是否已经完成或跳过了引导
-    const tourCompleted = localStorage.getItem(STORAGE_KEYS.TOUR_COMPLETED) === 'true';
-    const tourSkipped = localStorage.getItem(STORAGE_KEYS.TOUR_SKIPPED) === 'true';
+    const tourCompleted = safeLocalStorage.getItem(STORAGE_KEYS.TOUR_COMPLETED) === 'true';
+    const tourSkipped = safeLocalStorage.getItem(STORAGE_KEYS.TOUR_SKIPPED) === 'true';
     
     if (tourCompleted || tourSkipped) {
       return false;
     }
 
     // 检查是否看过开场动画
-    const hasVisited = localStorage.getItem('fms_has_visited') === 'true';
+    const hasVisited = safeLocalStorage.getItem('fms_has_visited') === 'true';
     if (!hasVisited) {
       return false; // 如果还没有看过开场动画，不显示引导
     }
@@ -46,9 +47,9 @@ export const useProductTour = () => {
 
   // 检查是否是首次访问任何页面
   const isFirstTimeUser = useCallback(() => {
-    const tourCompleted = localStorage.getItem(STORAGE_KEYS.TOUR_COMPLETED) === 'true';
-    const tourSkipped = localStorage.getItem(STORAGE_KEYS.TOUR_SKIPPED) === 'true';
-    const hasVisited = localStorage.getItem('fms_has_visited') === 'true';
+    const tourCompleted = safeLocalStorage.getItem(STORAGE_KEYS.TOUR_COMPLETED) === 'true';
+    const tourSkipped = safeLocalStorage.getItem(STORAGE_KEYS.TOUR_SKIPPED) === 'true';
+    const hasVisited = safeLocalStorage.getItem('fms_has_visited') === 'true';
     
     return hasVisited && !tourCompleted && !tourSkipped;
   }, []);
@@ -60,12 +61,12 @@ export const useProductTour = () => {
     setCurrentPageTour({
       ...config,
       onComplete: () => {
-        localStorage.setItem(STORAGE_KEYS.TOUR_COMPLETED, 'true');
+        safeLocalStorage.setItem(STORAGE_KEYS.TOUR_COMPLETED, 'true');
         setIsOpen(false);
         config.onComplete?.();
       },
       onSkip: () => {
-        localStorage.setItem(STORAGE_KEYS.TOUR_SKIPPED, 'true');
+        safeLocalStorage.setItem(STORAGE_KEYS.TOUR_SKIPPED, 'true');
         setIsOpen(false);
         config.onSkip?.();
       }
@@ -100,14 +101,14 @@ export const useProductTour = () => {
 
   // 重置引导状态
   const resetTour = useCallback(() => {
-    localStorage.removeItem(STORAGE_KEYS.TOUR_COMPLETED);
-    localStorage.removeItem(STORAGE_KEYS.TOUR_SKIPPED);
+    safeLocalStorage.removeItem(STORAGE_KEYS.TOUR_COMPLETED);
+    safeLocalStorage.removeItem(STORAGE_KEYS.TOUR_SKIPPED);
   }, []);
 
   // 获取引导统计信息（简化版）
   const getTourStats = useCallback(() => {
-    const tourCompleted = localStorage.getItem(STORAGE_KEYS.TOUR_COMPLETED) === 'true';
-    const tourSkipped = localStorage.getItem(STORAGE_KEYS.TOUR_SKIPPED) === 'true';
+    const tourCompleted = safeLocalStorage.getItem(STORAGE_KEYS.TOUR_COMPLETED) === 'true';
+    const tourSkipped = safeLocalStorage.getItem(STORAGE_KEYS.TOUR_SKIPPED) === 'true';
     
     return {
       totalPages: 1,

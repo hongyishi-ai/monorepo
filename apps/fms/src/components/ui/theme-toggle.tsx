@@ -20,7 +20,7 @@ const ThemeToggle = () => {
     <Button
       variant="ghost"
       size="sm"
-      className="brooklyn-nav-link"
+      className="hys-nav-link"
       onClick={handleClick}
       aria-label="切换深浅色主题"
     >

@@ -13,6 +13,27 @@ export const CLOUDFLARE_FREE_TIER_LIMITS = {
   maxFileBytes: 25 * 1024 * 1024,
 };
 
+export const contentGovernance = {
+  heatStroke: {
+    label: '热射病防治',
+    sourceName: '热射病防治指南与现场处置资料',
+    version: '指南/专家共识汇编，本地训练工具版',
+    reviewedAt: '2026-06-17',
+    statusLabel: '待复核',
+    disclaimer: '仅供训练和现场处置参考，不替代急救指挥、临床诊疗和当地规范。',
+    officialUpdateUrl: 'https://www.nhc.gov.cn/',
+  },
+  tccc: {
+    label: '战场救护 TCCC',
+    sourceName: 'CoTCCC 2017 战术战伤救护流程资料',
+    version: 'CoTCCC 2017 基础内容，需按 JTS/Deployed Medicine 更新复核',
+    reviewedAt: '2026-06-17',
+    statusLabel: '待复核',
+    disclaimer: '仅供教育训练和流程学习，不能替代现行作战医疗规范、医疗指挥链或正式认证课程。',
+    officialUpdateUrl: 'https://jts.health.mil/index.cfm/committees/cotccc',
+  },
+};
+
 export const heatStrokePageAliases = new Map([
   ['8-4-6黄金法则.html', '8-4-6-rule.html'],
   ['中国热射病诊断与治疗指南.html', 'diagnosis-treatment-guideline.html'],
@@ -93,7 +114,7 @@ export function buildHeaders({ fmsBase = '/fms/', heatStrokeBase = '/heat-stroke
     "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com",
     "img-src 'self' data: blob: https://openweathermap.org https://*.openweathermap.org https://www.xiaoyuzhoufm.com",
     "font-src 'self' data: https://cdnjs.cloudflare.com",
-    "connect-src 'self' https://api.openweathermap.org https://cloudflareinsights.com",
+    "connect-src 'self' https://cloudflareinsights.com",
     "media-src 'self' blob:",
     "manifest-src 'self'",
     "worker-src 'self' blob:",
@@ -157,6 +178,13 @@ export function shouldCopyHeatStrokePath(relativePath) {
   const fileName = path.posix.basename(normalized);
 
   if (fileName.startsWith('.') || normalized.includes('/.')) {
+    return false;
+  }
+
+  if (
+    normalized === 'assets/vendors/tailwind.compiler.js' ||
+    normalized === 'assets/vendors/framer-motion.js'
+  ) {
     return false;
   }
 
@@ -247,6 +275,312 @@ function rewritePageAliases(content, aliases) {
   return output;
 }
 
+function rewritePageHrefExtensions(content) {
+  return content.replace(/\bhref=(["'])([^"']+?)(\.html)(#[^"']*)?\1/g, (match, quote, href, _extension, hash = '') => {
+    if (
+      href.startsWith('http://') ||
+      href.startsWith('https://') ||
+      href.startsWith('//') ||
+      href.startsWith('../') ||
+      href === 'index' ||
+      href === 'offline'
+    ) {
+      return match;
+    }
+
+    if (href.includes('/pages/') || href.startsWith('pages/') || !href.includes('/')) {
+      return `href=${quote}${href}${hash}${quote}`;
+    }
+
+    return match;
+  });
+}
+
+export function injectMobileBottomNav(content, activeTab = 'tools') {
+  if (!/<\/body>/i.test(content) || content.includes('data-hongyishi-mobile-nav')) {
+    return content;
+  }
+
+  const tabs = [
+    { id: 'action', label: '处置', href: '/?tab=action' },
+    { id: 'tools', label: '工具', href: '/?tab=tools' },
+    { id: 'records', label: '记录', href: '/?tab=records' },
+    { id: 'library', label: '资料', href: '/?tab=library' },
+  ];
+
+  const navItems = tabs
+    .map((tab) => {
+      const activeClass = tab.id === activeTab ? ' hys-mobile-nav__item--active' : '';
+      const ariaCurrent = tab.id === activeTab ? ' aria-current="page"' : '';
+      return `<a class="hys-mobile-nav__item${activeClass}" href="${tab.href}"${ariaCurrent} title="返回红医师主站${tab.label}舱"><small>主站</small><span>${tab.label}</span></a>`;
+    })
+    .join('');
+
+  const nav = `
+<style data-hongyishi-mobile-nav>
+@media (min-width: 769px) {
+  .hys-mobile-nav {
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+  body {
+    padding-bottom: calc(86px + env(safe-area-inset-bottom)) !important;
+  }
+  .hys-mobile-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2147483000;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+    border-top: 2px solid #111;
+    background: rgba(244, 236, 220, 0.96);
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+    box-shadow: 0 -10px 28px rgba(0, 0, 0, 0.16);
+    backdrop-filter: blur(10px);
+  }
+  .hys-mobile-nav__item {
+    display: flex;
+    flex-direction: column;
+    min-height: 54px;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    border: 2px solid transparent;
+    color: #5f6567;
+    font: 800 13px/1.1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    text-decoration: none;
+  }
+  .hys-mobile-nav__item small {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    opacity: 0.68;
+  }
+  .hys-mobile-nav__item--active {
+    border-color: #111;
+    background: #111;
+    color: #f4ecdc;
+  }
+  .hys-mobile-nav__item:focus-visible {
+    outline: 2px solid #d82f2f;
+    outline-offset: 2px;
+  }
+}
+</style>
+<nav class="hys-mobile-nav" data-hongyishi-mobile-nav aria-label="红医师移动端导航">${navItems}</nav>`;
+
+  return content.replace(/<\/body>/i, `${nav}\n</body>`);
+}
+
+function extractHtmlTitle(content, fallbackTitle) {
+  const titleMatch = content.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+  const bodyWithoutScripts = content.replace(/<script\b[\s\S]*?<\/script>/gi, '');
+  const h1Match = bodyWithoutScripts.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+  const rawTitle = titleMatch?.[1] ?? h1Match?.[1] ?? fallbackTitle;
+
+  return rawTitle
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .replace(/\s*\|\s*TCCC.*$/i, '')
+    .trim() || fallbackTitle;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+export function injectContentGovernanceBanner(content, config) {
+  if (!/<\/head>/i.test(content) || !/<body\b[^>]*>/i.test(content) || content.includes('data-hongyishi-content-governance')) {
+    return content;
+  }
+
+  const style = `
+    <style data-hongyishi-content-governance>
+      .hys-content-governance {
+        border-bottom: 2px solid #111;
+        background: #fff8e8;
+        color: #111;
+        font: 700 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+      .hys-content-governance__inner {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0.75rem 1rem;
+        display: grid;
+        gap: 0.35rem;
+      }
+      .hys-content-governance__status {
+        display: inline-flex;
+        width: fit-content;
+        border: 2px solid #d93025;
+        background: #d93025;
+        color: #fff;
+        padding: 0.1rem 0.45rem;
+        font-weight: 900;
+      }
+      .hys-content-governance__meta {
+        color: #4d4d4d;
+      }
+      .hys-content-governance a {
+        color: #12313c;
+        font-weight: 900;
+        text-decoration: underline;
+      }
+    </style>`;
+  const officialLink = config.officialUpdateUrl
+    ? ` <a href="${escapeHtml(config.officialUpdateUrl)}" rel="noopener noreferrer">官方更新源</a>`
+    : '';
+  const banner = `
+    <aside class="hys-content-governance" data-hongyishi-content-governance aria-label="内容审核状态">
+      <div class="hys-content-governance__inner">
+        <span class="hys-content-governance__status">内容状态：${escapeHtml(config.statusLabel)}</span>
+        <span>${escapeHtml(config.label)} · ${escapeHtml(config.disclaimer)}</span>
+        <span class="hys-content-governance__meta">来源：${escapeHtml(config.sourceName)} · 版本：${escapeHtml(config.version)} · 复核日期：${escapeHtml(config.reviewedAt)}.${officialLink}</span>
+      </div>
+    </aside>`;
+
+  return content
+    .replace(/<\/head>/i, `${style}\n</head>`)
+    .replace(/<body\b([^>]*)>/i, `<body$1>${banner}`);
+}
+
+export function injectTcccBrandShell(content, relativePath) {
+  const normalizedPath = relativePath.split(path.sep).join('/');
+
+  if (!normalizedPath.startsWith('pages/') || !normalizedPath.endsWith('.html')) {
+    return content;
+  }
+
+  if (!/<\/head>/i.test(content) || !/<body\b[^>]*>/i.test(content) || content.includes('data-hongyishi-tccc-shell')) {
+    return content;
+  }
+
+  const flowTitle = escapeHtml(extractHtmlTitle(content, 'TCCC 流程'));
+  const style = `
+    <style data-hongyishi-tccc-shell>
+      .hys-tccc-skip {
+        position: fixed;
+        left: 1rem;
+        top: 1rem;
+        z-index: 2147483001;
+        transform: translateY(-150%);
+        background: #f4ecdc;
+        color: #111;
+        border: 2px solid #d93025;
+        padding: 0.5rem 0.75rem;
+        font-weight: 800;
+        text-decoration: none;
+      }
+      .hys-tccc-skip:focus {
+        transform: translateY(0);
+      }
+      .hys-tccc-shell {
+        position: sticky;
+        top: 0;
+        z-index: 60;
+        border-bottom: 2px solid #d93025;
+        background: rgba(244, 236, 220, 0.97);
+        color: #12313c;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+      }
+      .hys-tccc-shell__inner {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0.75rem 1rem;
+        display: grid;
+        gap: 0.5rem;
+      }
+      .hys-tccc-shell__nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+      .hys-tccc-shell__brand {
+        color: #d93025;
+        font-weight: 900;
+        text-decoration: none;
+      }
+      .hys-tccc-shell__links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 0.5rem;
+      }
+      .hys-tccc-shell__links a {
+        min-height: 36px;
+        display: inline-flex;
+        align-items: center;
+        border: 2px solid #12313c;
+        color: #12313c;
+        padding: 0.35rem 0.6rem;
+        font-size: 0.82rem;
+        font-weight: 800;
+        text-decoration: none;
+      }
+      .hys-tccc-shell__meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1rem;
+        font-size: 0.78rem;
+        color: #49606a;
+      }
+      .hys-tccc-shell__title {
+        color: #12313c;
+        font-weight: 900;
+      }
+      #hys-tccc-main {
+        scroll-margin-top: 92px;
+      }
+      @media (max-width: 640px) {
+        .hys-tccc-shell__nav {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+        .hys-tccc-shell__links {
+          justify-content: flex-start;
+        }
+      }
+    </style>`;
+  const shell = `
+    <a class="hys-tccc-skip" href="#hys-tccc-main">跳到流程</a>
+    <header class="hys-tccc-shell" data-hongyishi-tccc-shell>
+      <div class="hys-tccc-shell__inner">
+        <div class="hys-tccc-shell__nav">
+          <a class="hys-tccc-shell__brand" href="/">红医师 / 战场救护</a>
+          <div class="hys-tccc-shell__links" aria-label="TCCC 导航">
+            <a href="/">总入口</a>
+            <a href="/tccc/">项目首页</a>
+          </div>
+        </div>
+        <div class="hys-tccc-shell__meta">
+          <span class="hys-tccc-shell__title">当前流程：${flowTitle}</span>
+          <span>教育训练用途</span>
+          <span>内容状态：待复核</span>
+          <span>CoTCCC 2017 基础内容，需按 JTS / Deployed Medicine 更新复核</span>
+        </div>
+      </div>
+    </header>
+    <div id="hys-tccc-main" tabindex="-1"></div>`;
+
+  return content
+    .replace(/<\/head>/i, `${style}\n</head>`)
+    .replace(/<body\b([^>]*)>/i, `<body$1>${shell}`);
+}
+
+async function injectMobileBottomNavIntoFile(filePath, activeTab = 'tools') {
+  const content = await readFile(filePath, 'utf8');
+  await writeFile(filePath, injectMobileBottomNav(content, activeTab));
+}
+
 function rewriteHeatStrokePageAliases(content) {
   return rewritePageAliases(content, heatStrokePageAliases);
 }
@@ -288,8 +622,11 @@ export function rewriteHeatStrokeText(content, relativePath, basePath) {
       .replace(/(["'`])\/(index\.html|manifest\.json|assets\/|pages\/)/g, `$1${base}$2`);
   }
 
-  if (normalizedPath.endsWith('.js')) {
-    output = output.replace(/const FALLBACK_API_KEY = ['"][^'"]*['"];/g, "const FALLBACK_API_KEY = '';");
+  output = rewritePageHrefExtensions(output);
+
+  if (normalizedPath.endsWith('.html')) {
+    output = injectContentGovernanceBanner(output, contentGovernance.heatStroke);
+    output = injectMobileBottomNav(output, 'tools');
   }
 
   return output;
@@ -331,6 +668,14 @@ export function rewriteTcccText(content, relativePath, basePath) {
     output = output
       .replace(/(["'`])\/(["'`])/g, `$1${base}$2`)
       .replace(/clients\.openWindow\((["'])\.\/\1\)/g, `clients.openWindow('${base}')`);
+  }
+
+  output = rewritePageHrefExtensions(output);
+  output = injectTcccBrandShell(output, normalizedPath);
+
+  if (normalizedPath.endsWith('.html')) {
+    output = injectContentGovernanceBanner(output, contentGovernance.tccc);
+    output = injectMobileBottomNav(output, 'tools');
   }
 
   return output;
@@ -507,6 +852,7 @@ export async function buildCloudflareSite({
     run(pnpm, ['--filter', '@hongyishi/fms', 'build'], {
       env: { VITE_BASE_PATH: normalizeBasePath(fmsBase) },
     });
+    run(pnpm, ['--filter', '@hongyishi/heat-stroke', 'build']);
     run(pnpm, ['--filter', '@hongyishi/tccc', 'build']);
   }
 
@@ -522,6 +868,10 @@ export async function buildCloudflareSite({
   await cp(fmsOutput, path.join(outputDir, normalizeBasePath(fmsBase).replace(/^\/|\/$/g, '')), {
     recursive: true,
   });
+  await injectMobileBottomNavIntoFile(
+    path.join(outputDir, normalizeBasePath(fmsBase).replace(/^\/|\/$/g, ''), 'index.html'),
+    'tools',
+  );
   await copyFile(
     path.join(outputDir, normalizeBasePath(fmsBase).replace(/^\/|\/$/g, ''), 'index.html'),
     path.join(outputDir, normalizeBasePath(fmsBase).replace(/^\/|\/$/g, ''), '404.html'),

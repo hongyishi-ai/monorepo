@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 // 导入我们的页面组件
 import RootLayout from './components/shared/RootLayout';
 import FirstVisitDetector from './components/shared/FirstVisitDetector';
+import RouteErrorFallback, { RouteErrorPanel } from './components/shared/RouteErrorFallback';
 
 const OpeningPage = lazy(() => import('./pages/OpeningPage'));
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -22,7 +23,7 @@ export function RouteLoading() {
     <div
       role="status"
       aria-label="正在载入训练伤防治模块"
-      className="brooklyn-section flex min-h-[50vh] items-center justify-center px-6"
+      className="hys-section flex min-h-[50vh] items-center justify-center px-6"
     >
       <div className="w-full max-w-sm border-2 border-black bg-paper p-6 text-center shadow-[6px_6px_0_0_#A51F18]">
         <p className="mb-2 font-mono text-xs font-bold uppercase tracking-wide text-muted-foreground">
@@ -47,7 +48,8 @@ const router = createBrowserRouter([
   // 开场页面 - 独立路由，不使用RootLayout
   { 
     path: '/opening', 
-    element: withRouteLoading(OpeningPage)
+    element: withRouteLoading(OpeningPage),
+    errorElement: <RouteErrorFallback />,
   },
   {
     path: '/',
@@ -56,7 +58,7 @@ const router = createBrowserRouter([
         <RootLayout />
       </FirstVisitDetector>
     ),
-    // errorElement: <ErrorPage />, // 未来可以添加一个错误页面
+    errorElement: <RouteErrorFallback />,
     children: [
       { index: true, element: withRouteLoading(HomePage) },
       { path: 'assessment', element: withRouteLoading(AssessmentPage) },
@@ -66,6 +68,10 @@ const router = createBrowserRouter([
       { path: 'history', element: withRouteLoading(HistoryPage) },
       { path: 'about', element: withRouteLoading(AboutPage) },
     ],
+  },
+  {
+    path: '*',
+    element: <RouteErrorPanel message="页面不存在" />,
   },
 ], {
   basename: routerBaseName,

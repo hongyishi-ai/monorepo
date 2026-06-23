@@ -4,28 +4,21 @@
  */
 
 // API 配置
-const FALLBACK_API_KEY = '';
 const REQUEST_TIMEOUT = 12000; // 网络请求超时阈值(ms)
-
-// 运行时解析 API Key
-function resolveApiKey() {
-    const runtimeKey = window.HS_API_KEY || window.__HS_API_KEY;
-    const metaKey = document.querySelector('meta[name="hs-api-key"]')?.getAttribute('content');
-    const storedKey = localStorage.getItem('hs_api_key');
-    if (!runtimeKey && !metaKey && !storedKey) {
-        console.warn('未发现前端 OpenWeather Key。生产环境应通过 Cloudflare Pages Function 代理请求。');
-    }
-    return runtimeKey || metaKey || storedKey || FALLBACK_API_KEY;
-}
 
 // 运行时解析 API Base URL
 function resolveApiBase() {
     const runtimeBase = window.HS_API_BASE || window.__HS_API_BASE;
     const metaBase = document.querySelector('meta[name="hs-api-base"]')?.getAttribute('content');
-    return runtimeBase || metaBase || 'https://api.openweathermap.org';
+    const configuredBase = runtimeBase || metaBase || '/api/openweather';
+    if (configuredBase.includes('openweathermap.org')) {
+        console.warn('生产天气请求必须通过 /api/openweather 代理，已忽略直连 API_BASE。');
+        return '/api/openweather';
+    }
+    return configuredBase;
 }
 
-const API_KEY = resolveApiKey();
+const API_KEY = '';
 const API_BASE = resolveApiBase();
 
 /**
@@ -35,16 +28,9 @@ const API_BASE = resolveApiBase();
  * @returns {string} 完整的 URL
  */
 function buildApiUrl(path, params = {}) {
-    const isProxy = !API_BASE.includes('openweathermap.org');
-    if (isProxy) {
-        const url = new URL(API_BASE, window.location.origin);
-        url.searchParams.set('path', path);
-        Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
-        return url.toString();
-    }
-    const url = new URL(path, 'https://api.openweathermap.org');
+    const url = new URL(API_BASE, window.location.origin);
+    url.searchParams.set('path', path);
     Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
-    url.searchParams.set('appid', API_KEY);
     return url.toString();
 }
 

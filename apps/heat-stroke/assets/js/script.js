@@ -2,7 +2,7 @@
  * 红医师热射病防治 - 主脚本
  *
  * 代码组织结构:
- * 1. 常量与配置 (API_KEY, API_BASE, CACHE_*)
+ * 1. 常量与配置 (API_BASE, CACHE_*)
  * 2. API 模块 (buildApiUrl, fetchJson)
  * 3. 缓存模块 (buildCacheKey, readCache, writeCache, fetchJsonWithCache)
  * 4. UI 初始化与事件绑定
@@ -19,20 +19,15 @@
  */
 
 // ========== 1. 常量与配置 ==========
-const FALLBACK_API_KEY = '';
-const API_KEY = (function() {
-    const runtimeKey = window.HS_API_KEY || window.__HS_API_KEY;
-    const metaKey = document.querySelector('meta[name="hs-api-key"]')?.getAttribute('content');
-    const storedKey = localStorage.getItem('hs_api_key');
-    if (!runtimeKey && !metaKey && !storedKey) {
-        console.warn('未发现前端 OpenWeather Key。生产环境应通过 Cloudflare Pages Function 代理请求。');
-    }
-    return runtimeKey || metaKey || storedKey || FALLBACK_API_KEY;
-})();
 const API_BASE = (function() {
     const runtimeBase = window.HS_API_BASE || window.__HS_API_BASE;
     const metaBase = document.querySelector('meta[name="hs-api-base"]')?.getAttribute('content');
-    return runtimeBase || metaBase || 'https://api.openweathermap.org';
+    const configuredBase = runtimeBase || metaBase || '/api/openweather';
+    if (configuredBase.includes('openweathermap.org')) {
+        console.warn('生产天气请求必须通过 /api/openweather 代理，已忽略直连 API_BASE。');
+        return '/api/openweather';
+    }
+    return configuredBase;
 })();
 const REQUEST_TIMEOUT = 12000; // 网络请求超时阈值(ms)
 const CACHE_TTL_MS = 10 * 60 * 1000; // 缓存10分钟
@@ -42,16 +37,9 @@ let chart; // 图表对象
 
 // ========== 2. API 模块 ==========
 function buildApiUrl(path, params = {}) {
-    const isProxy = !API_BASE.includes('openweathermap.org');
-    if (isProxy) {
-        const url = new URL(API_BASE, window.location.origin);
-        url.searchParams.set('path', path);
-        Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
-        return url.toString();
-    }
-    const url = new URL(path, 'https://api.openweathermap.org');
+    const url = new URL(API_BASE, window.location.origin);
+    url.searchParams.set('path', path);
     Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
-    url.searchParams.set('appid', API_KEY);
     return url.toString();
 }
 
@@ -107,6 +95,22 @@ function showErrorState(message) {
     }
     if (alertEl) {
         alertEl.classList.add('hidden');
+    }
+}
+
+function showManualFallback(message) {
+    showErrorState(`${message}。请使用下方手动计算热指数。`);
+
+    const notice = document.getElementById('manual-fallback-notice');
+    const manualTempInput = document.getElementById('manual-temp');
+
+    if (notice) {
+        notice.textContent = `${message}。请输入现场温度和湿度，仍可立即计算热指数。`;
+        notice.classList.remove('hidden');
+    }
+
+    if (manualTempInput) {
+        manualTempInput.closest('.animated-item')?.classList.add('ring-2', 'ring-brand-orange');
     }
 }
 
@@ -181,11 +185,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // 获取用户位置
-    getUserLocation();
+    // 页面首次进入时直接查询默认城市；定位权限在统一站点安全策略中关闭。
+    fetchWeatherByCity(FALLBACK_CITY, true);
     
     // 刷新按钮点击事件
-    document.getElementById('refresh-btn').addEventListener('click', getUserLocation);
+    document.getElementById('refresh-btn').addEventListener('click', refreshWeatherQuery);
     
     // 搜索按钮点击事件
     document.getElementById('search-btn').addEventListener('click', searchLocation);
@@ -610,6 +614,13 @@ async function searchLocation() {
     await fetchWeatherByCity(locationInput);
 }
 
+async function refreshWeatherQuery() {
+    const locationInput = document.getElementById('location-input');
+    const cityName = locationInput?.value.trim() || FALLBACK_CITY;
+
+    await fetchWeatherByCity(cityName, cityName === FALLBACK_CITY);
+}
+
 async function fetchWeatherByCity(cityName, isFallback = false) {
     showLoadingState(`正在搜索 "${cityName}" 的天气数据...`);
     try {
@@ -634,7 +645,7 @@ async function fetchWeatherByCity(cityName, isFallback = false) {
         await getWeatherData(latitude, longitude);
     } catch (error) {
         console.error('搜索位置失败:', error);
-        showErrorState(isFallback ? '默认城市数据获取失败，请稍后再试' : '搜索位置失败，请稍后再试');
+        showManualFallback(isFallback ? '默认城市天气数据暂不可用' : '搜索位置失败');
     }
 }
 
@@ -680,7 +691,7 @@ async function getCurrentWeather(latitude, longitude) {
         displayCurrentWeather(data);
     } catch (error) {
         console.error('获取当前天气数据失败:', error);
-        showErrorState('获取天气数据失败，请稍后再试');
+        showManualFallback('自动天气数据暂不可用');
     }
 }
 

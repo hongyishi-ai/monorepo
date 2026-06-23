@@ -183,7 +183,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
             >
               <Card 
                 className={cn(
-                  "brooklyn-card bg-card/95 backdrop-blur-md border shadow-lg hover:shadow-xl cursor-pointer overflow-hidden",
+                  "hys-card bg-card/95 backdrop-blur-md border shadow-lg hover:shadow-xl cursor-pointer overflow-hidden",
                   "active:scale-95 touch-manipulation smart-status-transition smart-indicator-border-glow",
                   isScrollingDown && "indicator-dimmed",
                   !isScrollingDown && "indicator-focused",
@@ -295,13 +295,13 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
 
         {/* 抽屉组件 - 从底部弹出 */}
         <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-          <DrawerContent className="brooklyn-card">
+          <DrawerContent className="hys-card">
             <DrawerHeader className="text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <BarChart3 className="w-5 h-5 text-primary" />
                 <DrawerTitle className="text-lg font-normal">FMS测试状态详情</DrawerTitle>
               </div>
-              <DrawerDescription className="brooklyn-text">
+              <DrawerDescription className="hys-text">
                 当前评估进度：{progressPercentage}% ({totalCompleted}/{totalTests})
               </DrawerDescription>
             </DrawerHeader>
@@ -309,7 +309,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
             <div className="p-6 pb-8">
               {/* 当前测试状态 */}
               {currentTestName && (
-                <div className="mb-6 p-4 rounded-lg brooklyn-card border">
+                <div className="mb-6 p-4 rounded-lg hys-card border">
                   <div className="text-center">
                     <div className="flex items-center justify-center gap-2 mb-3">
                       {requiresBilateralAssessment ? (
@@ -321,7 +321,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
                       )}
                       <span className="text-sm font-medium text-foreground">当前测试</span>
                     </div>
-                    <div className="text-base brooklyn-text mb-2">
+                    <div className="text-base hys-text mb-2">
                       {currentTestName}
                     </div>
                     {requiresBilateralAssessment && (
@@ -340,7 +340,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
                   <div className="text-2xl font-light text-primary mb-2">
                     {completedBasicTests}
                   </div>
-                  <div className="text-sm brooklyn-text mb-1">基础测试</div>
+                  <div className="text-sm hys-text mb-1">基础测试</div>
                   <div className="text-xs text-muted-foreground">
                     共 {totalBasicTests} 项
                   </div>
@@ -351,7 +351,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
                   <div className="text-2xl font-light text-amber-600 mb-2">
                     {completedClearanceTests}
                   </div>
-                  <div className="text-sm brooklyn-text mb-1">排除测试</div>
+                  <div className="text-sm hys-text mb-1">排除测试</div>
                   <div className="text-xs text-muted-foreground">
                     共 {totalClearanceTests} 项
                   </div>
@@ -366,7 +366,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
                       <div className="text-2xl font-light text-blue-600 mb-2">
                         {asymmetryCount}
                       </div>
-                      <div className="text-sm brooklyn-text">不对称项</div>
+                      <div className="text-sm hys-text">不对称项</div>
                     </div>
                   )}
 
@@ -375,7 +375,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
                       <div className="text-2xl font-light text-red-500 mb-2">
                         {painfulCount}
                       </div>
-                      <div className="text-sm brooklyn-text">疼痛项</div>
+                      <div className="text-sm hys-text">疼痛项</div>
                     </div>
                   )}
                 </div>
@@ -383,7 +383,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
 
               {/* 底部提示 */}
               <div className="text-center p-4 bg-muted/20 rounded-lg border">
-                <div className="brooklyn-text text-sm space-y-2">
+                <div className="hys-text text-sm space-y-2">
                   <div>向下滑动或点击外部区域可关闭</div>
                   <div className="flex items-center justify-center gap-2 text-xs">
                     <kbd className="px-2 py-1 text-xs font-mono bg-muted rounded border">Alt</kbd>

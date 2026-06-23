@@ -46,11 +46,11 @@ const RootLayout = () => {
         跳到主内容
       </a>
       {/* 红医师海报系统导航栏 */}
-      <header className="brooklyn-nav">
-        <div className="brooklyn-container">
+      <header className="hys-nav">
+        <div className="hys-container">
           <nav className="flex items-center justify-between py-3">
             {/* Logo区域 */}
-            <Link to="/" className="brooklyn-logo hover:opacity-80 transition-opacity" onClick={closeMobileMenu}>
+            <Link to="/" className="hys-logo hover:opacity-80 transition-opacity" onClick={closeMobileMenu}>
               <span className="text-primary">红医师</span>
               <span className="mx-2 text-muted-foreground">/</span>
               <span>训练伤防治</span>
@@ -58,7 +58,7 @@ const RootLayout = () => {
 
             {/* 桌面端导航 */}
             <div className="hidden lg:flex items-center space-x-2">
-              <a href="/" className="brooklyn-nav-link">
+              <a href="/" className="hys-nav-link">
                 总入口
               </a>
               {navigationItems.map((item) => (
@@ -66,7 +66,7 @@ const RootLayout = () => {
                   <Button 
                     variant="ghost" 
                     className={cn(
-                      "brooklyn-nav-link",
+                      "hys-nav-link",
                       isActivePath(item.to, item.exact) && "active bg-accent text-primary"
                     )}
                   >
@@ -84,7 +84,7 @@ const RootLayout = () => {
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="brooklyn-nav-link"
+                className="hys-nav-link"
                 onClick={toggleMobileMenu}
                 aria-label={isMobileMenuOpen ? '关闭菜单' : '打开菜单'}
               >
@@ -101,7 +101,7 @@ const RootLayout = () => {
           {isMobileMenuOpen && (
             <div className="lg:hidden border-t border-border bg-background">
               <div className="py-4 space-y-2">
-                <a href="/" className="brooklyn-nav-link block">
+                <a href="/" className="hys-nav-link block">
                   总入口
                 </a>
                 {navigationItems.map((item) => (
@@ -109,7 +109,7 @@ const RootLayout = () => {
                     <Button 
                       variant="ghost" 
                       className={cn(
-                        "brooklyn-nav-link w-full justify-start",
+                        "hys-nav-link w-full justify-start",
                         isActivePath(item.to, item.exact) && "active bg-accent text-primary"
                       )}
                     >
@@ -124,7 +124,7 @@ const RootLayout = () => {
         </div>
 
         <div className="border-t border-border bg-muted/40">
-          <div className="brooklyn-container">
+          <div className="hys-container">
             <div className="flex flex-col gap-2 py-2 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
               <span className="font-medium text-foreground">当前项目：训练伤防治 / FMS教育评估</span>
               <span>本机保存 · IndexedDB · 可手动导出</span>
@@ -139,11 +139,11 @@ const RootLayout = () => {
         <Outlet />
       </main>
 
-      {/* 布鲁克林极简主义页脚 */}
-      <footer className="brooklyn-footer">
-        <div className="brooklyn-container">
+      {/* 红医师页脚 */}
+      <footer className="hys-footer">
+        <div className="hys-container">
           <div className="text-center space-y-4">
-            <div className="brooklyn-footer-text">
+            <div className="hys-footer-text">
               <p className="mb-2">
                 动有道，行无疆。
               </p>

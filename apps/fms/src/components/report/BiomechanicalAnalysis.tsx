@@ -11,7 +11,7 @@ interface BiomechanicalAnalysisProps {
 }
 
 /**
- * 生物力学分析组件 - 布鲁克林极简主义风格重设计
+ * 生物力学分析组件 - 红医师风格重设计
  * 
  * 遵循React哲学：
  * - 单一职责：专门处理生物力学数据展示
@@ -56,7 +56,7 @@ export const BiomechanicalAnalysis: React.FC<BiomechanicalAnalysisProps> = ({
   };
 
   return (
-    <Card className="brooklyn-card mb-20" style={{ position: 'relative' }}>
+    <Card className="hys-card mb-20" style={{ position: 'relative' }}>
       {/* 背景图标 */}
       <Microscope 
         className="absolute bottom-6 right-8 w-32 h-32 text-blue-600 opacity-5 z-0"
@@ -65,8 +65,8 @@ export const BiomechanicalAnalysis: React.FC<BiomechanicalAnalysisProps> = ({
       
       <CardContent className="px-4 md:px-6 py-8 md:py-12 relative z-10">
         <div className="text-center mb-8 md:mb-12">
-          <h2 className="brooklyn-title text-2xl mb-4">生物力学与功能分析</h2>
-          <p className="brooklyn-subtitle max-w-2xl mx-auto">
+          <h2 className="hys-title text-2xl mb-4">生物力学与功能分析</h2>
+          <p className="hys-subtitle max-w-2xl mx-auto">
             基于功能性动作筛查的深度生物力学解析，为每个测试提供详细的解剖学分析和专业指导
           </p>
         </div>
@@ -89,7 +89,7 @@ export const BiomechanicalAnalysis: React.FC<BiomechanicalAnalysisProps> = ({
               <AccordionItem 
                 key={testId} 
                 value={testId} 
-                className="brooklyn-card border-0"
+                className="hys-card border-0"
                 data-analysis={testId}
               >
                 <AccordionTrigger className="px-4 md:px-8 py-4 md:py-6 hover:no-underline rounded-lg hover:bg-gray-50/50 transition-colors">
@@ -101,7 +101,7 @@ export const BiomechanicalAnalysis: React.FC<BiomechanicalAnalysisProps> = ({
                       >
                         {bilateralData ? `左${bilateralData.left}|右${bilateralData.right}→${bilateralData.final}分` : `${score}分`}
                       </Badge>
-                      <h3 className="brooklyn-title text-base md:text-lg text-left truncate">{biomechanicalData.testName}</h3>
+                      <h3 className="hys-title text-base md:text-lg text-left truncate">{biomechanicalData.testName}</h3>
                     </div>
                   </div>
                 </AccordionTrigger>
@@ -110,23 +110,23 @@ export const BiomechanicalAnalysis: React.FC<BiomechanicalAnalysisProps> = ({
                   <div className="space-y-6 md:space-y-10">
                     {/* 临床意义 - 极简设计 */}
                     <div className="border-l-4 border-blue-500 pl-4 md:pl-6 py-2">
-                      <h4 className="brooklyn-title text-sm mb-3 text-blue-800">临床意义</h4>
-                      <p className="brooklyn-text leading-relaxed text-sm md:text-base">
+                      <h4 className="hys-title text-sm mb-3 text-blue-800">临床意义</h4>
+                      <p className="hys-text leading-relaxed text-sm md:text-base">
                         {biomechanicalData.clinicalSignificance}
                       </p>
                     </div>
 
                     {/* 关节运动模式 - 简化表格设计 */}
                     <div>
-                      <h4 className="brooklyn-title text-sm mb-4 md:mb-6">关节运动模式</h4>
+                      <h4 className="hys-title text-sm mb-4 md:mb-6">关节运动模式</h4>
                       <div className="space-y-2 md:space-y-3">
                         {biomechanicalData.jointMovements.map((movement, idx) => (
                           <div key={idx} className="flex justify-between items-center py-2 md:py-3 border-b border-gray-100 last:border-0">
                             <div className="flex-1 min-w-0">
-                              <span className="brooklyn-title text-sm">{movement.joint}</span>
-                              <p className="brooklyn-text text-xs mt-1 truncate">{movement.movement}</p>
+                              <span className="hys-title text-sm">{movement.joint}</span>
+                              <p className="hys-text text-xs mt-1 truncate">{movement.movement}</p>
                             </div>
-                            <Badge variant="outline" className="brooklyn-text text-xs ml-2 md:ml-4 flex-shrink-0">
+                            <Badge variant="outline" className="hys-text text-xs ml-2 md:ml-4 flex-shrink-0">
                               {movement.range}
                             </Badge>
                           </div>
@@ -136,7 +136,7 @@ export const BiomechanicalAnalysis: React.FC<BiomechanicalAnalysisProps> = ({
 
                     {/* 肌肉群分析 - 分组简化显示 */}
                     <div>
-                      <h4 className="brooklyn-title text-sm mb-4 md:mb-6">关键肌肉群分析</h4>
+                      <h4 className="hys-title text-sm mb-4 md:mb-6">关键肌肉群分析</h4>
                       <div className="space-y-4 md:space-y-6">
                         {['primary', 'synergist', 'stabilizer'].map(category => {
                           const muscles = biomechanicalData.muscleGroups.filter(m => m.category === category);
@@ -150,14 +150,14 @@ export const BiomechanicalAnalysis: React.FC<BiomechanicalAnalysisProps> = ({
 
                           return (
                             <div key={category}>
-                              <h5 className="brooklyn-title text-xs text-gray-600 mb-3">
+                              <h5 className="hys-title text-xs text-gray-600 mb-3">
                                 {categoryNames[category as keyof typeof categoryNames]}
                               </h5>
                               <div className="space-y-2 md:space-y-3">
                                 {muscles.map((muscle, idx) => (
                                   <div key={idx} className="p-3 md:p-4 bg-gray-50/50 rounded-lg">
-                                    <div className="brooklyn-title text-sm mb-2 md:mb-3">{muscle.name}</div>
-                                    <div className="brooklyn-text text-xs space-y-1 leading-relaxed">
+                                    <div className="hys-title text-sm mb-2 md:mb-3">{muscle.name}</div>
+                                    <div className="hys-text text-xs space-y-1 leading-relaxed">
                                       <div><span className="text-gray-600">起点：</span>{muscle.origin}</div>
                                       <div><span className="text-gray-600">止点：</span>{muscle.insertion}</div>
                                       <div><span className="text-gray-600">功能：</span>{muscle.function}</div>
@@ -176,10 +176,10 @@ export const BiomechanicalAnalysis: React.FC<BiomechanicalAnalysisProps> = ({
                         {/* 功能限制与代偿模式 - 统一的极简设计 */}
                         {scoreAnalysis.functionalLimitations.length > 0 && (
                           <div>
-                            <h4 className="brooklyn-title text-sm mb-4">功能限制</h4>
+                            <h4 className="hys-title text-sm mb-4">功能限制</h4>
                             <div className="space-y-2">
                               {scoreAnalysis.functionalLimitations.slice(0,3).map((limitation, idx) => (
-                                <div key={idx} className="brooklyn-text text-sm py-2 border-l-2 border-red-300 pl-3 md:pl-4">
+                                <div key={idx} className="hys-text text-sm py-2 border-l-2 border-red-300 pl-3 md:pl-4">
                                   {limitation}
                                 </div>
                               ))}
@@ -189,10 +189,10 @@ export const BiomechanicalAnalysis: React.FC<BiomechanicalAnalysisProps> = ({
 
                         {scoreAnalysis.compensatoryPatterns.length > 0 && (
                           <div>
-                            <h4 className="brooklyn-title text-sm mb-4">代偿模式</h4>
+                            <h4 className="hys-title text-sm mb-4">代偿模式</h4>
                             <div className="space-y-2">
                               {scoreAnalysis.compensatoryPatterns.slice(0,3).map((pattern, idx) => (
-                                <div key={idx} className="brooklyn-text text-sm py-2 border-l-2 border-amber-300 pl-3 md:pl-4">
+                                <div key={idx} className="hys-text text-sm py-2 border-l-2 border-amber-300 pl-3 md:pl-4">
                                   {pattern}
                                 </div>
                               ))}
@@ -202,10 +202,10 @@ export const BiomechanicalAnalysis: React.FC<BiomechanicalAnalysisProps> = ({
 
                         {/* 专业建议 */}
                         <div>
-                          <h4 className="brooklyn-title text-sm mb-4">专业建议</h4>
+                          <h4 className="hys-title text-sm mb-4">专业建议</h4>
                           <div className="space-y-2">
                             {scoreAnalysis.recommendations.map((rec, idx) => (
-                              <div key={idx} className="brooklyn-text text-sm py-2 border-l-2 border-green-300 pl-4">
+                              <div key={idx} className="hys-text text-sm py-2 border-l-2 border-green-300 pl-4">
                                 {rec}
                               </div>
                             ))}
@@ -215,10 +215,10 @@ export const BiomechanicalAnalysis: React.FC<BiomechanicalAnalysisProps> = ({
                         {/* 风险因素（仅0分显示） */}
                         {scoreAnalysis.riskFactors && scoreAnalysis.riskFactors.length > 0 && (
                           <div className="mt-6 p-6 bg-red-50/50 rounded-lg border border-red-200">
-                            <h4 className="brooklyn-title text-sm mb-4 text-red-800">风险因素</h4>
+                            <h4 className="hys-title text-sm mb-4 text-red-800">风险因素</h4>
                             <div className="space-y-2">
                               {scoreAnalysis.riskFactors.map((risk, idx) => (
-                                <div key={idx} className="brooklyn-text text-sm text-red-700">
+                                <div key={idx} className="hys-text text-sm text-red-700">
                                   • {risk}
                                 </div>
                               ))}
@@ -231,11 +231,11 @@ export const BiomechanicalAnalysis: React.FC<BiomechanicalAnalysisProps> = ({
                     {/* 双侧不对称分析 */}
                     {bilateralData && bilateralData.asymmetryData && (
                       <div className="mt-8 p-6 bg-blue-50/50 rounded-lg border border-blue-200">
-                        <h4 className="brooklyn-title text-sm mb-4 text-blue-800 flex items-center gap-2">
+                        <h4 className="hys-title text-sm mb-4 text-blue-800 flex items-center gap-2">
                           <ArrowLeftRight className="w-4 h-4" />
                           不对称性分析
                         </h4>
-                        <div className="space-y-3 brooklyn-text text-sm text-blue-700">
+                        <div className="space-y-3 hys-text text-sm text-blue-700">
                           <div className="flex justify-between">
                             <span>左右差值：</span>
                             <span className="font-medium">{Math.abs(bilateralData.left - bilateralData.right)}分</span>
@@ -250,7 +250,7 @@ export const BiomechanicalAnalysis: React.FC<BiomechanicalAnalysisProps> = ({
                           {bilateralData.asymmetryData?.recommendations?.length > 0 && (
                             <div className="pt-2 border-t border-blue-200">
                               <span className="block mb-2">建议措施：</span>
-                              <span className="brooklyn-text text-xs">
+                              <span className="hys-text text-xs">
                                 {bilateralData.asymmetryData.recommendations.slice(0, 2).join('、')}
                               </span>
                             </div>

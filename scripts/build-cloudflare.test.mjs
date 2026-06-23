@@ -10,6 +10,9 @@ import {
   buildRedirects,
   CLOUDFLARE_FREE_TIER_LIMITS,
   collectCloudflareFreeTierStats,
+  injectMobileBottomNav,
+  injectContentGovernanceBanner,
+  injectTcccBrandShell,
   mapHeatStrokeOutputPath,
   mapTcccOutputPath,
   normalizeBasePath,
@@ -26,6 +29,26 @@ const heatStrokeScriptsDir = path.join(repoRoot, 'apps', 'heat-stroke', 'assets'
 const fmsSrcDir = path.join(repoRoot, 'apps', 'fms', 'src');
 const tcccDir = path.join(repoRoot, 'apps', 'tccc');
 const tcccPagesDir = path.join(tcccDir, 'pages');
+
+async function collectFiles(directory, extensions) {
+  const files = [];
+  const entries = await readdir(directory, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const absolutePath = path.join(directory, entry.name);
+
+    if (entry.isDirectory()) {
+      files.push(...(await collectFiles(absolutePath, extensions)));
+      continue;
+    }
+
+    if (entry.isFile() && extensions.some((extension) => entry.name.endsWith(extension))) {
+      files.push(absolutePath);
+    }
+  }
+
+  return files;
+}
 
 test('normalizeBasePath enforces leading and trailing slashes', () => {
   assert.equal(normalizeBasePath('fms'), '/fms/');
@@ -55,7 +78,8 @@ test('buildHeaders adds security headers and long-lived hashed asset caching', (
     headers,
     /script-src 'self' 'unsafe-inline' https:\/\/cdnjs\.cloudflare\.com https:\/\/cdn\.jsdelivr\.net https:\/\/static\.cloudflareinsights\.com/,
   );
-  assert.match(headers, /connect-src 'self' https:\/\/api\.openweathermap\.org https:\/\/cloudflareinsights\.com/);
+  assert.match(headers, /connect-src 'self' https:\/\/cloudflareinsights\.com/);
+  assert.doesNotMatch(headers, /connect-src[^;]*api\.openweathermap\.org/);
   assert.doesNotMatch(headers, /cdn\.tailwindcss\.com/);
   assert.match(headers, /\/_next\/static\/\*/);
   assert.match(headers, /\/fms\/assets\/\*/);
@@ -106,19 +130,27 @@ test('Cloudflare build contract reports free-tier file count and file-size guard
 
 test('rewriteHeatStrokeText scopes root-relative static links and service worker registration', () => {
   const input = `
+    <html><head><title>热射病</title></head><body>
     <a href="/pages/热指数查询.html">热指数</a>
     <img src="/assets/images/icon.png">
     <script>navigator.serviceWorker.register('/sw.js')</script>
+    </body></html>
   `;
 
   const output = rewriteHeatStrokeText(input, 'index.html', '/heat-stroke/');
 
-  assert.match(output, /href="\/heat-stroke\/pages\/heat-index\.html"/);
+  assert.match(output, /href="\/heat-stroke\/pages\/heat-index"/);
   assert.match(output, /src="\/heat-stroke\/assets\/images\/icon\.png"/);
   assert.match(
     output,
     /navigator\.serviceWorker\.register\('\/heat-stroke\/sw\.js', \{ scope: '\/heat-stroke\/' \}\)/,
   );
+  assert.match(output, /data-hongyishi-mobile-nav/);
+  assert.match(output, /data-hongyishi-content-governance/);
+  assert.match(output, /内容状态：待复核/);
+  assert.match(output, /不替代急救指挥、临床诊疗和当地规范/);
+  assert.match(output, /href="\/\?tab=tools" aria-current="page"/);
+  assert.doesNotMatch(output, /data-hongyishi-tccc-shell/);
 });
 
 test('rewriteHeatStrokeText scopes manifest and service worker cache entries', () => {
@@ -154,8 +186,8 @@ test('rewriteHeatStrokeText replaces Chinese page filenames with Cloudflare-safe
   `;
   const output = rewriteHeatStrokeText(input, 'pages/热指数查询.html', '/heat-stroke/');
 
-  assert.match(output, /href="\/heat-stroke\/pages\/heat-index\.html"/);
-  assert.match(output, /href="heat-tolerance\.html"/);
+  assert.match(output, /href="\/heat-stroke\/pages\/heat-index"/);
+  assert.match(output, /href="heat-tolerance"/);
   assert.match(output, /'\/heat-stroke\/pages\/field-treatment\.html'/);
   assert.doesNotMatch(output, /热指数查询\.html|热耐力评估\.html|热射病现场处置\.html/);
 });
@@ -163,7 +195,10 @@ test('rewriteHeatStrokeText replaces Chinese page filenames with Cloudflare-safe
 test('shouldCopyHeatStrokePath keeps deployable static assets and excludes app internals', () => {
   assert.equal(shouldCopyHeatStrokePath('index.html'), true);
   assert.equal(shouldCopyHeatStrokePath('assets/js/script.js'), true);
+  assert.equal(shouldCopyHeatStrokePath('assets/css/tailwind.css'), true);
   assert.equal(shouldCopyHeatStrokePath('pages/热指数查询.html'), true);
+  assert.equal(shouldCopyHeatStrokePath('assets/vendors/tailwind.compiler.js'), false);
+  assert.equal(shouldCopyHeatStrokePath('assets/vendors/framer-motion.js'), false);
   assert.equal(shouldCopyHeatStrokePath('assets/.DS_Store'), false);
   assert.equal(shouldCopyHeatStrokePath('api/openweather.js'), false);
   assert.equal(shouldCopyHeatStrokePath('package.json'), false);
@@ -183,14 +218,32 @@ test('FMS demo media references are base-path aware for subdirectory deployment'
   }
 });
 
+test('FMS visual system uses the Hongyishi namespace instead of Brooklyn naming', async () => {
+  const sourceFiles = await collectFiles(fmsSrcDir, ['.css', '.ts', '.tsx']);
+
+  assert.ok(sourceFiles.length > 0, 'expected FMS source files');
+
+  for (const file of sourceFiles) {
+    const source = await readFile(file, 'utf8');
+
+    assert.doesNotMatch(source, /brooklyn-|Brooklyn|布鲁克林/i, `${path.relative(repoRoot, file)} should not use Brooklyn visual naming`);
+  }
+
+  const styles = await readFile(path.join(fmsSrcDir, 'index.css'), 'utf8');
+  assert.match(styles, /\.hys-card/);
+  assert.match(styles, /\.hys-nav/);
+});
+
 test('rewriteTcccText scopes root-relative app links, manifest, and service worker registration', () => {
   const input = `
+    <html><body>
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="/assets/css/tailwind.css">
     <script src="/pwa-register.js"></script>
     <img src="/icons/icon-192.png">
     <a href="/pages/TCCC标准流程.html">流程</a>
     <script>navigator.serviceWorker.register('/sw.js')</script>
+    </body></html>
   `;
 
   const output = rewriteTcccText(input, 'index.html', '/tccc/');
@@ -199,8 +252,21 @@ test('rewriteTcccText scopes root-relative app links, manifest, and service work
   assert.match(output, /href="\/tccc\/assets\/css\/tailwind\.css"/);
   assert.match(output, /src="\/tccc\/pwa-register\.js"/);
   assert.match(output, /src="\/tccc\/icons\/icon-192\.png"/);
-  assert.match(output, /href="\/tccc\/pages\/tccc-standard\.html"/);
+  assert.match(output, /href="\/tccc\/pages\/tccc-standard"/);
   assert.match(output, /navigator\.serviceWorker\.register\('\/tccc\/sw\.js', \{ scope: '\/tccc\/' \}\)/);
+  assert.match(output, /data-hongyishi-mobile-nav/);
+  assert.match(output, /href="\/\?tab=tools" aria-current="page"/);
+  assert.doesNotMatch(output, /data-hongyishi-tccc-shell/);
+
+  const flowOutput = rewriteTcccText(
+    '<html><head><title>TCCC标准流程</title></head><body><main>流程</main></body></html>',
+    'pages/TCCC标准流程.html',
+    '/tccc/',
+  );
+  assert.match(flowOutput, /data-hongyishi-tccc-shell/);
+  assert.match(flowOutput, /data-hongyishi-content-governance/);
+  assert.match(flowOutput, /不能替代现行作战医疗规范/);
+  assert.match(flowOutput, /data-hongyishi-mobile-nav/);
 
   const manifest = JSON.stringify({
     name: 'TCCC',
@@ -214,6 +280,62 @@ test('rewriteTcccText scopes root-relative app links, manifest, and service work
   assert.equal(rewrittenManifest.icons[0].src, 'icons/icon-192.png');
 });
 
+test('injectMobileBottomNav is mobile-only and idempotent', () => {
+  const input = '<html><body><main>content</main></body></html>';
+  const once = injectMobileBottomNav(input, 'records');
+  const twice = injectMobileBottomNav(once, 'records');
+
+  assert.match(once, /@media \(max-width: 768px\)/);
+  assert.match(once, /href="\/\?tab=records" aria-current="page"/);
+  assert.match(once, /title="返回红医师主站记录舱"/);
+  assert.match(once, /<small>主站<\/small><span>记录<\/span>/);
+  assert.equal(twice, once);
+});
+
+test('injectContentGovernanceBanner adds source and review state once', () => {
+  const input = '<html><head><title>x</title></head><body><main>content</main></body></html>';
+  const output = injectContentGovernanceBanner(input, {
+    label: '测试项目',
+    sourceName: '测试来源',
+    version: '测试版本',
+    reviewedAt: '2026-06-23',
+    statusLabel: '待复核',
+    disclaimer: '仅供训练参考。',
+    officialUpdateUrl: 'https://example.com/source',
+  });
+
+  assert.match(output, /data-hongyishi-content-governance/);
+  assert.match(output, /内容状态：待复核/);
+  assert.match(output, /来源：测试来源 · 版本：测试版本 · 复核日期：2026-06-23\./);
+  assert.match(output, /href="https:\/\/example\.com\/source"/);
+  assert.equal(injectContentGovernanceBanner(output, {
+    label: '测试项目',
+    sourceName: '测试来源',
+    version: '测试版本',
+    reviewedAt: '2026-06-23',
+    statusLabel: '待复核',
+    disclaimer: '仅供训练参考。',
+  }), output);
+});
+
+test('injectTcccBrandShell adds unified brand context only to TCCC flow pages', () => {
+  const input = `
+    <html><head><title>战术战斗伤员救护 | TCCC官方流程</title></head>
+    <body><script>const html = '<h1>\${step.title}</h1>';</script><div id="tcccMasterContainer"></div></body></html>
+  `;
+  const output = injectTcccBrandShell(input, 'pages/TCCC标准流程.html');
+  const rootOutput = injectTcccBrandShell(input, 'index.html');
+
+  assert.match(output, /data-hongyishi-tccc-shell/);
+  assert.match(output, /红医师 \/ 战场救护/);
+  assert.match(output, /href="\/tccc\/">项目首页/);
+  assert.match(output, /当前流程：战术战斗伤员救护/);
+  assert.match(output, /内容状态：待复核/);
+  assert.match(output, /id="hys-tccc-main"/);
+  assert.equal(rootOutput, input);
+  assert.equal(injectTcccBrandShell(output, 'pages/TCCC标准流程.html'), output);
+});
+
 test('rewriteTcccText replaces Chinese page filenames with Cloudflare-safe aliases', () => {
   assert.equal(mapTcccOutputPath('pages/TCCC标准流程.html'), 'pages/tccc-standard.html');
   assert.equal(mapTcccOutputPath('pages/循环系统教案.html'), 'pages/circulation-course.html');
@@ -225,7 +347,7 @@ test('rewriteTcccText replaces Chinese page filenames with Cloudflare-safe alias
   `;
   const output = rewriteTcccText(input, 'index.html', '/tccc/');
 
-  assert.match(output, /href="pages\/tfc-airway\.html"/);
+  assert.match(output, /href="pages\/tfc-airway"/);
   assert.match(output, /'\/tccc\/pages\/tccc-flow-data\.js'/);
   assert.doesNotMatch(output, /TFC气道算法\.html|TCCC战伤流程数据\.js/);
 });
@@ -258,6 +380,23 @@ test('heat-stroke source pages expose unified brand navigation', async () => {
   }
 });
 
+test('heat-stroke source uses locally built Tailwind CSS without runtime animation vendor', async () => {
+  const htmlFiles = [
+    path.join(repoRoot, 'apps', 'heat-stroke', 'index.html'),
+    ...(await readdir(heatStrokePagesDir))
+      .filter((file) => file.endsWith('.html'))
+      .map((file) => path.join(heatStrokePagesDir, file)),
+  ];
+
+  for (const file of htmlFiles) {
+    const html = await readFile(file, 'utf8');
+    const relative = path.relative(repoRoot, file);
+
+    assert.match(html, /assets\/css\/tailwind\.css/, `${relative} should load built Tailwind CSS`);
+    assert.doesNotMatch(html, /tailwind\.compiler\.js|framer-motion\.js/, `${relative} should not load runtime vendors`);
+  }
+});
+
 test('heat-stroke JavaScript sources do not expose fallback OpenWeather keys', async () => {
   const scriptFiles = (await readdir(heatStrokeScriptsDir)).filter((file) => file.endsWith('.js'));
 
@@ -270,6 +409,11 @@ test('heat-stroke JavaScript sources do not expose fallback OpenWeather keys', a
       source,
       /const\s+FALLBACK_API_KEY\s*=\s*['"][^'"]{8,}['"]/,
       `${file} should not contain a non-empty fallback API key`,
+    );
+    assert.doesNotMatch(
+      source,
+      /https:\/\/api\.openweathermap\.org/,
+      `${file} should not contain a direct OpenWeather API endpoint`,
     );
   }
 });

@@ -47,12 +47,12 @@ export const RiskAlerts = ({
           iconPosition="top-right"
           iconOpacity={0.12}
           as={Card}
-          className="brooklyn-card bg-red-50/50 border-red-200"
+          className="hys-card bg-red-50/50 border-red-200"
         >
           <CardContent className="px-4 md:px-6 py-6 md:py-8">
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-red-800">疼痛预警</h3>
-              <p className="brooklyn-text text-red-700 leading-relaxed">
+              <p className="hys-text text-red-700 leading-relaxed">
                 在以下测试中检测到疼痛反应，这可能表示存在潜在的运动系统功能障碍或组织损伤风险。
               </p>
               
@@ -85,12 +85,12 @@ export const RiskAlerts = ({
           iconPosition="top-right"
           iconOpacity={0.12}
           as={Card}
-          className="brooklyn-card bg-red-50/50 border-red-200"
+          className="hys-card bg-red-50/50 border-red-200"
         >
           <CardContent className="px-4 md:px-6 py-6 md:py-8">
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-red-800">严重不对称风险</h3>
-              <p className="brooklyn-text text-red-700 leading-relaxed">
+              <p className="hys-text text-red-700 leading-relaxed">
                 检测到 {highRiskAsymmetry} 项严重的左右侧功能不对称，这是运动损伤的高风险因素。
               </p>
               
@@ -114,12 +114,12 @@ export const RiskAlerts = ({
           iconPosition="top-right"
           iconOpacity={0.12}
           as={Card}
-          className="brooklyn-card bg-amber-50/50 border-amber-200"
+          className="hys-card bg-amber-50/50 border-amber-200"
         >
           <CardContent className="px-4 md:px-6 py-6 md:py-8">
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-amber-800">排除测试异常</h3>
-              <p className="brooklyn-text text-amber-700 leading-relaxed">
+              <p className="hys-text text-amber-700 leading-relaxed">
                 以下排除测试未能通过，建议在进行相应基础动作评估前优先解决这些问题。
               </p>
               

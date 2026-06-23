@@ -35,11 +35,11 @@ export const DetailedScoreResults: React.FC<DetailedScoreResultsProps> = ({
   testNameMap,
 }) => {
   return (
-    <Card className="brooklyn-card mb-12 md:mb-20">
+    <Card className="hys-card mb-12 md:mb-20">
       <CardContent className="px-4 md:px-6 py-8 md:py-12">
         <div className="text-center mb-6 md:mb-8">
-          <h2 className="brooklyn-title text-2xl mb-4">详细评分结果</h2>
-          <p className="brooklyn-text text-sm">功能性动作模式评估与病理性问题筛查</p>
+          <h2 className="hys-title text-2xl mb-4">详细评分结果</h2>
+          <p className="hys-text text-sm">功能性动作模式评估与病理性问题筛查</p>
         </div>
         
         <div className="space-y-6 px-2 md:px-0">
@@ -55,7 +55,7 @@ export const DetailedScoreResults: React.FC<DetailedScoreResultsProps> = ({
                 const hasAsymmetryForTest = asymmetryIssues[testId];
 
                 return (
-                  <div key={testId} className="p-3 md:p-4 brooklyn-card">
+                  <div key={testId} className="p-3 md:p-4 hys-card">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex-1 min-w-0">
                         <div className="font-medium text-sm mb-1 flex items-center gap-2">
@@ -66,7 +66,7 @@ export const DetailedScoreResults: React.FC<DetailedScoreResultsProps> = ({
                             </Badge>
                           )}
                         </div>
-                        <div className="text-xs brooklyn-text">
+                        <div className="text-xs hys-text">
                           {score === 3 ? '动作质量优秀' : 
                            score === 2 ? '动作质量良好' : 
                            score === 1 ? '动作存在限制' : '检测到疼痛'}
@@ -88,15 +88,15 @@ export const DetailedScoreResults: React.FC<DetailedScoreResultsProps> = ({
                         <div className="grid grid-cols-3 gap-1 md:gap-2 text-center text-xs">
                           <div>
                             <div className="text-blue-600 font-medium">{bilateralData.left}</div>
-                            <div className="brooklyn-text">左侧</div>
+                            <div className="hys-text">左侧</div>
                           </div>
                           <div>
                             <div className="text-muted-foreground">→</div>
-                            <div className="brooklyn-text">取低分</div>
+                            <div className="hys-text">取低分</div>
                           </div>
                           <div>
                             <div className="text-green-600 font-medium">{bilateralData.right}</div>
-                            <div className="brooklyn-text">右侧</div>
+                            <div className="hys-text">右侧</div>
                           </div>
                         </div>
                       </div>
@@ -115,12 +115,12 @@ export const DetailedScoreResults: React.FC<DetailedScoreResultsProps> = ({
             </div>
             <div className="grid gap-3 md:gap-4">
               {clearanceTestsScores.map(([testId, score]) => (
-                <div key={testId} className="flex items-center justify-between p-3 md:p-4 brooklyn-card">
+                <div key={testId} className="flex items-center justify-between p-3 md:p-4 hys-card">
                   <div className="flex-1 min-w-0">
                     <div className="font-medium text-sm mb-1 truncate">
                       {testNameMap[testId]?.split(' (')[0]}
                     </div>
-                    <div className="text-xs brooklyn-text">
+                    <div className="text-xs hys-text">
                       {score === 0 ? '检测到异常，需要关注' : '测试正常，可以继续'}
                     </div>
                   </div>

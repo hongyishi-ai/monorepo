@@ -31,21 +31,21 @@ export const ScoreRadarChart = ({
   
   if (!hasData) {
     return (
-      <Card className="brooklyn-card">
+      <Card className="hys-card">
         <CardContent className="px-4 md:px-6 py-8 md:py-12 text-center">
           <BarChart3 className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-          <p className="brooklyn-text">暂无可视化数据</p>
+          <p className="hys-text">暂无可视化数据</p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="brooklyn-card mb-16 md:mb-20">
+    <Card className="hys-card mb-16 md:mb-20">
       <CardContent className="px-4 md:px-6 py-8 md:py-12" role="region" aria-label="动作模式分析雷达图">
         <div className="text-center mb-12">
-          <h2 className="brooklyn-title text-2xl mb-4">动作模式分析图表</h2>
-          <p className="brooklyn-subtitle">
+          <h2 className="hys-title text-2xl mb-4">动作模式分析图表</h2>
+          <p className="hys-subtitle">
             各项基础测试得分的雷达图分析，直观显示运动功能强弱项分布
           </p>
         </div>
@@ -93,11 +93,11 @@ export const ScoreRadarChart = ({
         <div className="flex items-center justify-center gap-6 mt-8">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-blue-500 rounded-full opacity-50"></div>
-            <span className="text-sm brooklyn-text">当前得分</span>
+            <span className="text-sm hys-text">当前得分</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-1 bg-gray-300 border-dashed border-gray-400"></div>
-            <span className="text-sm brooklyn-text">满分参考</span>
+            <span className="text-sm hys-text">满分参考</span>
           </div>
         </div>
       </CardContent>

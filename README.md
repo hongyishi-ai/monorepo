@@ -59,6 +59,9 @@ pnpm build:cloudflare
 # 本地预览 Cloudflare Pages 输出
 pnpm preview:cloudflare
 
+# 检查内部路由、代表页面和移动端底部栏
+pnpm audit:links
+
 # 类型检查
 pnpm type-check
 
@@ -119,12 +122,21 @@ Secret: OPENWEATHER_API_KEY
 
 仓库根目录的 `wrangler.jsonc` 记录 Pages 项目名、兼容日期和输出目录。Cloudflare 控制台仍需配置构建命令和 `OPENWEATHER_API_KEY` Secret；密钥不进入仓库。
 
+本地 Cloudflare Pages 预览需要在仓库根目录创建私有 `.dev.vars`：
+
+```text
+OPENWEATHER_API_KEY=<your-openweather-key>
+```
+
+`.dev.vars*` 已被 `.gitignore` 排除。没有本地密钥时，热指数页仍会提示使用温湿度手动计算。
+
 上线前检查：
 
 ```bash
 pnpm test:cloudflare
 pnpm build:cloudflare
 pnpm preview:cloudflare
+pnpm audit:links -- --base=http://127.0.0.1:8788
 ```
 
 本地预览至少检查以下路径：
@@ -145,7 +157,7 @@ pnpm preview:cloudflare
 - 桌面和 375px 移动端没有横向溢出。
 - 浏览器网络面板没有静态资源 404/500。
 - `.cloudflare/site/heat-stroke/pages` 只包含 ASCII 页面名。
-- 前端源码和部署产物不得暴露 OpenWeather API key；生产天气请求必须走 `/api/openweather`，并由 Cloudflare Pages Secret 提供 `OPENWEATHER_API_KEY`。
+- 前端源码和部署产物不得暴露 OpenWeather API key；生产天气请求必须走 `/api/openweather`，并由 Cloudflare Pages Secret 提供 `OPENWEATHER_API_KEY`。CSP 不允许前端直连 OpenWeather API。
 
 ## CI/CD
 

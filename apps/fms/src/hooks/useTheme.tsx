@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { safeLocalStorage } from '@/lib/safe-storage';
 
 // 定义主题类型
 export type Theme = 'light' | 'dark';
@@ -17,7 +18,7 @@ export function useTheme() {
     if (typeof window === 'undefined') return 'light';
 
     // 用户本地存储优先
-    const stored = localStorage.getItem('theme');
+    const stored = safeLocalStorage.getItem('theme');
     if (stored === 'light' || stored === 'dark') {
       return stored;
     }
@@ -39,7 +40,7 @@ export function useTheme() {
     if (typeof document === 'undefined') return;
     const root = document.documentElement;
     root.classList.toggle('dark', theme === 'dark');
-    localStorage.setItem('theme', theme);
+    safeLocalStorage.setItem('theme', theme);
   }, [theme]);
 
   /**

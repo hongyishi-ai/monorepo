@@ -1,6 +1,5 @@
-import Footer from "@/app/_components/footer";
 import { HOME_OG_IMAGE_URL } from "@/lib/constants";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Noto_Sans_SC } from "next/font/google";
 import cn from "classnames";
 import { ThemeSwitcher } from "./_components/theme-switcher";
@@ -19,15 +18,30 @@ const notoSansSC = Noto_Sans_SC({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://hongyishi.cn"),
-  title: "红医师 | 官方博客",
+  title: "红医师",
   description:
-    "红医师是一个医疗软件与资源共享项目，涵盖训练伤防治、热射病防治、战场救护、博客与播客等内容。",
+    "红医师一线医疗工具：热射病防治、训练伤防治与战场救护。",
+  appleWebApp: {
+    capable: true,
+    title: "红医师",
+    statusBarStyle: "default",
+  },
+  applicationName: "红医师",
+  manifest: "/favicon/site.webmanifest",
   openGraph: {
-    title: "红医师 | 官方博客",
+    title: "红医师",
     description:
-      "红医师：医疗软件与资源共享项目的内容与动态。",
+      "红医师一线医疗工具。",
     images: [HOME_OG_IMAGE_URL],
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F4ECDC" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+  ],
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -67,8 +81,7 @@ export default function RootLayout({
           name="msapplication-config"
           content="/favicon/browserconfig.xml"
         />
-        <meta name="theme-color" content="#000" />
-        <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+        <meta name="mobile-web-app-capable" content="yes" />
       </head>
       <body
         className={cn(notoSansSC.className, notoSansSC.variable, "dark:bg-black dark:text-slate-400")}

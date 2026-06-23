@@ -163,28 +163,28 @@ describe('Progress 进度组件测试', () => {
 describe('Card 卡片组件测试', () => {
   it('应该正确应用CSS类名', () => {
     render(
-      <div className="brooklyn-card" data-testid="test-card">
-        <div className="brooklyn-card-content">
+      <div className="hys-card" data-testid="test-card">
+        <div className="hys-card-content">
           测试内容
         </div>
       </div>
     )
     
     const card = screen.getByTestId('test-card')
-    expect(card).toHaveClass('brooklyn-card')
+    expect(card).toHaveClass('hys-card')
     expect(screen.getByText('测试内容')).toBeInTheDocument()
   })
 
   it('应该支持不同的卡片变体', () => {
     render(
       <div>
-        <div className="brooklyn-card bg-primary/5" data-testid="primary-card">
+        <div className="hys-card bg-primary/5" data-testid="primary-card">
           主要卡片
         </div>
-        <div className="brooklyn-card bg-red-50" data-testid="error-card">
+        <div className="hys-card bg-red-50" data-testid="error-card">
           错误卡片
         </div>
-        <div className="brooklyn-card bg-amber-50" data-testid="warning-card">
+        <div className="hys-card bg-amber-50" data-testid="warning-card">
           警告卡片
         </div>
       </div>

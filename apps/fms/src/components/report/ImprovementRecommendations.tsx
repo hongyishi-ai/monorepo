@@ -67,12 +67,12 @@ export const ImprovementRecommendations: React.FC<ImprovementRecommendationsProp
         iconSize="xl" 
         iconPosition="bottom-right" 
         iconOpacity={0.05}
-        className="brooklyn-card mb-12"
+        className="hys-card mb-12"
       >
         <CardContent className="px-4 md:px-6 py-8 md:py-12 relative z-10">
           <div className="text-center mb-8 md:mb-12">
-            <h3 className="brooklyn-title text-2xl mb-4">重点改善建议</h3>
-            <p className="brooklyn-subtitle">
+            <h3 className="hys-title text-2xl mb-4">重点改善建议</h3>
+            <p className="hys-subtitle">
               
             </p>
           </div>
@@ -87,14 +87,14 @@ export const ImprovementRecommendations: React.FC<ImprovementRecommendationsProp
                 iconSize="md"
                 iconPosition="top-right"
                 iconOpacity={0.1}
-                className="p-4 md:p-6 bg-background brooklyn-card"
+                className="p-4 md:p-6 bg-background hys-card"
               >
                 <div className="space-y-2 md:space-y-3">
                   <h4 className="font-medium text-sm md:text-base">{test.name} - 动作质量需改善</h4>
-                  <p className="brooklyn-text text-sm leading-relaxed">
+                  <p className="hys-text text-sm leading-relaxed">
                     {test.description}
                   </p>
-                  <p className="text-xs brooklyn-text">
+                  <p className="text-xs hys-text">
                     <strong>改善建议：</strong>
                     针对该动作模式进行专项的灵活性、稳定性和动作控制训练。
                   </p>
@@ -117,15 +117,15 @@ export const ImprovementRecommendations: React.FC<ImprovementRecommendationsProp
                     iconSize="md"
                     iconPosition="top-right"
                     iconOpacity={0.1}
-                    className="p-4 md:p-6 bg-background brooklyn-card"
+                    className="p-4 md:p-6 bg-background hys-card"
                   >
                     <div className="space-y-2 md:space-y-3">
                       <h4 className="font-medium text-sm md:text-base">{test.name} - 不对称性需关注</h4>
-                      <p className="brooklyn-text text-sm leading-relaxed">
+                      <p className="hys-text text-sm leading-relaxed">
                         检测到{asymmetryData.asymmetryLevel === 'severe' ? '严重' : 
                                 asymmetryData.asymmetryLevel === 'moderate' ? '中等' : '轻微'}的左右侧功能差异。
                       </p>
-                      <p className="text-xs brooklyn-text">
+                      <p className="text-xs hys-text">
                         <strong>纠正建议：</strong>
                         重点加强弱侧训练，避免过度依赖优势侧，建立对称的动作模式。
                       </p>
@@ -140,7 +140,7 @@ export const ImprovementRecommendations: React.FC<ImprovementRecommendationsProp
       {/* 康复方案按钮 - 移到卡片外部 */}
       <div className="text-center mb-16 md:mb-20">
         <Link to={`/training${searchParams.get('recordId') ? `?recordId=${searchParams.get('recordId')}` : ''}`}>
-          <Button className="brooklyn-button px-8">
+          <Button className="hys-button px-8">
             <TrendingUp className="w-4 h-4 mr-2" />
             查看专业康复方案
           </Button>

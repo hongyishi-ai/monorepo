@@ -114,7 +114,7 @@ const BilateralScoringCard: React.FC<BilateralScoringCardProps> = ({
         onClick={() => side === 'left' ? setLeftScore(score) : setRightScore(score)}
         variant={isSelected ? 'default' : 'outline'}
         className={cn(
-          "h-auto p-3 text-left brooklyn-button transition-all duration-200 flex flex-col items-center gap-1",
+          "h-auto p-3 text-left hys-button transition-all duration-200 flex flex-col items-center gap-1",
           score === 0 && "border-red-200 hover:border-red-300",
           isSelected && score === 0 && "bg-red-500 hover:bg-red-600 text-white",
           isSelected && score !== 0 && "bg-primary text-primary-foreground"
@@ -224,13 +224,13 @@ const BilateralScoringCard: React.FC<BilateralScoringCardProps> = ({
         iconPosition="top-right"
         iconOpacity={0.08}
         as={Card}
-        className="brooklyn-card"
+        className="hys-card"
       >
         <CardContent className="p-4 md:p-8">
           {/* 标题区域 - 简化 */}
           <div className="text-center mb-6 md:mb-8">
             <h2 className="text-xl font-normal">左右侧分别评分</h2>
-            <p className="brooklyn-text text-sm mt-2">分别对左右两侧进行评分，系统将自动取较低分数</p>
+            <p className="hys-text text-sm mt-2">分别对左右两侧进行评分，系统将自动取较低分数</p>
           </div>
 
           {/* 双侧评分区域 - 重新设计 */}
@@ -243,7 +243,7 @@ const BilateralScoringCard: React.FC<BilateralScoringCardProps> = ({
                   <ChevronLeft className="w-5 h-5 text-blue-600" />
                   <span className="text-lg font-medium text-blue-600">左侧</span>
                 </div>
-                <div className="text-sm brooklyn-text text-blue-700">
+                <div className="text-sm hys-text text-blue-700">
                   {sideInstructions.left}
                 </div>
               </div>
@@ -261,7 +261,7 @@ const BilateralScoringCard: React.FC<BilateralScoringCardProps> = ({
                   <span className="text-lg font-medium text-green-600">右侧</span>
                   <ChevronRight className="w-5 h-5 text-green-600" />
                 </div>
-                <div className="text-sm brooklyn-text text-green-700">
+                <div className="text-sm hys-text text-green-700">
                   {sideInstructions.right}
                 </div>
               </div>
@@ -278,7 +278,7 @@ const BilateralScoringCard: React.FC<BilateralScoringCardProps> = ({
               <Button 
                 onClick={handleSubmit}
                 size="lg"
-                className="brooklyn-button px-8 py-3"
+                className="hys-button px-8 py-3"
               >
                 确认评分并继续下一项测试
               </Button>

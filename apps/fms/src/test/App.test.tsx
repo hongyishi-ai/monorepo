@@ -221,7 +221,7 @@ describe('App 响应式测试', () => {
     renderApp()
     
     // 检查响应式布局
-    const container = screen.getByText('功能性动作筛查').closest('.brooklyn-section')
+    const container = screen.getByText('功能性动作筛查').closest('.hys-section')
     expect(container).toBeInTheDocument()
   })
 })
