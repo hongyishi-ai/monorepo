@@ -380,6 +380,93 @@ test('heat-stroke source pages expose unified brand navigation', async () => {
   }
 });
 
+test('heat-stroke source pages use the Hongyishi visual shell', async () => {
+  const htmlFiles = [
+    path.join(repoRoot, 'apps', 'heat-stroke', 'index.html'),
+    ...(await readdir(heatStrokePagesDir))
+      .filter((file) => file.endsWith('.html'))
+      .map((file) => path.join(heatStrokePagesDir, file)),
+  ];
+  const styles = await readFile(path.join(repoRoot, 'apps', 'heat-stroke', 'assets', 'css', 'styles.css'), 'utf8');
+
+  assert.match(styles, /body\.hys-heat-page/, 'shared styles should define the heat-stroke visual shell');
+  assert.match(styles, /\.hys-heat-card/, 'shared styles should expose reusable heat-stroke card styling');
+  assert.match(styles, /\.hys-heat-button/, 'shared styles should expose reusable heat-stroke button styling');
+
+  for (const file of htmlFiles) {
+    const html = await readFile(file, 'utf8');
+    const relative = path.relative(repoRoot, file);
+    const bodyTag = html.match(/<body[^>]*>/)?.[0] ?? '';
+
+    assert.match(bodyTag, /\bhys-heat-page\b/, `${relative} should opt into the Hongyishi visual shell`);
+    assert.doesNotMatch(bodyTag, /\bbg-black\b/, `${relative} body should not keep the old black app shell`);
+  }
+});
+
+test('heat-stroke interactive tool DOM contracts remain intact', async () => {
+  const contracts = [
+    {
+      file: '热指数查询.html',
+      selectors: [
+        'id="location-input"',
+        'id="search-btn"',
+        'id="manual-temp"',
+        'id="manual-humidity"',
+        'id="calculate-hi-btn"',
+        'id="heat-index-chart"',
+        '../assets/js/script.js',
+      ],
+    },
+    {
+      file: '热射病现场处置.html',
+      selectors: [
+        'id="start-btn"',
+        'id="next-btn-1"',
+        'id="next-btn-2"',
+        'id="next-btn-3"',
+        'id="next-btn-4"',
+        'id="next-btn-5"',
+        'id="finish-btn"',
+        'id="restart-btn"',
+        'id="temperature-input"',
+        'class="custom-checkbox"',
+      ],
+    },
+    {
+      file: '热耐力评估.html',
+      selectors: [
+        'id="height"',
+        'id="weight"',
+        'id="rating-form"',
+        'data-question-id="q1"',
+        'data-question-id="q18"',
+        'id="score-section"',
+        'id="score-display"',
+      ],
+    },
+    {
+      file: '热射病通关挑战.html',
+      selectors: [
+        'id="intro"',
+        'id="prevention"',
+        'id="prevention-quiz"',
+        'id="warning"',
+        'id="treatment"',
+        'id="treatment-quiz"',
+        'id="quiz"',
+      ],
+    },
+  ];
+
+  for (const contract of contracts) {
+    const html = await readFile(path.join(heatStrokePagesDir, contract.file), 'utf8');
+
+    for (const selector of contract.selectors) {
+      assert.match(html, new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), `${contract.file} should retain ${selector}`);
+    }
+  }
+});
+
 test('heat-stroke source uses locally built Tailwind CSS without runtime animation vendor', async () => {
   const htmlFiles = [
     path.join(repoRoot, 'apps', 'heat-stroke', 'index.html'),
