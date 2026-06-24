@@ -1,165 +1,178 @@
-import * as React from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Card, CardContent } from "./card"
-import { cn } from "@/lib/utils"
-import { 
-  AlertTriangle, 
-  ArrowLeftRight, 
+import * as React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Card, CardContent } from "./card";
+import { cn } from "@/lib/utils";
+import {
+  AlertTriangle,
+  ArrowLeftRight,
   ChevronUp,
   Zap,
   Eye,
   Target,
-  BarChart3
-} from "lucide-react"
+  BarChart3,
+} from "lucide-react";
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
   DrawerDescription,
-} from "./drawer"
+} from "./drawer";
 
 interface SmartStatusIndicatorProps {
-  completedBasicTests: number
-  totalBasicTests: number
-  completedClearanceTests: number
-  totalClearanceTests: number
-  asymmetryCount: number
-  painfulCount: number
-  currentTestName?: string
-  currentTestType?: 'basic' | 'clearance'
-  requiresBilateralAssessment?: boolean
-  className?: string
+  completedBasicTests: number;
+  totalBasicTests: number;
+  completedClearanceTests: number;
+  totalClearanceTests: number;
+  asymmetryCount: number;
+  painfulCount: number;
+  currentTestName?: string;
+  currentTestType?: "basic" | "clearance";
+  requiresBilateralAssessment?: boolean;
+  className?: string;
 }
 
-export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatusIndicatorProps>(
-  ({ 
-    completedBasicTests, 
-    totalBasicTests, 
-    completedClearanceTests, 
-    totalClearanceTests, 
-    asymmetryCount, 
-    painfulCount,
-    currentTestName,
-    currentTestType,
-    requiresBilateralAssessment,
-    className,
-    ...props 
-  }, ref) => {
-    const [isVisible, setIsVisible] = React.useState(true)
-    const [isDrawerOpen, setIsDrawerOpen] = React.useState(false)
-    const [isScrollingDown, setIsScrollingDown] = React.useState(false)
-    const [lastScrollY, setLastScrollY] = React.useState(0)
-    const [isDemoDrawerOpen, setIsDemoDrawerOpen] = React.useState(false)
+export const SmartStatusIndicator = React.forwardRef<
+  HTMLDivElement,
+  SmartStatusIndicatorProps
+>(
+  (
+    {
+      completedBasicTests,
+      totalBasicTests,
+      completedClearanceTests,
+      totalClearanceTests,
+      asymmetryCount,
+      painfulCount,
+      currentTestName,
+      currentTestType,
+      requiresBilateralAssessment,
+      className,
+      ...props
+    },
+    ref,
+  ) => {
+    const [isVisible, setIsVisible] = React.useState(true);
+    const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+    const [isScrollingDown, setIsScrollingDown] = React.useState(false);
+    const [lastScrollY, setLastScrollY] = React.useState(0);
+    const [isDemoDrawerOpen, setIsDemoDrawerOpen] = React.useState(false);
 
     // 总进度计算
-    const totalCompleted = completedBasicTests + completedClearanceTests
-    const totalTests = totalBasicTests + totalClearanceTests
-    const progressPercentage = Math.round((totalCompleted / totalTests) * 100)
+    const totalCompleted = completedBasicTests + completedClearanceTests;
+    const totalTests = totalBasicTests + totalClearanceTests;
+    const progressPercentage = Math.round((totalCompleted / totalTests) * 100);
 
     // 滚动监听逻辑
     React.useEffect(() => {
-      let ticking = false
+      let ticking = false;
 
       const handleScroll = () => {
         if (!ticking) {
           requestAnimationFrame(() => {
-            const currentScrollY = window.scrollY
-            
+            const currentScrollY = window.scrollY;
+
             // 判断滚动方向
             if (currentScrollY > lastScrollY && currentScrollY > 150) {
               // 向下滚动且滚动距离大于150px时半透明显示
-              setIsScrollingDown(true)
+              setIsScrollingDown(true);
               if (isDrawerOpen) {
-                setIsDrawerOpen(false) // 滚动时自动关闭抽屉
+                setIsDrawerOpen(false); // 滚动时自动关闭抽屉
               }
             } else if (currentScrollY < lastScrollY || currentScrollY <= 100) {
               // 向上滚动或回到顶部时完全显示
-              setIsScrollingDown(false)
+              setIsScrollingDown(false);
             }
-            
-            setLastScrollY(currentScrollY)
-            ticking = false
-          })
-          ticking = true
-        }
-      }
 
-      window.addEventListener('scroll', handleScroll, { passive: true })
-      return () => window.removeEventListener('scroll', handleScroll)
-    }, [lastScrollY, isDrawerOpen])
+            setLastScrollY(currentScrollY);
+            ticking = false;
+          });
+          ticking = true;
+        }
+      };
+
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      return () => window.removeEventListener("scroll", handleScroll);
+    }, [lastScrollY, isDrawerOpen]);
 
     // 键盘快捷键支持
     React.useEffect(() => {
       const handleKeyPress = (e: KeyboardEvent) => {
         // Alt + S 切换状态指示器
-        if (e.altKey && e.key === 's') {
-          e.preventDefault()
-          setIsDrawerOpen(!isDrawerOpen)
+        if (e.altKey && e.key === "s") {
+          e.preventDefault();
+          setIsDrawerOpen(!isDrawerOpen);
         }
         // Escape 关闭展开的面板
-        if (e.key === 'Escape' && isDrawerOpen) {
-          setIsDrawerOpen(false)
+        if (e.key === "Escape" && isDrawerOpen) {
+          setIsDrawerOpen(false);
         }
-      }
+      };
 
-      window.addEventListener('keydown', handleKeyPress)
-      return () => window.removeEventListener('keydown', handleKeyPress)
-    }, [isDrawerOpen])
+      window.addEventListener("keydown", handleKeyPress);
+      return () => window.removeEventListener("keydown", handleKeyPress);
+    }, [isDrawerOpen]);
 
     // 监听演示指引抽屉开关，打开时弱化本指示器，避免双悬浮抢占注意力
     React.useEffect(() => {
       const handleDemoToggle = (e: Event) => {
         try {
-          const custom = e as CustomEvent<boolean>
-          setIsDemoDrawerOpen(!!custom.detail)
+          const custom = e as CustomEvent<boolean>;
+          setIsDemoDrawerOpen(!!custom.detail);
         } catch {
           // ignore
         }
-      }
-      window.addEventListener('demoDrawerToggle', handleDemoToggle as EventListener)
-      return () => window.removeEventListener('demoDrawerToggle', handleDemoToggle as EventListener)
-    }, [])
+      };
+      window.addEventListener(
+        "demoDrawerToggle",
+        handleDemoToggle as EventListener,
+      );
+      return () =>
+        window.removeEventListener(
+          "demoDrawerToggle",
+          handleDemoToggle as EventListener,
+        );
+    }, []);
 
     // 自动隐藏逻辑：如果没有任何完成的测试，隐藏组件
     React.useEffect(() => {
-      setIsVisible(totalCompleted > 0)
-    }, [totalCompleted])
+      setIsVisible(totalCompleted > 0);
+    }, [totalCompleted]);
 
     // 动态图标选择
     const getStatusIcon = () => {
       if (requiresBilateralAssessment) {
-        return <ArrowLeftRight className="w-4 h-4 text-blue-600" />
+        return <ArrowLeftRight className="w-4 h-4 text-blue-600" />;
       }
-      if (currentTestType === 'clearance') {
-        return <AlertTriangle className="w-4 h-4 text-amber-600" />
+      if (currentTestType === "clearance") {
+        return <AlertTriangle className="w-4 h-4 text-amber-600" />;
       }
       if (asymmetryCount > 0 || painfulCount > 0) {
-        return <Zap className="w-4 h-4 text-red-500" />
+        return <Zap className="w-4 h-4 text-red-500" />;
       }
-      return <Target className="w-4 h-4 text-primary" />
-    }
+      return <Target className="w-4 h-4 text-primary" />;
+    };
 
     // 状态描述
     const getStatusText = () => {
       if (requiresBilateralAssessment) {
-        return "双侧评估"
+        return "双侧评估";
       }
-      if (currentTestType === 'clearance') {
-        return "排除测试"
+      if (currentTestType === "clearance") {
+        return "排除测试";
       }
       if (asymmetryCount > 0 || painfulCount > 0) {
-        return "需要关注"
+        return "需要关注";
       }
-      return "进行中"
-    }
+      return "进行中";
+    };
 
-    if (!isVisible) return null
+    if (!isVisible) return null;
 
     return (
       <>
         <div
-          className="relative z-10 mb-4 lg:fixed lg:right-6 lg:bottom-6 lg:z-50 lg:mb-0"
+          className="z-10 mb-4 lg:fixed lg:right-6 lg:bottom-6 lg:z-50 lg:mb-0"
           data-hys-assist-control="status"
           data-tour-id="assessment-status-detail"
         >
@@ -167,36 +180,38 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
             <motion.div
               ref={ref}
               initial={{ opacity: 0, scale: 0.8, y: 20 }}
-              animate={{ 
-                opacity: isScrollingDown ? 0.3 : 1, 
-                scale: isScrollingDown ? 0.9 : 1, 
-                y: isScrollingDown ? 10 : 0 
+              animate={{
+                opacity: isScrollingDown ? 0.3 : 1,
+                scale: isScrollingDown ? 0.9 : 1,
+                y: isScrollingDown ? 10 : 0,
               }}
               exit={{ opacity: 0, scale: 0.8, y: 20 }}
               transition={{
                 type: "spring",
                 stiffness: 300,
                 damping: 25,
-                mass: 0.8
+                mass: 0.8,
               }}
               className={cn("", className)}
               {...props}
             >
-              <Card 
+              <Card
                 className={cn(
                   "hys-card hys-mobile-assist-card bg-card/95 backdrop-blur-md border shadow-lg hover:shadow-xl cursor-pointer overflow-hidden md:h-auto md:w-auto",
                   "active:scale-95 touch-manipulation smart-status-transition smart-indicator-border-glow",
                   isScrollingDown && "indicator-dimmed",
                   !isScrollingDown && "indicator-focused",
-                  (requiresBilateralAssessment || asymmetryCount > 0 || painfulCount > 0) && "smart-indicator-border-glow"
-                ,
-                isDemoDrawerOpen && "opacity-40 pointer-events-none"
+                  (requiresBilateralAssessment ||
+                    asymmetryCount > 0 ||
+                    painfulCount > 0) &&
+                    "smart-indicator-border-glow",
+                  isDemoDrawerOpen && "opacity-40 pointer-events-none",
                 )}
                 onClick={() => setIsDrawerOpen(true)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault()
-                    setIsDrawerOpen(true)
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setIsDrawerOpen(true);
                   }
                 }}
                 tabIndex={0}
@@ -213,26 +228,34 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
                   >
                     <div className="flex items-center gap-3">
                       {/* 动态状态图标 */}
-                      <div className={cn(
-                        "relative",
-                        requiresBilateralAssessment && "smart-indicator-glow",
-                        (asymmetryCount > 0 || painfulCount > 0) && "smart-indicator-pulse"
-                      )}>
-                        <div className={cn(
-                          "w-9 h-9 md:h-10 md:w-10 flex items-center justify-center border-2 transition-all duration-300",
-                          requiresBilateralAssessment 
-                            ? "bg-blue-50 border-blue-200" 
-                            : currentTestType === 'clearance'
-                            ? "bg-amber-50 border-amber-200"
-                            : (asymmetryCount > 0 || painfulCount > 0)
-                            ? "bg-red-50 border-red-200"
-                            : "bg-secondary/10 border-transparent"
-                        )}>
+                      <div
+                        className={cn(
+                          "relative",
+                          requiresBilateralAssessment && "smart-indicator-glow",
+                          (asymmetryCount > 0 || painfulCount > 0) &&
+                            "smart-indicator-pulse",
+                        )}
+                      >
+                        <div
+                          className={cn(
+                            "w-9 h-9 md:h-10 md:w-10 flex items-center justify-center border-2 transition-all duration-300",
+                            requiresBilateralAssessment
+                              ? "bg-blue-50 border-blue-200"
+                              : currentTestType === "clearance"
+                                ? "bg-amber-50 border-amber-200"
+                                : asymmetryCount > 0 || painfulCount > 0
+                                  ? "bg-red-50 border-red-200"
+                                  : "bg-secondary/10 border-transparent",
+                          )}
+                        >
                           {getStatusIcon()}
                         </div>
-                        
+
                         {/* 进度环 */}
-                        <svg className="absolute inset-0 h-9 w-9 -rotate-90 md:h-10 md:w-10" viewBox="0 0 40 40">
+                        <svg
+                          className="absolute inset-0 h-9 w-9 -rotate-90 md:h-10 md:w-10"
+                          viewBox="0 0 40 40"
+                        >
                           <circle
                             cx="20"
                             cy="20"
@@ -248,10 +271,13 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
                             r="18"
                             fill="none"
                             stroke={
-                              requiresBilateralAssessment ? "hsl(217 91% 60%)" :
-                              currentTestType === 'clearance' ? "hsl(43 96% 56%)" :
-                              (asymmetryCount > 0 || painfulCount > 0) ? "hsl(0 84% 60%)" :
-                              "hsl(var(--primary))"
+                              requiresBilateralAssessment
+                                ? "hsl(217 91% 60%)"
+                                : currentTestType === "clearance"
+                                  ? "hsl(43 96% 56%)"
+                                  : asymmetryCount > 0 || painfulCount > 0
+                                    ? "hsl(0 84% 60%)"
+                                    : "hsl(var(--primary))"
                             }
                             strokeWidth="2"
                             strokeDasharray={`${2 * Math.PI * 18}`}
@@ -267,19 +293,22 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
                             <div className="w-full h-full bg-blue-400 animate-ping opacity-75" />
                           </div>
                         )}
-                        
+
                         {/* 警告指示点 */}
-                        {(asymmetryCount > 0 || painfulCount > 0) && !requiresBilateralAssessment && (
-                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 border-2 border-card">
-                            <div className="w-full h-full bg-red-400 animate-pulse" />
-                          </div>
-                        )}
+                        {(asymmetryCount > 0 || painfulCount > 0) &&
+                          !requiresBilateralAssessment && (
+                            <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 border-2 border-card">
+                              <div className="w-full h-full bg-red-400 animate-pulse" />
+                            </div>
+                          )}
                       </div>
 
                       {/* 核心信息 */}
                       <div className="hys-mobile-assist-label min-w-0 text-left">
                         <div className="text-sm font-medium text-foreground flex items-center gap-2">
-                          <span>{totalCompleted}/{totalTests}</span>
+                          <span>
+                            {totalCompleted}/{totalTests}
+                          </span>
                           <ChevronUp className="w-3 h-3 text-muted-foreground opacity-50" />
                         </div>
                         <div className="text-xs text-muted-foreground truncate">
@@ -300,10 +329,13 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
             <DrawerHeader className="text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <BarChart3 className="w-5 h-5 text-primary" />
-                <DrawerTitle className="text-lg font-normal">FMS测试状态详情</DrawerTitle>
+                <DrawerTitle className="text-lg font-normal">
+                  FMS测试状态详情
+                </DrawerTitle>
               </div>
               <DrawerDescription className="hys-text">
-                当前评估进度：{progressPercentage}% ({totalCompleted}/{totalTests})
+                当前评估进度：{progressPercentage}% ({totalCompleted}/
+                {totalTests})
               </DrawerDescription>
             </DrawerHeader>
 
@@ -315,12 +347,14 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
                     <div className="flex items-center justify-center gap-2 mb-3">
                       {requiresBilateralAssessment ? (
                         <ArrowLeftRight className="w-5 h-5 text-blue-600" />
-                      ) : currentTestType === 'clearance' ? (
+                      ) : currentTestType === "clearance" ? (
                         <AlertTriangle className="w-5 h-5 text-amber-600" />
                       ) : (
                         <Eye className="w-5 h-5 text-primary" />
                       )}
-                      <span className="text-sm font-medium text-foreground">当前测试</span>
+                      <span className="text-sm font-medium text-foreground">
+                        当前测试
+                      </span>
                     </div>
                     <div className="text-base hys-text mb-2">
                       {currentTestName}
@@ -337,7 +371,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
               {/* 统计信息网格 */}
               <div className="grid grid-cols-2 gap-4 mb-6">
                 {/* 基础测试 */}
-                  <div className="hys-panel p-4 text-center">
+                <div className="hys-panel p-4 text-center">
                   <div className="text-2xl font-light text-primary mb-2">
                     {completedBasicTests}
                   </div>
@@ -348,7 +382,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
                 </div>
 
                 {/* 排除测试 */}
-                  <div className="hys-panel p-4 text-center">
+                <div className="hys-panel p-4 text-center">
                   <div className="text-2xl font-light text-amber-600 mb-2">
                     {completedClearanceTests}
                   </div>
@@ -387,9 +421,13 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
                 <div className="hys-text text-sm space-y-2">
                   <div>向下滑动或点击外部区域可关闭</div>
                   <div className="hidden items-center justify-center gap-2 text-xs sm:flex">
-                    <kbd className="px-2 py-1 text-xs font-mono bg-muted rounded border">Alt</kbd>
+                    <kbd className="px-2 py-1 text-xs font-mono bg-muted rounded border">
+                      Alt
+                    </kbd>
                     <span>+</span>
-                    <kbd className="px-2 py-1 text-xs font-mono bg-muted rounded border">S</kbd>
+                    <kbd className="px-2 py-1 text-xs font-mono bg-muted rounded border">
+                      S
+                    </kbd>
                     <span className="ml-1">快速切换</span>
                   </div>
                 </div>
@@ -398,8 +436,8 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
           </DrawerContent>
         </Drawer>
       </>
-    )
-  }
-)
+    );
+  },
+);
 
-SmartStatusIndicator.displayName = "SmartStatusIndicator" 
+SmartStatusIndicator.displayName = "SmartStatusIndicator";

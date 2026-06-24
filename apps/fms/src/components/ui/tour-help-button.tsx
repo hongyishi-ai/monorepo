@@ -1,40 +1,35 @@
-import React from 'react';
-import { Button } from './button';
-import { HelpCircle } from 'lucide-react';
-import { useProductTour } from '@/hooks/useProductTour';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { Button } from "./button";
+import { HelpCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface TourHelpButtonProps {
-  variant?: 'ghost' | 'outline' | 'secondary';
-  size?: 'default' | 'sm' | 'lg' | 'icon';
+  variant?: "ghost" | "outline" | "secondary";
+  size?: "default" | "sm" | "lg" | "icon";
   className?: string;
   showText?: boolean;
   label?: string;
-  position?: 'fixed' | 'inline';
+  position?: "fixed" | "inline";
 }
 
-/**
- * 首页产品引导帮助按钮组件
- * 仅在首页使用，点击后启动首页的产品引导
- */
+const START_TOUR_EVENT = "hys:fms:start-tour";
+
 export const TourHelpButton: React.FC<TourHelpButtonProps> = ({
-  variant = 'ghost',
-  size = 'sm',
+  variant = "ghost",
+  size = "sm",
   className,
   showText = false,
-  label = '使用引导',
-  position = 'inline'
+  label = "使用引导",
+  position = "inline",
 }) => {
-  const { startTourManually } = useProductTour();
-
   const handleClick = () => {
-    startTourManually();
+    window.dispatchEvent(new CustomEvent(START_TOUR_EVENT));
   };
 
   const buttonClass = cn(
-    'text-muted-foreground hover:text-foreground transition-colors',
-    position === 'fixed' && 'fixed bottom-4 right-4 z-50 shadow-lg',
-    className
+    "text-muted-foreground hover:text-foreground transition-colors",
+    position === "fixed" && "fixed bottom-4 right-4 z-50 shadow-lg",
+    className,
   );
 
   return (

@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from './button';
-import { Card, CardContent, CardHeader, CardTitle } from './card';
-import { Badge } from './badge';
-import { X, ArrowRight, ArrowLeft, Target, Sparkles } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "./button";
+import { Card, CardContent, CardHeader, CardTitle } from "./card";
+import { Badge } from "./badge";
+import { X, ArrowRight, ArrowLeft, Target, Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // 引导步骤的配置接口
 export interface TourStep {
@@ -14,7 +14,7 @@ export interface TourStep {
   description: string;
   content?: React.ReactNode;
   target?: string; // CSS 选择器
-  placement?: 'top' | 'bottom' | 'left' | 'right' | 'center';
+  placement?: "top" | "bottom" | "left" | "right" | "center";
   spotlightPadding?: number;
   highlightColor?: string;
   action?: {
@@ -58,34 +58,42 @@ export const ProductTour: React.FC<ProductTourProps> = ({
   isOpen,
   onRequestClose,
   config,
-  className
+  className,
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [targetBounds, setTargetBounds] = useState<DOMRect | null>(null);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const overlayRef = useRef<HTMLDivElement>(null);
   const stepCardRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
+  const scrollTimeoutRef = useRef<number | null>(null);
 
   // 本地化配置
   const locale = {
-    back: '上一步',
-    close: '关闭',
-    last: '完成',
-    next: '下一步',
-    skip: '跳过引导',
-    of: '/',
-    ...config.locale
+    back: "上一步",
+    close: "关闭",
+    last: "完成",
+    next: "下一步",
+    skip: "跳过引导",
+    of: "/",
+    ...config.locale,
   };
 
   // 更新窗口尺寸
   const updateWindowSize = useCallback(() => {
     setWindowSize({
       width: window.innerWidth,
-      height: window.innerHeight
+      height: window.innerHeight,
     });
   }, []);
 
-  // 获取目标元素的位置
+  const prefersReducedMotion = useCallback(() => {
+    return typeof window.matchMedia === "function"
+      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      : false;
+  }, []);
+
+  // 获取目标元素的位置。测量和滚动必须分离，避免 scroll 事件触发 smooth scroll 反馈环。
   const updateTargetBounds = useCallback(() => {
     const step = config.steps[currentStep];
     if (!step?.target) {
@@ -97,49 +105,106 @@ export const ProductTour: React.FC<ProductTourProps> = ({
     if (element) {
       const bounds = element.getBoundingClientRect();
       setTargetBounds(bounds);
-
-      // 添加平滑滚动到目标元素
-      const scrollToTarget = () => {
-        const elementTop = window.pageYOffset + bounds.top;
-        const elementCenter = elementTop - (window.innerHeight / 2) + (bounds.height / 2);
-        
-        window.scrollTo({
-          top: Math.max(0, elementCenter),
-          behavior: 'smooth'
-        });
-      };
-
-      // 延迟滚动，确保步骤卡片动画完成后再滚动
-      setTimeout(scrollToTarget, 300);
     } else {
       setTargetBounds(null);
     }
   }, [currentStep, config.steps]);
+
+  const scheduleTargetBoundsUpdate = useCallback(() => {
+    if (rafRef.current !== null) {
+      window.cancelAnimationFrame(rafRef.current);
+    }
+
+    rafRef.current = window.requestAnimationFrame(() => {
+      rafRef.current = null;
+      updateTargetBounds();
+    });
+  }, [updateTargetBounds]);
+
+  const scrollCurrentStepIntoView = useCallback(() => {
+    const step = config.steps[currentStep];
+    if (!step?.target) {
+      setTargetBounds(null);
+      return;
+    }
+
+    const element = document.querySelector(step.target);
+    if (!element) {
+      setTargetBounds(null);
+      return;
+    }
+
+    element.scrollIntoView({
+      block: "center",
+      inline: "center",
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
+
+    scheduleTargetBoundsUpdate();
+
+    if (scrollTimeoutRef.current !== null) {
+      window.clearTimeout(scrollTimeoutRef.current);
+    }
+
+    scrollTimeoutRef.current = window.setTimeout(
+      () => {
+        scrollTimeoutRef.current = null;
+        scheduleTargetBoundsUpdate();
+      },
+      prefersReducedMotion() ? 0 : 360,
+    );
+  }, [
+    currentStep,
+    config.steps,
+    prefersReducedMotion,
+    scheduleTargetBoundsUpdate,
+  ]);
 
   // 监听窗口大小变化和滚动
   useEffect(() => {
     if (!isOpen) return;
 
     updateWindowSize();
-    updateTargetBounds();
+    scheduleTargetBoundsUpdate();
 
     const handleResize = () => {
       updateWindowSize();
-      updateTargetBounds();
+      scheduleTargetBoundsUpdate();
     };
 
     const handleScroll = () => {
-      updateTargetBounds();
+      scheduleTargetBoundsUpdate();
     };
 
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", handleScroll);
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
     };
-  }, [isOpen, updateWindowSize, updateTargetBounds]);
+  }, [isOpen, updateWindowSize, scheduleTargetBoundsUpdate]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    setCurrentStep(0);
+  }, [isOpen, config.steps]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    scrollCurrentStepIntoView();
+
+    return () => {
+      if (scrollTimeoutRef.current !== null) {
+        window.clearTimeout(scrollTimeoutRef.current);
+        scrollTimeoutRef.current = null;
+      }
+    };
+  }, [isOpen, currentStep, scrollCurrentStepIntoView]);
 
   // 键盘事件处理
   useEffect(() => {
@@ -147,15 +212,15 @@ export const ProductTour: React.FC<ProductTourProps> = ({
 
     const handleKeyDown = (e: KeyboardEvent) => {
       switch (e.key) {
-        case 'Escape':
+        case "Escape":
           onRequestClose();
           break;
-        case 'ArrowRight':
+        case "ArrowRight":
           if (currentStep < config.steps.length - 1) {
             setCurrentStep(currentStep + 1);
           }
           break;
-        case 'ArrowLeft':
+        case "ArrowLeft":
           if (currentStep > 0) {
             setCurrentStep(currentStep - 1);
           }
@@ -163,21 +228,23 @@ export const ProductTour: React.FC<ProductTourProps> = ({
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, currentStep, config.steps.length, onRequestClose]);
 
-  // 阻止背景滚动
+  // 仅无目标的居中引导需要锁定背景滚动；目标型引导必须允许页面定位。
   useEffect(() => {
     if (!isOpen || config.disableScrolling === false) return;
+    const step = config.steps[currentStep];
+    if (step?.target) return;
 
     const originalStyle = window.getComputedStyle(document.body).overflow;
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
 
     return () => {
       document.body.style.overflow = originalStyle;
     };
-  }, [isOpen, config.disableScrolling]);
+  }, [isOpen, config.disableScrolling, config.steps, currentStep]);
 
   // 处理步骤导航
   const handleNext = () => {
@@ -208,28 +275,28 @@ export const ProductTour: React.FC<ProductTourProps> = ({
     const cardWidth = isMobile ? Math.min(windowSize.width - 40, 350) : 380;
     const cardHeight = isMobile ? 280 : 300;
 
-    if (!targetBounds || step.placement === 'center') {
+    if (!targetBounds || step.placement === "center") {
       return {
         top: (windowSize.height - cardHeight) / 2,
         left: (windowSize.width - cardWidth) / 2,
-        transform: 'none'
+        transform: "none",
       };
     }
 
-    const placement = step.placement || 'bottom';
+    const placement = step.placement || "bottom";
     let top = 0;
     let left = 0;
 
     switch (placement) {
-      case 'top':
+      case "top":
         top = targetBounds.top - cardHeight - padding;
         left = targetBounds.left + (targetBounds.width - cardWidth) / 2;
         break;
-      case 'bottom':
+      case "bottom":
         top = targetBounds.bottom + padding;
         left = targetBounds.left + (targetBounds.width - cardWidth) / 2;
         break;
-      case 'left':
+      case "left":
         // 移动端可能需要调整为上下布局
         if (isMobile) {
           top = targetBounds.bottom + padding;
@@ -239,7 +306,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
           left = targetBounds.left - cardWidth - padding;
         }
         break;
-      case 'right':
+      case "right":
         // 移动端可能需要调整为上下布局
         if (isMobile) {
           top = targetBounds.bottom + padding;
@@ -252,10 +319,16 @@ export const ProductTour: React.FC<ProductTourProps> = ({
     }
 
     // 确保卡片在视口内
-    top = Math.max(padding, Math.min(top, windowSize.height - cardHeight - padding));
-    left = Math.max(padding, Math.min(left, windowSize.width - cardWidth - padding));
+    top = Math.max(
+      padding,
+      Math.min(top, windowSize.height - cardHeight - padding),
+    );
+    left = Math.max(
+      padding,
+      Math.min(left, windowSize.width - cardWidth - padding),
+    );
 
-    return { top, left, transform: 'none' };
+    return { top, left, transform: "none" };
   }, [targetBounds, windowSize, currentStep, config.steps]);
 
   if (!isOpen) return null;
@@ -303,14 +376,17 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                     </CardTitle>
                     {config.showProgress && (
                       <div className="flex items-center gap-2 mt-1">
-                          <Badge variant="secondary" className="border-2 border-border text-xs">
+                        <Badge
+                          variant="secondary"
+                          className="border-2 border-border text-xs"
+                        >
                           {currentStep + 1} {locale.of} {config.steps.length}
                         </Badge>
                         <div className="h-1 flex-1 overflow-hidden border border-border bg-muted">
                           <div
                             className="h-full bg-primary transition-all duration-300"
                             style={{
-                              width: `${((currentStep + 1) / config.steps.length) * 100}%`
+                              width: `${((currentStep + 1) / config.steps.length) * 100}%`,
                             }}
                           />
                         </div>
@@ -333,7 +409,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {step.description}
                 </p>
-                
+
                 {step.content && (
                   <div className="border-2 border-border bg-muted/50 p-3">
                     {step.content}
@@ -380,11 +456,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                         </Button>
                       )}
                     </div>
-                    <Button
-                      onClick={handleNext}
-                      size="sm"
-                      className="ml-auto"
-                    >
+                    <Button onClick={handleNext} size="sm" className="ml-auto">
                       {isLastStep ? locale.last : locale.next}
                       {!isLastStep && <ArrowRight className="w-4 h-4 ml-1" />}
                     </Button>
@@ -396,7 +468,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
         </motion.div>
       </AnimatePresence>
     </div>,
-    document.body
+    document.body,
   );
 };
 
@@ -410,11 +482,19 @@ interface TourOverlayProps {
 }
 
 const TourOverlay = React.forwardRef<HTMLDivElement, TourOverlayProps>(
-  ({ target, padding = 8, highlightColor = 'rgba(255, 255, 255, 0.1)', disabled }, ref) => {
+  (
+    {
+      target,
+      padding = 8,
+      highlightColor = "rgba(255, 255, 255, 0.1)",
+      disabled,
+    },
+    ref,
+  ) => {
     if (disabled) return null;
 
     const createClipPath = () => {
-      if (!target) return 'inset(0 0 0 0)';
+      if (!target) return "inset(0 0 0 0)";
 
       const { top, left, width, height } = target;
       const p = padding;
@@ -448,7 +528,7 @@ const TourOverlay = React.forwardRef<HTMLDivElement, TourOverlayProps>(
             radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.4) 40%),
             linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5))
           `,
-          clipPath: createClipPath()
+          clipPath: createClipPath(),
         }}
       >
         {/* 高亮边框 */}
@@ -461,15 +541,15 @@ const TourOverlay = React.forwardRef<HTMLDivElement, TourOverlayProps>(
               width: target.width + padding * 2,
               height: target.height + padding * 2,
               borderColor: highlightColor,
-              boxShadow: `0 0 0 4px ${highlightColor}20, 0 0 20px ${highlightColor}40`
+              boxShadow: `0 0 0 4px ${highlightColor}20, 0 0 20px ${highlightColor}40`,
             }}
           />
         )}
       </div>
     );
-  }
+  },
 );
 
-TourOverlay.displayName = 'TourOverlay';
+TourOverlay.displayName = "TourOverlay";
 
 export default ProductTour;

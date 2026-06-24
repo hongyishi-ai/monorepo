@@ -1,38 +1,40 @@
 #!/usr/bin/env node
 
-const defaultBaseUrl = 'http://127.0.0.1:3021';
+const defaultBaseUrl = "http://127.0.0.1:3021";
 const args = new Set(process.argv.slice(2));
-const baseArg = process.argv.find((arg) => arg.startsWith('--base='));
-const baseUrl = (baseArg ? baseArg.split('=')[1] : process.env.HONGYISHI_AUDIT_BASE_URL) ?? defaultBaseUrl;
-const shouldCheckExternal = args.has('--external');
-const shouldCheckMobileNav = !args.has('--no-mobile-nav');
-const shouldCheckUsageGuides = !args.has('--no-usage-guides');
+const baseArg = process.argv.find((arg) => arg.startsWith("--base="));
+const baseUrl =
+  (baseArg ? baseArg.split("=")[1] : process.env.HONGYISHI_AUDIT_BASE_URL) ??
+  defaultBaseUrl;
+const shouldCheckExternal = args.has("--external");
+const shouldCheckMobileNav = !args.has("--no-mobile-nav");
+const shouldCheckUsageGuides = !args.has("--no-usage-guides");
 
 const representativeRoutes = [
-  '/',
-  '/blog',
-  '/offline',
-  '/heat-stroke/',
-  '/heat-stroke/pages/field-treatment',
-  '/heat-stroke/pages/heat-index',
-  '/heat-stroke/pages/8-4-6-rule',
-  '/tccc/',
-  '/tccc/pages/tccc-standard',
-  '/tccc/pages/tfc-airway',
-  '/tccc/pages/tccc-flow-framework',
-  '/fms/',
-  '/fms/assessment',
-  '/fms/history',
-  '/fms/report',
-  '/fms/training',
-  '/fms/education',
-  '/fms/about',
+  "/",
+  "/blog",
+  "/offline",
+  "/heat-stroke/",
+  "/heat-stroke/pages/field-treatment",
+  "/heat-stroke/pages/heat-index",
+  "/heat-stroke/pages/8-4-6-rule",
+  "/tccc/",
+  "/tccc/pages/tccc-standard",
+  "/tccc/pages/tfc-airway",
+  "/tccc/pages/tccc-flow-framework",
+  "/fms/",
+  "/fms/assessment",
+  "/fms/history",
+  "/fms/report",
+  "/fms/training",
+  "/fms/education",
+  "/fms/about",
 ];
 
-function normalizeUrl(value, currentPath = '/') {
+function normalizeUrl(value, currentPath = "/") {
   try {
     const url = new URL(value, new URL(currentPath, baseUrl));
-    url.hash = '';
+    url.hash = "";
     return url;
   } catch {
     return null;
@@ -66,13 +68,15 @@ function extractLinks(html, currentPath) {
 }
 
 function shouldIgnoreInternalPath(pathname) {
-  return pathname.startsWith('/cdn-cgi/');
+  return pathname.startsWith("/cdn-cgi/");
 }
 
 async function fetchPage(pathname) {
-  const response = await fetch(new URL(pathname, baseUrl), { redirect: 'follow' });
-  const contentType = response.headers.get('content-type') ?? '';
-  const body = contentType.includes('text/html') ? await response.text() : '';
+  const response = await fetch(new URL(pathname, baseUrl), {
+    redirect: "follow",
+  });
+  const contentType = response.headers.get("content-type") ?? "";
+  const body = contentType.includes("text/html") ? await response.text() : "";
 
   return {
     body,
@@ -85,7 +89,7 @@ async function fetchPage(pathname) {
 
 async function crawlInternalLinks() {
   const origin = new URL(baseUrl).origin;
-  const queue = ['/'];
+  const queue = ["/"];
   const visited = new Set();
   const checked = [];
   const external = new Map();
@@ -99,9 +103,13 @@ async function crawlInternalLinks() {
 
     visited.add(pathname);
     const result = await fetchPage(pathname);
-    checked.push({ path: pathname, status: result.status, finalUrl: result.finalUrl });
+    checked.push({
+      path: pathname,
+      status: result.status,
+      finalUrl: result.finalUrl,
+    });
 
-    if (!result.ok || !result.contentType.includes('text/html')) {
+    if (!result.ok || !result.contentType.includes("text/html")) {
       continue;
     }
 
@@ -109,7 +117,11 @@ async function crawlInternalLinks() {
       if (url.origin === origin) {
         const nextPath = `${url.pathname}${url.search}`;
 
-        if (!shouldIgnoreInternalPath(url.pathname) && !visited.has(nextPath) && !queue.includes(nextPath)) {
+        if (
+          !shouldIgnoreInternalPath(url.pathname) &&
+          !visited.has(nextPath) &&
+          !queue.includes(nextPath)
+        ) {
           queue.push(nextPath);
         }
       } else if (shouldCheckExternal && /^https?:$/.test(url.protocol)) {
@@ -130,7 +142,11 @@ async function checkRepresentativeRoutes() {
   for (const route of representativeRoutes) {
     try {
       const result = await fetchPage(route);
-      results.push({ path: route, status: result.status, finalUrl: result.finalUrl });
+      results.push({
+        path: route,
+        status: result.status,
+        finalUrl: result.finalUrl,
+      });
     } catch (error) {
       results.push({ path: route, error: String(error) });
     }
@@ -150,20 +166,20 @@ async function checkExternalLinks(external) {
 
     try {
       let response = await fetch(url, {
-        method: 'HEAD',
-        redirect: 'follow',
+        method: "HEAD",
+        redirect: "follow",
         signal: controller.signal,
-        headers: { 'user-agent': 'Mozilla/5.0 hongyishi-link-audit' },
+        headers: { "user-agent": "Mozilla/5.0 hongyishi-link-audit" },
       });
 
       if ([403, 405, 406].includes(response.status)) {
         response = await fetch(url, {
-          method: 'GET',
-          redirect: 'follow',
+          method: "GET",
+          redirect: "follow",
           signal: controller.signal,
           headers: {
-            range: 'bytes=0-1024',
-            'user-agent': 'Mozilla/5.0 hongyishi-link-audit',
+            range: "bytes=0-1024",
+            "user-agent": "Mozilla/5.0 hongyishi-link-audit",
           },
         });
       }
@@ -171,12 +187,14 @@ async function checkExternalLinks(external) {
       return {
         url,
         status: response.status,
-        ok: response.status < 400 || [401, 403, 406, 429].includes(response.status),
+        ok:
+          response.status < 400 ||
+          [401, 403, 406, 429].includes(response.status),
       };
     } catch (error) {
       return {
         url,
-        error: error.name === 'AbortError' ? 'timeout' : String(error),
+        error: error.name === "AbortError" ? "timeout" : String(error),
         ok: false,
       };
     } finally {
@@ -201,7 +219,7 @@ async function checkMobileNav() {
     return [];
   }
 
-  const { chromium } = await import('playwright');
+  const { chromium } = await import("playwright");
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({
     viewport: { width: 390, height: 844 },
@@ -210,97 +228,123 @@ async function checkMobileNav() {
   });
   const routesToCheck = [
     {
-      path: '/',
-      requiredLabels: ['处置', '工具', '记录', '资料'],
+      path: "/",
+      requiredLabels: ["处置", "工具", "记录", "资料"],
     },
     {
-      path: '/heat-stroke/',
-      expectedScope: 'heatStroke',
-      linkBase: '/heat-stroke/',
+      path: "/heat-stroke/",
+      expectedScope: "heatStroke",
+      linkBase: "/heat-stroke/",
       requiredHrefs: [
-        '/heat-stroke/pages/heat-index',
-        '/heat-stroke/pages/field-treatment',
-        '/heat-stroke/pages/8-4-6-rule',
-        '/heat-stroke/',
+        "/heat-stroke/pages/heat-index",
+        "/heat-stroke/pages/field-treatment",
+        "/heat-stroke/pages/8-4-6-rule",
+        "/heat-stroke/",
       ],
     },
     {
-      path: '/heat-stroke/pages/field-treatment',
-      expectedScope: 'heatStroke',
-      linkBase: '/heat-stroke/',
+      path: "/heat-stroke/pages/field-treatment",
+      expectedScope: "heatStroke",
+      linkBase: "/heat-stroke/",
       requiredHrefs: [
-        '/heat-stroke/pages/heat-index',
-        '/heat-stroke/pages/field-treatment',
-        '/heat-stroke/pages/8-4-6-rule',
-        '/heat-stroke/',
+        "/heat-stroke/pages/heat-index",
+        "/heat-stroke/pages/field-treatment",
+        "/heat-stroke/pages/8-4-6-rule",
+        "/heat-stroke/",
       ],
     },
     {
-      path: '/tccc/',
-      expectedScope: 'tccc',
-      linkBase: '/tccc/',
+      path: "/tccc/",
+      expectedScope: "tccc",
+      linkBase: "/tccc/",
       requiredHrefs: [
-        '/tccc/pages/tccc-standard',
-        '/tccc/pages/tfc-hemorrhage',
-        '/tccc/pages/tacevac-reassessment',
-        '/tccc/',
+        "/tccc/pages/tccc-standard",
+        "/tccc/pages/tfc-hemorrhage",
+        "/tccc/pages/tacevac-reassessment",
+        "/tccc/",
       ],
     },
     {
-      path: '/tccc/pages/tccc-standard',
-      expectedScope: 'tccc',
-      linkBase: '/tccc/',
+      path: "/tccc/pages/tccc-standard",
+      expectedScope: "tccc",
+      linkBase: "/tccc/",
       requiredHrefs: [
-        '/tccc/pages/tccc-standard',
-        '/tccc/pages/tfc-hemorrhage',
-        '/tccc/pages/tacevac-reassessment',
-        '/tccc/',
+        "/tccc/pages/tccc-standard",
+        "/tccc/pages/tfc-hemorrhage",
+        "/tccc/pages/tacevac-reassessment",
+        "/tccc/",
       ],
     },
     {
-      path: '/fms/assessment',
-      expectedScope: 'fms',
-      linkBase: '/fms/',
-      requiredHrefs: ['/fms', '/fms/assessment', '/fms/training', '/fms/history'],
+      path: "/fms/assessment",
+      expectedScope: "fms",
+      linkBase: "/fms/",
+      requiredHrefs: [
+        "/fms",
+        "/fms/assessment",
+        "/fms/training",
+        "/fms/history",
+      ],
     },
   ];
   const results = [];
 
   try {
     for (const expectation of routesToCheck) {
-      await page.goto(new URL(expectation.path, baseUrl).href, { waitUntil: 'domcontentloaded', timeout: 15_000 });
+      await page.goto(new URL(expectation.path, baseUrl).href, {
+        waitUntil: "domcontentloaded",
+        timeout: 15_000,
+      });
       await page.waitForTimeout(300);
       results.push(
         await page.evaluate((expected) => {
-          const nav = document.querySelector('nav[data-hongyishi-mobile-nav], nav[aria-label="红医师移动端导航"]');
+          const nav = document.querySelector(
+            'nav[data-hongyishi-mobile-nav], nav[aria-label="红医师移动端导航"]',
+          );
           const style = nav ? getComputedStyle(nav) : null;
           const hrefs = nav
-            ? Array.from(nav.querySelectorAll('a[href]')).map((link) => {
-                const url = new URL(link.getAttribute('href'), window.location.href);
+            ? Array.from(nav.querySelectorAll("a[href]")).map((link) => {
+                const url = new URL(
+                  link.getAttribute("href"),
+                  window.location.href,
+                );
                 return `${url.pathname}${url.search}`;
               })
             : [];
           const labels = nav
-            ? Array.from(nav.querySelectorAll('a[href], button')).map((item) => item.textContent?.replace(/\s+/g, ' ').trim() ?? '')
+            ? Array.from(nav.querySelectorAll("a[href], button")).map(
+                (item) => item.textContent?.replace(/\s+/g, " ").trim() ?? "",
+              )
             : [];
-          const linkBaseRoot = expected.linkBase?.replace(/\/$/, '');
+          const linkBaseRoot = expected.linkBase?.replace(/\/$/, "");
           const outOfScopeLinks = expected.linkBase
-            ? hrefs.filter((href) => href.startsWith('/') && !href.startsWith(expected.linkBase) && href !== linkBaseRoot)
+            ? hrefs.filter(
+                (href) =>
+                  href.startsWith("/") &&
+                  !href.startsWith(expected.linkBase) &&
+                  href !== linkBaseRoot,
+              )
             : [];
-          const missingRequiredHrefs = (expected.requiredHrefs ?? []).filter((href) => !hrefs.includes(href));
-          const missingRequiredLabels = (expected.requiredLabels ?? []).filter((label) => !labels.includes(label));
+          const missingRequiredHrefs = (expected.requiredHrefs ?? []).filter(
+            (href) => !hrefs.includes(href),
+          );
+          const missingRequiredLabels = (expected.requiredLabels ?? []).filter(
+            (label) => !labels.includes(label),
+          );
 
           return {
             path: expected.path,
             hasNav: Boolean(nav),
-            position: style?.position ?? '',
-            scope: nav?.getAttribute('data-hys-mobile-nav-scope') ?? '',
-            expectedScope: expected.expectedScope ?? '',
-            hasMainSiteLabel: Boolean(nav?.textContent?.includes('主站')),
+            position: style?.position ?? "",
+            scope: nav?.getAttribute("data-hys-mobile-nav-scope") ?? "",
+            expectedScope: expected.expectedScope ?? "",
+            hasMainSiteLabel: Boolean(nav?.textContent?.includes("主站")),
             missingRequiredHrefs,
             missingRequiredLabels,
             outOfScopeLinks,
-            horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 2,
+            horizontalOverflow:
+              document.documentElement.scrollWidth >
+              document.documentElement.clientWidth + 2,
           };
         }, expectation),
       );
@@ -317,7 +361,7 @@ async function checkUsageGuides() {
     return [];
   }
 
-  const { chromium } = await import('playwright');
+  const { chromium } = await import("playwright");
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({
     viewport: { width: 390, height: 844 },
@@ -325,38 +369,128 @@ async function checkUsageGuides() {
     hasTouch: true,
   });
   const routesToCheck = [
-    { path: '/fms/?skip_opening=true', selector: '[data-hys-fms-guide-panel]' },
-    { path: '/fms/assessment', selector: '[data-hys-fms-guide-panel]', checkAssistDock: true },
-    { path: '/fms/report', selector: '[data-hys-fms-guide-panel]' },
-    { path: '/fms/training', selector: '[data-hys-fms-guide-panel]' },
-    { path: '/fms/history', selector: '[data-hys-fms-guide-panel]' },
-    { path: '/fms/education', selector: '[data-hys-fms-guide-panel]' },
-    { path: '/fms/about', selector: '[data-hys-fms-guide-panel]' },
-    { path: '/heat-stroke/', selector: '[data-hongyishi-usage-guide]' },
-    { path: '/heat-stroke/pages/heat-index', selector: '[data-hongyishi-usage-guide]' },
-    { path: '/heat-stroke/pages/field-treatment', selector: '[data-hongyishi-usage-guide]' },
-    { path: '/heat-stroke/pages/8-4-6-rule', selector: '[data-hongyishi-usage-guide]' },
-    { path: '/tccc/', selector: '[data-hongyishi-usage-guide]' },
-    { path: '/tccc/pages/tccc-standard', selector: '[data-hongyishi-usage-guide]' },
-    { path: '/tccc/pages/tfc-hemorrhage', selector: '[data-hongyishi-usage-guide]' },
-    { path: '/tccc/pages/tacevac-reassessment', selector: '[data-hongyishi-usage-guide]' },
+    {
+      path: "/fms/?skip_opening=true",
+      selector: "[data-hys-fms-guide-panel]",
+      triggerSelector: "[data-hys-tour-help]",
+    },
+    {
+      path: "/fms/assessment",
+      selector: "[data-hys-fms-guide-panel]",
+      triggerSelector: "[data-hys-tour-help]",
+      checkAssistDock: true,
+    },
+    {
+      path: "/fms/report",
+      selector: "[data-hys-fms-guide-panel]",
+      triggerSelector: "[data-hys-tour-help]",
+    },
+    {
+      path: "/fms/training",
+      selector: "[data-hys-fms-guide-panel]",
+      triggerSelector: "[data-hys-tour-help]",
+    },
+    {
+      path: "/fms/history",
+      selector: "[data-hys-fms-guide-panel]",
+      triggerSelector: "[data-hys-tour-help]",
+    },
+    {
+      path: "/fms/education",
+      selector: "[data-hys-fms-guide-panel]",
+      triggerSelector: "[data-hys-tour-help]",
+    },
+    {
+      path: "/fms/about",
+      selector: "[data-hys-fms-guide-panel]",
+      triggerSelector: "[data-hys-tour-help]",
+    },
+    {
+      path: "/heat-stroke/",
+      selector: "[data-hongyishi-guide-runtime]",
+      triggerSelector: "[data-hongyishi-guide-trigger]",
+      checkGuideCard: true,
+    },
+    {
+      path: "/heat-stroke/pages/heat-index",
+      selector: "[data-hongyishi-guide-runtime]",
+      triggerSelector: "[data-hongyishi-guide-trigger]",
+      checkGuideCard: true,
+    },
+    {
+      path: "/heat-stroke/pages/field-treatment",
+      selector: "[data-hongyishi-guide-runtime]",
+      triggerSelector: "[data-hongyishi-guide-trigger]",
+      checkGuideCard: true,
+    },
+    {
+      path: "/heat-stroke/pages/8-4-6-rule",
+      selector: "[data-hongyishi-guide-runtime]",
+      triggerSelector: "[data-hongyishi-guide-trigger]",
+      checkGuideCard: true,
+    },
+    {
+      path: "/tccc/",
+      selector: "[data-hongyishi-guide-runtime]",
+      triggerSelector: "[data-hongyishi-guide-trigger]",
+      checkGuideCard: true,
+    },
+    {
+      path: "/tccc/pages/tccc-standard",
+      selector: "[data-hongyishi-guide-runtime]",
+      triggerSelector: "[data-hongyishi-guide-trigger]",
+      checkGuideCard: true,
+    },
+    {
+      path: "/tccc/pages/tfc-hemorrhage",
+      selector: "[data-hongyishi-guide-runtime]",
+      triggerSelector: "[data-hongyishi-guide-trigger]",
+      checkGuideCard: true,
+    },
+    {
+      path: "/tccc/pages/tacevac-reassessment",
+      selector: "[data-hongyishi-guide-runtime]",
+      triggerSelector: "[data-hongyishi-guide-trigger]",
+      checkGuideCard: true,
+    },
   ];
   const results = [];
 
   try {
     for (const expectation of routesToCheck) {
-      await page.goto(new URL(expectation.path, baseUrl).href, { waitUntil: 'domcontentloaded', timeout: 15_000 });
+      await page.goto(new URL(expectation.path, baseUrl).href, {
+        waitUntil: "domcontentloaded",
+        timeout: 15_000,
+      });
       await page.waitForTimeout(500);
+      if (expectation.checkGuideCard) {
+        const clicked = await page.evaluate((selector) => {
+          const trigger = document.querySelector(selector);
+          if (!trigger) return false;
+          trigger.click();
+          return true;
+        }, expectation.triggerSelector);
+        if (clicked) {
+          await page.waitForTimeout(500);
+        }
+      }
       results.push(
         await page.evaluate((expected) => {
           const guide = document.querySelector(expected.selector);
-          const nav = document.querySelector('nav[data-hongyishi-mobile-nav], nav[aria-label="训练伤防治项目移动端导航"]');
+          const trigger = document.querySelector(expected.triggerSelector);
+          const guideCard = document.querySelector(".hys-guide-card");
+          const nav = document.querySelector(
+            'nav[data-hongyishi-mobile-nav], nav[aria-label="训练伤防治项目移动端导航"]',
+          );
           const navRect = nav?.getBoundingClientRect();
+          const cardRect = guideCard?.getBoundingClientRect();
           const assistControls = expected.checkAssistDock
-            ? Array.from(document.querySelectorAll('[data-hys-assist-control]')).map((item) => {
+            ? Array.from(
+                document.querySelectorAll("[data-hys-assist-control]"),
+              ).map((item) => {
                 const rect = item.getBoundingClientRect();
                 return {
-                  id: item.getAttribute('data-hys-assist-control') ?? '',
+                  id: item.getAttribute("data-hys-assist-control") ?? "",
                   visible: rect.width > 0 && rect.height > 0,
                   bottom: rect.bottom,
                   navTop: navRect?.top ?? null,
@@ -374,9 +508,24 @@ async function checkUsageGuides() {
             path: expected.path,
             selector: expected.selector,
             hasGuide: Boolean(guide),
-            guideTextLength: guide?.textContent?.replace(/\s+/g, '').length ?? 0,
-            hasTourHelp: Boolean(document.querySelector('[data-hys-tour-help]')),
-            horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 2,
+            guideTextLength:
+              guide?.textContent?.replace(/\s+/g, "").length ??
+              trigger?.textContent?.replace(/\s+/g, "").length ??
+              0,
+            hasTourHelp: Boolean(trigger),
+            guideCardVisible: expected.checkGuideCard
+              ? Boolean(cardRect && cardRect.width > 0 && cardRect.height > 0)
+              : true,
+            guideCardOverlapsNav:
+              expected.checkGuideCard && cardRect && navRect
+                ? cardRect.left < navRect.right &&
+                  cardRect.right > navRect.left &&
+                  cardRect.top < navRect.bottom &&
+                  cardRect.bottom > navRect.top + 1
+                : false,
+            horizontalOverflow:
+              document.documentElement.scrollWidth >
+              document.documentElement.clientWidth + 2,
             assistControls,
           };
         }, expectation),
@@ -391,7 +540,7 @@ async function checkUsageGuides() {
 
 function summarizeStatus(items) {
   return items.reduce((summary, item) => {
-    const key = item.status ?? item.error ?? 'unknown';
+    const key = item.status ?? item.error ?? "unknown";
     summary[key] = (summary[key] ?? 0) + 1;
     return summary;
   }, {});
@@ -401,13 +550,17 @@ const crawl = await crawlInternalLinks();
 const representative = await checkRepresentativeRoutes();
 const mobileNav = await checkMobileNav();
 const usageGuides = await checkUsageGuides();
-const externalResults = shouldCheckExternal ? await checkExternalLinks(crawl.external) : [];
+const externalResults = shouldCheckExternal
+  ? await checkExternalLinks(crawl.external)
+  : [];
 
-const representativeFailures = representative.filter((item) => item.error || item.status >= 400);
+const representativeFailures = representative.filter(
+  (item) => item.error || item.status >= 400,
+);
 const mobileNavFailures = mobileNav.filter(
   (item) =>
     !item.hasNav ||
-    item.position !== 'fixed' ||
+    item.position !== "fixed" ||
     item.horizontalOverflow ||
     item.hasMainSiteLabel ||
     item.missingRequiredHrefs.length > 0 ||
@@ -418,9 +571,14 @@ const mobileNavFailures = mobileNav.filter(
 const usageGuideFailures = usageGuides.filter(
   (item) =>
     !item.hasGuide ||
+    !item.hasTourHelp ||
     item.guideTextLength < 24 ||
+    !item.guideCardVisible ||
+    item.guideCardOverlapsNav ||
     item.horizontalOverflow ||
-    item.assistControls.some((control) => !control.visible || control.overlapsNav),
+    item.assistControls.some(
+      (control) => !control.visible || control.overlapsNav,
+    ),
 );
 const externalFailures = externalResults.filter((item) => !item.ok);
 const failed =
@@ -459,7 +617,7 @@ const report = {
           from: Array.from(crawl.external.get(item.url) ?? []).slice(0, 3),
         })),
       }
-    : 'skipped',
+    : "skipped",
 };
 
 console.log(JSON.stringify(report, null, 2));

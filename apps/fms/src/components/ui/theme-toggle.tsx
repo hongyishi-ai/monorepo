@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
-import { Moon, Sun } from 'lucide-react';
-import { useTheme } from '@/hooks/useTheme';
+import { Button } from "@/components/ui/button";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "@/hooks/useTheme";
 
 /**
  * ThemeToggle 主题切换按钮
@@ -24,9 +24,15 @@ const ThemeToggle = () => {
       onClick={handleClick}
       aria-label="切换深浅色主题"
     >
-      {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+      <span
+        className="t-icon-swap h-5 w-5 place-items-center"
+        data-state={theme === "dark" ? "sun" : "moon"}
+      >
+        <Sun className="t-icon h-5 w-5" data-icon="sun" aria-hidden="true" />
+        <Moon className="t-icon h-5 w-5" data-icon="moon" aria-hidden="true" />
+      </span>
     </Button>
   );
 };
 
-export default ThemeToggle; 
+export default ThemeToggle;
