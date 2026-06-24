@@ -27,6 +27,29 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-24 - 222c20b - FMS 移动端辅助入口与使用引导统一
+
+- Commit: `222c20bbb3bf1bb86b0d75d2a0383f75a842c1a6`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://07fdb329.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.103.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - `pnpm type-check` passed
+  - `pnpm lint` passed with existing FMS warnings: `0 errors, 24 warnings`
+  - `pnpm test` passed: utils `18/18`, FMS `157/157`
+  - `pnpm test:cloudflare` passed: `46/46`
+  - `pnpm size:budget` passed: `391 files, 50.80 MiB total`
+  - `pnpm build:cloudflare` passed
+  - `pnpm audit:links -- --base=https://07fdb329.hongyishi-monorepo.pages.dev` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, usage guides `15/15`
+  - `pnpm audit:links -- --base=https://hongyishi.cn` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, usage guides `15/15`
+  - `https://hongyishi.cn/` returned HTTP `200`
+  - GitHub Actions passed for `222c20b`: CI, Cloudflare Build Check, Storybook, React Version Check
+- Notes:
+  - FMS mobile assessment no longer uses fixed bottom floating controls for demo and status details; mobile entries are in the page flow and the drawers render above the bottom tab bar.
+  - FMS pages now share a Hongyishi-style page header, guide panel, empty state, metric cards, hard-border form controls, and route-aware product tour entries.
+  - Heat stroke and TCCC deployment rewrites now inject concise project/page-specific usage guides, and link audits validate guide presence across representative routes.
+
 ## 2026-06-24 - 5aa816b - 子项目移动端导航与热射病控件统一
 
 - Commit: `5aa816bfa4a3e2ebdfdc6a5522179f234ba6ffab`
