@@ -27,6 +27,33 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-24 - ceabc1b - 首次使用引导统一与 FMS 引导抖动修复
+
+- Commit: `ceabc1b5fa636a3300a3b243b6eb4269ffc560dc`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://f97f5cb9.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.103.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - `pnpm exec prettier --check apps/fms/src/components/ui/product-tour.tsx apps/fms/src/hooks/useProductTour.tsx apps/fms/src/components/ui/tour-help-button.tsx apps/fms/src/components/shared/FmsPage.tsx apps/fms/src/components/ui/demo-floating-button.tsx apps/fms/src/components/ui/smart-status-indicator.tsx apps/fms/src/index.css scripts/build-cloudflare.mjs scripts/build-cloudflare.test.mjs scripts/audit-links.mjs` passed
+  - `pnpm lint` passed with existing FMS warnings: `0 errors, 24 warnings`
+  - `pnpm type-check` passed
+  - `pnpm test` passed: utils `18/18`, FMS `157/157`
+  - `pnpm test:cloudflare` passed: `46/46`
+  - `pnpm size:budget` passed: `391 files, 51.18 MiB total`
+  - `pnpm build:cloudflare` passed
+  - Mobile Playwright smoke passed: FMS assessment guide scroll range `0`, guide card/nav overlap `false`, assist control/nav overlap `false`
+  - Static guide smoke passed for heat stroke field-treatment and TCCC standard: first-use auto open, reload suppression, manual replay, no bottom-nav overlap
+  - `pnpm audit:links -- --base=http://127.0.0.1:4175` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, usage guides `15/15`
+  - `pnpm audit:links -- --base=https://f97f5cb9.hongyishi-monorepo.pages.dev` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, usage guides `15/15`
+  - `pnpm audit:links -- --base=https://hongyishi.cn` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, usage guides `15/15`
+  - `https://hongyishi.cn/` returned HTTP `200`
+- Notes:
+  - FMS product tour now separates measuring from scrolling, so route/step changes no longer create a smooth-scroll feedback loop.
+  - FMS, heat stroke, and TCCC usage guides now use first-use per-page storage and can be manually replayed without keeping large guide panels open.
+  - Heat stroke and TCCC static rewrites now inject a shared spotlight guide runtime instead of persistent usage-guide sections.
+  - FMS mobile assessment assist controls now stay above the bottom tab bar during guide and audit flows.
+
 ## 2026-06-24 - 222c20b - FMS 移动端辅助入口与使用引导统一
 
 - Commit: `222c20bbb3bf1bb86b0d75d2a0383f75a842c1a6`
