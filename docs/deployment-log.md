@@ -27,6 +27,25 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-24 - 5aa816b - 子项目移动端导航与热射病控件统一
+
+- Commit: `5aa816bfa4a3e2ebdfdc6a5522179f234ba6ffab`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://bd1b0eb0.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.103.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - `pnpm test:cloudflare` passed: `44/44`
+  - `pnpm build:cloudflare` passed
+  - `pnpm audit:links -- --base=https://bd1b0eb0.hongyishi-monorepo.pages.dev` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`
+  - `pnpm audit:links -- --base=https://hongyishi.cn` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`
+  - `https://hongyishi.cn/` returned HTTP `200`
+  - GitHub Actions passed for `5aa816b`: CI, Cloudflare Build Check, Storybook, React Version Check
+- Notes:
+  - Heat stroke, TCCC, and FMS mobile bottom navigation now stays within the active subproject instead of returning to main-site tabs.
+  - Heat stroke field-treatment timer, progress, and checkbox controls were restyled to match the Hongyishi visual system.
+  - Mobile nav audit now validates project scope, labels, links, and absence of the old `主站` tab prefix.
+
 ## 2026-06-23 - c290607 - main 与 Cloudflare 生产站点对齐
 
 - Commit: `c290607`
