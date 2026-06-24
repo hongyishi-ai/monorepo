@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { ClipboardCheck, Dumbbell, History, Home, Menu, X } from 'lucide-react';
 import { useAppStore } from '@/stores/useAppStore';
 import ThemeToggle from '@/components/ui/theme-toggle';
+import TourHelpButton from '@/components/ui/tour-help-button';
 
 const RootLayout = () => {
   const location = useLocation();
@@ -82,6 +83,7 @@ const RootLayout = () => {
                 </Link>
               ))}
               {/* 主题切换按钮 */}
+              <TourHelpButton variant="outline" showText className="hys-guide-shell-button" />
               <ThemeToggle />
             </div>
 
@@ -125,6 +127,12 @@ const RootLayout = () => {
                   </Link>
                 ))}
                 {/* 主题切换按钮已移至顶部，这里移除 */}
+                <TourHelpButton
+                  variant="outline"
+                  showText
+                  className="hys-guide-shell-button w-full justify-center"
+                  position="inline"
+                />
               </div>
             </div>
           )}

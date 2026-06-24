@@ -28,20 +28,20 @@ const TestCard = ({ test }: TestCardProps) => {
 
   return (
     <>
-      <Card className={isClearanceTest ? 'border-amber-200 bg-amber-50/30' : 'border-blue-200 bg-blue-50/30'}>
+      <Card className="hys-card" data-tour-id="assessment-test-card">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             {isClearanceTest ? (
-              <AlertTriangle className="w-5 h-5 text-amber-500" />
+              <AlertTriangle className="w-5 h-5 text-primary" />
             ) : (
-              <CheckCircle className="w-5 h-5 text-blue-500" />
+              <CheckCircle className="w-5 h-5 text-primary" />
             )}
             {test.name}
           </CardTitle>
           <CardDescription>
             {test.description}
             {isClearanceTest && (
-              <div className="mt-2 p-2 bg-amber-100 border border-amber-200 rounded text-amber-800 text-sm">
+              <div className="hys-inline-alert mt-3 p-3 text-sm">
                 <strong>注意：</strong>这是一项排除性测试，用于检查是否存在需要专业医疗评估的问题。
               </div>
             )}
@@ -51,9 +51,7 @@ const TestCard = ({ test }: TestCardProps) => {
         {/* 桌面版：完整的演示区域和执行步骤 */}
         <CardContent className="hidden md:grid md:grid-cols-2 gap-4 md:gap-6">
           {/* 左侧：视频区域 */}
-          <div className={`aspect-video rounded-md overflow-hidden ${
-            isClearanceTest ? 'bg-amber-100 border border-amber-200' : 'bg-gray-200 border border-gray-300'
-          }`}>
+          <div className="aspect-video overflow-hidden border-2 border-border bg-muted">
             {TEST_DEMO_MAPPING[test.id] ? (
               <div className="w-full h-full relative">
                 <img 
@@ -64,8 +62,8 @@ const TestCard = ({ test }: TestCardProps) => {
                   decoding="async"
                 />
                 {/* 播放控制提示 */}
-                <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
-                  GIF演示
+                <div className="absolute bottom-2 right-2 border border-white/50 bg-black/70 px-2 py-1 text-xs font-bold text-white">
+                  GIF 演示
                 </div>
               </div>
             ) : (
@@ -74,12 +72,12 @@ const TestCard = ({ test }: TestCardProps) => {
                   {isClearanceTest ? (
                     <>
                       <AlertTriangle className="w-8 h-8 mx-auto mb-2 text-amber-500" />
-                      <p className="text-amber-600">排除测试演示</p>
+                      <p className="text-primary">排除测试演示</p>
                     </>
                   ) : (
                     <>
                       <CheckCircle className="w-8 h-8 mx-auto mb-2 text-blue-500" />
-                      <p className="text-gray-500">动作演示区域</p>
+                      <p className="text-muted-foreground">动作演示区域</p>
                     </>
                   )}
                 </div>
@@ -92,7 +90,7 @@ const TestCard = ({ test }: TestCardProps) => {
             <h2 className="font-semibold text-lg mb-2 flex items-center gap-2">
               执行步骤：
               {isClearanceTest && (
-                <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded">
+                  <span className="border-2 border-primary bg-primary px-2 py-1 text-xs font-bold text-primary-foreground">
                   安全第一
                 </span>
               )}
@@ -104,7 +102,7 @@ const TestCard = ({ test }: TestCardProps) => {
             </ul>
 
             {isClearanceTest && (
-              <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+              <div className="hys-inline-alert mt-4 p-3">
                 <h4 className="font-medium text-amber-800 mb-1">重要提示：</h4>
                 <p className="text-sm text-amber-700">
                   如果此测试未通过（出现疼痛），请立即停止后续相关测试，并咨询专业医疗人员。

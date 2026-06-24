@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import { useStorage } from '@/hooks/use-storage';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import { useAppStore } from '@/stores/useAppStore';
+import { FmsGuidePanel, FmsPageHeader } from '@/components/shared/FmsPage';
 import type { FMSAssessmentData } from '@/types/fms-data';
 
 // 双侧评估数据结构
@@ -306,10 +307,38 @@ const AssessmentPage = () => {
     : scores[currentTest.id] !== undefined;
 
   return (
-    <div className="hys-section min-h-screen" role="region" aria-label="FMS评估流程">
+    <div className="hys-section hys-assessment-surface min-h-screen" role="region" aria-label="FMS评估流程">
       <div className="hys-container max-w-6xl">
+        <FmsPageHeader
+          eyebrow="FMS ASSESSMENT"
+          title="功能性动作筛查"
+          description={
+            <>
+              按顺序完成排除测试和七项基础动作。遇到疼痛时选择 0 分，系统会自动保留风险信号并生成报告。
+            </>
+          }
+        />
+
+        <FmsGuidePanel
+          summary="先确认安全，再看演示，最后录入评分。"
+          steps={[
+            { title: '看当前测试', description: '阅读动作说明，手机端可点当前测试卡片下方的“演示指引”查看 GIF、步骤和评分标准。' },
+            { title: '按表现评分', description: '单侧测试直接选 0-3 分；双侧测试分别录入左右侧，系统自动取较低分。' },
+            { title: '查看状态详情', description: '完成任一项目后，“状态详情”会汇总完成进度、不对称项和疼痛项，便于中途复核。' },
+            { title: '完成后看报告', description: '最后一项提交后自动保存本机记录，并进入报告与训练建议。' },
+          ]}
+          boundary="FMS 不是诊断工具。任何疼痛都应优先停止相关动作，并咨询医疗或康复专业人员。"
+          tourId="assessment-guide"
+        />
+
         {/* 紧凑的头部区域 - 只保留智能状态指示器 */}
-        <div className="mb-6 md:mb-8" role="region" aria-label="评估进度与当前测试" aria-live="polite">
+        <div
+          className="mb-6 md:mb-8"
+          role="region"
+          aria-label="评估进度与当前测试"
+          aria-live="polite"
+          data-tour-id="assessment-progress"
+        >
           <SmartStatusIndicator
             completedBasicTests={Object.keys(scores).filter(id => BASIC_TESTS.some(t => t.id === id)).length}
             totalBasicTests={BASIC_TESTS.length}
@@ -345,7 +374,7 @@ const AssessmentPage = () => {
           </div>
         ) : (
           // 传统单一评分
-          <Card className="hys-card mb-6 md:mb-8" role="region" aria-label="动作评分">
+          <Card className="hys-card mb-6 md:mb-8" role="region" aria-label="动作评分" data-tour-id="assessment-scoring">
             <CardContent className="p-4 md:p-8">
               <div className="text-center mb-4 md:mb-6">
                 <h2 className="text-lg font-normal mb-2">
@@ -357,7 +386,7 @@ const AssessmentPage = () => {
                 {/* 移动端与桌面端分别显示更贴切的提示文案，降低困惑 */}
                 <p className="hys-text text-xs text-muted-foreground flex items-center justify-center gap-1 md:hidden">
                   <Eye className="w-3 h-3" />
-                  请点击左下角演示指引查看评分标准
+                  请点击当前测试卡片下方的“演示指引”查看评分标准
                 </p>
                 <p className="hys-text text-xs text-muted-foreground hidden md:flex items-center justify-center gap-1">
                   <Eye className="w-3 h-3" />
@@ -373,8 +402,8 @@ const AssessmentPage = () => {
                     onClick={() => handleScoreSelect(score)}
                     variant={scores[currentTest.id] === score ? 'default' : 'outline'}
                     className={cn(
-                      "h-auto p-3 md:p-4 text-left hys-button transition-all duration-200 flex flex-col items-center gap-2",
-                      score === 0 && "border-red-200 hover:border-red-300",
+                      "h-auto min-h-[88px] p-3 md:p-4 text-left hys-button transition-all duration-200 flex flex-col items-center gap-2",
+                      score === 0 && "border-primary hover:border-primary",
                       scores[currentTest.id] === score && score === 0 && "bg-red-500 hover:bg-red-600 text-white",
                       scores[currentTest.id] === score && score !== 0 && "bg-primary text-primary-foreground"
                     )}
@@ -416,7 +445,7 @@ const AssessmentPage = () => {
 
               {/* 疼痛提示 */}
               {scores[currentTest.id] === 0 && (
-                <div className="mt-6 p-4 bg-red-50 border border-red-200 hys-card">
+                <div className="hys-inline-alert mt-6 p-4">
                   <div className="text-center space-y-2">
                     <AlertTriangle className="w-6 h-6 text-red-500 mx-auto" />
                     <h4 className="font-medium text-red-800 text-sm">检测到疼痛</h4>
@@ -432,14 +461,14 @@ const AssessmentPage = () => {
         </div>
 
         {/* 导航按钮 */}
-        <div className="flex justify-between items-center pb-6 md:pb-8" role="region" aria-label="评估导航">
+        <div className="hys-assessment-actions flex flex-col justify-between md:flex-row md:items-center md:pb-8" role="region" aria-label="评估导航" data-tour-id="assessment-navigation">
           <div className="flex items-center gap-2">
             <Button
               onClick={goToPreviousTest}
               variant="outline"
               disabled={currentTestIndex === 0}
               className={cn(
-                "hys-button px-8 border-2 shadow-sm text-foreground",
+                "hys-button w-full px-8 border-2 shadow-sm text-foreground md:w-auto",
                 currentTestIndex === 0 
                   ? "opacity-50 cursor-not-allowed border-muted text-muted-foreground" 
                   : "border-primary/20 hover:border-primary/40 hover:bg-primary/5 hover:text-foreground"
@@ -450,7 +479,7 @@ const AssessmentPage = () => {
             </Button>
           </div>
 
-          <div className="hys-text text-center">
+          <div className="hys-text order-first text-center md:order-none">
             <p className="text-xs">
               {currentTestIndex + 1} / {FMS_TESTS.length}
             </p>
@@ -463,7 +492,7 @@ const AssessmentPage = () => {
             onClick={goToNextTest}
             disabled={!hasScore}
             className={cn(
-              "hys-button px-8",
+              "hys-button w-full px-8 md:w-auto",
               !hasScore && "opacity-50 cursor-not-allowed"
             )}
           >

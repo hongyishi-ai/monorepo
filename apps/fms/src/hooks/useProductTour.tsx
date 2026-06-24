@@ -16,9 +16,11 @@ export const useProductTour = () => {
   const [currentPageTour, setCurrentPageTour] = useState<TourConfig>(defaultTourConfig);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 获取当前页面名称（简化版，仅支持首页）
+  // 获取当前页面名称
   const getCurrentPageName = useCallback(() => {
-    return location.pathname === '/' ? 'home' : 'home';
+    if (location.pathname === '/') return 'home';
+    const firstSegment = location.pathname.split('/').filter(Boolean)[0];
+    return firstSegment && tourConfigs[firstSegment] ? firstSegment : 'home';
   }, [location.pathname]);
 
   // 检查是否应该显示引导（仅在首页）
@@ -56,7 +58,8 @@ export const useProductTour = () => {
 
   // 启动引导（仅首页）
   const startTour = useCallback(() => {
-    const config = tourConfigs.home || defaultTourConfig;
+    const currentPage = getCurrentPageName();
+    const config = tourConfigs[currentPage] || defaultTourConfig;
     
     setCurrentPageTour({
       ...config,
@@ -73,11 +76,12 @@ export const useProductTour = () => {
     });
     
     setIsOpen(true);
-  }, []);
+  }, [getCurrentPageName]);
 
   // 手动启动引导（不检查条件）
   const startTourManually = useCallback(() => {
-    const config = tourConfigs.home || defaultTourConfig;
+    const currentPage = getCurrentPageName();
+    const config = tourConfigs[currentPage] || defaultTourConfig;
     
     setCurrentPageTour({
       ...config,
@@ -92,7 +96,7 @@ export const useProductTour = () => {
     });
     
     setIsOpen(true);
-  }, []);
+  }, [getCurrentPageName]);
 
   // 关闭引导
   const closeTour = useCallback(() => {
@@ -109,12 +113,13 @@ export const useProductTour = () => {
   const getTourStats = useCallback(() => {
     const tourCompleted = safeLocalStorage.getItem(STORAGE_KEYS.TOUR_COMPLETED) === 'true';
     const tourSkipped = safeLocalStorage.getItem(STORAGE_KEYS.TOUR_SKIPPED) === 'true';
+    const totalPages = Object.keys(tourConfigs).length;
     
     return {
-      totalPages: 1,
+      totalPages,
       completedPages: tourCompleted ? 1 : 0,
       skippedPages: tourSkipped ? 1 : 0,
-      remainingPages: (tourCompleted || tourSkipped) ? 0 : 1,
+      remainingPages: (tourCompleted || tourSkipped) ? totalPages - 1 : totalPages,
       completionRate: (tourCompleted || tourSkipped) ? 100 : 0
     };
   }, []);

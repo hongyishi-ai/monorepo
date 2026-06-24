@@ -109,8 +109,9 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
     return (
       <>
         <div
-          className="fixed left-6 z-40 md:hidden"
-          style={{ bottom: 'calc(1.5rem + env(safe-area-inset-bottom))' }}
+          className="relative z-10 mb-4 md:hidden"
+          data-hys-assist-control="demo"
+          data-tour-id="assessment-demo-guide"
         >
           <AnimatePresence mode="wait">
             <motion.div
@@ -133,7 +134,7 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
             >
               <Card 
                 className={cn(
-                  "hys-card bg-card/95 backdrop-blur-md border shadow-lg hover:shadow-xl cursor-pointer overflow-hidden",
+                  "hys-card hys-mobile-assist-card bg-card/95 backdrop-blur-md border shadow-lg hover:shadow-xl cursor-pointer overflow-hidden",
                   "active:scale-95 touch-manipulation smart-status-transition",
                   isScrollingDown && "indicator-dimmed",
                   !isScrollingDown && "indicator-focused",
@@ -156,46 +157,46 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="p-4"
+                    className="p-3"
                   >
                     <div className="flex items-center gap-3">
                       {/* 动态状态图标 */}
                       <div className={cn(
-                        "relative",
-                        isClearanceTest && "smart-indicator-glow"
-                      )}>
+                          "relative",
+                          isClearanceTest && "smart-indicator-glow"
+                        )}>
                         <div className={cn(
-                          "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300",
+                          "w-9 h-9 flex items-center justify-center border-2 transition-all duration-300",
                           isClearanceTest 
                             ? "bg-amber-50 border-amber-200" 
-                            : "bg-blue-50 border-blue-200"
+                            : "bg-primary/10 border-primary/30"
                         )}>
                           <Eye className={cn(
                             "w-4 h-4",
-                            isClearanceTest ? "text-amber-600" : "text-blue-600"
+                            isClearanceTest ? "text-amber-600" : "text-primary"
                           )} />
                         </div>
                         
                         {/* 进度环占位 - 保持与smart-status-indicator一致的布局 */}
-                        <svg className="absolute inset-0 w-10 h-10 -rotate-90">
+                        <svg className="absolute inset-0 h-9 w-9 -rotate-90" viewBox="0 0 36 36">
                           <circle
-                            cx="20"
-                            cy="20"
-                            r="18"
+                            cx="18"
+                            cy="18"
+                            r="16"
                             fill="none"
                             stroke="hsl(var(--border))"
                             strokeWidth="1.5"
                             opacity="0.2"
                           />
                           <circle
-                            cx="20"
-                            cy="20"
-                            r="18"
+                            cx="18"
+                            cy="18"
+                            r="16"
                             fill="none"
-                            stroke={isClearanceTest ? "hsl(43 96% 56%)" : "hsl(217 91% 60%)"}
+                            stroke={isClearanceTest ? "hsl(43 96% 56%)" : "hsl(var(--primary))"}
                             strokeWidth="2"
-                            strokeDasharray={`${2 * Math.PI * 18}`}
-                            strokeDashoffset={`${2 * Math.PI * 18 * 0.3}`} // 显示70%的环
+                            strokeDasharray={`${2 * Math.PI * 16}`}
+                            strokeDashoffset={`${2 * Math.PI * 16 * 0.3}`} // 显示70%的环
                             className="transition-all duration-700 ease-out"
                             strokeLinecap="round"
                           />
@@ -203,18 +204,18 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
 
                         {/* 动态指示点 */}
                         <div className={cn(
-                          "absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-card",
-                          isClearanceTest ? "bg-amber-500" : "bg-blue-500"
+                          "absolute -top-1 -right-1 w-3 h-3 border-2 border-card",
+                          isClearanceTest ? "bg-amber-500" : "bg-primary"
                         )}>
                           <div className={cn(
-                            "w-full h-full rounded-full animate-ping opacity-75",
-                            isClearanceTest ? "bg-amber-400" : "bg-blue-400"
+                            "w-full h-full animate-ping opacity-75",
+                            isClearanceTest ? "bg-amber-400" : "bg-primary"
                           )} />
                         </div>
                       </div>
 
                       {/* 核心信息 */}
-                      <div className="text-left min-w-0">
+                      <div className="hys-mobile-assist-label min-w-0 text-left">
                         <div className="text-sm font-medium text-foreground flex items-center gap-2">
                           <span>演示指引</span>
                           <ChevronUp className="w-3 h-3 text-muted-foreground opacity-50" />
@@ -233,7 +234,7 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
 
         {/* 抽屉组件 */}
         <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-          <DrawerContent className="max-h-[85vh] hys-card">
+          <DrawerContent className="hys-drawer-content hys-card max-h-[min(85vh,calc(100vh-var(--hys-mobile-nav-height)-1rem))]">
             <DrawerHeader className="text-center pb-4">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Eye className="w-5 h-5 text-primary" />
@@ -253,11 +254,11 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
 
             {/* 标签切换器 */}
             <div className="px-4 pb-4">
-              <div className="flex items-center gap-1 p-1 bg-secondary/30 rounded-lg">
+              <div className="flex items-center gap-1 border-2 border-border bg-secondary/20 p-1">
                 <button
                   onClick={() => setActiveTab('demo')}
                   className={cn(
-                    "flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all",
+                    "flex-1 border-2 border-transparent px-3 py-2 text-xs font-bold transition-all",
                     activeTab === 'demo'
                       ? "bg-primary text-primary-foreground shadow-sm"
                       : "text-muted-foreground hover:text-foreground"
@@ -269,7 +270,7 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
                 <button
                   onClick={() => setActiveTab('steps')}
                   className={cn(
-                    "flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all",
+                    "flex-1 border-2 border-transparent px-3 py-2 text-xs font-bold transition-all",
                     activeTab === 'steps'
                       ? "bg-primary text-primary-foreground shadow-sm"
                       : "text-muted-foreground hover:text-foreground"
@@ -281,7 +282,7 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
                 <button
                   onClick={() => setActiveTab('scoring')}
                   className={cn(
-                    "flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all",
+                    "flex-1 border-2 border-transparent px-3 py-2 text-xs font-bold transition-all",
                     activeTab === 'scoring'
                       ? "bg-primary text-primary-foreground shadow-sm"
                       : "text-muted-foreground hover:text-foreground"
@@ -294,7 +295,7 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
             </div>
 
             {/* 固定高度的内容区域 */}
-            <div className="px-4 pb-6 h-80 overflow-y-auto">
+            <div className="h-80 overflow-y-auto px-4 pb-6">
               <AnimatePresence mode="wait">
                 {activeTab === 'demo' && (
                   <motion.div
@@ -307,8 +308,8 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
                   >
                     {/* 动作演示区域 */}
                     <div className={cn(
-                      "aspect-video rounded-lg border overflow-hidden",
-                      isClearanceTest ? "bg-amber-50 border-amber-200" : "bg-blue-50 border-blue-200"
+                      "aspect-video border-2 overflow-hidden",
+                      isClearanceTest ? "bg-amber-50 border-amber-300" : "bg-primary/10 border-primary/30"
                     )}>
                       {TEST_DEMO_MAPPING[test.id] && !imageError ? (
                         <div className="w-full h-full relative">
@@ -322,7 +323,7 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
                           />
                           {/* 播放控制提示 */}
                           <div className="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                            GIF演示
+                            GIF 演示
                           </div>
                         </div>
                       ) : (
@@ -407,7 +408,7 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
 
                     {/* 安全提示 */}
                     {isClearanceTest && (
-                      <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                      <div className="hys-inline-alert p-4">
                         <div className="flex items-start gap-3">
                           <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
                           <div>
@@ -464,10 +465,10 @@ export const DemoFloatingButton = React.forwardRef<HTMLDivElement, DemoFloatingB
             </div>
 
             {/* 底部提示 */}
-            <div className="text-center p-4 bg-muted/20 rounded-lg border mx-4 mb-4">
+            <div className="mx-4 mb-4 border-2 border-border bg-muted/20 p-4 text-center">
               <div className="hys-text text-sm space-y-2">
                 <div>向下滑动或点击外部区域可关闭</div>
-                <div className="flex items-center justify-center gap-2 text-xs">
+                <div className="hidden items-center justify-center gap-2 text-xs sm:flex">
                   <kbd className="px-2 py-1 text-xs font-mono bg-muted rounded border">Alt</kbd>
                   <span>+</span>
                   <kbd className="px-2 py-1 text-xs font-mono bg-muted rounded border">D</kbd>

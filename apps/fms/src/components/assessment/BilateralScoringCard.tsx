@@ -114,8 +114,8 @@ const BilateralScoringCard: React.FC<BilateralScoringCardProps> = ({
         onClick={() => side === 'left' ? setLeftScore(score) : setRightScore(score)}
         variant={isSelected ? 'default' : 'outline'}
         className={cn(
-          "h-auto p-3 text-left hys-button transition-all duration-200 flex flex-col items-center gap-1",
-          score === 0 && "border-red-200 hover:border-red-300",
+          "h-auto min-h-[76px] p-3 text-left hys-button transition-all duration-200 flex flex-col items-center gap-1",
+          score === 0 && "border-primary hover:border-primary",
           isSelected && score === 0 && "bg-red-500 hover:bg-red-600 text-white",
           isSelected && score !== 0 && "bg-primary text-primary-foreground"
         )}
@@ -225,6 +225,7 @@ const BilateralScoringCard: React.FC<BilateralScoringCardProps> = ({
         iconOpacity={0.08}
         as={Card}
         className="hys-card"
+        data-tour-id="assessment-bilateral-scoring"
       >
         <CardContent className="p-4 md:p-8">
           {/* 标题区域 - 简化 */}
@@ -238,12 +239,12 @@ const BilateralScoringCard: React.FC<BilateralScoringCardProps> = ({
             {/* 左侧评分 */}
             <div className="space-y-4">
               {/* 左侧标题 - 简化设计 */}
-              <div className="flex items-center gap-3 pb-3 border-b border-blue-100">
+              <div className="flex items-center gap-3 border-b-2 border-border pb-3">
                 <div className="flex items-center gap-2">
-                  <ChevronLeft className="w-5 h-5 text-blue-600" />
-                  <span className="text-lg font-medium text-blue-600">左侧</span>
+                  <ChevronLeft className="w-5 h-5 text-primary" />
+                  <span className="text-lg font-black text-foreground">左侧</span>
                 </div>
-                <div className="text-sm hys-text text-blue-700">
+                <div className="text-sm hys-text">
                   {sideInstructions.left}
                 </div>
               </div>
@@ -256,12 +257,12 @@ const BilateralScoringCard: React.FC<BilateralScoringCardProps> = ({
             {/* 右侧评分 */}
             <div className="space-y-4">
               {/* 右侧标题 - 简化设计 */}
-              <div className="flex items-center gap-3 pb-3 border-b border-green-100">
+              <div className="flex items-center gap-3 border-b-2 border-border pb-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-lg font-medium text-green-600">右侧</span>
-                  <ChevronRight className="w-5 h-5 text-green-600" />
+                  <span className="text-lg font-black text-foreground">右侧</span>
+                  <ChevronRight className="w-5 h-5 text-primary" />
                 </div>
-                <div className="text-sm hys-text text-green-700">
+                <div className="text-sm hys-text">
                   {sideInstructions.right}
                 </div>
               </div>

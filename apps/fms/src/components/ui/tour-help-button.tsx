@@ -9,6 +9,7 @@ interface TourHelpButtonProps {
   size?: 'default' | 'sm' | 'lg' | 'icon';
   className?: string;
   showText?: boolean;
+  label?: string;
   position?: 'fixed' | 'inline';
 }
 
@@ -21,6 +22,7 @@ export const TourHelpButton: React.FC<TourHelpButtonProps> = ({
   size = 'sm',
   className,
   showText = false,
+  label = '使用引导',
   position = 'inline'
 }) => {
   const { startTourManually } = useProductTour();
@@ -41,10 +43,12 @@ export const TourHelpButton: React.FC<TourHelpButtonProps> = ({
       variant={variant}
       size={size}
       className={buttonClass}
-      title="产品引导"
+      title={label}
+      data-hys-tour-help
+      data-tour-id="guide-entry"
     >
       <HelpCircle className="w-4 h-4" />
-      {showText && <span className="ml-2">产品引导</span>}
+      {showText && <span className="ml-2">{label}</span>}
     </Button>
   );
 };

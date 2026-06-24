@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { FmsGuidePanel, FmsPageHeader } from '@/components/shared/FmsPage';
 
 const AboutPage = () => {
   const assetBase = import.meta.env.BASE_URL;
@@ -9,37 +10,41 @@ const AboutPage = () => {
   }, []);
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <article className="overflow-x-hidden pt-12 pb-20 px-3 md:pt-28 md:pb-48 md:px-8">
-        <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <header className="text-center px-4">
-            <h1 className="text-4xl md:text-6xl mb-4 md:mb-5 font-bold text-foreground tracking-tight leading-tight md:leading-[1.1]">
-              关于本项目
-            </h1>
-            <div className="text-gray-500 dark:text-gray-400 text-sm md:text-lg mb-8 md:mb-14">
-              <time dateTime="2025-07-01">2025 年 7 月</time>
-            </div>
-          </header>
+    <div className="hys-section min-h-screen bg-background text-foreground">
+      <article className="hys-container max-w-6xl overflow-x-hidden">
+        <FmsPageHeader
+          eyebrow="ABOUT FMS"
+          title="关于本项目"
+          description={
+            <>
+              <time dateTime="2025-07-01">2025 年 7 月</time> · 公益训练伤防治工具
+            </>
+          }
+        />
 
-          {/* Main Content Grid */}
-          <div className="grid gap-16 md:gap-48 mt-8 md:mt-32">
-            <section className="max-w-4xl mx-auto relative">
-              {/* Sticky Image */}
-              <div className="sticky top-16 mb-6 md:mb-8">
-                <div className="relative w-full pb-[55%] overflow-hidden rounded-xl md:w-[110%] md:-ml-[5%] md:rounded-2xl">
-                  <img 
-                    src={`${assetBase}about.png`} 
-                    alt="FMS功能性动作筛查系统项目图片，展示医疗救援与健康防护理念"
-                    loading="eager"
-                    decoding="async"
-                    className="absolute top-0 left-0 w-full h-full object-cover fade-in-image"
-                  />
-                </div>
-              </div>
+        <FmsGuidePanel
+          summary="这里说明项目目标、适用边界和为什么从筛查开始。"
+          steps={[
+            { title: '看项目目标', description: '训练伤防治关注的是风险识别和主动干预，不是事后补救。' },
+            { title: '理解使用边界', description: 'FMS 是训练参考工具，不能替代诊断或个体化医疗建议。' },
+            { title: '回到主流程', description: '了解项目后，建议从评估开始，再进入报告和训练方案。' },
+          ]}
+          boundary="如果已经出现疼痛、损伤或活动受限，应优先寻求专业评估。"
+          tourId="about-guide"
+        />
 
-              {/* Content Card */}
-              <div className="bg-card p-6 md:p-16 lg:p-20 relative -mt-24 md:-mt-72 shadow-xl border border-border rounded-xl md:rounded-2xl max-w-[70ch] mx-auto">
+        <section className="mx-auto max-w-4xl" data-tour-id="about-story">
+          <div className="hys-card mb-8 overflow-hidden">
+            <img
+              src={`${assetBase}about.png`}
+              alt="FMS功能性动作筛查系统项目图片，展示医疗救援与健康防护理念"
+              loading="eager"
+              decoding="async"
+              className="h-auto w-full object-cover fade-in-image"
+            />
+          </div>
+
+              <div className="hys-card mx-auto max-w-[70ch] p-6 md:p-12 lg:p-16">
                 <p className="mb-5 md:mb-8 text-lg text-foreground dark:text-gray-200 leading-relaxed md:leading-loose">
                   训练伤，大多不是意外。
                 </p>
@@ -80,11 +85,9 @@ const AboutPage = () => {
                   守护大家的运动健康，我全力以赴。
                 </p>
               </div>
-            </section>
-          </div>
-        </div>
+        </section>
       </article>
-    </main>
+    </div>
   );
 };
 

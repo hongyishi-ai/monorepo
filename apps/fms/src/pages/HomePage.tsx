@@ -4,6 +4,7 @@ import { CardWithIcon, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Target, Clock, Star } from 'lucide-react';
 import { useStorage } from '@/hooks/use-storage';
+import { FmsGuidePanel, FmsPageHeader } from '@/components/shared/FmsPage';
 
 import { format } from 'date-fns';
 import type { AssessmentRecord } from '@/lib/storage';
@@ -56,20 +57,28 @@ const HomePage = () => {
   return (
     <div className="hys-section">
       <div className="hys-container">
-        {/* 主标题区域 - 极简布局 */}
-        <div className="text-center mb-16 md:mb-20 minimal-fade-in" role="region" aria-label="首页标题与描述">
-          <p className="mb-4 font-mono text-sm font-bold text-muted-foreground">
-            功能性动作筛查
-          </p>
-          <h1 className="hys-title">
-            训练伤防治
-          </h1>
-          <p className="hys-subtitle max-w-3xl mx-auto">
-            科学评估动作模式，
-            <br className="hidden sm:inline" />
-            获取个性化改善建议，从评估到训练方案。
-          </p>
-        </div>
+        <FmsPageHeader
+          eyebrow="功能性动作筛查"
+          title="训练伤防治"
+          description={
+            <>
+              科学评估动作模式，
+              <br className="hidden sm:inline" />
+              获取个性化改善建议，从评估到训练方案。
+            </>
+          }
+        />
+
+        <FmsGuidePanel
+          summary="首次使用建议按评估、报告、训练的顺序完成。"
+          steps={[
+            { title: '先开始评估', description: '完成 7 项基础测试和 3 项排除测试，记录疼痛、不对称和动作质量。' },
+            { title: '再查看报告', description: '确认总分、风险提示、详细评分和需要优先处理的问题。' },
+            { title: '最后进入训练', description: '系统会根据评估结果生成分阶段纠正训练，并保留本机历史记录。' },
+          ]}
+          boundary="评估结果用于训练参考，不替代临床诊断、康复处方或现场专业指导。"
+          tourId="home-guide"
+        />
 
         {/* 主要操作区域 - 简洁的两栏布局 */}
         <div className="hys-grid grid-cols-1 md:grid-cols-2 max-w-5xl mx-auto mb-16 md:mb-24 gap-4 md:gap-6" role="region" aria-label="主要功能入口">
@@ -121,7 +130,7 @@ const HomePage = () => {
                     掌握正确的动作要求。
                   </p>
                 </div>
-                <Button variant="outline" className="group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <Button variant="outline" className="group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                   <span className="mr-2">开始学习</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Button>

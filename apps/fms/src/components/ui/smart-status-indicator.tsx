@@ -159,8 +159,9 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
     return (
       <>
         <div
-          className="fixed right-6 z-40"
-          style={{ bottom: 'calc(1.5rem + env(safe-area-inset-bottom))' }}
+          className="relative z-10 mb-4 lg:fixed lg:right-6 lg:bottom-6 lg:z-50 lg:mb-0"
+          data-hys-assist-control="status"
+          data-tour-id="assessment-status-detail"
         >
           <AnimatePresence mode="wait">
             <motion.div
@@ -183,7 +184,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
             >
               <Card 
                 className={cn(
-                  "hys-card bg-card/95 backdrop-blur-md border shadow-lg hover:shadow-xl cursor-pointer overflow-hidden",
+                  "hys-card hys-mobile-assist-card bg-card/95 backdrop-blur-md border shadow-lg hover:shadow-xl cursor-pointer overflow-hidden md:h-auto md:w-auto",
                   "active:scale-95 touch-manipulation smart-status-transition smart-indicator-border-glow",
                   isScrollingDown && "indicator-dimmed",
                   !isScrollingDown && "indicator-focused",
@@ -208,7 +209,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="p-4"
+                    className="p-3 md:p-4"
                   >
                     <div className="flex items-center gap-3">
                       {/* 动态状态图标 */}
@@ -218,7 +219,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
                         (asymmetryCount > 0 || painfulCount > 0) && "smart-indicator-pulse"
                       )}>
                         <div className={cn(
-                          "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300",
+                          "w-9 h-9 md:h-10 md:w-10 flex items-center justify-center border-2 transition-all duration-300",
                           requiresBilateralAssessment 
                             ? "bg-blue-50 border-blue-200" 
                             : currentTestType === 'clearance'
@@ -231,7 +232,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
                         </div>
                         
                         {/* 进度环 */}
-                        <svg className="absolute inset-0 w-10 h-10 -rotate-90">
+                        <svg className="absolute inset-0 h-9 w-9 -rotate-90 md:h-10 md:w-10" viewBox="0 0 40 40">
                           <circle
                             cx="20"
                             cy="20"
@@ -262,21 +263,21 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
 
                         {/* 状态指示点 */}
                         {requiresBilateralAssessment && (
-                          <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-blue-500 border-2 border-card">
-                            <div className="w-full h-full rounded-full bg-blue-400 animate-ping opacity-75" />
+                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 border-2 border-card">
+                            <div className="w-full h-full bg-blue-400 animate-ping opacity-75" />
                           </div>
                         )}
                         
                         {/* 警告指示点 */}
                         {(asymmetryCount > 0 || painfulCount > 0) && !requiresBilateralAssessment && (
-                          <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-red-500 border-2 border-card">
-                            <div className="w-full h-full rounded-full bg-red-400 animate-pulse" />
+                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 border-2 border-card">
+                            <div className="w-full h-full bg-red-400 animate-pulse" />
                           </div>
                         )}
                       </div>
 
                       {/* 核心信息 */}
-                      <div className="text-left min-w-0">
+                      <div className="hys-mobile-assist-label min-w-0 text-left">
                         <div className="text-sm font-medium text-foreground flex items-center gap-2">
                           <span>{totalCompleted}/{totalTests}</span>
                           <ChevronUp className="w-3 h-3 text-muted-foreground opacity-50" />
@@ -295,7 +296,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
 
         {/* 抽屉组件 - 从底部弹出 */}
         <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-          <DrawerContent className="hys-card">
+          <DrawerContent className="hys-drawer-content hys-card">
             <DrawerHeader className="text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <BarChart3 className="w-5 h-5 text-primary" />
@@ -309,7 +310,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
             <div className="p-6 pb-8">
               {/* 当前测试状态 */}
               {currentTestName && (
-                <div className="mb-6 p-4 rounded-lg hys-card border">
+                <div className="hys-card mb-6 p-4">
                   <div className="text-center">
                     <div className="flex items-center justify-center gap-2 mb-3">
                       {requiresBilateralAssessment ? (
@@ -336,7 +337,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
               {/* 统计信息网格 */}
               <div className="grid grid-cols-2 gap-4 mb-6">
                 {/* 基础测试 */}
-                <div className="text-center p-4 rounded-lg bg-primary/5 border border-primary/10">
+                  <div className="hys-panel p-4 text-center">
                   <div className="text-2xl font-light text-primary mb-2">
                     {completedBasicTests}
                   </div>
@@ -347,7 +348,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
                 </div>
 
                 {/* 排除测试 */}
-                <div className="text-center p-4 rounded-lg bg-amber-50 border border-amber-200">
+                  <div className="hys-panel p-4 text-center">
                   <div className="text-2xl font-light text-amber-600 mb-2">
                     {completedClearanceTests}
                   </div>
@@ -362,7 +363,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
               {(asymmetryCount > 0 || painfulCount > 0) && (
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   {asymmetryCount > 0 && (
-                    <div className="text-center p-4 rounded-lg bg-blue-50 border border-blue-200">
+                    <div className="hys-panel p-4 text-center">
                       <div className="text-2xl font-light text-blue-600 mb-2">
                         {asymmetryCount}
                       </div>
@@ -371,7 +372,7 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
                   )}
 
                   {painfulCount > 0 && (
-                    <div className="text-center p-4 rounded-lg bg-red-50 border border-red-200">
+                    <div className="hys-panel p-4 text-center">
                       <div className="text-2xl font-light text-red-500 mb-2">
                         {painfulCount}
                       </div>
@@ -382,10 +383,10 @@ export const SmartStatusIndicator = React.forwardRef<HTMLDivElement, SmartStatus
               )}
 
               {/* 底部提示 */}
-              <div className="text-center p-4 bg-muted/20 rounded-lg border">
+              <div className="border-2 border-border bg-muted/20 p-4 text-center">
                 <div className="hys-text text-sm space-y-2">
                   <div>向下滑动或点击外部区域可关闭</div>
-                  <div className="flex items-center justify-center gap-2 text-xs">
+                  <div className="hidden items-center justify-center gap-2 text-xs sm:flex">
                     <kbd className="px-2 py-1 text-xs font-mono bg-muted rounded border">Alt</kbd>
                     <span>+</span>
                     <kbd className="px-2 py-1 text-xs font-mono bg-muted rounded border">S</kbd>

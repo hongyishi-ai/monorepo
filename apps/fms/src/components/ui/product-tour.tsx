@@ -288,12 +288,12 @@ export const ProductTour: React.FC<ProductTourProps> = ({
           className="absolute z-10"
           style={cardPosition}
         >
-          <Card className="w-full max-w-sm md:max-w-md lg:w-96 bg-background/95 backdrop-blur-sm border-2 shadow-2xl">
+          <Card className="hys-card w-full max-w-sm border-2 bg-background/95 shadow-2xl backdrop-blur-sm md:max-w-md lg:w-96">
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex-shrink-0">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                    <div className="flex h-10 w-10 items-center justify-center border-2 border-primary bg-primary text-primary-foreground">
                       <Sparkles className="w-5 h-5 text-primary" />
                     </div>
                   </div>
@@ -303,10 +303,10 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                     </CardTitle>
                     {config.showProgress && (
                       <div className="flex items-center gap-2 mt-1">
-                        <Badge variant="secondary" className="text-xs">
+                          <Badge variant="secondary" className="border-2 border-border text-xs">
                           {currentStep + 1} {locale.of} {config.steps.length}
                         </Badge>
-                        <div className="flex-1 h-1 bg-muted rounded-full overflow-hidden">
+                        <div className="h-1 flex-1 overflow-hidden border border-border bg-muted">
                           <div
                             className="h-full bg-primary transition-all duration-300"
                             style={{
@@ -322,7 +322,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                   variant="ghost"
                   size="sm"
                   onClick={onRequestClose}
-                  className="flex-shrink-0 -mt-1 -mr-1"
+                  className="-mr-1 -mt-1 flex-shrink-0 border-2 border-border"
                 >
                   <X className="w-4 h-4" />
                 </Button>
@@ -335,7 +335,7 @@ export const ProductTour: React.FC<ProductTourProps> = ({
                 </p>
                 
                 {step.content && (
-                  <div className="bg-muted/50 rounded-lg p-3">
+                  <div className="border-2 border-border bg-muted/50 p-3">
                     {step.content}
                   </div>
                 )}

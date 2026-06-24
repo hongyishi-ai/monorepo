@@ -6,6 +6,7 @@ const baseArg = process.argv.find((arg) => arg.startsWith('--base='));
 const baseUrl = (baseArg ? baseArg.split('=')[1] : process.env.HONGYISHI_AUDIT_BASE_URL) ?? defaultBaseUrl;
 const shouldCheckExternal = args.has('--external');
 const shouldCheckMobileNav = !args.has('--no-mobile-nav');
+const shouldCheckUsageGuides = !args.has('--no-usage-guides');
 
 const representativeRoutes = [
   '/',
@@ -311,6 +312,83 @@ async function checkMobileNav() {
   return results;
 }
 
+async function checkUsageGuides() {
+  if (!shouldCheckUsageGuides) {
+    return [];
+  }
+
+  const { chromium } = await import('playwright');
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage({
+    viewport: { width: 390, height: 844 },
+    isMobile: true,
+    hasTouch: true,
+  });
+  const routesToCheck = [
+    { path: '/fms/?skip_opening=true', selector: '[data-hys-fms-guide-panel]' },
+    { path: '/fms/assessment', selector: '[data-hys-fms-guide-panel]', checkAssistDock: true },
+    { path: '/fms/report', selector: '[data-hys-fms-guide-panel]' },
+    { path: '/fms/training', selector: '[data-hys-fms-guide-panel]' },
+    { path: '/fms/history', selector: '[data-hys-fms-guide-panel]' },
+    { path: '/fms/education', selector: '[data-hys-fms-guide-panel]' },
+    { path: '/fms/about', selector: '[data-hys-fms-guide-panel]' },
+    { path: '/heat-stroke/', selector: '[data-hongyishi-usage-guide]' },
+    { path: '/heat-stroke/pages/heat-index', selector: '[data-hongyishi-usage-guide]' },
+    { path: '/heat-stroke/pages/field-treatment', selector: '[data-hongyishi-usage-guide]' },
+    { path: '/heat-stroke/pages/8-4-6-rule', selector: '[data-hongyishi-usage-guide]' },
+    { path: '/tccc/', selector: '[data-hongyishi-usage-guide]' },
+    { path: '/tccc/pages/tccc-standard', selector: '[data-hongyishi-usage-guide]' },
+    { path: '/tccc/pages/tfc-hemorrhage', selector: '[data-hongyishi-usage-guide]' },
+    { path: '/tccc/pages/tacevac-reassessment', selector: '[data-hongyishi-usage-guide]' },
+  ];
+  const results = [];
+
+  try {
+    for (const expectation of routesToCheck) {
+      await page.goto(new URL(expectation.path, baseUrl).href, { waitUntil: 'domcontentloaded', timeout: 15_000 });
+      await page.waitForTimeout(500);
+      results.push(
+        await page.evaluate((expected) => {
+          const guide = document.querySelector(expected.selector);
+          const nav = document.querySelector('nav[data-hongyishi-mobile-nav], nav[aria-label="训练伤防治项目移动端导航"]');
+          const navRect = nav?.getBoundingClientRect();
+          const assistControls = expected.checkAssistDock
+            ? Array.from(document.querySelectorAll('[data-hys-assist-control]')).map((item) => {
+                const rect = item.getBoundingClientRect();
+                return {
+                  id: item.getAttribute('data-hys-assist-control') ?? '',
+                  visible: rect.width > 0 && rect.height > 0,
+                  bottom: rect.bottom,
+                  navTop: navRect?.top ?? null,
+                  overlapsNav: navRect
+                    ? rect.left < navRect.right &&
+                      rect.right > navRect.left &&
+                      rect.top < navRect.bottom &&
+                      rect.bottom > navRect.top + 1
+                    : false,
+                };
+              })
+            : [];
+
+          return {
+            path: expected.path,
+            selector: expected.selector,
+            hasGuide: Boolean(guide),
+            guideTextLength: guide?.textContent?.replace(/\s+/g, '').length ?? 0,
+            hasTourHelp: Boolean(document.querySelector('[data-hys-tour-help]')),
+            horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 2,
+            assistControls,
+          };
+        }, expectation),
+      );
+    }
+  } finally {
+    await browser.close();
+  }
+
+  return results;
+}
+
 function summarizeStatus(items) {
   return items.reduce((summary, item) => {
     const key = item.status ?? item.error ?? 'unknown';
@@ -322,6 +400,7 @@ function summarizeStatus(items) {
 const crawl = await crawlInternalLinks();
 const representative = await checkRepresentativeRoutes();
 const mobileNav = await checkMobileNav();
+const usageGuides = await checkUsageGuides();
 const externalResults = shouldCheckExternal ? await checkExternalLinks(crawl.external) : [];
 
 const representativeFailures = representative.filter((item) => item.error || item.status >= 400);
@@ -336,8 +415,20 @@ const mobileNavFailures = mobileNav.filter(
     item.outOfScopeLinks.length > 0 ||
     (item.expectedScope && item.scope !== item.expectedScope),
 );
+const usageGuideFailures = usageGuides.filter(
+  (item) =>
+    !item.hasGuide ||
+    item.guideTextLength < 24 ||
+    item.horizontalOverflow ||
+    item.assistControls.some((control) => !control.visible || control.overlapsNav),
+);
 const externalFailures = externalResults.filter((item) => !item.ok);
-const failed = crawl.failures.length > 0 || representativeFailures.length > 0 || mobileNavFailures.length > 0 || externalFailures.length > 0;
+const failed =
+  crawl.failures.length > 0 ||
+  representativeFailures.length > 0 ||
+  mobileNavFailures.length > 0 ||
+  usageGuideFailures.length > 0 ||
+  externalFailures.length > 0;
 
 const report = {
   baseUrl,
@@ -354,6 +445,10 @@ const report = {
   mobileNav: {
     checked: mobileNav.length,
     failures: mobileNavFailures,
+  },
+  usageGuides: {
+    checked: usageGuides.length,
+    failures: usageGuideFailures,
   },
   external: shouldCheckExternal
     ? {

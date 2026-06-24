@@ -15,6 +15,7 @@ import { useReportDataFlow } from '@/hooks/useReportDataFlow';
 import { CLEARANCE_TEST_PATHOLOGY } from '@/data/fms-biomechanics';
 import { getAsymmetryRiskAssessment } from '@/data/fms-tests';
 import { AlertTriangle, Download, RotateCcw, Loader2 } from 'lucide-react';
+import { FmsEmptyState, FmsGuidePanel, FmsPageHeader } from '@/components/shared/FmsPage';
 
 /**
  * 阶段四重构后的ReportPage组件
@@ -93,22 +94,31 @@ const ReportPage = () => {
   if (!hasData || !reportAnalysis) {
     return (
       <div className="hys-section">
-        <ContainerWithIcon
-          icon={AlertTriangle}
-          iconColor="text-muted-foreground"
-          iconSize="2xl"
-          iconPosition="center"
-          iconOpacity={0.1}
-          className="hys-container max-w-2xl text-center"
-        >
-          <h1 className="hys-title text-2xl mb-4">暂无评估数据</h1>
-          <p className="hys-text mb-8 max-w-md mx-auto">
+        <div className="hys-container">
+          <FmsGuidePanel
+            summary="报告需要评估数据；可以先完成评估，或从历史记录恢复。"
+            steps={[
+              { title: '没有数据时先评估', description: '点击下方按钮进入 FMS 评估，完成后自动生成报告。' },
+              { title: '已有记录去历史页', description: '如果之前评估过，可在历史记录中查看详情并恢复报告。' },
+              { title: '报告生成后再训练', description: '训练方案会基于报告中的低分项、疼痛和不对称生成。' },
+            ]}
+            boundary="报告不会凭空生成训练建议，必须先有一次完整或历史评估数据。"
+            tourId="report-guide"
+          />
+          <FmsEmptyState
+            icon={AlertTriangle}
+            title="暂无评估数据"
+            description={
+              <>
             请先完成FMS功能性动作筛查，我们将为您生成详细的专业分析报告。
-          </p>
-          <Link to="/assessment">
-            <Button className="hys-button px-8">开始 FMS 评估</Button>
-          </Link>
-        </ContainerWithIcon>
+              </>
+            }
+          >
+            <Link to="/assessment">
+              <Button className="hys-button px-8">开始 FMS 评估</Button>
+            </Link>
+          </FmsEmptyState>
+        </div>
       </div>
     );
   }
@@ -134,8 +144,25 @@ const ReportPage = () => {
   return (
     <div className="hys-section">
       <div className="hys-container max-w-7xl">
+        <FmsPageHeader
+          eyebrow="FMS REPORT"
+          title="评估报告"
+          description="把总分、风险信号、排除测试和动作模式放在同一张图里，便于决定下一步训练优先级。"
+        />
+
+        <FmsGuidePanel
+          summary="报告页先判断风险，再进入训练方案。"
+          steps={[
+            { title: '看总览', description: '确认总分、风险状态，以及是否存在疼痛或高风险不对称。' },
+            { title: '核对细节', description: '展开详细评分、双侧差异和排除测试影响，确认问题来源。' },
+            { title: '进入训练', description: '使用“查看专业康复方案”把当前报告带入训练计划。' },
+          ]}
+          boundary="报告只解释本次筛查数据，不替代医学诊断。疼痛或持续不适应先处理安全问题。"
+          tourId="report-guide"
+        />
+
         {/* 报告摘要组件 - 遵循React哲学的组合原则 */}
-        <div role="region" aria-label="报告摘要">
+        <div role="region" aria-label="报告摘要" data-tour-id="report-summary">
           <ReportSummary
             totalScore={basicScoreData.totalScore}
             maxScore={basicScoreData.maxScore}
@@ -144,7 +171,7 @@ const ReportPage = () => {
         </div>
 
         {/* 顶部显眼的“查看专业康复方案”按钮 */}
-        <div className="hidden md:flex justify-center mb-12 md:mb-16" role="region" aria-label="前往训练方案">
+        <div className="hidden md:flex justify-center mb-12 md:mb-16" role="region" aria-label="前往训练方案" data-tour-id="report-training-action">
           <Link to={`/training${getRecordId() ? `?recordId=${getRecordId()}` : ''}`}>
             <Button className="hys-button px-8" aria-label="查看专业康复方案">
               查看专业康复方案
@@ -198,7 +225,7 @@ const ReportPage = () => {
         />
 
         {/* 详细分析区域 */}
-                  <div className="space-y-12 md:space-y-20">
+        <div className="space-y-12 md:space-y-20" data-tour-id="report-detail">
           {/* 生物力学分析组件 */}
           <BiomechanicalAnalysis
             basicTestsScores={basicScoreData.basicTestsScores}

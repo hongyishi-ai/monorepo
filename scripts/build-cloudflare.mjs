@@ -34,6 +34,107 @@ export const contentGovernance = {
   },
 };
 
+export const usageGuideConfigs = {
+  heatStroke: {
+    default: {
+      title: '热射病防治使用引导',
+      summary: '先判断风险，再选择工具或资料页。',
+      steps: [
+        '需要现场决策时，优先进入热指数查询或现场处置。',
+        '需要培训复盘时，查看 8-4-6 黄金法则和指南资料。',
+        '所有建议都应结合现场指挥、降温条件和医疗转运能力。',
+      ],
+      boundary: '仅供训练和现场处置参考，不替代急救指挥、临床诊疗和当地规范。',
+    },
+    pages: {
+      'pages/heat-index.html': {
+        title: '热指数查询使用引导',
+        summary: '输入环境信息后，按风险等级决定训练调整。',
+        steps: [
+          '优先使用定位或手动输入温湿度，确认数据来源可靠。',
+          '查看热指数分级和页面建议，不要只看单个数字。',
+          '高风险时减少强度、补水降温，并准备现场处置预案。',
+        ],
+        boundary: '热指数是风险评估工具，不能替代现场医学判断和指挥决策。',
+      },
+      'pages/field-treatment.html': {
+        title: '现场处置使用引导',
+        summary: '识别、降温、计时、转运要并行推进。',
+        steps: [
+          '先识别意识、体温、皮肤和运动能力异常，尽快脱离热环境。',
+          '立即启动主动降温并记录关键时间，倒计时只服务于处置节奏。',
+          '持续复评并尽早联系转运，不能等页面流程完成才求助。',
+        ],
+        boundary: '疑似热射病是急症，页面不能替代急救指挥或医疗团队处置。',
+      },
+      'pages/8-4-6-rule.html': {
+        title: '8-4-6 黄金法则使用引导',
+        summary: '把预防、预警和救治拆成可执行检查表。',
+        steps: [
+          '训练前用预防条目检查环境、补水、着装和人员状态。',
+          '训练中用预警条目观察异常信号，出现问题立即降负荷。',
+          '救治阶段按流程协同降温、转运和记录，不靠记忆临场拼凑。',
+        ],
+        boundary: '法则用于训练组织和复盘，具体处置仍以现场规范为准。',
+      },
+      'pages/heat-tolerance.html': {
+        title: '热耐力评估使用引导',
+        summary: '按表单逐项填写，结果用于训练风险分层。',
+        steps: [
+          '逐项填写近期状态、训练负荷和热暴露相关信息。',
+          '提交后查看分层解释，重点关注可调整的风险因素。',
+          '高风险结果应转化为训练安排调整，而不是继续硬撑。',
+        ],
+        boundary: '评估结果不是诊断，异常症状应优先由专业人员判断。',
+      },
+    },
+  },
+  tccc: {
+    default: {
+      title: 'TCCC 使用引导',
+      summary: '先明确场景，再按流程节点推进。',
+      steps: [
+        '确认当前页面属于 TFC、TCCC 还是 TACEVAC 场景。',
+        '按页面决策节点执行，不要跳过出血、气道、呼吸、循环等优先级。',
+        '流程学习后回到目录或标准流程，复核是否遗漏关键动作。',
+      ],
+      boundary: '仅供教育训练，不能替代现行作战医疗规范、医疗指挥链或正式认证课程。',
+    },
+    pages: {
+      'pages/tccc-standard.html': {
+        title: 'TCCC 标准流程使用引导',
+        summary: '按 MARCH/PAWS 思路复核关键处置。',
+        steps: [
+          '从威胁控制和大出血开始，不要先处理低优先级问题。',
+          '每完成一个节点都回看下一步行动和撤离准备。',
+          '学习完成后用目录进入专项算法做针对性训练。',
+        ],
+        boundary: '标准流程需按最新 CoTCCC/JTS 资料复核，本页面内容状态为待复核。',
+      },
+      'pages/tfc-hemorrhage.html': {
+        title: 'TFC 大出血算法使用引导',
+        summary: '先控制可见大出血，再继续后续评估。',
+        steps: [
+          '快速定位肢体、交界区或躯干出血来源。',
+          '按算法选择止血带、填塞、压迫或其他训练内容。',
+          '完成止血后继续进入气道、呼吸和循环相关流程。',
+        ],
+        boundary: '算法用于训练演示，实际处置必须服从现行战术医疗规范。',
+      },
+      'pages/tacevac-reassessment.html': {
+        title: 'TACEVAC 再评估使用引导',
+        summary: '转运阶段要持续复评，不是一次性检查。',
+        steps: [
+          '复查所有已完成处置是否仍然有效。',
+          '记录生命体征、疼痛、低体温和交接信息。',
+          '准备向接收方交代伤情、处置和后续风险。',
+        ],
+        boundary: '转运处置必须结合平台能力、医疗指挥和接收单位要求。',
+      },
+    },
+  },
+};
+
 export const heatStrokePageAliases = new Map([
   ['8-4-6黄金法则.html', '8-4-6-rule.html'],
   ['中国热射病诊断与治疗指南.html', 'diagnosis-treatment-guideline.html'],
@@ -318,6 +419,24 @@ export function mapTcccOutputPath(relativePath) {
   return path.posix.join(path.posix.dirname(normalized), alias);
 }
 
+export function resolveUsageGuideConfig(project, relativePath) {
+  const normalized = relativePath.split(path.sep).join('/');
+  const guideSet = usageGuideConfigs[project];
+
+  if (!guideSet) {
+    return undefined;
+  }
+
+  const outputPath =
+    project === 'heatStroke'
+      ? mapHeatStrokeOutputPath(normalized)
+      : project === 'tccc'
+        ? mapTcccOutputPath(normalized)
+        : normalized;
+
+  return guideSet.pages?.[outputPath] ?? guideSet.default;
+}
+
 function isTextFile(relativePath) {
   return /\.(html|css|js|json|txt|md|webmanifest)$/i.test(relativePath);
 }
@@ -538,6 +657,129 @@ export function injectContentGovernanceBanner(content, config) {
     .replace(/<body\b([^>]*)>/i, `<body$1>${banner}`);
 }
 
+export function injectUsageGuide(content, config) {
+  if (!config || !/<\/head>/i.test(content) || !/<body\b[^>]*>/i.test(content) || content.includes('data-hongyishi-usage-guide')) {
+    return content;
+  }
+
+  const style = `
+    <style data-hongyishi-usage-guide>
+      .hys-usage-guide {
+        max-width: 1120px;
+        margin: 1rem auto;
+        padding: 0 1rem;
+        color: #12313c;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans SC", sans-serif;
+      }
+      .hys-usage-guide details {
+        border: 2px solid #111;
+        background: #f4ecdc;
+        box-shadow: 6px 6px 0 rgba(18, 49, 60, 0.22);
+      }
+      .hys-usage-guide summary {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        min-height: 48px;
+        border-bottom: 2px solid #111;
+        padding: 0.75rem 1rem;
+        color: #111;
+        font-weight: 900;
+        list-style: none;
+      }
+      .hys-usage-guide summary::-webkit-details-marker {
+        display: none;
+      }
+      .hys-usage-guide__tag {
+        display: inline-flex;
+        align-items: center;
+        border: 2px solid #d93025;
+        background: #d93025;
+        color: #fff;
+        padding: 0.1rem 0.45rem;
+        font: 900 0.72rem/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        white-space: nowrap;
+      }
+      .hys-usage-guide__body {
+        padding: 1rem;
+        display: grid;
+        gap: 0.8rem;
+      }
+      .hys-usage-guide__summary {
+        margin: 0;
+        font-weight: 800;
+      }
+      .hys-usage-guide ol {
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 0.55rem;
+        list-style: none;
+      }
+      .hys-usage-guide li {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 0.6rem;
+        align-items: start;
+        line-height: 1.5;
+      }
+      .hys-usage-guide li span:first-child {
+        display: inline-flex;
+        min-width: 2rem;
+        justify-content: center;
+        border: 2px solid #12313c;
+        background: #12313c;
+        color: #f4ecdc;
+        font: 900 0.76rem/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+      .hys-usage-guide__boundary {
+        margin: 0;
+        border-top: 2px solid rgba(17, 17, 17, 0.3);
+        padding-top: 0.75rem;
+        color: #4d4d4d;
+        font-size: 0.92rem;
+        font-weight: 700;
+        line-height: 1.55;
+      }
+      @media (max-width: 640px) {
+        .hys-usage-guide {
+          margin: 0.75rem auto;
+          padding: 0 0.75rem;
+        }
+        .hys-usage-guide summary {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+        .hys-usage-guide__body {
+          padding: 0.85rem;
+        }
+      }
+    </style>`;
+  const steps = config.steps
+    .map((step, index) => `<li><span>${String(index + 1).padStart(2, '0')}</span><span>${escapeHtml(step)}</span></li>`)
+    .join('');
+  const guide = `
+    <section class="hys-usage-guide" data-hongyishi-usage-guide aria-label="${escapeHtml(config.title)}">
+      <details open>
+        <summary>
+          <span>${escapeHtml(config.title)}</span>
+          <span class="hys-usage-guide__tag">使用引导</span>
+        </summary>
+        <div class="hys-usage-guide__body">
+          <p class="hys-usage-guide__summary">${escapeHtml(config.summary)}</p>
+          <ol>${steps}</ol>
+          <p class="hys-usage-guide__boundary">${escapeHtml(config.boundary)}</p>
+        </div>
+      </details>
+    </section>`;
+
+  return content
+    .replace(/<\/head>/i, `${style}\n</head>`)
+    .replace(/(<body\b[^>]*>(?:\s*<aside class="hys-content-governance"[\s\S]*?<\/aside>)?)/i, `$1${guide}`);
+}
+
 export function injectTcccBrandShell(content, relativePath) {
   const normalizedPath = relativePath.split(path.sep).join('/');
 
@@ -707,6 +949,7 @@ export function rewriteHeatStrokeText(content, relativePath, basePath) {
 
   if (normalizedPath.endsWith('.html')) {
     output = injectContentGovernanceBanner(output, contentGovernance.heatStroke);
+    output = injectUsageGuide(output, resolveUsageGuideConfig('heatStroke', normalizedPath));
     output = injectMobileBottomNav(output, resolveProjectMobileActiveTab('heatStroke', mapHeatStrokeOutputPath(normalizedPath)), {
       scope: 'heatStroke',
       basePath: base,
@@ -759,6 +1002,7 @@ export function rewriteTcccText(content, relativePath, basePath) {
 
   if (normalizedPath.endsWith('.html')) {
     output = injectContentGovernanceBanner(output, contentGovernance.tccc);
+    output = injectUsageGuide(output, resolveUsageGuideConfig('tccc', normalizedPath));
     output = injectMobileBottomNav(output, resolveProjectMobileActiveTab('tccc', mapTcccOutputPath(normalizedPath)), {
       scope: 'tccc',
       basePath: base,

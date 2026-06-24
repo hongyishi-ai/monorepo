@@ -12,10 +12,12 @@ import {
   collectCloudflareFreeTierStats,
   injectMobileBottomNav,
   injectContentGovernanceBanner,
+  injectUsageGuide,
   injectTcccBrandShell,
   mapHeatStrokeOutputPath,
   mapTcccOutputPath,
   normalizeBasePath,
+  resolveUsageGuideConfig,
   rewriteHeatStrokeText,
   rewriteTcccText,
   shouldCopyHeatStrokePath,
@@ -147,7 +149,9 @@ test('rewriteHeatStrokeText scopes root-relative static links and service worker
   );
   assert.match(output, /data-hongyishi-mobile-nav/);
   assert.match(output, /data-hongyishi-content-governance/);
+  assert.match(output, /data-hongyishi-usage-guide/);
   assert.match(output, /内容状态：待复核/);
+  assert.match(output, /热射病防治使用引导|热指数查询使用引导/);
   assert.match(output, /不替代急救指挥、临床诊疗和当地规范/);
   assert.match(output, /data-hys-mobile-nav-scope="heatStroke"/);
   assert.match(output, /href="\/heat-stroke\/" aria-current="page" title="打开热射病资料"><span>资料<\/span>/);
@@ -271,7 +275,9 @@ test('rewriteTcccText scopes root-relative app links, manifest, and service work
   );
   assert.match(flowOutput, /data-hongyishi-tccc-shell/);
   assert.match(flowOutput, /data-hongyishi-content-governance/);
+  assert.match(flowOutput, /data-hongyishi-usage-guide/);
   assert.match(flowOutput, /不能替代现行作战医疗规范/);
+  assert.match(flowOutput, /TCCC 标准流程使用引导/);
   assert.match(flowOutput, /data-hongyishi-mobile-nav/);
   assert.match(flowOutput, /href="\/tccc\/pages\/tccc-standard" aria-current="page" title="打开 TCCC 标准"><span>标准<\/span>/);
   assert.doesNotMatch(flowOutput, /主站|\/\?tab=tools/);
@@ -340,6 +346,29 @@ test('injectContentGovernanceBanner adds source and review state once', () => {
     statusLabel: '待复核',
     disclaimer: '仅供训练参考。',
   }), output);
+});
+
+test('injectUsageGuide adds concise project guidance once', () => {
+  const input = '<html><head><title>x</title></head><body><main>content</main></body></html>';
+  const config = {
+    title: '测试使用引导',
+    summary: '先看风险，再操作。',
+    steps: ['第一步', '第二步'],
+    boundary: '仅供测试。',
+  };
+  const output = injectUsageGuide(input, config);
+
+  assert.match(output, /data-hongyishi-usage-guide/);
+  assert.match(output, /测试使用引导/);
+  assert.match(output, /<span>01<\/span><span>第一步<\/span>/);
+  assert.match(output, /仅供测试。/);
+  assert.equal(injectUsageGuide(output, config), output);
+});
+
+test('resolveUsageGuideConfig follows safe page aliases', () => {
+  assert.equal(resolveUsageGuideConfig('heatStroke', 'pages/热射病现场处置.html').title, '现场处置使用引导');
+  assert.equal(resolveUsageGuideConfig('tccc', 'pages/TFC大出血算法.html').title, 'TFC 大出血算法使用引导');
+  assert.equal(resolveUsageGuideConfig('tccc', 'index.html').title, 'TCCC 使用引导');
 });
 
 test('injectTcccBrandShell adds unified brand context only to TCCC flow pages', () => {

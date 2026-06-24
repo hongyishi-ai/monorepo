@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useStorage } from '@/hooks/use-storage';
 import type { AssessmentRecord } from '@/lib/storage';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
@@ -14,6 +14,7 @@ import ContainerWithIcon from '@/components/ui/container-with-icon';
 import { Calendar, Clock, Download, Upload, Trash2, Star, StarOff, BarChart3, Activity, AlertTriangle, CheckCircle, Archive } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { FmsGuidePanel, FmsMetricCard, FmsPageHeader } from '@/components/shared/FmsPage';
 
 const HistoryPage = () => {
   const navigate = useNavigate();
@@ -188,54 +189,43 @@ const HistoryPage = () => {
   return (
     <div className="hys-section" role="region" aria-label="历史评估记录">
       <div className="hys-container max-w-6xl">
-        {/* 页面标题和统计信息 */}
-        <div className="text-center mb-16 md:mb-20 minimal-fade-in" role="region" aria-label="页面标题与说明">
-          <h1 className="hys-title">历史评估记录</h1>
-          <p className="hys-subtitle max-w-3xl mx-auto mt-6">
+        <FmsPageHeader
+          eyebrow="FMS LOCAL RECORDS"
+          title="历史评估记录"
+          description={
+            <>
             管理您的所有FMS评估记录，支持查看详细报告、数据导入导出和记录管理功能。
-          </p>
-        </div>
+            </>
+          }
+        />
+
+        <FmsGuidePanel
+          summary="记录默认保存在本机，换设备前请先导出。"
+          steps={[
+            { title: '查看统计', description: '先确认当前设备内有多少记录、收藏和平均得分。' },
+            { title: '恢复报告', description: '点击“查看详情”可恢复某次报告，并继续进入训练方案。' },
+            { title: '导出备份', description: '浏览器本地数据可能被清理，重要记录建议定期导出 JSON。' },
+            { title: '导入迁移', description: '换设备或重装后，用导入功能恢复此前导出的记录。' },
+          ]}
+          boundary="导入前请确认 JSON 来源可信；删除记录后无法从页面内恢复。"
+          tourId="history-guide"
+        />
 
         {/* 统计卡片 */}
         <div className="mb-16 md:mb-20" role="region" aria-label="统计概览">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12">
-            <Card className="hys-card">
-              <CardContent className="p-4 text-center">
-                <Archive className="w-8 h-8 mx-auto mb-2 text-blue-600" />
-                <div className="text-2xl font-light text-blue-600">{statistics.totalAssessments}</div>
-                <div className="text-sm text-muted-foreground">总记录数</div>
-              </CardContent>
-            </Card>
-            <Card className="hys-card">
-              <CardContent className="p-4 text-center">
-                <Star className="w-8 h-8 mx-auto mb-2 text-amber-600" />
-                <div className="text-2xl font-light text-amber-600">{statistics.starredAssessments}</div>
-                <div className="text-sm text-muted-foreground">收藏记录</div>
-              </CardContent>
-            </Card>
-            <Card className="hys-card">
-              <CardContent className="p-4 text-center">
-                <Activity className="w-8 h-8 mx-auto mb-2 text-green-600" />
-                <div className="text-2xl font-light text-green-600">{statistics.avgScore}</div>
-                <div className="text-sm text-muted-foreground">平均得分</div>
-              </CardContent>
-            </Card>
-            <Card className="hys-card">
-              <CardContent className="p-4 text-center">
-                <Clock className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
-                <div className="text-sm font-light text-muted-foreground">
-                  {statistics.latestAssessment 
-                    ? format(statistics.latestAssessment, 'MM/dd')
-                    : '无'
-                  }
-                </div>
-                <div className="text-sm text-muted-foreground">最近评估</div>
-              </CardContent>
-            </Card>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12" data-tour-id="history-stats">
+            <FmsMetricCard icon={Archive} label="总记录数" value={statistics.totalAssessments} />
+            <FmsMetricCard icon={Star} label="收藏记录" value={statistics.starredAssessments} />
+            <FmsMetricCard icon={Activity} label="平均得分" value={statistics.avgScore} />
+            <FmsMetricCard
+              icon={Clock}
+              label="最近评估"
+              value={statistics.latestAssessment ? format(statistics.latestAssessment, 'MM/dd') : '无'}
+            />
           </div>
 
           {/* 操作按钮 */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center" role="region" aria-label="导入导出与新建操作">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center" role="region" aria-label="导入导出与新建操作" data-tour-id="history-actions">
             <Link to="/assessment">
               <Button className="hys-button px-8">新建评估</Button>
             </Link>
@@ -265,7 +255,7 @@ const HistoryPage = () => {
                       type="file"
                       accept=".json"
                       onChange={handleFileImport}
-                      className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                      className="hys-field-input hys-file-input mt-2 block w-full text-sm text-muted-foreground file:mr-4 file:px-4 file:py-2"
                     />
                   </div>
                   <div>
@@ -337,7 +327,7 @@ const HistoryPage = () => {
             </Link>
           </ContainerWithIcon>
         ) : (
-          <div className="space-y-6" role="list" aria-label="评估记录列表">
+          <div className="space-y-6" role="list" aria-label="评估记录列表" data-tour-id="history-records">
             {assessments.map((record) => {
               const status = getAssessmentStatus(record);
               const StatusIcon = status.icon;
