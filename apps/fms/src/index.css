@@ -261,7 +261,55 @@
     line-height: 1.6;
   }
 
+  .hys-mobile-bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+    border-top: 2px solid hsl(var(--foreground));
+    background: hsl(var(--background) / 0.96);
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+    box-shadow: 0 -10px 28px rgba(0, 0, 0, 0.16);
+    backdrop-filter: blur(10px);
+  }
+
+  .hys-mobile-bottom-nav__item {
+    display: flex;
+    min-height: 54px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    border: 2px solid transparent;
+    color: hsl(var(--muted-foreground));
+    font: 900 12px/1.1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    letter-spacing: 0;
+    text-decoration: none;
+  }
+
+  .hys-mobile-bottom-nav__icon {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2.5;
+  }
+
+  .hys-mobile-bottom-nav__item--active {
+    border-color: hsl(var(--foreground));
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+
   /* 移动端优化 */
+  @media (max-width: 1023px) {
+    body {
+      padding-bottom: calc(86px + env(safe-area-inset-bottom));
+    }
+  }
+
   @media (max-width: 768px) {
     .hys-section {
       padding: 2rem 0; /* 移动端进一步减少间距 */

@@ -74,6 +74,39 @@ export const tcccPageAliases = new Map([
   ['循环系统教案.html', 'circulation-course.html'],
 ]);
 
+export const mobileNavConfigs = {
+  platform: {
+    ariaLabel: '红医师移动端导航',
+    titlePrefix: '打开红医师',
+    tabs: [
+      { id: 'action', label: '处置', href: '/?tab=action' },
+      { id: 'tools', label: '工具', href: '/?tab=tools' },
+      { id: 'records', label: '记录', href: '/?tab=records' },
+      { id: 'library', label: '资料', href: '/?tab=library' },
+    ],
+  },
+  heatStroke: {
+    ariaLabel: '热射病项目移动端导航',
+    titlePrefix: '打开热射病',
+    tabs: [
+      { id: 'heat-index', label: '热指数', href: 'pages/heat-index' },
+      { id: 'field-treatment', label: '处置', href: 'pages/field-treatment' },
+      { id: 'rule', label: '法则', href: 'pages/8-4-6-rule' },
+      { id: 'library', label: '资料', href: '' },
+    ],
+  },
+  tccc: {
+    ariaLabel: 'TCCC 项目移动端导航',
+    titlePrefix: '打开 TCCC ',
+    tabs: [
+      { id: 'standard', label: '标准', href: 'pages/tccc-standard' },
+      { id: 'tfc', label: 'TFC', href: 'pages/tfc-hemorrhage' },
+      { id: 'tacevac', label: 'TACEVAC', href: 'pages/tacevac-reassessment' },
+      { id: 'directory', label: '目录', href: '' },
+    ],
+  },
+};
+
 export function normalizeBasePath(basePath) {
   if (!basePath || basePath === '/') {
     return '/';
@@ -82,6 +115,41 @@ export function normalizeBasePath(basePath) {
   let normalized = basePath.startsWith('/') ? basePath : `/${basePath}`;
   normalized = normalized.endsWith('/') ? normalized : `${normalized}/`;
   return normalized;
+}
+
+function joinBasePath(basePath, relativeHref) {
+  if (relativeHref.startsWith('/')) {
+    return relativeHref;
+  }
+
+  const base = normalizeBasePath(basePath);
+
+  if (!relativeHref) {
+    return base;
+  }
+
+  return `${base}${relativeHref.replace(/^\/+/, '')}`;
+}
+
+export function resolveProjectMobileActiveTab(project, relativePath) {
+  const normalizedPath = relativePath.split(path.sep).join('/');
+  const fileName = path.posix.basename(normalizedPath);
+
+  if (project === 'heatStroke') {
+    if (fileName === 'heat-index.html') return 'heat-index';
+    if (fileName === 'field-treatment.html') return 'field-treatment';
+    if (fileName === '8-4-6-rule.html') return 'rule';
+    return 'library';
+  }
+
+  if (project === 'tccc') {
+    if (fileName === 'tccc-standard.html' || fileName === 'tccc-flow-framework.html') return 'standard';
+    if (fileName.startsWith('tfc-')) return 'tfc';
+    if (fileName.startsWith('tacevac-')) return 'tacevac';
+    return 'directory';
+  }
+
+  return undefined;
 }
 
 export function buildRedirects({ fmsBase = '/fms/', heatStrokeBase = '/heat-stroke/', tcccBase = '/tccc/' } = {}) {
@@ -296,23 +364,25 @@ function rewritePageHrefExtensions(content) {
   });
 }
 
-export function injectMobileBottomNav(content, activeTab = 'tools') {
+export function injectMobileBottomNav(content, activeTab = 'tools', options = {}) {
   if (!/<\/body>/i.test(content) || content.includes('data-hongyishi-mobile-nav')) {
     return content;
   }
 
-  const tabs = [
-    { id: 'action', label: '处置', href: '/?tab=action' },
-    { id: 'tools', label: '工具', href: '/?tab=tools' },
-    { id: 'records', label: '记录', href: '/?tab=records' },
-    { id: 'library', label: '资料', href: '/?tab=library' },
-  ];
+  const scope = options.scope ?? 'platform';
+  const config = options.config ?? mobileNavConfigs[scope] ?? mobileNavConfigs.platform;
+  const basePath = options.basePath ?? '/';
+  const tabs = config.tabs.map((tab) => ({
+    ...tab,
+    href: joinBasePath(basePath, tab.href),
+  }));
 
   const navItems = tabs
     .map((tab) => {
       const activeClass = tab.id === activeTab ? ' hys-mobile-nav__item--active' : '';
       const ariaCurrent = tab.id === activeTab ? ' aria-current="page"' : '';
-      return `<a class="hys-mobile-nav__item${activeClass}" href="${tab.href}"${ariaCurrent} title="返回红医师主站${tab.label}舱"><small>主站</small><span>${tab.label}</span></a>`;
+      const title = `${config.titlePrefix}${tab.label}`;
+      return `<a class="hys-mobile-nav__item${activeClass}" href="${escapeHtml(tab.href)}"${ariaCurrent} title="${escapeHtml(title)}"><span>${escapeHtml(tab.label)}</span></a>`;
     })
     .join('');
 
@@ -344,21 +414,14 @@ export function injectMobileBottomNav(content, activeTab = 'tools') {
   }
   .hys-mobile-nav__item {
     display: flex;
-    flex-direction: column;
     min-height: 54px;
     align-items: center;
     justify-content: center;
-    gap: 2px;
     border: 2px solid transparent;
     color: #5f6567;
-    font: 800 13px/1.1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font: 900 13px/1.1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    letter-spacing: 0;
     text-decoration: none;
-  }
-  .hys-mobile-nav__item small {
-    display: block;
-    font-size: 10px;
-    font-weight: 700;
-    opacity: 0.68;
   }
   .hys-mobile-nav__item--active {
     border-color: #111;
@@ -371,7 +434,7 @@ export function injectMobileBottomNav(content, activeTab = 'tools') {
   }
 }
 </style>
-<nav class="hys-mobile-nav" data-hongyishi-mobile-nav aria-label="红医师移动端导航">${navItems}</nav>`;
+<nav class="hys-mobile-nav" data-hongyishi-mobile-nav data-hys-mobile-nav-scope="${escapeHtml(scope)}" aria-label="${escapeHtml(config.ariaLabel)}">${navItems}</nav>`;
 
   return content.replace(/<\/body>/i, `${nav}\n</body>`);
 }
@@ -433,6 +496,29 @@ export function injectContentGovernanceBanner(content, config) {
         color: #12313c;
         font-weight: 900;
         text-decoration: underline;
+      }
+      @media (max-width: 640px) {
+        .hys-content-governance {
+          font-size: 11px;
+          line-height: 1.35;
+        }
+        .hys-content-governance__inner {
+          align-items: center;
+          gap: 0.25rem 0.5rem;
+          grid-template-columns: auto minmax(0, 1fr);
+          padding: 0.5rem 0.75rem;
+        }
+        .hys-content-governance__status {
+          font-size: 10px;
+          padding: 0.05rem 0.35rem;
+          white-space: nowrap;
+        }
+        .hys-content-governance__meta {
+          grid-column: 1 / -1;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
       }
     </style>`;
   const officialLink = config.officialUpdateUrl
@@ -576,11 +662,6 @@ export function injectTcccBrandShell(content, relativePath) {
     .replace(/<body\b([^>]*)>/i, `<body$1>${shell}`);
 }
 
-async function injectMobileBottomNavIntoFile(filePath, activeTab = 'tools') {
-  const content = await readFile(filePath, 'utf8');
-  await writeFile(filePath, injectMobileBottomNav(content, activeTab));
-}
-
 function rewriteHeatStrokePageAliases(content) {
   return rewritePageAliases(content, heatStrokePageAliases);
 }
@@ -626,7 +707,10 @@ export function rewriteHeatStrokeText(content, relativePath, basePath) {
 
   if (normalizedPath.endsWith('.html')) {
     output = injectContentGovernanceBanner(output, contentGovernance.heatStroke);
-    output = injectMobileBottomNav(output, 'tools');
+    output = injectMobileBottomNav(output, resolveProjectMobileActiveTab('heatStroke', mapHeatStrokeOutputPath(normalizedPath)), {
+      scope: 'heatStroke',
+      basePath: base,
+    });
   }
 
   return output;
@@ -675,7 +759,10 @@ export function rewriteTcccText(content, relativePath, basePath) {
 
   if (normalizedPath.endsWith('.html')) {
     output = injectContentGovernanceBanner(output, contentGovernance.tccc);
-    output = injectMobileBottomNav(output, 'tools');
+    output = injectMobileBottomNav(output, resolveProjectMobileActiveTab('tccc', mapTcccOutputPath(normalizedPath)), {
+      scope: 'tccc',
+      basePath: base,
+    });
   }
 
   return output;
@@ -868,10 +955,6 @@ export async function buildCloudflareSite({
   await cp(fmsOutput, path.join(outputDir, normalizeBasePath(fmsBase).replace(/^\/|\/$/g, '')), {
     recursive: true,
   });
-  await injectMobileBottomNavIntoFile(
-    path.join(outputDir, normalizeBasePath(fmsBase).replace(/^\/|\/$/g, ''), 'index.html'),
-    'tools',
-  );
   await copyFile(
     path.join(outputDir, normalizeBasePath(fmsBase).replace(/^\/|\/$/g, ''), 'index.html'),
     path.join(outputDir, normalizeBasePath(fmsBase).replace(/^\/|\/$/g, ''), '404.html'),

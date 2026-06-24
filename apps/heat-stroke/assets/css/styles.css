@@ -427,7 +427,7 @@ body.hys-heat-page :is(input, select, textarea, .form-input):focus {
     outline-offset: 2px;
 }
 
-body.hys-heat-page :is(.progress-bar, .progress-container) {
+body.hys-heat-page .progress-bar {
     background: rgba(18, 49, 60, 0.14) !important;
     border: 1px solid var(--hys-line) !important;
     border-radius: 999px !important;
@@ -468,6 +468,153 @@ body.hys-heat-page [data-hongyishi-content-governance] {
 
 body.hys-heat-page :is(table, .table) {
     border-color: var(--hys-field-navy) !important;
+}
+
+body.hys-heat-page .hys-flow-status {
+    border: 2px solid var(--hys-ink) !important;
+    border-radius: 6px !important;
+    background: linear-gradient(180deg, #FFFDF4 0%, var(--hys-paper) 100%) !important;
+    box-shadow: var(--hys-shadow-red);
+    padding: 0.9rem !important;
+}
+
+body.hys-heat-page .hys-flow-status__header {
+    align-items: stretch !important;
+    display: grid !important;
+    gap: 0.75rem !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    margin-bottom: 0.75rem !important;
+}
+
+body.hys-heat-page #current-step-text {
+    align-items: center;
+    background: var(--hys-field-navy);
+    border: 2px solid var(--hys-ink);
+    color: var(--hys-paper);
+    display: inline-flex;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 900;
+    letter-spacing: 0;
+    min-height: 44px;
+    padding: 0.55rem 0.75rem;
+}
+
+body.hys-heat-page #timer.timer {
+    align-items: center;
+    background: var(--hys-red);
+    border: 2px solid var(--hys-ink);
+    color: var(--hys-paper) !important;
+    display: inline-flex;
+    font-family: var(--font-mono);
+    font-size: clamp(1.2rem, 7vw, 1.9rem) !important;
+    font-variant-numeric: tabular-nums;
+    font-weight: 900;
+    justify-content: center;
+    letter-spacing: 0;
+    min-height: 44px;
+    min-width: 5.7rem;
+    padding: 0.35rem 0.7rem;
+}
+
+body.hys-heat-page #timer.timer.hidden {
+    display: none !important;
+}
+
+body.hys-heat-page .hys-flow-status .progress-bar {
+    background: rgba(18, 49, 60, 0.14) !important;
+    border: 2px solid var(--hys-field-navy) !important;
+    border-radius: 0 !important;
+    height: 12px !important;
+    margin: 0 !important;
+    overflow: hidden;
+}
+
+body.hys-heat-page .hys-flow-status .progress-fill {
+    background: var(--hys-red) !important;
+    border-radius: 0 !important;
+}
+
+body.hys-heat-page .checkbox-container {
+    align-items: center !important;
+    background: #FFFDF4;
+    border: 2px solid rgba(18, 49, 60, 0.28);
+    border-radius: 6px;
+    color: var(--hys-field-navy);
+    display: grid !important;
+    gap: 0.75rem;
+    grid-template-columns: 44px minmax(0, 1fr);
+    margin: 0.75rem 0 !important;
+    min-height: 56px;
+    padding: 0.45rem 0.6rem;
+}
+
+body.hys-heat-page .checkbox-container label {
+    color: var(--hys-field-navy);
+    font-weight: 800;
+    line-height: 1.35;
+}
+
+body.hys-heat-page .custom-checkbox {
+    align-items: center;
+    background: var(--hys-paper) !important;
+    border: 2px solid var(--hys-field-navy) !important;
+    border-radius: 4px !important;
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.75);
+    cursor: pointer;
+    display: inline-flex !important;
+    height: 44px !important;
+    justify-content: center;
+    margin: 0 !important;
+    min-height: 44px;
+    min-width: 44px;
+    width: 44px !important;
+}
+
+body.hys-heat-page .custom-checkbox.checked {
+    background: var(--hys-red) !important;
+    border-color: var(--hys-ink) !important;
+}
+
+body.hys-heat-page .custom-checkbox.checked::after {
+    border: solid var(--hys-paper);
+    border-width: 0 3px 3px 0;
+    content: "" !important;
+    display: block;
+    height: 20px;
+    transform: rotate(45deg) translate(-1px, -2px);
+    width: 10px;
+}
+
+body.hys-heat-page .custom-checkbox:focus-visible {
+    outline: 3px solid var(--hys-focus) !important;
+    outline-offset: 3px;
+}
+
+body.hys-heat-page .step-number {
+    background: var(--hys-red) !important;
+    border: 2px solid var(--hys-ink);
+    border-radius: 4px !important;
+    color: var(--hys-paper);
+    font-family: var(--font-mono);
+    font-weight: 900;
+}
+
+@media (max-width: 640px) {
+    body.hys-heat-page .hys-flow-status {
+        margin-left: -0.25rem;
+        margin-right: -0.25rem;
+        padding: 0.75rem !important;
+    }
+
+    body.hys-heat-page .hys-flow-status__header {
+        grid-template-columns: 1fr;
+    }
+
+    body.hys-heat-page #timer.timer {
+        justify-self: stretch;
+        width: 100%;
+    }
 }
 
 body.hys-heat-page :is(th, td) {

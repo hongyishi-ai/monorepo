@@ -1,7 +1,7 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Menu, X } from 'lucide-react';
+import { ClipboardCheck, Dumbbell, History, Home, Menu, X } from 'lucide-react';
 import { useAppStore } from '@/stores/useAppStore';
 import ThemeToggle from '@/components/ui/theme-toggle';
 
@@ -20,6 +20,13 @@ const RootLayout = () => {
     { to: '/history', label: '历史记录', type: 'link' },
     { to: '/education', label: 'FMS知识', type: 'link' },
     { to: '/about', label: '关于本项目', type: 'link' },
+  ];
+
+  const mobileBottomItems = [
+    { to: '/', label: '首页', icon: Home, exact: true },
+    { to: '/assessment', label: '评估', icon: ClipboardCheck },
+    { to: '/training', label: '训练', icon: Dumbbell },
+    { to: '/history', label: '记录', icon: History },
   ];
 
   const isActivePath = (path: string, exact = false) => {
@@ -138,6 +145,31 @@ const RootLayout = () => {
       <main id="main" className="flex-grow">
         <Outlet />
       </main>
+
+      <nav
+        className="hys-mobile-bottom-nav lg:hidden"
+        data-hongyishi-mobile-nav
+        data-hys-mobile-nav-scope="fms"
+        aria-label="训练伤防治项目移动端导航"
+      >
+        {mobileBottomItems.map((item) => {
+          const Icon = item.icon;
+          const active = isActivePath(item.to, item.exact);
+
+          return (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={cn('hys-mobile-bottom-nav__item', active && 'hys-mobile-bottom-nav__item--active')}
+              aria-current={active ? 'page' : undefined}
+              onClick={closeMobileMenu}
+            >
+              <Icon aria-hidden="true" className="hys-mobile-bottom-nav__icon" />
+              <span>{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
 
       {/* 红医师页脚 */}
       <footer className="hys-footer">

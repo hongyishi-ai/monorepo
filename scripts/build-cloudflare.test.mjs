@@ -149,7 +149,10 @@ test('rewriteHeatStrokeText scopes root-relative static links and service worker
   assert.match(output, /data-hongyishi-content-governance/);
   assert.match(output, /内容状态：待复核/);
   assert.match(output, /不替代急救指挥、临床诊疗和当地规范/);
-  assert.match(output, /href="\/\?tab=tools" aria-current="page"/);
+  assert.match(output, /data-hys-mobile-nav-scope="heatStroke"/);
+  assert.match(output, /href="\/heat-stroke\/" aria-current="page" title="打开热射病资料"><span>资料<\/span>/);
+  assert.match(output, /href="\/heat-stroke\/pages\/field-treatment" title="打开热射病处置"/);
+  assert.doesNotMatch(output, /主站|\/\?tab=tools/);
   assert.doesNotMatch(output, /data-hongyishi-tccc-shell/);
 });
 
@@ -255,7 +258,10 @@ test('rewriteTcccText scopes root-relative app links, manifest, and service work
   assert.match(output, /href="\/tccc\/pages\/tccc-standard"/);
   assert.match(output, /navigator\.serviceWorker\.register\('\/tccc\/sw\.js', \{ scope: '\/tccc\/' \}\)/);
   assert.match(output, /data-hongyishi-mobile-nav/);
-  assert.match(output, /href="\/\?tab=tools" aria-current="page"/);
+  assert.match(output, /data-hys-mobile-nav-scope="tccc"/);
+  assert.match(output, /href="\/tccc\/" aria-current="page" title="打开 TCCC 目录"><span>目录<\/span>/);
+  assert.match(output, /href="\/tccc\/pages\/tfc-hemorrhage" title="打开 TCCC TFC"/);
+  assert.doesNotMatch(output, /主站|\/\?tab=tools/);
   assert.doesNotMatch(output, /data-hongyishi-tccc-shell/);
 
   const flowOutput = rewriteTcccText(
@@ -267,6 +273,8 @@ test('rewriteTcccText scopes root-relative app links, manifest, and service work
   assert.match(flowOutput, /data-hongyishi-content-governance/);
   assert.match(flowOutput, /不能替代现行作战医疗规范/);
   assert.match(flowOutput, /data-hongyishi-mobile-nav/);
+  assert.match(flowOutput, /href="\/tccc\/pages\/tccc-standard" aria-current="page" title="打开 TCCC 标准"><span>标准<\/span>/);
+  assert.doesNotMatch(flowOutput, /主站|\/\?tab=tools/);
 
   const manifest = JSON.stringify({
     name: 'TCCC',
@@ -287,9 +295,25 @@ test('injectMobileBottomNav is mobile-only and idempotent', () => {
 
   assert.match(once, /@media \(max-width: 768px\)/);
   assert.match(once, /href="\/\?tab=records" aria-current="page"/);
-  assert.match(once, /title="返回红医师主站记录舱"/);
-  assert.match(once, /<small>主站<\/small><span>记录<\/span>/);
+  assert.match(once, /title="打开红医师记录"/);
+  assert.match(once, /<span>记录<\/span>/);
+  assert.doesNotMatch(once, /<small>|主站/);
   assert.equal(twice, once);
+});
+
+test('injectMobileBottomNav can render project-local tabs', () => {
+  const input = '<html><body><main>content</main></body></html>';
+  const output = injectMobileBottomNav(input, 'field-treatment', {
+    scope: 'heatStroke',
+    basePath: '/heat-stroke/',
+  });
+
+  assert.match(output, /aria-label="热射病项目移动端导航"/);
+  assert.match(output, /data-hys-mobile-nav-scope="heatStroke"/);
+  assert.match(output, /href="\/heat-stroke\/pages\/field-treatment" aria-current="page" title="打开热射病处置"/);
+  assert.match(output, /href="\/heat-stroke\/pages\/heat-index"/);
+  assert.match(output, /href="\/heat-stroke\/"/);
+  assert.doesNotMatch(output, /主站|\/\?tab=/);
 });
 
 test('injectContentGovernanceBanner adds source and review state once', () => {
@@ -429,6 +453,7 @@ test('heat-stroke interactive tool DOM contracts remain intact', async () => {
         'id="finish-btn"',
         'id="restart-btn"',
         'id="temperature-input"',
+        'class="progress-container hys-flow-status mb-8"',
         'class="custom-checkbox"',
       ],
     },

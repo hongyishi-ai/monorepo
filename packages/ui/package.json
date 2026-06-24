@@ -7,7 +7,8 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./components/*": "./src/components/*"
+    "./components/*": "./src/components/*",
+    "./styles/*": "./src/styles/*"
   },
   "scripts": {
     "build": "tsc --noEmit",

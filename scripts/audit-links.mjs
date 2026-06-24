@@ -208,31 +208,100 @@ async function checkMobileNav() {
     hasTouch: true,
   });
   const routesToCheck = [
-    '/',
-    '/heat-stroke/',
-    '/heat-stroke/pages/field-treatment',
-    '/tccc/',
-    '/tccc/pages/tccc-standard',
-    '/fms/assessment',
+    {
+      path: '/',
+      requiredLabels: ['处置', '工具', '记录', '资料'],
+    },
+    {
+      path: '/heat-stroke/',
+      expectedScope: 'heatStroke',
+      linkBase: '/heat-stroke/',
+      requiredHrefs: [
+        '/heat-stroke/pages/heat-index',
+        '/heat-stroke/pages/field-treatment',
+        '/heat-stroke/pages/8-4-6-rule',
+        '/heat-stroke/',
+      ],
+    },
+    {
+      path: '/heat-stroke/pages/field-treatment',
+      expectedScope: 'heatStroke',
+      linkBase: '/heat-stroke/',
+      requiredHrefs: [
+        '/heat-stroke/pages/heat-index',
+        '/heat-stroke/pages/field-treatment',
+        '/heat-stroke/pages/8-4-6-rule',
+        '/heat-stroke/',
+      ],
+    },
+    {
+      path: '/tccc/',
+      expectedScope: 'tccc',
+      linkBase: '/tccc/',
+      requiredHrefs: [
+        '/tccc/pages/tccc-standard',
+        '/tccc/pages/tfc-hemorrhage',
+        '/tccc/pages/tacevac-reassessment',
+        '/tccc/',
+      ],
+    },
+    {
+      path: '/tccc/pages/tccc-standard',
+      expectedScope: 'tccc',
+      linkBase: '/tccc/',
+      requiredHrefs: [
+        '/tccc/pages/tccc-standard',
+        '/tccc/pages/tfc-hemorrhage',
+        '/tccc/pages/tacevac-reassessment',
+        '/tccc/',
+      ],
+    },
+    {
+      path: '/fms/assessment',
+      expectedScope: 'fms',
+      linkBase: '/fms/',
+      requiredHrefs: ['/fms', '/fms/assessment', '/fms/training', '/fms/history'],
+    },
   ];
   const results = [];
 
   try {
-    for (const route of routesToCheck) {
-      await page.goto(new URL(route, baseUrl).href, { waitUntil: 'domcontentloaded', timeout: 15_000 });
+    for (const expectation of routesToCheck) {
+      await page.goto(new URL(expectation.path, baseUrl).href, { waitUntil: 'domcontentloaded', timeout: 15_000 });
       await page.waitForTimeout(300);
       results.push(
-        await page.evaluate((path) => {
+        await page.evaluate((expected) => {
           const nav = document.querySelector('nav[data-hongyishi-mobile-nav], nav[aria-label="红医师移动端导航"]');
           const style = nav ? getComputedStyle(nav) : null;
+          const hrefs = nav
+            ? Array.from(nav.querySelectorAll('a[href]')).map((link) => {
+                const url = new URL(link.getAttribute('href'), window.location.href);
+                return `${url.pathname}${url.search}`;
+              })
+            : [];
+          const labels = nav
+            ? Array.from(nav.querySelectorAll('a[href], button')).map((item) => item.textContent?.replace(/\s+/g, ' ').trim() ?? '')
+            : [];
+          const linkBaseRoot = expected.linkBase?.replace(/\/$/, '');
+          const outOfScopeLinks = expected.linkBase
+            ? hrefs.filter((href) => href.startsWith('/') && !href.startsWith(expected.linkBase) && href !== linkBaseRoot)
+            : [];
+          const missingRequiredHrefs = (expected.requiredHrefs ?? []).filter((href) => !hrefs.includes(href));
+          const missingRequiredLabels = (expected.requiredLabels ?? []).filter((label) => !labels.includes(label));
 
           return {
-            path,
+            path: expected.path,
             hasNav: Boolean(nav),
             position: style?.position ?? '',
+            scope: nav?.getAttribute('data-hys-mobile-nav-scope') ?? '',
+            expectedScope: expected.expectedScope ?? '',
+            hasMainSiteLabel: Boolean(nav?.textContent?.includes('主站')),
+            missingRequiredHrefs,
+            missingRequiredLabels,
+            outOfScopeLinks,
             horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 2,
           };
-        }, route),
+        }, expectation),
       );
     }
   } finally {
@@ -256,7 +325,17 @@ const mobileNav = await checkMobileNav();
 const externalResults = shouldCheckExternal ? await checkExternalLinks(crawl.external) : [];
 
 const representativeFailures = representative.filter((item) => item.error || item.status >= 400);
-const mobileNavFailures = mobileNav.filter((item) => !item.hasNav || item.position !== 'fixed' || item.horizontalOverflow);
+const mobileNavFailures = mobileNav.filter(
+  (item) =>
+    !item.hasNav ||
+    item.position !== 'fixed' ||
+    item.horizontalOverflow ||
+    item.hasMainSiteLabel ||
+    item.missingRequiredHrefs.length > 0 ||
+    item.missingRequiredLabels.length > 0 ||
+    item.outOfScopeLinks.length > 0 ||
+    (item.expectedScope && item.scope !== item.expectedScope),
+);
 const externalFailures = externalResults.filter((item) => !item.ok);
 const failed = crawl.failures.length > 0 || representativeFailures.length > 0 || mobileNavFailures.length > 0 || externalFailures.length > 0;
 

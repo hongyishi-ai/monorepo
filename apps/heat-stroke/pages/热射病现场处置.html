@@ -319,8 +319,8 @@
 
         <!-- 处置流程 -->
         <section id="treatment-flow" class="hidden">
-            <div class="progress-container mb-8">
-                <div class="flex justify-between mb-2">
+            <div class="progress-container hys-flow-status mb-8">
+                <div class="flex justify-between mb-2 hys-flow-status__header">
                     <span id="current-step-text">步骤 1/6</span>
                     <span id="timer" class="timer hidden">00:00</span>
                 </div>
@@ -1217,6 +1217,7 @@
                 // 重置UI
                 document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
                     checkbox.classList.remove('checked');
+                    checkbox.setAttribute('aria-checked', 'false');
                 });
                 
                 document.querySelectorAll('.step-container').forEach(container => {

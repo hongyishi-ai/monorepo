@@ -1,0 +1,29 @@
+@layer components {
+  .hys-control-checkbox {
+    min-width: 44px;
+    width: 44px;
+    height: 44px;
+    border: 2px solid var(--hys-color-field-navy);
+    border-radius: var(--hys-radius-control);
+    background: var(--hys-color-paper);
+  }
+
+  .hys-control-checkbox[aria-checked="true"],
+  .hys-control-checkbox:checked {
+    border-color: var(--hys-color-ink);
+    background: var(--hys-color-constructivism-red);
+  }
+
+  .hys-control-progress {
+    height: 12px;
+    overflow: hidden;
+    border: 2px solid var(--hys-color-field-navy);
+    border-radius: 0;
+    background: rgba(18, 49, 60, 0.14);
+  }
+
+  .hys-control-progress__fill {
+    height: 100%;
+    background: var(--hys-color-constructivism-red);
+  }
+}

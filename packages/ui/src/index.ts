@@ -17,6 +17,10 @@ export { Card } from './components/card/card';
 
 // Form
 export { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from './components/form/form';
+export { Checkbox } from './components/form/checkbox';
 export { Input } from './components/form/input';
 export { Label } from './components/form/label';
 export { Select } from './components/form/select';
+
+// Feedback
+export { Progress } from './components/feedback/progress';
