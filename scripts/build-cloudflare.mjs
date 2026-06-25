@@ -519,6 +519,297 @@ export function injectMobileBottomNav(
   return content.replace(/<\/body>/i, `${nav}\n</body>`);
 }
 
+export function injectThemeRuntime(content) {
+  if (
+    !/<\/head>/i.test(content) ||
+    !/<\/body>/i.test(content) ||
+    content.includes("data-hongyishi-theme-runtime")
+  ) {
+    return content;
+  }
+
+  const style = `
+<style data-hongyishi-theme-runtime>
+  :root {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  html.dark {
+    --hys-paper: #050505;
+    --hys-ink: #f4ecdc;
+    --hys-field-navy: #f4ecdc;
+    --hys-muted: #b8b0a2;
+    --hys-clinical-blue: #78c7e7;
+  }
+  html.dark body {
+    background-color: #050505 !important;
+    color: #f4ecdc !important;
+  }
+  html.dark body,
+  html.dark body.hys-heat-page {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px) !important;
+  }
+  html.dark a {
+    color: #78c7e7;
+  }
+  .hys-theme-control {
+    position: fixed;
+    top: max(12px, env(safe-area-inset-top));
+    right: max(12px, env(safe-area-inset-right));
+    z-index: 2147482999;
+    display: grid;
+    justify-items: end;
+    gap: 6px;
+    color: #111;
+    font: 900 12px/1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+  .hys-theme-control__trigger,
+  .hys-theme-control__item {
+    appearance: none;
+    border: 2px solid currentColor;
+    border-radius: 4px;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    letter-spacing: 0;
+  }
+  .hys-theme-control__trigger {
+    min-height: 36px;
+    background: rgba(244, 236, 220, 0.94);
+    padding: 0 10px;
+    box-shadow: 4px 4px 0 rgba(17, 17, 17, 0.18);
+    backdrop-filter: blur(10px);
+  }
+  .hys-theme-control__menu {
+    display: none;
+    min-width: 132px;
+    border: 2px solid currentColor;
+    border-radius: 4px;
+    background: rgba(244, 236, 220, 0.98);
+    box-shadow: 8px 8px 0 rgba(17, 17, 17, 0.18);
+    padding: 4px;
+    backdrop-filter: blur(10px);
+  }
+  .hys-theme-control[data-open="true"] .hys-theme-control__menu {
+    display: grid;
+    gap: 3px;
+  }
+  .hys-theme-control__item {
+    width: 100%;
+    min-height: 34px;
+    background: transparent;
+    padding: 0 8px;
+    text-align: left;
+  }
+  .hys-theme-control__item:hover,
+  .hys-theme-control__item[aria-checked="true"] {
+    background: currentColor;
+    color: #f4ecdc;
+  }
+  .hys-theme-control__trigger:focus-visible,
+  .hys-theme-control__item:focus-visible {
+    outline: 2px solid #d93025;
+    outline-offset: 2px;
+  }
+  html.dark .hys-theme-control {
+    color: #f4ecdc;
+  }
+  html.dark .hys-theme-control__trigger,
+  html.dark .hys-theme-control__menu {
+    background: rgba(5, 5, 5, 0.92);
+    box-shadow: 4px 4px 0 rgba(217, 48, 37, 0.36);
+  }
+  html.dark .hys-theme-control__item:hover,
+  html.dark .hys-theme-control__item[aria-checked="true"] {
+    color: #050505;
+  }
+  html.dark .hys-mobile-nav {
+    border-top-color: #f4ecdc;
+    background: rgba(5, 5, 5, 0.94);
+    box-shadow: 0 -10px 28px rgba(0, 0, 0, 0.5);
+  }
+  html.dark .hys-mobile-nav__item {
+    color: #b8b0a2;
+  }
+  html.dark .hys-mobile-nav__item--active {
+    border-color: #f4ecdc;
+    background: #f4ecdc;
+    color: #050505;
+  }
+  html.dark .hys-content-governance {
+    border-bottom-color: #d93025;
+    background: #0b1418;
+    color: #f4ecdc;
+  }
+  html.dark .hys-content-governance__meta {
+    color: #b8b0a2;
+  }
+  html.dark .hys-content-governance a,
+  html.dark .hys-tccc-shell__links a {
+    color: #78c7e7;
+  }
+  html.dark .hys-tccc-shell,
+  html.dark .brand-nav {
+    background: rgba(5, 5, 5, 0.96) !important;
+    color: #f4ecdc !important;
+  }
+  html.dark .hys-tccc-shell__brand,
+  html.dark .hys-tccc-shell__title,
+  html.dark .brand-mark,
+  html.dark .brand-nav-link {
+    color: #f4ecdc !important;
+  }
+  html.dark .hys-tccc-shell__meta {
+    color: #b8b0a2;
+  }
+  html.dark .hys-tccc-shell__links a,
+  html.dark .brand-nav-link {
+    border-color: #f4ecdc !important;
+  }
+  @media (max-width: 640px) {
+    .hys-theme-control__label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+    .hys-theme-control__trigger {
+      min-width: 38px;
+      padding: 0 8px;
+    }
+  }
+</style>`;
+
+  const script = `
+<script data-hongyishi-theme-runtime>
+(function () {
+  var STORAGE_KEY = "hongyishi-theme";
+  var LEGACY_KEYS = ["hongyishi-blog-theme", "theme"];
+  var MODES = ["system", "light", "dark"];
+  var LABELS = { system: "跟随系统", light: "日间", dark: "夜间" };
+  var media = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+
+  function isMode(value) {
+    return MODES.indexOf(value) !== -1;
+  }
+
+  function readMode() {
+    try {
+      var stored = window.localStorage.getItem(STORAGE_KEY);
+      if (isMode(stored)) return stored;
+      for (var index = 0; index < LEGACY_KEYS.length; index += 1) {
+        var legacyValue = window.localStorage.getItem(LEGACY_KEYS[index]);
+        if (isMode(legacyValue)) {
+          window.localStorage.setItem(STORAGE_KEY, legacyValue);
+          return legacyValue;
+        }
+      }
+    } catch (error) {
+      return "system";
+    }
+    return "system";
+  }
+
+  function writeMode(mode) {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, mode);
+    } catch (error) {}
+  }
+
+  function resolveMode(mode) {
+    return mode === "system" ? (media && media.matches ? "dark" : "light") : mode;
+  }
+
+  function applyMode(mode) {
+    var resolved = resolveMode(mode);
+    document.documentElement.classList.toggle("dark", resolved === "dark");
+    document.documentElement.setAttribute("data-mode", mode);
+    document.documentElement.setAttribute("data-hys-theme", mode);
+    document.documentElement.setAttribute("data-hys-theme-resolved", resolved);
+    document.querySelectorAll("[data-hongyishi-theme-control]").forEach(function (control) {
+      var trigger = control.querySelector(".hys-theme-control__trigger");
+      if (trigger) {
+        trigger.setAttribute("aria-label", "主题：" + LABELS[mode]);
+        var label = trigger.querySelector(".hys-theme-control__label");
+        if (label) label.textContent = LABELS[mode];
+      }
+      control.querySelectorAll(".hys-theme-control__item").forEach(function (item) {
+        var active = item.getAttribute("data-theme-mode") === mode;
+        item.setAttribute("aria-checked", active ? "true" : "false");
+      });
+    });
+  }
+
+  function closeAll() {
+    document.querySelectorAll("[data-hongyishi-theme-control]").forEach(function (control) {
+      control.setAttribute("data-open", "false");
+      var trigger = control.querySelector(".hys-theme-control__trigger");
+      if (trigger) trigger.setAttribute("aria-expanded", "false");
+    });
+  }
+
+  function bindControl(control) {
+    var trigger = control.querySelector(".hys-theme-control__trigger");
+    if (trigger) {
+      trigger.addEventListener("click", function () {
+        var open = control.getAttribute("data-open") === "true";
+        closeAll();
+        control.setAttribute("data-open", open ? "false" : "true");
+        trigger.setAttribute("aria-expanded", open ? "false" : "true");
+      });
+    }
+    control.querySelectorAll(".hys-theme-control__item").forEach(function (item) {
+      item.addEventListener("click", function () {
+        var mode = item.getAttribute("data-theme-mode");
+        if (!isMode(mode)) return;
+        writeMode(mode);
+        applyMode(mode);
+        closeAll();
+      });
+    });
+  }
+
+  function init() {
+    document.querySelectorAll("[data-hongyishi-theme-control]").forEach(bindControl);
+    applyMode(readMode());
+    document.addEventListener("click", function (event) {
+      if (!event.target.closest("[data-hongyishi-theme-control]")) closeAll();
+    });
+  }
+
+  applyMode(readMode());
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+  if (media && media.addEventListener) media.addEventListener("change", function () {
+    if (readMode() === "system") applyMode("system");
+  });
+  window.addEventListener("storage", function (event) {
+    if (event.key === STORAGE_KEY && isMode(event.newValue)) applyMode(event.newValue);
+  });
+})();
+</script>`;
+
+  const control = `
+<div class="hys-theme-control" data-hongyishi-theme-control data-open="false">
+  <button class="hys-theme-control__trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="主题：跟随系统">◐ <span class="hys-theme-control__label">跟随系统</span></button>
+  <div class="hys-theme-control__menu" role="menu" aria-label="选择主题">
+    <button class="hys-theme-control__item" type="button" role="menuitemradio" data-theme-mode="system" aria-checked="true">跟随系统</button>
+    <button class="hys-theme-control__item" type="button" role="menuitemradio" data-theme-mode="light" aria-checked="false">日间</button>
+    <button class="hys-theme-control__item" type="button" role="menuitemradio" data-theme-mode="dark" aria-checked="false">夜间</button>
+  </div>
+</div>`;
+
+  return content
+    .replace(/<\/head>/i, `${style}\n</head>`)
+    .replace(/<\/body>/i, `${control}\n${script}\n</body>`);
+}
+
 function extractHtmlTitle(content, fallbackTitle) {
   const titleMatch = content.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
   const bodyWithoutScripts = content.replace(
@@ -812,6 +1103,7 @@ export function rewriteHeatStrokeText(content, relativePath, basePath) {
       output,
       contentGovernance.heatStroke,
     );
+    output = injectThemeRuntime(output);
     output = injectMobileBottomNav(
       output,
       resolveProjectMobileActiveTab(
@@ -889,6 +1181,7 @@ export function rewriteTcccText(content, relativePath, basePath) {
 
   if (normalizedPath.endsWith(".html")) {
     output = injectContentGovernanceBanner(output, contentGovernance.tccc);
+    output = injectThemeRuntime(output);
     output = injectMobileBottomNav(
       output,
       resolveProjectMobileActiveTab("tccc", mapTcccOutputPath(normalizedPath)),

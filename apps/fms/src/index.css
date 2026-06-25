@@ -729,6 +729,20 @@
     box-shadow: inset 0 -3px 0 hsl(var(--primary));
   }
 
+  .hys-theme-trigger {
+    min-width: 2.5rem;
+    white-space: nowrap;
+  }
+
+  .hys-theme-menu {
+    letter-spacing: 0;
+  }
+
+  .hys-theme-menu__item[data-state="checked"] {
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+
   .hys-logo {
     font-size: 1.5rem;
     font-weight: 900;

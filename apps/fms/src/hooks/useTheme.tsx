@@ -1,80 +1,152 @@
 import { useCallback, useEffect, useState } from 'react';
 import { safeLocalStorage } from '@/lib/safe-storage';
 
-// 定义主题类型
-export type Theme = 'light' | 'dark';
+export type ThemeMode = 'system' | 'light' | 'dark';
+export type ResolvedTheme = 'light' | 'dark';
+
+const THEME_STORAGE_KEY = 'hongyishi-theme';
+const LEGACY_THEME_STORAGE_KEYS = ['theme', 'hongyishi-blog-theme'];
+
+function isThemeMode(value: string | null): value is ThemeMode {
+  return value === 'system' || value === 'light' || value === 'dark';
+}
+
+function getSystemTheme(): ResolvedTheme {
+  if (
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches
+  ) {
+    return 'dark';
+  }
+
+  return 'light';
+}
+
+function readStoredThemeMode(): ThemeMode {
+  const stored = safeLocalStorage.getItem(THEME_STORAGE_KEY);
+  if (isThemeMode(stored)) return stored;
+
+  for (const key of LEGACY_THEME_STORAGE_KEYS) {
+    const legacyValue = safeLocalStorage.getItem(key);
+    if (isThemeMode(legacyValue)) {
+      safeLocalStorage.setItem(THEME_STORAGE_KEY, legacyValue);
+      return legacyValue;
+    }
+  }
+
+  return 'system';
+}
+
+function resolveTheme(mode: ThemeMode): ResolvedTheme {
+  return mode === 'system' ? getSystemTheme() : mode;
+}
+
+function applyTheme(mode: ThemeMode, resolvedTheme: ResolvedTheme) {
+  if (typeof document === 'undefined') return;
+
+  const root = document.documentElement;
+  root.classList.toggle('dark', resolvedTheme === 'dark');
+  root.setAttribute('data-mode', mode);
+  root.setAttribute('data-hys-theme', mode);
+  root.setAttribute('data-hys-theme-resolved', resolvedTheme);
+}
 
 /**
  * useTheme Hook
  *
- * 1. 根据 localStorage 中保存的用户偏好或操作系统首选项确定初始主题。
+ * 1. 根据 localStorage 中保存的用户偏好确定主题模式。
  * 2. 在 HTML <html> 元素上切换 `dark` class，以配合 Tailwind 的暗色模式。
- * 3. 提供 `toggleTheme` 方法，并在支持 View Transitions API 的浏览器中
- *    使用 `startViewTransition` 创建丝滑的主题切换动画。
- * 4. 点击位置 (x, y) 会写入 CSS 变量 `--x`、`--y`，用于生成径向遮罩动画中心点。
+ * 3. 保持日间、夜间、跟随系统三态和其他子项目一致。
  */
 export function useTheme() {
-  const getPreferredTheme = (): Theme => {
-    if (typeof window === 'undefined') return 'light';
+  const [mode, setMode] = useState<ThemeMode>(readStoredThemeMode);
+  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() =>
+    resolveTheme(readStoredThemeMode()),
+  );
 
-    // 用户本地存储优先
-    const stored = safeLocalStorage.getItem('theme');
-    if (stored === 'light' || stored === 'dark') {
-      return stored;
-    }
-
-    // window.matchMedia 可能在测试环境中不可用
-    if (typeof window.matchMedia !== 'function') {
-      return 'light';
-    }
-
-    // 否则参考系统偏好
-    const mql = window.matchMedia('(prefers-color-scheme: dark)');
-    return mql.matches ? 'dark' : 'light';
-  };
-
-  const [theme, setTheme] = useState<Theme>(getPreferredTheme);
-
-  // 每当 theme 改变时，同步到 <html> class 以及 localStorage
   useEffect(() => {
-    if (typeof document === 'undefined') return;
-    const root = document.documentElement;
-    root.classList.toggle('dark', theme === 'dark');
-    safeLocalStorage.setItem('theme', theme);
-  }, [theme]);
+    const resolved = resolveTheme(mode);
+    setResolvedTheme(resolved);
+    applyTheme(mode, resolved);
+    safeLocalStorage.setItem(THEME_STORAGE_KEY, mode);
+  }, [mode]);
 
-  /**
-   * 切换主题
-   * @param x 点击中心 X 坐标（用于动画，可选）
-   * @param y 点击中心 Y 坐标（用于动画，可选）
-   */
-  const toggleTheme = useCallback((x?: number, y?: number) => {
-    const root = typeof document !== 'undefined' ? document.documentElement : null;
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
 
-    // 把点击位置写入 CSS 变量，供 ::view-transition-new 使用
-    if (root && typeof x === 'number' && typeof y === 'number') {
-      root.style.setProperty('--x', `${x}px`);
-      root.style.setProperty('--y', `${y}px`);
-    }
+    const media =
+      typeof window.matchMedia === 'function'
+        ? window.matchMedia('(prefers-color-scheme: dark)')
+        : null;
 
-    const switchTheme = () => {
-      setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+    const handleSystemChange = () => {
+      setMode((currentMode) => {
+        if (currentMode !== 'system') return currentMode;
+        const resolved = getSystemTheme();
+        setResolvedTheme(resolved);
+        applyTheme(currentMode, resolved);
+        return currentMode;
+      });
     };
 
-    // 若浏览器不支持 View Transitions API，直接切换
-    if (!document?.startViewTransition) {
-      switchTheme();
-      return;
-    }
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key !== THEME_STORAGE_KEY || !isThemeMode(event.newValue)) {
+        return;
+      }
+      setMode(event.newValue);
+    };
 
-    // 使用 View Transitions API 进行动画切换
-    document.startViewTransition(() => {
-      switchTheme();
-    });
+    media?.addEventListener?.('change', handleSystemChange);
+    window.addEventListener('storage', handleStorage);
+
+    return () => {
+      media?.removeEventListener?.('change', handleSystemChange);
+      window.removeEventListener('storage', handleStorage);
+    };
   }, []);
 
+  const updateThemeMode = useCallback(
+    (nextMode: ThemeMode, x?: number, y?: number) => {
+      const root =
+        typeof document !== 'undefined' ? document.documentElement : null;
+
+      if (root && typeof x === 'number' && typeof y === 'number') {
+        root.style.setProperty('--x', `${x}px`);
+        root.style.setProperty('--y', `${y}px`);
+      }
+
+      const switchTheme = () => {
+        setMode(nextMode);
+      };
+
+      if (
+        !document?.startViewTransition ||
+        window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+      ) {
+        switchTheme();
+        return;
+      }
+
+      document.startViewTransition(() => {
+        switchTheme();
+      });
+    },
+    [],
+  );
+
+  /**
+   * 兼容旧调用：二态切换会把偏好写为明确日间/夜间。
+   */
+  const toggleTheme = useCallback((x?: number, y?: number) => {
+    updateThemeMode(resolvedTheme === 'light' ? 'dark' : 'light', x, y);
+  }, [resolvedTheme, updateThemeMode]);
+
   return {
-    theme,
+    mode,
+    resolvedTheme,
+    theme: resolvedTheme,
+    setThemeMode: updateThemeMode,
     toggleTheme,
   };
 } 

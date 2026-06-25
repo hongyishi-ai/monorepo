@@ -50,7 +50,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" suppressHydrationWarning data-mode="system">
+    <html
+      lang="zh-CN"
+      suppressHydrationWarning
+      data-mode="system"
+      data-hys-theme="system"
+      data-hys-theme-resolved="light"
+    >
       <head>
         <link
           rel="apple-touch-icon"

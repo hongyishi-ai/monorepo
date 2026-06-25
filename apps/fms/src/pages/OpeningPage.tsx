@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import type { FC } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { safeLocalStorage } from "@/lib/safe-storage";
+import ThemeToggle from "@/components/ui/theme-toggle";
 
 const OpeningPage: FC = () => {
   const navigate = useNavigate();
@@ -89,6 +90,10 @@ const OpeningPage: FC = () => {
         <div className="absolute left-5 top-5 z-10 flex items-end gap-3 md:left-8 md:top-8">
           <div className="font-black leading-none text-primary">红医师</div>
           <div className="font-mono text-xs font-bold uppercase tracking-[0.24em] text-secondary">FMS</div>
+        </div>
+
+        <div className="absolute right-5 top-5 z-20 md:right-8 md:top-8">
+          <ThemeToggle />
         </div>
 
         <div className="absolute bottom-5 right-5 z-10 hidden font-mono text-xs font-bold uppercase tracking-[0.28em] text-secondary/70 md:block">
