@@ -27,6 +27,30 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-25 - 4bfd902 - 移除使用引导并优化 FMS 检测辅助控件
+
+- Commit: `4bfd902d03b32b87b92cad493b2f3cab3a5544e1`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://3f34bbdf.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.103.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - `pnpm --filter @hongyishi/fms type-check` passed
+  - `pnpm test:cloudflare-build` passed: `27/27`
+  - `pnpm lint` passed with existing FMS warnings: `0 errors, 24 warnings`
+  - `pnpm test` passed: utils `18/18`, FMS `157/157`
+  - `pnpm test:cloudflare` passed: `44/44`
+  - `pnpm build:cloudflare` passed
+  - `pnpm audit:links -- --base=http://127.0.0.1:3021` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - Mobile Playwright smoke passed: no guide remnants, demo/status controls visible, no bottom-nav overlap, both drawers open
+  - `pnpm audit:links -- --base=https://3f34bbdf.hongyishi-monorepo.pages.dev` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `pnpm audit:links -- --base=https://hongyishi.cn` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `https://3f34bbdf.hongyishi-monorepo.pages.dev/` and `https://hongyishi.cn/` returned HTTP `200`
+- Notes:
+  - Removed FMS ProductTour, page guide panels, tour help buttons, and static heat stroke/TCCC guide injection.
+  - Kept FMS per-test demo guidance and test status details, but changed their collapsed mobile presentation to compact production controls.
+  - Link audit now treats guide surfaces as regressions while still validating FMS assessment assist controls.
+
 ## 2026-06-24 - ceabc1b - 首次使用引导统一与 FMS 引导抖动修复
 
 - Commit: `ceabc1b5fa636a3300a3b243b6eb4269ffc560dc`
