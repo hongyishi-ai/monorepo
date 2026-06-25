@@ -1,25 +1,25 @@
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import ContainerWithIcon from '@/components/ui/container-with-icon';
-import { 
-  ReportSummary, 
-  RiskAlerts, 
-  ScoreRadarChart, 
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import ContainerWithIcon from "@/components/ui/container-with-icon";
+import {
+  ReportSummary,
+  RiskAlerts,
+  ScoreRadarChart,
   AsymmetryAnalysisCard,
   DetailedScoreResults,
   BiomechanicalAnalysis,
   PathologyAnalysis,
-  ImprovementRecommendations
-} from '@/components/report';
-import { useReportDataFlow } from '@/hooks/useReportDataFlow';
-import { CLEARANCE_TEST_PATHOLOGY } from '@/data/fms-biomechanics';
-import { getAsymmetryRiskAssessment } from '@/data/fms-tests';
-import { AlertTriangle, Download, RotateCcw, Loader2 } from 'lucide-react';
-import { FmsEmptyState, FmsGuidePanel, FmsPageHeader } from '@/components/shared/FmsPage';
+  ImprovementRecommendations,
+} from "@/components/report";
+import { useReportDataFlow } from "@/hooks/useReportDataFlow";
+import { CLEARANCE_TEST_PATHOLOGY } from "@/data/fms-biomechanics";
+import { getAsymmetryRiskAssessment } from "@/data/fms-tests";
+import { AlertTriangle, Download, RotateCcw, Loader2 } from "lucide-react";
+import { FmsEmptyState, FmsPageHeader } from "@/components/shared/FmsPage";
 
 /**
  * 阶段四重构后的ReportPage组件
- * 
+ *
  * 遵循React哲学核心原则：
  * - 组件专注渲染：所有数据处理逻辑已抽离到useReportDataFlow Hook
  * - 单向数据流：数据流向清晰，状态管理统一
@@ -36,7 +36,7 @@ const ReportPage = () => {
     isLoadingHistory,
     historyLoadError,
     hasData,
-    getRecordId
+    getRecordId,
   } = useReportDataFlow();
 
   // 历史记录加载状态处理 - 遵循"条件渲染"原则
@@ -79,7 +79,9 @@ const ReportPage = () => {
           </p>
           <div className="flex gap-4 justify-center">
             <Link to="/history">
-              <Button variant="outline" className="hys-button">返回历史记录</Button>
+              <Button variant="outline" className="hys-button">
+                返回历史记录
+              </Button>
             </Link>
             <Link to="/assessment">
               <Button className="hys-button">开始新评估</Button>
@@ -95,23 +97,11 @@ const ReportPage = () => {
     return (
       <div className="hys-section">
         <div className="hys-container">
-          <FmsGuidePanel
-            summary="报告需要评估数据；可以先完成评估，或从历史记录恢复。"
-            steps={[
-              { title: '没有数据时先评估', description: '点击下方按钮进入 FMS 评估，完成后自动生成报告。' },
-              { title: '已有记录去历史页', description: '如果之前评估过，可在历史记录中查看详情并恢复报告。' },
-              { title: '报告生成后再训练', description: '训练方案会基于报告中的低分项、疼痛和不对称生成。' },
-            ]}
-            boundary="报告不会凭空生成训练建议，必须先有一次完整或历史评估数据。"
-            tourId="report-guide"
-          />
           <FmsEmptyState
             icon={AlertTriangle}
             title="暂无评估数据"
             description={
-              <>
-            请先完成FMS功能性动作筛查，我们将为您生成详细的专业分析报告。
-              </>
+              <>请先完成FMS功能性动作筛查，我们将为您生成详细的专业分析报告。</>
             }
           >
             <Link to="/assessment">
@@ -133,12 +123,14 @@ const ReportPage = () => {
     lowScoringTests,
     assessmentStatus,
     testMap,
-    testNameMap
+    testNameMap,
   } = reportAnalysis;
 
   // 不对称分析卡片仅展示中/高风险项（轻度不对称只在详细结果中以 Badge 标注）
   const filteredAsymmetryIssues = Object.fromEntries(
-    Object.entries(reportData?.asymmetryIssues || {}).filter(([, v]: any) => v && v.riskLevel && v.riskLevel !== 'low')
+    Object.entries(reportData?.asymmetryIssues || {}).filter(
+      ([, v]: any) => v && v.riskLevel && v.riskLevel !== "low",
+    ),
   );
 
   return (
@@ -148,17 +140,6 @@ const ReportPage = () => {
           eyebrow="FMS REPORT"
           title="评估报告"
           description="把总分、风险信号、排除测试和动作模式放在同一张图里，便于决定下一步训练优先级。"
-        />
-
-        <FmsGuidePanel
-          summary="报告页先判断风险，再进入训练方案。"
-          steps={[
-            { title: '看总览', description: '确认总分、风险状态，以及是否存在疼痛或高风险不对称。' },
-            { title: '核对细节', description: '展开详细评分、双侧差异和排除测试影响，确认问题来源。' },
-            { title: '进入训练', description: '使用“查看专业康复方案”把当前报告带入训练计划。' },
-          ]}
-          boundary="报告只解释本次筛查数据，不替代医学诊断。疼痛或持续不适应先处理安全问题。"
-          tourId="report-guide"
         />
 
         {/* 报告摘要组件 - 遵循React哲学的组合原则 */}
@@ -171,8 +152,15 @@ const ReportPage = () => {
         </div>
 
         {/* 顶部显眼的“查看专业康复方案”按钮 */}
-        <div className="hidden md:flex justify-center mb-12 md:mb-16" role="region" aria-label="前往训练方案" data-tour-id="report-training-action">
-          <Link to={`/training${getRecordId() ? `?recordId=${getRecordId()}` : ''}`}>
+        <div
+          className="hidden md:flex justify-center mb-12 md:mb-16"
+          role="region"
+          aria-label="前往训练方案"
+          data-tour-id="report-training-action"
+        >
+          <Link
+            to={`/training${getRecordId() ? `?recordId=${getRecordId()}` : ""}`}
+          >
             <Button className="hys-button px-8" aria-label="查看专业康复方案">
               查看专业康复方案
             </Button>
@@ -201,10 +189,10 @@ const ReportPage = () => {
         <div
           role="region"
           aria-label="雷达图与动作模式分析"
-          className={lowScoringTests.length >= 2 ? '' : 'hidden md:block'}
+          className={lowScoringTests.length >= 2 ? "" : "hidden md:block"}
         >
           <ScoreRadarChart
-            radarData={chartData.map(item => ({
+            radarData={chartData.map((item) => ({
               subject: item.subject,
               基础测试: item.score,
               最大分值: 3,
@@ -245,19 +233,26 @@ const ReportPage = () => {
           lowScoringTests={lowScoringTests}
           asymmetryIssues={reportData?.asymmetryIssues || {}}
           testMap={testMap}
-          searchParams={new URLSearchParams(getRecordId() ? `recordId=${getRecordId()}` : '')}
+          searchParams={
+            new URLSearchParams(
+              getRecordId() ? `recordId=${getRecordId()}` : "",
+            )
+          }
         />
 
         {/* 操作按钮 - 遵循"用户体验一致性"原则 */}
         <div className="flex flex-col sm:flex-row justify-center gap-4 items-center mt-12 md:mt-16">
           <Link to="/assessment">
-            <Button variant="outline" className="hys-button px-8 text-foreground border-primary/20 hover:border-primary/40 hover:bg-primary/5 hover:text-foreground">
+            <Button
+              variant="outline"
+              className="hys-button px-8 text-foreground border-primary/20 hover:border-primary/40 hover:bg-primary/5 hover:text-foreground"
+            >
               <RotateCcw className="w-4 h-4 mr-2" />
               重新评估
             </Button>
           </Link>
-          <Button 
-            onClick={() => window.print()} 
+          <Button
+            onClick={() => window.print()}
             className="hys-button px-8 hidden sm:inline-flex"
           >
             <Download className="w-4 h-4 mr-2" />
@@ -269,4 +264,4 @@ const ReportPage = () => {
   );
 };
 
-export default ReportPage; 
+export default ReportPage;

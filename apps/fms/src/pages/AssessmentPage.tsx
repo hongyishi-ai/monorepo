@@ -1,18 +1,23 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import TestCard from '@/components/assessment/TestCard';
-import BilateralScoringCard from '@/components/assessment/BilateralScoringCard';
-import { FMS_TESTS, BASIC_TESTS, CLEARANCE_TESTS, CLEARANCE_TEST_MAPPINGS } from '@/data/fms-tests';
-import { Button } from '@/components/ui/button';
-import { SmartStatusIndicator } from '@/components/ui/smart-status-indicator';
-import { Card, CardContent } from '@/components/ui/card';
-import { AlertTriangle, ArrowLeft, ArrowRight, Eye } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useStorage } from '@/hooks/use-storage';
-import { useAssessmentStore } from '@/stores/useAssessmentStore';
-import { useAppStore } from '@/stores/useAppStore';
-import { FmsGuidePanel, FmsPageHeader } from '@/components/shared/FmsPage';
-import type { FMSAssessmentData } from '@/types/fms-data';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import TestCard from "@/components/assessment/TestCard";
+import BilateralScoringCard from "@/components/assessment/BilateralScoringCard";
+import {
+  FMS_TESTS,
+  BASIC_TESTS,
+  CLEARANCE_TESTS,
+  CLEARANCE_TEST_MAPPINGS,
+} from "@/data/fms-tests";
+import { Button } from "@/components/ui/button";
+import { SmartStatusIndicator } from "@/components/ui/smart-status-indicator";
+import { Card, CardContent } from "@/components/ui/card";
+import { AlertTriangle, ArrowLeft, ArrowRight, Eye } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useStorage } from "@/hooks/use-storage";
+import { useAssessmentStore } from "@/stores/useAssessmentStore";
+import { useAppStore } from "@/stores/useAppStore";
+import { FmsPageHeader } from "@/components/shared/FmsPage";
+import type { FMSAssessmentData } from "@/types/fms-data";
 
 // 双侧评估数据结构
 interface BilateralScores {
@@ -28,7 +33,6 @@ const AssessmentPage = () => {
   const navigate = useNavigate();
   const { saveAssessment } = useStorage();
 
-  
   // 使用Zustand store替代local state
   const {
     sessionId,
@@ -46,7 +50,7 @@ const AssessmentPage = () => {
     removePainfulTest,
     updateAsymmetryIssue,
     completeAssessment,
-    forceResetAssessment
+    forceResetAssessment,
   } = useAssessmentStore();
 
   // 使用应用级store进行页面导航管理
@@ -57,19 +61,19 @@ const AssessmentPage = () => {
     if (!isAssessmentInProgress) {
       startNewAssessment();
     }
-    
+
     // 记录当前页面访问
-    setLastVisitedPage('assessment');
+    setLastVisitedPage("assessment");
   }, [isAssessmentInProgress, startNewAssessment, setLastVisitedPage]);
 
   // 页面初始化时滚动到顶部
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   // 当测试索引变化时滚动到顶部
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentTestIndex]);
 
   const currentTest = FMS_TESTS[currentTestIndex];
@@ -78,86 +82,107 @@ const AssessmentPage = () => {
   // 应用排除测试影响的逻辑
   const applyClearanceTestEffects = (newScores: Record<string, number>) => {
     let updatedScores = { ...newScores };
-    
+
     // 检查每个排除测试，如果为0分，则将对应的基础测试也设为0分
-    Object.entries(CLEARANCE_TEST_MAPPINGS).forEach(([clearanceTestId, basicTestId]) => {
-      if (updatedScores[clearanceTestId] === 0) {
-        updatedScores[basicTestId] = 0;
-        // 同时更新store中的分数
-        updateScore(basicTestId, 0);
-        // 也要添加到疼痛测试列表中
-        if (!hasPainfulTests.includes(basicTestId)) {
-          addPainfulTest(basicTestId);
+    Object.entries(CLEARANCE_TEST_MAPPINGS).forEach(
+      ([clearanceTestId, basicTestId]) => {
+        if (updatedScores[clearanceTestId] === 0) {
+          updatedScores[basicTestId] = 0;
+          // 同时更新store中的分数
+          updateScore(basicTestId, 0);
+          // 也要添加到疼痛测试列表中
+          if (!hasPainfulTests.includes(basicTestId)) {
+            addPainfulTest(basicTestId);
+          }
         }
-      }
-    });
-    
+      },
+    );
+
     return updatedScores;
   };
 
   // 重新检查所有排除性测试的影响（用于处理修改已有评分的情况）
   const reapplyAllClearanceTestEffects = () => {
     const currentScores = { ...scores };
-    
+
     // 重新检查所有排除测试的影响
-    Object.entries(CLEARANCE_TEST_MAPPINGS).forEach(([clearanceTestId, basicTestId]) => {
-      if (currentScores[clearanceTestId] === 0 && currentScores[basicTestId] !== 0) {
-        updateScore(basicTestId, 0);
-        if (!hasPainfulTests.includes(basicTestId)) {
-          addPainfulTest(basicTestId);
+    Object.entries(CLEARANCE_TEST_MAPPINGS).forEach(
+      ([clearanceTestId, basicTestId]) => {
+        if (
+          currentScores[clearanceTestId] === 0 &&
+          currentScores[basicTestId] !== 0
+        ) {
+          updateScore(basicTestId, 0);
+          if (!hasPainfulTests.includes(basicTestId)) {
+            addPainfulTest(basicTestId);
+          }
         }
-      }
-    });
+      },
+    );
   };
 
   // 获取下一个测试的索引，考虑跳过逻辑
-  const getNextTestIndex = (currentIndex: number, currentScore: number): number => {
+  const getNextTestIndex = (
+    currentIndex: number,
+    currentScore: number,
+  ): number => {
     const current = FMS_TESTS[currentIndex];
-    
+
     // 如果当前是排除测试且阳性（0分），跳过对应的基础测试
     if (current.isClearanceTest && currentScore === 0) {
-      const targetBasicTestId = CLEARANCE_TEST_MAPPINGS[current.id as keyof typeof CLEARANCE_TEST_MAPPINGS];
+      const targetBasicTestId =
+        CLEARANCE_TEST_MAPPINGS[
+          current.id as keyof typeof CLEARANCE_TEST_MAPPINGS
+        ];
       if (targetBasicTestId) {
         // 找到对应基础测试的索引
-        const basicTestIndex = FMS_TESTS.findIndex(test => test.id === targetBasicTestId);
+        const basicTestIndex = FMS_TESTS.findIndex(
+          (test) => test.id === targetBasicTestId,
+        );
         if (basicTestIndex > currentIndex) {
           // 跳过对应的基础测试，返回基础测试之后的索引
           return basicTestIndex + 1;
         }
       }
     }
-    
+
     // 默认情况：返回下一个测试
     return currentIndex + 1;
   };
 
   // 保存评估数据并导航到报告页面
-  const saveAndNavigateToReport = async (latestScores?: Record<string, number>, latestBilateralScores?: Record<string, BilateralScores>) => {
+  const saveAndNavigateToReport = async (
+    latestScores?: Record<string, number>,
+    latestBilateralScores?: Record<string, BilateralScores>,
+  ) => {
     try {
       // 使用传入的最新分数，如果没有传入则使用当前状态
       const currentScores = latestScores || scores;
       const currentBilateralScores = latestBilateralScores || bilateralScores;
-      
+
       // 构造评估数据
       const assessmentData: FMSAssessmentData = {
-        sessionId: sessionId || '',
+        sessionId: sessionId || "",
         timestamp: new Date(),
-        basicScores: currentScores,  // 使用最新的分数
-        bilateralScores: currentBilateralScores,  // 使用最新的双侧数据
-        clearanceResults: CLEARANCE_TESTS.map(test => ({
+        basicScores: currentScores, // 使用最新的分数
+        bilateralScores: currentBilateralScores, // 使用最新的双侧数据
+        clearanceResults: CLEARANCE_TESTS.map((test) => ({
           testId: test.id,
-          isPositive: currentScores[test.id] === 0,  // 使用最新的分数
-          affectedBaseTest: CLEARANCE_TEST_MAPPINGS[test.id as keyof typeof CLEARANCE_TEST_MAPPINGS]
+          isPositive: currentScores[test.id] === 0, // 使用最新的分数
+          affectedBaseTest:
+            CLEARANCE_TEST_MAPPINGS[
+              test.id as keyof typeof CLEARANCE_TEST_MAPPINGS
+            ],
         })),
         totalScore: Object.entries(currentScores)
-          .filter(([testId]) => BASIC_TESTS.some(test => test.id === testId))
-          .reduce((sum, [, score]) => sum + score, 0),  // 只计算基础测试分数
+          .filter(([testId]) => BASIC_TESTS.some((test) => test.id === testId))
+          .reduce((sum, [, score]) => sum + score, 0), // 只计算基础测试分数
         asymmetryIssues: asymmetryIssues,
         painfulTests: hasPainfulTests,
         riskFlags: [...hasPainfulTests, ...Object.keys(asymmetryIssues)],
-        completedTests: Object.keys(currentScores),  // 使用最新的分数
+        completedTests: Object.keys(currentScores), // 使用最新的分数
         incompleteTests: [],
-        testSequence: FMS_TESTS.map(t => t.id)
+        testSequence: FMS_TESTS.map((t) => t.id),
       };
 
       // 完成评估并保存到store
@@ -166,42 +191,42 @@ const AssessmentPage = () => {
       // 自动保存评估数据
       await saveAssessment(assessmentData, undefined, {
         title: `FMS评估 - ${new Date().toLocaleDateString()}`,
-        description: `总分: ${assessmentData.totalScore}/21，${hasPainfulTests.length > 0 ? '存在疼痛问题' : '无疼痛问题'}`
+        description: `总分: ${assessmentData.totalScore}/21，${hasPainfulTests.length > 0 ? "存在疼痛问题" : "无疼痛问题"}`,
       });
 
       // 使用Zustand store传递报告数据
       const reportData = {
-        scores: currentScores,  // 使用最新的分数
-        bilateralScores: currentBilateralScores,  // 使用最新的双侧数据
+        scores: currentScores, // 使用最新的分数
+        bilateralScores: currentBilateralScores, // 使用最新的双侧数据
         asymmetryIssues: asymmetryIssues,
         painfulTests: hasPainfulTests,
-        basicTests: BASIC_TESTS.map(t => t.id),
-        clearanceTests: CLEARANCE_TESTS.map(t => t.id),
-        sessionId: sessionId
+        basicTests: BASIC_TESTS.map((t) => t.id),
+        clearanceTests: CLEARANCE_TESTS.map((t) => t.id),
+        sessionId: sessionId,
       };
-      
+
       setReportData(reportData);
 
       // 导航到报告页面（不再需要state参数）
-      navigate('/report');
+      navigate("/report");
     } catch (error) {
-      console.error('保存评估数据失败:', error);
-      
+      console.error("保存评估数据失败:", error);
+
       // 即使保存失败也要传递数据并导航
       const currentScores = latestScores || scores;
       const currentBilateralScores = latestBilateralScores || bilateralScores;
       const reportData = {
-        scores: currentScores,  // 使用最新的分数
-        bilateralScores: currentBilateralScores,  // 使用最新的双侧数据
+        scores: currentScores, // 使用最新的分数
+        bilateralScores: currentBilateralScores, // 使用最新的双侧数据
         asymmetryIssues: asymmetryIssues,
         painfulTests: hasPainfulTests,
-        basicTests: BASIC_TESTS.map(t => t.id),
-        clearanceTests: CLEARANCE_TESTS.map(t => t.id),
-        sessionId: sessionId
+        basicTests: BASIC_TESTS.map((t) => t.id),
+        clearanceTests: CLEARANCE_TESTS.map((t) => t.id),
+        sessionId: sessionId,
       };
-      
+
       setReportData(reportData);
-      navigate('/report');
+      navigate("/report");
     }
   };
 
@@ -218,16 +243,16 @@ const AssessmentPage = () => {
 
     // 构造包含最新分数的状态
     const newScores = { ...scores, [currentTest.id]: score };
-    
+
     // 应用排除测试影响逻辑
     const updatedScores = applyClearanceTestEffects(newScores);
-    
+
     // 重新检查所有排除性测试的影响（处理用户修改已有评分的情况）
     setTimeout(() => reapplyAllClearanceTestEffects(), 100);
-    
+
     // 检查是否需要跳过下一个测试
     const nextTestIndex = getNextTestIndex(currentTestIndex, score);
-    
+
     if (nextTestIndex < FMS_TESTS.length) {
       setCurrentTestIndex(nextTestIndex);
     } else {
@@ -239,7 +264,7 @@ const AssessmentPage = () => {
   const handleBilateralScoreSubmit = async (scoreData: BilateralScores) => {
     // 更新双侧评分到store
     updateBilateralScore(currentTest.id, scoreData);
-    
+
     // 更新最终分数
     updateScore(currentTest.id, scoreData.final);
 
@@ -257,21 +282,24 @@ const AssessmentPage = () => {
 
     // 构造包含最新分数的状态
     const newScores = { ...scores, [currentTest.id]: scoreData.final };
-    
+
     // 应用排除测试影响逻辑
     const updatedScores = applyClearanceTestEffects(newScores);
-    
+
     // 重新检查所有排除性测试的影响
     setTimeout(() => reapplyAllClearanceTestEffects(), 100);
-    
+
     // 检查是否需要跳过下一个测试（对于双侧评分，传入最终分数）
     const nextTestIndex = getNextTestIndex(currentTestIndex, scoreData.final);
-    
+
     if (nextTestIndex < FMS_TESTS.length) {
       setCurrentTestIndex(nextTestIndex);
     } else {
       // 这是最后一个测试，传入最新的分数和双侧数据以确保数据完整性
-      const updatedBilateralScores = { ...bilateralScores, [currentTest.id]: scoreData };
+      const updatedBilateralScores = {
+        ...bilateralScores,
+        [currentTest.id]: scoreData,
+      };
       await saveAndNavigateToReport(updatedScores, updatedBilateralScores);
     }
   };
@@ -284,12 +312,12 @@ const AssessmentPage = () => {
 
   const goToNextTest = async () => {
     // 使用当前测试的分数（如果有）来决定跳转逻辑
-    const currentScore = requiresBilateralAssessment 
-      ? bilateralScores[currentTest.id]?.final ?? 1  // 默认1分，不跳过
-      : scores[currentTest.id] ?? 1;
-    
+    const currentScore = requiresBilateralAssessment
+      ? (bilateralScores[currentTest.id]?.final ?? 1) // 默认1分，不跳过
+      : (scores[currentTest.id] ?? 1);
+
     const nextTestIndex = getNextTestIndex(currentTestIndex, currentScore);
-    
+
     if (nextTestIndex < FMS_TESTS.length) {
       setCurrentTestIndex(nextTestIndex);
     } else {
@@ -302,33 +330,26 @@ const AssessmentPage = () => {
   const isClearanceTest = currentTest.isClearanceTest;
 
   // 检查是否有评分数据
-  const hasScore = requiresBilateralAssessment 
+  const hasScore = requiresBilateralAssessment
     ? bilateralScores[currentTest.id] !== undefined
     : scores[currentTest.id] !== undefined;
 
   return (
-    <div className="hys-section hys-assessment-surface min-h-screen" role="region" aria-label="FMS评估流程">
+    <div
+      className="hys-section hys-assessment-surface min-h-screen"
+      role="region"
+      aria-label="FMS评估流程"
+    >
       <div className="hys-container max-w-6xl">
         <FmsPageHeader
           eyebrow="FMS ASSESSMENT"
           title="功能性动作筛查"
           description={
             <>
-              按顺序完成排除测试和七项基础动作。遇到疼痛时选择 0 分，系统会自动保留风险信号并生成报告。
+              按顺序完成排除测试和七项基础动作。遇到疼痛时选择 0
+              分，系统会自动保留风险信号并生成报告。
             </>
           }
-        />
-
-        <FmsGuidePanel
-          summary="先确认安全，再看演示，最后录入评分。"
-          steps={[
-            { title: '看当前测试', description: '阅读动作说明，手机端可点当前测试卡片下方的“演示指引”查看 GIF、步骤和评分标准。' },
-            { title: '按表现评分', description: '单侧测试直接选 0-3 分；双侧测试分别录入左右侧，系统自动取较低分。' },
-            { title: '查看状态详情', description: '完成任一项目后，“状态详情”会汇总完成进度、不对称项和疼痛项，便于中途复核。' },
-            { title: '完成后看报告', description: '最后一项提交后自动保存本机记录，并进入报告与训练建议。' },
-          ]}
-          boundary="FMS 不是诊断工具。任何疼痛都应优先停止相关动作，并咨询医疗或康复专业人员。"
-          tourId="assessment-guide"
         />
 
         {/* 紧凑的头部区域 - 只保留智能状态指示器 */}
@@ -340,14 +361,22 @@ const AssessmentPage = () => {
           data-tour-id="assessment-progress"
         >
           <SmartStatusIndicator
-            completedBasicTests={Object.keys(scores).filter(id => BASIC_TESTS.some(t => t.id === id)).length}
+            completedBasicTests={
+              Object.keys(scores).filter((id) =>
+                BASIC_TESTS.some((t) => t.id === id),
+              ).length
+            }
             totalBasicTests={BASIC_TESTS.length}
-            completedClearanceTests={Object.keys(scores).filter(id => CLEARANCE_TESTS.some(t => t.id === id)).length}
+            completedClearanceTests={
+              Object.keys(scores).filter((id) =>
+                CLEARANCE_TESTS.some((t) => t.id === id),
+              ).length
+            }
             totalClearanceTests={CLEARANCE_TESTS.length}
             asymmetryCount={Object.keys(asymmetryIssues).length}
             painfulCount={hasPainfulTests.length}
-            currentTestName={currentTest.name.split(' (')[0]}
-            currentTestType={isClearanceTest ? 'clearance' : 'basic'}
+            currentTestName={currentTest.name.split(" (")[0]}
+            currentTestType={isClearanceTest ? "clearance" : "basic"}
             requiresBilateralAssessment={requiresBilateralAssessment}
           />
         </div>
@@ -359,109 +388,147 @@ const AssessmentPage = () => {
 
         {/* 评分区域 - 紧凑布局 */}
         <div>
-        {requiresBilateralAssessment ? (
-          // 双侧评分组件
-          <div className="mb-6 md:mb-8">
-            <BilateralScoringCard
-              key={currentTest.id}
-              test={currentTest}
-              onScoreSubmit={handleBilateralScoreSubmit}
-              initialScores={bilateralScores[currentTest.id] ? {
-                left: bilateralScores[currentTest.id].left,
-                right: bilateralScores[currentTest.id].right
-              } : {}}
-            />
-          </div>
-        ) : (
-          // 传统单一评分
-          <Card className="hys-card mb-6 md:mb-8" role="region" aria-label="动作评分" data-tour-id="assessment-scoring">
-            <CardContent className="p-4 md:p-8">
-              <div className="text-center mb-4 md:mb-6">
-                <h2 className="text-lg font-normal mb-2">
-                  {isClearanceTest ? '排除测试评分' : '动作质量评分'}
-                </h2>
-                <p className="hys-text text-sm mb-2">
-                  请根据您的实际表现选择相应分数
-                </p>
-                {/* 移动端与桌面端分别显示更贴切的提示文案，降低困惑 */}
-                <p className="hys-text text-xs text-muted-foreground flex items-center justify-center gap-1 md:hidden">
-                  <Eye className="w-3 h-3" />
-                  请点击当前测试卡片下方的“演示指引”查看评分标准
-                </p>
-                <p className="hys-text text-xs text-muted-foreground hidden md:flex items-center justify-center gap-1">
-                  <Eye className="w-3 h-3" />
-                  查看评分标准请参阅上方动作卡片
-                </p>
-              </div>
-
-              {/* 评分按钮 */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-6 md:mb-8 max-w-3xl mx-auto">
-                {currentTest.scoringCriteria.map(({ score }) => (
-                  <Button
-                    key={score}
-                    onClick={() => handleScoreSelect(score)}
-                    variant={scores[currentTest.id] === score ? 'default' : 'outline'}
-                    className={cn(
-                      "h-auto min-h-[88px] p-3 md:p-4 text-left hys-button transition-all duration-200 flex flex-col items-center gap-2",
-                      score === 0 && "border-primary hover:border-primary",
-                      scores[currentTest.id] === score && score === 0 && "bg-red-500 hover:bg-red-600 text-white",
-                      scores[currentTest.id] === score && score !== 0 && "bg-primary text-primary-foreground"
-                    )}
-                    aria-label={`评分${score}分：${
-                      score === 0 ? "动作中出现疼痛" : 
-                      isClearanceTest ? (
-                        score === 1 ? "顺利通过，无疼痛" : "出现疼痛"
-                      ) : (
-                        score === 1 ? "无法按标准完成动作" : 
-                        score === 2 ? "能够完成动作但存在代偿" : 
-                        "完美地完成动作"
-                      )
-                    }`}
-                  >
-                    <div className={cn(
-                      "text-2xl font-bold mb-1",
-                      scores[currentTest.id] === score && score === 0 ? "text-white" : 
-                      score === 0 ? "text-red-600" : 
-                      scores[currentTest.id] === score ? "text-primary-foreground" : "text-foreground"
-                    )}>
-                      {score}
-                    </div>
-                    <div className={cn(
-                      "text-xs text-center leading-tight",
-                      scores[currentTest.id] === score ? "text-current" : "text-muted-foreground"
-                    )}>
-                      {isClearanceTest ? (
-                        score === 0 ? "出现疼痛" : "顺利通过"
-                      ) : (
-                        score === 0 ? "出现疼痛" : 
-                        score === 1 ? "无法完成" : 
-                        score === 2 ? "存在代偿" : 
-                        "完美动作"
-                      )}
-                    </div>
-                  </Button>
-                ))}
-              </div>
-
-              {/* 疼痛提示 */}
-              {scores[currentTest.id] === 0 && (
-                <div className="hys-inline-alert mt-6 p-4">
-                  <div className="text-center space-y-2">
-                    <AlertTriangle className="w-6 h-6 text-red-500 mx-auto" />
-                    <h4 className="font-medium text-red-800 text-sm">检测到疼痛</h4>
-                    <p className="hys-text text-red-700 max-w-xl mx-auto text-sm">
-                      建议您暂停剧烈运动，并咨询专业医疗人员或物理治疗师的意见。
-                    </p>
-                  </div>
+          {requiresBilateralAssessment ? (
+            // 双侧评分组件
+            <div className="mb-6 md:mb-8">
+              <BilateralScoringCard
+                key={currentTest.id}
+                test={currentTest}
+                onScoreSubmit={handleBilateralScoreSubmit}
+                initialScores={
+                  bilateralScores[currentTest.id]
+                    ? {
+                        left: bilateralScores[currentTest.id].left,
+                        right: bilateralScores[currentTest.id].right,
+                      }
+                    : {}
+                }
+              />
+            </div>
+          ) : (
+            // 传统单一评分
+            <Card
+              className="hys-card mb-6 md:mb-8"
+              role="region"
+              aria-label="动作评分"
+              data-tour-id="assessment-scoring"
+            >
+              <CardContent className="p-4 md:p-8">
+                <div className="text-center mb-4 md:mb-6">
+                  <h2 className="text-lg font-normal mb-2">
+                    {isClearanceTest ? "排除测试评分" : "动作质量评分"}
+                  </h2>
+                  <p className="hys-text text-sm mb-2">
+                    请根据您的实际表现选择相应分数
+                  </p>
+                  {/* 移动端与桌面端分别显示更贴切的提示文案，降低困惑 */}
+                  <p className="hys-text text-xs text-muted-foreground flex items-center justify-center gap-1 md:hidden">
+                    <Eye className="w-3 h-3" />
+                    请点击当前测试卡片下方的“演示指引”查看评分标准
+                  </p>
+                  <p className="hys-text text-xs text-muted-foreground hidden md:flex items-center justify-center gap-1">
+                    <Eye className="w-3 h-3" />
+                    查看评分标准请参阅上方动作卡片
+                  </p>
                 </div>
-              )}
-            </CardContent>
-          </Card>
-        )}
+
+                {/* 评分按钮 */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-6 md:mb-8 max-w-3xl mx-auto">
+                  {currentTest.scoringCriteria.map(({ score }) => (
+                    <Button
+                      key={score}
+                      onClick={() => handleScoreSelect(score)}
+                      variant={
+                        scores[currentTest.id] === score ? "default" : "outline"
+                      }
+                      className={cn(
+                        "h-auto min-h-[88px] p-3 md:p-4 text-left hys-button transition-all duration-200 flex flex-col items-center gap-2",
+                        score === 0 && "border-primary hover:border-primary",
+                        scores[currentTest.id] === score &&
+                          score === 0 &&
+                          "bg-red-500 hover:bg-red-600 text-white",
+                        scores[currentTest.id] === score &&
+                          score !== 0 &&
+                          "bg-primary text-primary-foreground",
+                      )}
+                      aria-label={`评分${score}分：${
+                        score === 0
+                          ? "动作中出现疼痛"
+                          : isClearanceTest
+                            ? score === 1
+                              ? "顺利通过，无疼痛"
+                              : "出现疼痛"
+                            : score === 1
+                              ? "无法按标准完成动作"
+                              : score === 2
+                                ? "能够完成动作但存在代偿"
+                                : "完美地完成动作"
+                      }`}
+                    >
+                      <div
+                        className={cn(
+                          "text-2xl font-bold mb-1",
+                          scores[currentTest.id] === score && score === 0
+                            ? "text-white"
+                            : score === 0
+                              ? "text-red-600"
+                              : scores[currentTest.id] === score
+                                ? "text-primary-foreground"
+                                : "text-foreground",
+                        )}
+                      >
+                        {score}
+                      </div>
+                      <div
+                        className={cn(
+                          "text-xs text-center leading-tight",
+                          scores[currentTest.id] === score
+                            ? "text-current"
+                            : "text-muted-foreground",
+                        )}
+                      >
+                        {isClearanceTest
+                          ? score === 0
+                            ? "出现疼痛"
+                            : "顺利通过"
+                          : score === 0
+                            ? "出现疼痛"
+                            : score === 1
+                              ? "无法完成"
+                              : score === 2
+                                ? "存在代偿"
+                                : "完美动作"}
+                      </div>
+                    </Button>
+                  ))}
+                </div>
+
+                {/* 疼痛提示 */}
+                {scores[currentTest.id] === 0 && (
+                  <div className="hys-inline-alert mt-6 p-4">
+                    <div className="text-center space-y-2">
+                      <AlertTriangle className="w-6 h-6 text-red-500 mx-auto" />
+                      <h4 className="font-medium text-red-800 text-sm">
+                        检测到疼痛
+                      </h4>
+                      <p className="hys-text text-red-700 max-w-xl mx-auto text-sm">
+                        建议您暂停剧烈运动，并咨询专业医疗人员或物理治疗师的意见。
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {/* 导航按钮 */}
-        <div className="hys-assessment-actions flex flex-col justify-between md:flex-row md:items-center md:pb-8" role="region" aria-label="评估导航" data-tour-id="assessment-navigation">
+        <div
+          className="hys-assessment-actions flex flex-col justify-between md:flex-row md:items-center md:pb-8"
+          role="region"
+          aria-label="评估导航"
+          data-tour-id="assessment-navigation"
+        >
           <div className="flex items-center gap-2">
             <Button
               onClick={goToPreviousTest}
@@ -469,9 +536,9 @@ const AssessmentPage = () => {
               disabled={currentTestIndex === 0}
               className={cn(
                 "hys-button w-full px-8 border-2 shadow-sm text-foreground md:w-auto",
-                currentTestIndex === 0 
-                  ? "opacity-50 cursor-not-allowed border-muted text-muted-foreground" 
-                  : "border-primary/20 hover:border-primary/40 hover:bg-primary/5 hover:text-foreground"
+                currentTestIndex === 0
+                  ? "opacity-50 cursor-not-allowed border-muted text-muted-foreground"
+                  : "border-primary/20 hover:border-primary/40 hover:bg-primary/5 hover:text-foreground",
               )}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -484,7 +551,7 @@ const AssessmentPage = () => {
               {currentTestIndex + 1} / {FMS_TESTS.length}
             </p>
             <p className="text-xs text-muted-foreground">
-              {currentTest.name.split(' (')[0]}
+              {currentTest.name.split(" (")[0]}
             </p>
           </div>
 
@@ -493,10 +560,10 @@ const AssessmentPage = () => {
             disabled={!hasScore}
             className={cn(
               "hys-button w-full px-8 md:w-auto",
-              !hasScore && "opacity-50 cursor-not-allowed"
+              !hasScore && "opacity-50 cursor-not-allowed",
             )}
           >
-            {currentTestIndex === FMS_TESTS.length - 1 ? '完成评估' : '下一项'}
+            {currentTestIndex === FMS_TESTS.length - 1 ? "完成评估" : "下一项"}
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </div>
@@ -507,11 +574,19 @@ const AssessmentPage = () => {
             <h3 className="text-sm font-medium mb-2">调试信息:</h3>
             <p className="text-xs mb-1">当前测试索引: {currentTestIndex}</p>
             <p className="text-xs mb-1">当前测试ID: {currentTest.id}</p>
-            <p className="text-xs mb-1">需要双侧评分: {requiresBilateralAssessment ? '是' : '否'}</p>
-            <p className="text-xs mb-1">已完成测试: {Object.keys(scores).length}</p>
-            <p className="text-xs mb-1">已完成双侧测试: {Object.keys(bilateralScores).length}</p>
+            <p className="text-xs mb-1">
+              需要双侧评分: {requiresBilateralAssessment ? "是" : "否"}
+            </p>
+            <p className="text-xs mb-1">
+              已完成测试: {Object.keys(scores).length}
+            </p>
+            <p className="text-xs mb-1">
+              已完成双侧测试: {Object.keys(bilateralScores).length}
+            </p>
             <p className="text-xs mb-1">测试总数: {FMS_TESTS.length}</p>
-            <p className="text-xs mb-2">所有测试ID: {FMS_TESTS.map(t => t.id).join(', ')}</p>
+            <p className="text-xs mb-2">
+              所有测试ID: {FMS_TESTS.map((t) => t.id).join(", ")}
+            </p>
             <div className="space-y-1">
               <p className="text-xs">双侧评分状态:</p>
               <div className="text-xs pl-2">
@@ -524,7 +599,7 @@ const AssessmentPage = () => {
             </div>
             <Button
               onClick={() => {
-                if (confirm('确定要重置评估吗？这将清除所有进度。')) {
+                if (confirm("确定要重置评估吗？这将清除所有进度。")) {
                   forceResetAssessment();
                   window.location.reload();
                 }
@@ -537,10 +612,9 @@ const AssessmentPage = () => {
             </Button>
           </div>
         )}
-
       </div>
     </div>
   );
 };
 
-export default AssessmentPage; 
+export default AssessmentPage;

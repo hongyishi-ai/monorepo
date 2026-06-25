@@ -8,7 +8,7 @@ const baseUrl =
   defaultBaseUrl;
 const shouldCheckExternal = args.has("--external");
 const shouldCheckMobileNav = !args.has("--no-mobile-nav");
-const shouldCheckUsageGuides = !args.has("--no-usage-guides");
+const shouldCheckGuideSurfaces = !args.has("--no-usage-guides");
 
 const representativeRoutes = [
   "/",
@@ -356,8 +356,8 @@ async function checkMobileNav() {
   return results;
 }
 
-async function checkUsageGuides() {
-  if (!shouldCheckUsageGuides) {
+async function checkGuideSurfaces() {
+  if (!shouldCheckGuideSurfaces) {
     return [];
   }
 
@@ -371,87 +371,50 @@ async function checkUsageGuides() {
   const routesToCheck = [
     {
       path: "/fms/?skip_opening=true",
-      selector: "[data-hys-fms-guide-panel]",
-      triggerSelector: "[data-hys-tour-help]",
     },
     {
       path: "/fms/assessment",
-      selector: "[data-hys-fms-guide-panel]",
-      triggerSelector: "[data-hys-tour-help]",
+      prepareAssessmentControls: true,
       checkAssistDock: true,
     },
     {
       path: "/fms/report",
-      selector: "[data-hys-fms-guide-panel]",
-      triggerSelector: "[data-hys-tour-help]",
     },
     {
       path: "/fms/training",
-      selector: "[data-hys-fms-guide-panel]",
-      triggerSelector: "[data-hys-tour-help]",
     },
     {
       path: "/fms/history",
-      selector: "[data-hys-fms-guide-panel]",
-      triggerSelector: "[data-hys-tour-help]",
     },
     {
       path: "/fms/education",
-      selector: "[data-hys-fms-guide-panel]",
-      triggerSelector: "[data-hys-tour-help]",
     },
     {
       path: "/fms/about",
-      selector: "[data-hys-fms-guide-panel]",
-      triggerSelector: "[data-hys-tour-help]",
     },
     {
       path: "/heat-stroke/",
-      selector: "[data-hongyishi-guide-runtime]",
-      triggerSelector: "[data-hongyishi-guide-trigger]",
-      checkGuideCard: true,
     },
     {
       path: "/heat-stroke/pages/heat-index",
-      selector: "[data-hongyishi-guide-runtime]",
-      triggerSelector: "[data-hongyishi-guide-trigger]",
-      checkGuideCard: true,
     },
     {
       path: "/heat-stroke/pages/field-treatment",
-      selector: "[data-hongyishi-guide-runtime]",
-      triggerSelector: "[data-hongyishi-guide-trigger]",
-      checkGuideCard: true,
     },
     {
       path: "/heat-stroke/pages/8-4-6-rule",
-      selector: "[data-hongyishi-guide-runtime]",
-      triggerSelector: "[data-hongyishi-guide-trigger]",
-      checkGuideCard: true,
     },
     {
       path: "/tccc/",
-      selector: "[data-hongyishi-guide-runtime]",
-      triggerSelector: "[data-hongyishi-guide-trigger]",
-      checkGuideCard: true,
     },
     {
       path: "/tccc/pages/tccc-standard",
-      selector: "[data-hongyishi-guide-runtime]",
-      triggerSelector: "[data-hongyishi-guide-trigger]",
-      checkGuideCard: true,
     },
     {
       path: "/tccc/pages/tfc-hemorrhage",
-      selector: "[data-hongyishi-guide-runtime]",
-      triggerSelector: "[data-hongyishi-guide-trigger]",
-      checkGuideCard: true,
     },
     {
       path: "/tccc/pages/tacevac-reassessment",
-      selector: "[data-hongyishi-guide-runtime]",
-      triggerSelector: "[data-hongyishi-guide-trigger]",
-      checkGuideCard: true,
     },
   ];
   const results = [];
@@ -463,27 +426,39 @@ async function checkUsageGuides() {
         timeout: 15_000,
       });
       await page.waitForTimeout(500);
-      if (expectation.checkGuideCard) {
-        const clicked = await page.evaluate((selector) => {
-          const trigger = document.querySelector(selector);
-          if (!trigger) return false;
-          trigger.click();
-          return true;
-        }, expectation.triggerSelector);
-        if (clicked) {
-          await page.waitForTimeout(500);
-        }
+      if (expectation.prepareAssessmentControls) {
+        await page
+          .locator('button[aria-label^="评分3分"]')
+          .first()
+          .click({ timeout: 5_000 })
+          .catch(() => undefined);
+        await page.waitForTimeout(300);
       }
       results.push(
         await page.evaluate((expected) => {
-          const guide = document.querySelector(expected.selector);
-          const trigger = document.querySelector(expected.triggerSelector);
-          const guideCard = document.querySelector(".hys-guide-card");
+          const guideSelectors = [
+            "[data-hys-fms-guide-panel]",
+            "[data-hys-tour-help]",
+            "[data-hongyishi-guide-runtime]",
+            "[data-hongyishi-guide-trigger]",
+            "[data-hongyishi-guide-entry]",
+            ".hys-guide-panel",
+            ".hys-guide-shell-button",
+            ".hys-guide-entry",
+            ".hys-guide-card",
+          ];
+          const guideSurfaces = guideSelectors
+            .flatMap((selector) =>
+              Array.from(document.querySelectorAll(selector)).map((item) => ({
+                selector,
+                text: item.textContent?.replace(/\s+/g, " ").trim() ?? "",
+              })),
+            )
+            .filter((item) => item.text.length > 0 || item.selector !== "");
           const nav = document.querySelector(
             'nav[data-hongyishi-mobile-nav], nav[aria-label="训练伤防治项目移动端导航"]',
           );
           const navRect = nav?.getBoundingClientRect();
-          const cardRect = guideCard?.getBoundingClientRect();
           const assistControls = expected.checkAssistDock
             ? Array.from(
                 document.querySelectorAll("[data-hys-assist-control]"),
@@ -506,23 +481,8 @@ async function checkUsageGuides() {
 
           return {
             path: expected.path,
-            selector: expected.selector,
-            hasGuide: Boolean(guide),
-            guideTextLength:
-              guide?.textContent?.replace(/\s+/g, "").length ??
-              trigger?.textContent?.replace(/\s+/g, "").length ??
-              0,
-            hasTourHelp: Boolean(trigger),
-            guideCardVisible: expected.checkGuideCard
-              ? Boolean(cardRect && cardRect.width > 0 && cardRect.height > 0)
-              : true,
-            guideCardOverlapsNav:
-              expected.checkGuideCard && cardRect && navRect
-                ? cardRect.left < navRect.right &&
-                  cardRect.right > navRect.left &&
-                  cardRect.top < navRect.bottom &&
-                  cardRect.bottom > navRect.top + 1
-                : false,
+            guideSurfaces,
+            guideSurfaceCount: guideSurfaces.length,
             horizontalOverflow:
               document.documentElement.scrollWidth >
               document.documentElement.clientWidth + 2,
@@ -549,7 +509,7 @@ function summarizeStatus(items) {
 const crawl = await crawlInternalLinks();
 const representative = await checkRepresentativeRoutes();
 const mobileNav = await checkMobileNav();
-const usageGuides = await checkUsageGuides();
+const guideSurfaces = await checkGuideSurfaces();
 const externalResults = shouldCheckExternal
   ? await checkExternalLinks(crawl.external)
   : [];
@@ -568,14 +528,14 @@ const mobileNavFailures = mobileNav.filter(
     item.outOfScopeLinks.length > 0 ||
     (item.expectedScope && item.scope !== item.expectedScope),
 );
-const usageGuideFailures = usageGuides.filter(
+const guideSurfaceFailures = guideSurfaces.filter(
   (item) =>
-    !item.hasGuide ||
-    !item.hasTourHelp ||
-    item.guideTextLength < 24 ||
-    !item.guideCardVisible ||
-    item.guideCardOverlapsNav ||
+    item.guideSurfaceCount > 0 ||
     item.horizontalOverflow ||
+    (item.assistControls.length > 0 &&
+      !["demo", "status"].every((id) =>
+        item.assistControls.some((control) => control.id === id),
+      )) ||
     item.assistControls.some(
       (control) => !control.visible || control.overlapsNav,
     ),
@@ -585,7 +545,7 @@ const failed =
   crawl.failures.length > 0 ||
   representativeFailures.length > 0 ||
   mobileNavFailures.length > 0 ||
-  usageGuideFailures.length > 0 ||
+  guideSurfaceFailures.length > 0 ||
   externalFailures.length > 0;
 
 const report = {
@@ -604,9 +564,9 @@ const report = {
     checked: mobileNav.length,
     failures: mobileNavFailures,
   },
-  usageGuides: {
-    checked: usageGuides.length,
-    failures: usageGuideFailures,
+  guideSurfaces: {
+    checked: guideSurfaces.length,
+    failures: guideSurfaceFailures,
   },
   external: shouldCheckExternal
     ? {

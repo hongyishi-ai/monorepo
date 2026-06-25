@@ -501,83 +501,6 @@
     box-shadow: 6px 6px 0 rgba(18, 49, 60, 0.18);
   }
 
-  .hys-guide-panel {
-    padding: 1rem;
-  }
-
-  .hys-guide-panel__marker,
-  .hys-guide-steps__index {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid hsl(var(--foreground));
-    background: hsl(var(--foreground));
-    color: hsl(var(--background));
-    font-family:
-      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-weight: 900;
-  }
-
-  .hys-guide-panel__marker {
-    height: 2rem;
-    width: 2rem;
-    flex-shrink: 0;
-  }
-
-  .hys-guide-panel__action {
-    min-height: 44px;
-    flex-shrink: 0;
-    border-width: 2px;
-    border-color: hsl(var(--foreground));
-    background: hsl(var(--card));
-    color: hsl(var(--foreground));
-    font-weight: 900;
-  }
-
-  .hys-guide-shell-button {
-    min-height: 38px;
-    border: 2px solid hsl(var(--foreground));
-    background: hsl(var(--card));
-    color: hsl(var(--foreground));
-    font-weight: 900;
-    box-shadow: 3px 3px 0 rgba(18, 49, 60, 0.18);
-  }
-
-  .hys-guide-steps {
-    display: grid;
-    gap: 0.75rem;
-  }
-
-  .hys-guide-steps li {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 0.75rem;
-    align-items: start;
-  }
-
-  .hys-guide-steps__index {
-    min-height: 1.8rem;
-    min-width: 2.1rem;
-    padding: 0 0.35rem;
-    background: hsl(var(--primary));
-    border-color: hsl(var(--primary));
-  }
-
-  .hys-guide-steps strong {
-    display: block;
-    color: hsl(var(--foreground));
-    font-size: 0.95rem;
-    line-height: 1.35;
-  }
-
-  .hys-guide-steps span span {
-    display: block;
-    margin-top: 0.15rem;
-    color: hsl(var(--muted-foreground));
-    font-size: 0.9rem;
-    line-height: 1.5;
-  }
-
   .hys-status-tile {
     display: flex;
     min-height: 116px;
@@ -641,11 +564,132 @@
 
   .hys-mobile-assist-card {
     width: 100%;
-    min-height: calc(var(--hys-mobile-assist-height) - 6px);
+    min-height: var(--hys-mobile-assist-height);
   }
 
-  .hys-mobile-assist-card .hys-mobile-assist-label {
-    max-width: min(18rem, calc(100vw - 8rem));
+  .hys-assist-card {
+    position: relative;
+    border: 2px solid hsl(var(--border));
+    border-radius: var(--radius);
+    box-shadow: 4px 4px 0 rgba(18, 49, 60, 0.18);
+  }
+
+  .hys-assist-card--primary {
+    border-color: hsl(var(--primary) / 0.38);
+  }
+
+  .hys-assist-card--warning {
+    border-color: rgb(245 158 11 / 0.58);
+  }
+
+  .hys-assist-card--status {
+    border-color: hsl(var(--foreground) / 0.22);
+  }
+
+  .hys-assist-card--attention {
+    border-color: rgb(239 68 68 / 0.52);
+  }
+
+  .hys-assist-card__inner {
+    display: grid;
+    min-height: var(--hys-mobile-assist-height);
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.7rem 0.85rem;
+  }
+
+  .hys-assist-card__icon {
+    display: inline-flex;
+    height: 2.25rem;
+    width: 2.25rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid currentColor;
+    background: hsl(var(--background));
+    color: hsl(var(--primary));
+  }
+
+  .hys-assist-card--warning .hys-assist-card__icon {
+    color: rgb(217 119 6);
+  }
+
+  .hys-assist-card--attention .hys-assist-card__icon {
+    color: rgb(220 38 38);
+  }
+
+  .hys-assist-card__body {
+    min-width: 0;
+  }
+
+  .hys-assist-card__title-row {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .hys-assist-card__title,
+  .hys-assist-card__count {
+    color: hsl(var(--foreground));
+    font-size: 0.9rem;
+    font-weight: 900;
+    line-height: 1.2;
+  }
+
+  .hys-assist-card__count {
+    margin-left: auto;
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.78rem;
+  }
+
+  .hys-assist-card__meta {
+    margin-top: 0.16rem;
+    overflow: hidden;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .hys-assist-card__badge {
+    height: 1.25rem;
+    border-width: 2px;
+    border-color: rgb(245 158 11 / 0.52);
+    background: rgb(255 251 235);
+    color: rgb(146 64 14);
+    font-size: 0.68rem;
+    font-weight: 900;
+  }
+
+  .hys-assist-card__meter {
+    display: flex;
+    align-items: end;
+    height: 2.25rem;
+    width: 0.36rem;
+    overflow: hidden;
+    border: 2px solid hsl(var(--border));
+    background: hsl(var(--muted));
+  }
+
+  .hys-assist-card__meter::before {
+    display: block;
+    width: 100%;
+    height: var(--hys-assist-progress, 0%);
+    min-height: 3px;
+    background: hsl(var(--primary));
+    content: "";
+  }
+
+  .hys-assist-card__chevron {
+    height: 1rem;
+    width: 1rem;
+    flex-shrink: 0;
+    color: hsl(var(--muted-foreground));
   }
 
   .hys-drawer-content {
@@ -853,123 +897,23 @@
     .hys-footer {
       padding: 2rem 0; /* 移动端页脚间距 */
     }
-
-    .hys-guide-panel.hys-guide-panel {
-      padding: 0.9rem;
-      margin-bottom: calc(
-        var(--hys-mobile-nav-height) + var(--hys-mobile-safe-bottom) + 1rem
-      );
-      scroll-margin-bottom: calc(
-        var(--hys-mobile-nav-height) + var(--hys-mobile-safe-bottom) + 1rem
-      );
-    }
-
-    .hys-guide-panel__action {
-      width: 100%;
-      justify-content: center;
-    }
-  }
-
-  /* 智能状态指示器动画 */
-  .smart-indicator-pulse {
-    animation: smartPulse 2s infinite ease-in-out;
-  }
-
-  @keyframes smartPulse {
-    0%,
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 0.8;
-      transform: scale(1.05);
-    }
-  }
-
-  .smart-indicator-glow {
-    position: relative;
-  }
-
-  .smart-indicator-glow::before {
-    content: "";
-    position: absolute;
-    inset: -2px;
-    border-radius: 50%;
-    padding: 2px;
-    background: linear-gradient(45deg, hsl(var(--primary)), hsl(var(--accent)));
-    mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    opacity: 0;
-    animation: glowRing 3s infinite ease-in-out;
-  }
-
-  @keyframes glowRing {
-    0%,
-    70%,
-    100% {
-      opacity: 0;
-      transform: scale(1);
-    }
-    30%,
-    50% {
-      opacity: 0.6;
-      transform: scale(1.1);
-    }
   }
 
   /* 滚动感知指示器状态 */
   .indicator-dimmed {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 0.4;
-    transform: translateY(4px) scale(0.95);
+    opacity: 0.86;
   }
 
   .indicator-focused {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 4px 4px 0 rgba(18, 49, 60, 0.18);
     transform: translateY(0) scale(1);
   }
-
-  /* 键盘可见性样式 */
-  .smart-indicator-keyboard-focus {
-    outline: 2px solid hsl(var(--primary));
-    outline-offset: 2px;
-  }
-
-  /* 悬浮动画增强 - 已移除上下移动效果 */
 
   /* 状态切换动画 */
   .smart-status-transition {
     transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-  }
-
-  /* 渐变边框效果 */
-  .smart-indicator-border-glow {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .smart-indicator-border-glow::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent
-    );
-    transition: left 0.5s;
-  }
-
-  .smart-indicator-border-glow:hover::before {
-    left: 100%;
   }
 
   /* 不对称性Alert提醒样式 */

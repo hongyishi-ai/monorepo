@@ -1,32 +1,63 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useStorage } from '@/hooks/use-storage';
-import type { AssessmentRecord } from '@/lib/storage';
-import { Card, CardHeader } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useStorage } from "@/hooks/use-storage";
+import type { AssessmentRecord } from "@/lib/storage";
+import { Card, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import ContainerWithIcon from '@/components/ui/container-with-icon';
-import { Calendar, Clock, Download, Upload, Trash2, Star, StarOff, BarChart3, Activity, AlertTriangle, CheckCircle, Archive } from 'lucide-react';
-import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
-import { FmsGuidePanel, FmsMetricCard, FmsPageHeader } from '@/components/shared/FmsPage';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import ContainerWithIcon from "@/components/ui/container-with-icon";
+import {
+  Calendar,
+  Clock,
+  Download,
+  Upload,
+  Trash2,
+  Star,
+  StarOff,
+  BarChart3,
+  Activity,
+  AlertTriangle,
+  CheckCircle,
+  Archive,
+} from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { FmsMetricCard, FmsPageHeader } from "@/components/shared/FmsPage";
 
 const HistoryPage = () => {
   const navigate = useNavigate();
-  const { 
-    getAllAssessments, 
-    deleteAssessment, 
-    updateAssessment, 
-    exportData, 
-    importData, 
+  const {
+    getAllAssessments,
+    deleteAssessment,
+    updateAssessment,
+    exportData,
+    importData,
     getStatistics,
     isLoading,
-    error 
+    error,
   } = useStorage();
 
   const [assessments, setAssessments] = useState<AssessmentRecord[]>([]);
@@ -39,23 +70,26 @@ const HistoryPage = () => {
     totalAssessments: 0,
     starredAssessments: 0,
     avgScore: 0,
-    latestAssessment: undefined
+    latestAssessment: undefined,
   });
 
-  const [importText, setImportText] = useState('');
-  const [importResult, setImportResult] = useState<{ imported: number; errors: string[] } | null>(null);
+  const [importText, setImportText] = useState("");
+  const [importResult, setImportResult] = useState<{
+    imported: number;
+    errors: string[];
+  } | null>(null);
 
   // 加载数据
   const loadData = async () => {
     try {
       const [assessmentsData, statsData] = await Promise.all([
         getAllAssessments(),
-        getStatistics()
+        getStatistics(),
       ]);
       setAssessments(assessmentsData);
       setStatistics(statsData);
     } catch (err) {
-      console.error('加载历史数据失败:', err);
+      console.error("加载历史数据失败:", err);
     }
   };
 
@@ -69,7 +103,7 @@ const HistoryPage = () => {
       await deleteAssessment(record.id!);
       await loadData(); // 重新加载数据
     } catch (err) {
-      console.error('删除失败:', err);
+      console.error("删除失败:", err);
     }
   };
 
@@ -79,7 +113,7 @@ const HistoryPage = () => {
       await updateAssessment(record.id!, { isStarred: !record.isStarred });
       await loadData(); // 重新加载数据
     } catch (err) {
-      console.error('更新收藏状态失败:', err);
+      console.error("更新收藏状态失败:", err);
     }
   };
 
@@ -93,34 +127,34 @@ const HistoryPage = () => {
   const handleExport = async () => {
     try {
       const data = await exportData();
-      const blob = new Blob([data], { type: 'application/json' });
+      const blob = new Blob([data], { type: "application/json" });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = `fms-backup-${format(new Date(), 'yyyy-MM-dd-HHmm')}.json`;
+      a.download = `fms-backup-${format(new Date(), "yyyy-MM-dd-HHmm")}.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (err) {
-      console.error('导出失败:', err);
+      console.error("导出失败:", err);
     }
   };
 
   // 导入数据
   const handleImport = async () => {
     if (!importText.trim()) return;
-    
+
     try {
       const result = await importData(importText);
       setImportResult(result);
       if (result.imported > 0) {
         await loadData(); // 重新加载数据
-        setImportText('');
+        setImportText("");
       }
     } catch (err) {
-      console.error('导入失败:', err);
-      setImportResult({ imported: 0, errors: ['导入失败'] });
+      console.error("导入失败:", err);
+      setImportResult({ imported: 0, errors: ["导入失败"] });
     }
   };
 
@@ -145,23 +179,23 @@ const HistoryPage = () => {
     const score = assessmentData.totalScore;
 
     if (hasPain) {
-      return { 
-        status: '需要关注', 
-        color: 'text-red-600 bg-red-50 border-red-200',
-        icon: AlertTriangle
+      return {
+        status: "需要关注",
+        color: "text-red-600 bg-red-50 border-red-200",
+        icon: AlertTriangle,
       };
     }
     if (hasAsymmetry || score < 14) {
-      return { 
-        status: '建议改善', 
-        color: 'text-amber-600 bg-amber-50 border-amber-200',
-        icon: BarChart3
+      return {
+        status: "建议改善",
+        color: "text-amber-600 bg-amber-50 border-amber-200",
+        icon: BarChart3,
       };
     }
-    return { 
-      status: '功能良好', 
-      color: 'text-green-600 bg-green-50 border-green-200',
-      icon: CheckCircle
+    return {
+      status: "功能良好",
+      color: "text-green-600 bg-green-50 border-green-200",
+      icon: CheckCircle,
     };
   };
 
@@ -178,7 +212,10 @@ const HistoryPage = () => {
         >
           <h1 className="hys-title text-2xl mb-4 text-red-600">加载失败</h1>
           <p className="hys-text mb-8">{error}</p>
-          <Button onClick={() => window.location.reload()} className="hys-button">
+          <Button
+            onClick={() => window.location.reload()}
+            className="hys-button"
+          >
             重新加载
           </Button>
         </ContainerWithIcon>
@@ -194,38 +231,50 @@ const HistoryPage = () => {
           title="历史评估记录"
           description={
             <>
-            管理您的所有FMS评估记录，支持查看详细报告、数据导入导出和记录管理功能。
+              管理您的所有FMS评估记录，支持查看详细报告、数据导入导出和记录管理功能。
             </>
           }
         />
 
-        <FmsGuidePanel
-          summary="记录默认保存在本机，换设备前请先导出。"
-          steps={[
-            { title: '查看统计', description: '先确认当前设备内有多少记录、收藏和平均得分。' },
-            { title: '恢复报告', description: '点击“查看详情”可恢复某次报告，并继续进入训练方案。' },
-            { title: '导出备份', description: '浏览器本地数据可能被清理，重要记录建议定期导出 JSON。' },
-            { title: '导入迁移', description: '换设备或重装后，用导入功能恢复此前导出的记录。' },
-          ]}
-          boundary="导入前请确认 JSON 来源可信；删除记录后无法从页面内恢复。"
-          tourId="history-guide"
-        />
-
         {/* 统计卡片 */}
         <div className="mb-16 md:mb-20" role="region" aria-label="统计概览">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12" data-tour-id="history-stats">
-            <FmsMetricCard icon={Archive} label="总记录数" value={statistics.totalAssessments} />
-            <FmsMetricCard icon={Star} label="收藏记录" value={statistics.starredAssessments} />
-            <FmsMetricCard icon={Activity} label="平均得分" value={statistics.avgScore} />
+          <div
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12"
+            data-tour-id="history-stats"
+          >
+            <FmsMetricCard
+              icon={Archive}
+              label="总记录数"
+              value={statistics.totalAssessments}
+            />
+            <FmsMetricCard
+              icon={Star}
+              label="收藏记录"
+              value={statistics.starredAssessments}
+            />
+            <FmsMetricCard
+              icon={Activity}
+              label="平均得分"
+              value={statistics.avgScore}
+            />
             <FmsMetricCard
               icon={Clock}
               label="最近评估"
-              value={statistics.latestAssessment ? format(statistics.latestAssessment, 'MM/dd') : '无'}
+              value={
+                statistics.latestAssessment
+                  ? format(statistics.latestAssessment, "MM/dd")
+                  : "无"
+              }
             />
           </div>
 
           {/* 操作按钮 */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center" role="region" aria-label="导入导出与新建操作" data-tour-id="history-actions">
+          <div
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            role="region"
+            aria-label="导入导出与新建操作"
+            data-tour-id="history-actions"
+          >
             <Link to="/assessment">
               <Button className="hys-button px-8">新建评估</Button>
             </Link>
@@ -269,12 +318,14 @@ const HistoryPage = () => {
                     />
                   </div>
                   {importResult && (
-                    <div className={cn(
-                      "p-4 rounded-md",
-                      importResult.errors.length > 0 
-                        ? "bg-red-50 border border-red-200" 
-                        : "bg-green-50 border border-green-200"
-                    )}>
+                    <div
+                      className={cn(
+                        "p-4 rounded-md",
+                        importResult.errors.length > 0
+                          ? "bg-red-50 border border-red-200"
+                          : "bg-green-50 border border-green-200",
+                      )}
+                    >
                       <div className="text-sm">
                         <div className="font-medium">
                           成功导入 {importResult.imported} 条记录
@@ -327,26 +378,42 @@ const HistoryPage = () => {
             </Link>
           </ContainerWithIcon>
         ) : (
-          <div className="space-y-6" role="list" aria-label="评估记录列表" data-tour-id="history-records">
+          <div
+            className="space-y-6"
+            role="list"
+            aria-label="评估记录列表"
+            data-tour-id="history-records"
+          >
             {assessments.map((record) => {
               const status = getAssessmentStatus(record);
               const StatusIcon = status.icon;
 
               return (
-                <Card key={record.id} className="hys-card group hover:shadow-lg transition-all duration-300" role="listitem">
+                <Card
+                  key={record.id}
+                  className="hys-card group hover:shadow-lg transition-all duration-300"
+                  role="listitem"
+                >
                   <CardHeader className="pb-6">
                     <div className="space-y-4">
                       {/* 标题行 */}
                       <div className="flex items-start justify-between">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-3 mb-3">
-                            <h3 className="hys-title text-xl font-light truncate">{record.title}</h3>
+                            <h3 className="hys-title text-xl font-light truncate">
+                              {record.title}
+                            </h3>
                             {record.isStarred && (
                               <Star className="w-5 h-5 text-amber-500 fill-current flex-shrink-0" />
                             )}
                           </div>
                           <div className="flex items-center gap-2 mb-2">
-                            <Badge className={cn("px-3 py-1.5 text-sm font-medium", status.color)}>
+                            <Badge
+                              className={cn(
+                                "px-3 py-1.5 text-sm font-medium",
+                                status.color,
+                              )}
+                            >
                               <StatusIcon className="w-4 h-4 mr-2" />
                               {status.status}
                             </Badge>
@@ -371,7 +438,10 @@ const HistoryPage = () => {
                         <div className="flex items-center gap-2 text-sm">
                           <Calendar className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                           <span className="hys-text">
-                            {format(new Date(record.createdAt), 'yyyy年MM月dd日')}
+                            {format(
+                              new Date(record.createdAt),
+                              "yyyy年MM月dd日",
+                            )}
                           </span>
                         </div>
                         <div className="flex items-center gap-2 text-sm">
@@ -401,7 +471,11 @@ const HistoryPage = () => {
                       {record.tags.length > 0 && (
                         <div className="flex flex-wrap gap-2 pt-2">
                           {record.tags.map((tag, index) => (
-                            <Badge key={index} variant="secondary" className="text-xs px-2 py-1">
+                            <Badge
+                              key={index}
+                              variant="secondary"
+                              className="text-xs px-2 py-1"
+                            >
                               {tag}
                             </Badge>
                           ))}
@@ -430,7 +504,8 @@ const HistoryPage = () => {
                             <AlertDialogHeader>
                               <AlertDialogTitle>确认删除</AlertDialogTitle>
                               <AlertDialogDescription>
-                                确定要删除评估记录"{record.title}"吗？此操作无法撤销。
+                                确定要删除评估记录"{record.title}
+                                "吗？此操作无法撤销。
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -457,4 +532,4 @@ const HistoryPage = () => {
   );
 };
 
-export default HistoryPage; 
+export default HistoryPage;

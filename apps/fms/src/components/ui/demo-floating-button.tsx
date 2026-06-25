@@ -7,7 +7,7 @@ import {
   Play,
   List,
   Target,
-  ChevronUp,
+  ChevronRight,
   AlertTriangle,
   CheckCircle,
 } from "lucide-react";
@@ -121,19 +121,15 @@ export const DemoFloatingButton = React.forwardRef<
 
   return (
     <>
-      <div
-        className="z-10 mb-4 md:hidden"
-        data-hys-assist-control="demo"
-        data-tour-id="assessment-demo-guide"
-      >
+      <div className="z-10 mb-4 md:hidden" data-hys-assist-control="demo">
         <AnimatePresence mode="wait">
           <motion.div
             ref={ref}
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{
-              opacity: isScrollingDown ? 0.3 : 1,
-              scale: isScrollingDown ? 0.9 : 1,
-              y: isScrollingDown ? 10 : 0,
+              opacity: isScrollingDown ? 0.82 : 1,
+              scale: isScrollingDown ? 0.98 : 1,
+              y: 0,
             }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             transition={{
@@ -147,11 +143,13 @@ export const DemoFloatingButton = React.forwardRef<
           >
             <Card
               className={cn(
-                "hys-card hys-mobile-assist-card bg-card/95 backdrop-blur-md border shadow-lg hover:shadow-xl cursor-pointer overflow-hidden",
+                "hys-mobile-assist-card hys-assist-card cursor-pointer overflow-hidden bg-card/95 backdrop-blur-md",
                 "active:scale-95 touch-manipulation smart-status-transition",
                 isScrollingDown && "indicator-dimmed",
                 !isScrollingDown && "indicator-focused",
-                isClearanceTest && "smart-indicator-border-glow",
+                isClearanceTest
+                  ? "hys-assist-card--warning"
+                  : "hys-assist-card--primary",
               )}
               onClick={() => setIsDrawerOpen(true)}
               onKeyDown={(e) => {
@@ -166,95 +164,38 @@ export const DemoFloatingButton = React.forwardRef<
               aria-expanded={isDrawerOpen}
             >
               <CardContent className="p-0">
-                {/* 始终显示收缩状态的指示器 - 与smart-status-indicator布局一致 */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="p-3"
+                  className="hys-assist-card__inner"
                 >
-                  <div className="flex items-center gap-3">
-                    {/* 动态状态图标 */}
-                    <div
-                      className={cn(
-                        "relative",
-                        isClearanceTest && "smart-indicator-glow",
+                  <div className="hys-assist-card__icon" aria-hidden="true">
+                    <Eye className="h-4 w-4" />
+                  </div>
+
+                  <div className="hys-assist-card__body">
+                    <div className="hys-assist-card__title-row">
+                      <span className="hys-assist-card__title">演示指引</span>
+                      {isClearanceTest && (
+                        <Badge
+                          variant="outline"
+                          className="hys-assist-card__badge"
+                        >
+                          安全
+                        </Badge>
                       )}
-                    >
-                      <div
-                        className={cn(
-                          "w-9 h-9 flex items-center justify-center border-2 transition-all duration-300",
-                          isClearanceTest
-                            ? "bg-amber-50 border-amber-200"
-                            : "bg-primary/10 border-primary/30",
-                        )}
-                      >
-                        <Eye
-                          className={cn(
-                            "w-4 h-4",
-                            isClearanceTest ? "text-amber-600" : "text-primary",
-                          )}
-                        />
-                      </div>
-
-                      {/* 进度环占位 - 保持与smart-status-indicator一致的布局 */}
-                      <svg
-                        className="absolute inset-0 h-9 w-9 -rotate-90"
-                        viewBox="0 0 36 36"
-                      >
-                        <circle
-                          cx="18"
-                          cy="18"
-                          r="16"
-                          fill="none"
-                          stroke="hsl(var(--border))"
-                          strokeWidth="1.5"
-                          opacity="0.2"
-                        />
-                        <circle
-                          cx="18"
-                          cy="18"
-                          r="16"
-                          fill="none"
-                          stroke={
-                            isClearanceTest
-                              ? "hsl(43 96% 56%)"
-                              : "hsl(var(--primary))"
-                          }
-                          strokeWidth="2"
-                          strokeDasharray={`${2 * Math.PI * 16}`}
-                          strokeDashoffset={`${2 * Math.PI * 16 * 0.3}`} // 显示70%的环
-                          className="transition-all duration-700 ease-out"
-                          strokeLinecap="round"
-                        />
-                      </svg>
-
-                      {/* 动态指示点 */}
-                      <div
-                        className={cn(
-                          "absolute -top-1 -right-1 w-3 h-3 border-2 border-card",
-                          isClearanceTest ? "bg-amber-500" : "bg-primary",
-                        )}
-                      >
-                        <div
-                          className={cn(
-                            "w-full h-full animate-ping opacity-75",
-                            isClearanceTest ? "bg-amber-400" : "bg-primary",
-                          )}
-                        />
-                      </div>
                     </div>
-
-                    {/* 核心信息 */}
-                    <div className="hys-mobile-assist-label min-w-0 text-left">
-                      <div className="text-sm font-medium text-foreground flex items-center gap-2">
-                        <span>演示指引</span>
-                        <ChevronUp className="w-3 h-3 text-muted-foreground opacity-50" />
-                      </div>
-                      <div className="text-xs text-muted-foreground truncate">
-                        {isClearanceTest ? "排除测试指导" : "动作演示说明"}
-                      </div>
+                    <div className="hys-assist-card__meta">
+                      {isClearanceTest
+                        ? "排除测试 · GIF / 步骤 / 评分"
+                        : "当前动作 · GIF / 步骤 / 评分"}
                     </div>
                   </div>
+
+                  <ChevronRight
+                    className="hys-assist-card__chevron"
+                    aria-hidden="true"
+                  />
                 </motion.div>
               </CardContent>
             </Card>

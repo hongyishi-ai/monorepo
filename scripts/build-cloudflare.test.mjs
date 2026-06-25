@@ -12,12 +12,10 @@ import {
   collectCloudflareFreeTierStats,
   injectMobileBottomNav,
   injectContentGovernanceBanner,
-  injectUsageGuide,
   injectTcccBrandShell,
   mapHeatStrokeOutputPath,
   mapTcccOutputPath,
   normalizeBasePath,
-  resolveUsageGuideConfig,
   rewriteHeatStrokeText,
   rewriteTcccText,
   shouldCopyHeatStrokePath,
@@ -169,11 +167,11 @@ test("rewriteHeatStrokeText scopes root-relative static links and service worker
   );
   assert.match(output, /data-hongyishi-mobile-nav/);
   assert.match(output, /data-hongyishi-content-governance/);
-  assert.match(output, /data-hongyishi-guide-runtime/);
-  assert.match(output, /data-hongyishi-guide-trigger/);
-  assert.match(output, /hys:heatStroke:guide:v1:index\.html:seen/);
+  assert.doesNotMatch(output, /data-hongyishi-guide-runtime/);
+  assert.doesNotMatch(output, /data-hongyishi-guide-trigger/);
+  assert.doesNotMatch(output, /data-hongyishi-guide-entry/);
+  assert.doesNotMatch(output, /hys:heatStroke:guide/);
   assert.match(output, /内容状态：待复核/);
-  assert.match(output, /热射病防治使用引导|热指数查询使用引导/);
   assert.match(output, /不替代急救指挥、临床诊疗和当地规范/);
   assert.match(output, /data-hys-mobile-nav-scope="heatStroke"/);
   assert.match(
@@ -349,11 +347,11 @@ test("rewriteTcccText scopes root-relative app links, manifest, and service work
   );
   assert.match(flowOutput, /data-hongyishi-tccc-shell/);
   assert.match(flowOutput, /data-hongyishi-content-governance/);
-  assert.match(flowOutput, /data-hongyishi-guide-runtime/);
-  assert.match(flowOutput, /data-hongyishi-guide-trigger/);
-  assert.match(flowOutput, /hys:tccc:guide:v1:pages\/tccc-standard\.html:seen/);
+  assert.doesNotMatch(flowOutput, /data-hongyishi-guide-runtime/);
+  assert.doesNotMatch(flowOutput, /data-hongyishi-guide-trigger/);
+  assert.doesNotMatch(flowOutput, /data-hongyishi-guide-entry/);
+  assert.doesNotMatch(flowOutput, /hys:tccc:guide/);
   assert.match(flowOutput, /不能替代现行作战医疗规范/);
-  assert.match(flowOutput, /TCCC 标准流程使用引导/);
   assert.match(flowOutput, /data-hongyishi-mobile-nav/);
   assert.match(
     flowOutput,
@@ -440,55 +438,6 @@ test("injectContentGovernanceBanner adds source and review state once", () => {
       disclaimer: "仅供训练参考。",
     }),
     output,
-  );
-});
-
-test("injectUsageGuide adds first-use guide runtime once", () => {
-  const input =
-    "<html><head><title>x</title></head><body><main>content</main></body></html>";
-  const config = {
-    title: "测试使用引导",
-    summary: "先看风险，再操作。",
-    steps: ["第一步", "第二步"],
-    boundary: "仅供测试。",
-  };
-  const output = injectUsageGuide(input, config, {
-    project: "heatStroke",
-    relativePath: "pages/field-treatment.html",
-  });
-
-  assert.match(output, /data-hongyishi-guide-entry/);
-  assert.match(output, /data-hongyishi-guide-runtime/);
-  assert.match(output, /data-hongyishi-guide-trigger/);
-  assert.match(
-    output,
-    /hys:heatStroke:guide:v1:pages\/field-treatment\.html:seen/,
-  );
-  assert.match(output, /测试使用引导/);
-  assert.match(output, /scrollIntoView/);
-  assert.match(output, /requestAnimationFrame/);
-  assert.match(output, /仅供测试。/);
-  assert.equal(
-    injectUsageGuide(output, config, {
-      project: "heatStroke",
-      relativePath: "pages/field-treatment.html",
-    }),
-    output,
-  );
-});
-
-test("resolveUsageGuideConfig follows safe page aliases", () => {
-  assert.equal(
-    resolveUsageGuideConfig("heatStroke", "pages/热射病现场处置.html").title,
-    "现场处置使用引导",
-  );
-  assert.equal(
-    resolveUsageGuideConfig("tccc", "pages/TFC大出血算法.html").title,
-    "TFC 大出血算法使用引导",
-  );
-  assert.equal(
-    resolveUsageGuideConfig("tccc", "index.html").title,
-    "TCCC 使用引导",
   );
 });
 

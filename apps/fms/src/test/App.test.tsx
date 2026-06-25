@@ -1,239 +1,244 @@
-
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { render } from '@testing-library/react'
-import { screen, waitFor } from '@testing-library/dom'
-import { createMemoryRouter, MemoryRouter, Route, RouterProvider, Routes, useLocation } from 'react-router-dom'
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { render } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/dom";
+import {
+  createMemoryRouter,
+  MemoryRouter,
+  Route,
+  RouterProvider,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 // import userEvent from '@testing-library/user-event'
 
-import { RouteLoading } from '../App'
+import { RouteLoading } from "../App";
 
 // 导入页面组件
-import RootLayout from '../components/shared/RootLayout'
-import FirstVisitDetector from '../components/shared/FirstVisitDetector'
-import HomePage from '../pages/HomePage'
-import AssessmentPage from '../pages/AssessmentPage'
-import ReportPage from '../pages/ReportPage'
-import TrainingPage from '../pages/TrainingPage'
-import EducationPage from '../pages/EducationPage'
-import { useAppStore } from '../stores/useAppStore'
+import RootLayout from "../components/shared/RootLayout";
+import FirstVisitDetector from "../components/shared/FirstVisitDetector";
+import HomePage from "../pages/HomePage";
+import AssessmentPage from "../pages/AssessmentPage";
+import ReportPage from "../pages/ReportPage";
+import TrainingPage from "../pages/TrainingPage";
+import EducationPage from "../pages/EducationPage";
+import { useAppStore } from "../stores/useAppStore";
 
 // Mock Framer Motion to avoid animation issues in tests
-vi.mock('framer-motion', () => ({
+vi.mock("framer-motion", () => ({
   motion: {
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
   },
   AnimatePresence: ({ children }: any) => children,
-}))
-
-vi.mock('@/components/ui/product-tour', () => ({
-  ProductTour: () => null,
-}))
-
-vi.mock('@/hooks/useProductTour', () => ({
-  useProductTour: () => ({
-    isOpen: false,
-    currentPageTour: { steps: [] },
-    closeTour: () => undefined,
-  }),
-}))
+}));
 
 const PathProbe = () => {
-  const location = useLocation()
+  const location = useLocation();
 
-  return <div data-testid="current-path">{location.pathname}</div>
-}
+  return <div data-testid="current-path">{location.pathname}</div>;
+};
 
 // Helper function to render App with router
-const renderApp = (initialEntries = ['/']) => {
-  const router = createMemoryRouter([
+const renderApp = (initialEntries = ["/"]) => {
+  const router = createMemoryRouter(
+    [
+      {
+        path: "/",
+        element: <RootLayout />,
+        children: [
+          { index: true, element: <HomePage /> },
+          { path: "assessment", element: <AssessmentPage /> },
+          { path: "report", element: <ReportPage /> },
+          { path: "training", element: <TrainingPage /> },
+          { path: "education", element: <EducationPage /> },
+        ],
+      },
+    ],
     {
-      path: '/',
-      element: <RootLayout />,
-      children: [
-        { index: true, element: <HomePage /> },
-        { path: 'assessment', element: <AssessmentPage /> },
-        { path: 'report', element: <ReportPage /> },
-        { path: 'training', element: <TrainingPage /> },
-        { path: 'education', element: <EducationPage /> },
-      ],
+      initialEntries,
+      initialIndex: 0,
     },
-  ], {
-    initialEntries,
-    initialIndex: 0,
-  })
+  );
 
-  return render(<RouterProvider router={router} />)
-}
+  return render(<RouterProvider router={router} />);
+};
 
-describe('App 路由测试', () => {
+describe("App 路由测试", () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
-  it('应该正确渲染首页', async () => {
-    renderApp()
-    
+  it("应该正确渲染首页", async () => {
+    renderApp();
+
     // 检查首页标题
-    expect(screen.getByText('功能性动作筛查')).toBeInTheDocument()
-    expect(screen.getByText(/科学评估动作模式/)).toBeInTheDocument()
-    
+    expect(screen.getByText("功能性动作筛查")).toBeInTheDocument();
+    expect(screen.getByText(/科学评估动作模式/)).toBeInTheDocument();
+
     // 检查主要操作按钮 - 使用getAllBy处理多个匹配
-    expect(screen.getAllByText('开始评估')).toHaveLength(2) // 导航和卡片各一个
-    expect(screen.getByText('学习理论')).toBeInTheDocument()
-  })
+    expect(screen.getAllByText("开始评估")).toHaveLength(2); // 导航和卡片各一个
+    expect(screen.getByText("学习理论")).toBeInTheDocument();
+  });
 
-  it('应该能够导航到评估页面', async () => {
-    renderApp()
-    
+  it("应该能够导航到评估页面", async () => {
+    renderApp();
+
     // 使用更具体的选择器找到开始评估链接
-    const assessmentLink = screen.getByRole('link', { name: /开始测试/ })
-    expect(assessmentLink).toHaveAttribute('href', '/assessment')
-  })
+    const assessmentLink = screen.getByRole("link", { name: /开始测试/ });
+    expect(assessmentLink).toHaveAttribute("href", "/assessment");
+  });
 
-  it('应该能够导航到教育页面', async () => {
-    renderApp()
-    
+  it("应该能够导航到教育页面", async () => {
+    renderApp();
+
     // 使用更具体的选择器找到学习理论链接
-    const educationLink = screen.getByRole('link', { name: /开始学习/ })
-    expect(educationLink).toHaveAttribute('href', '/education')
-  })
+    const educationLink = screen.getByRole("link", { name: /开始学习/ });
+    expect(educationLink).toHaveAttribute("href", "/education");
+  });
 
-  it('应该正确渲染评估页面', async () => {
-    renderApp(['/assessment'])
-    
+  it("应该正确渲染评估页面", async () => {
+    renderApp(["/assessment"]);
+
     // 检查评估页面是否正确渲染
     await waitFor(() => {
-      expect(screen.getByText('过顶深蹲 (Deep Squat)')).toBeInTheDocument()
+      expect(screen.getByText("过顶深蹲 (Deep Squat)")).toBeInTheDocument();
       // 验证评分按钮存在，这证明页面正确加载了
-      expect(screen.getByRole('button', { name: /评分3分：完美地完成动作/ })).toBeInTheDocument()
-    })
-  })
+      expect(
+        screen.getByRole("button", { name: /评分3分：完美地完成动作/ }),
+      ).toBeInTheDocument();
+    });
+  });
 
-  it('应该正确渲染教育页面', async () => {
-    renderApp(['/education'])
-    
+  it("应该正确渲染教育页面", async () => {
+    renderApp(["/education"]);
+
     // 检查教育页面是否正确渲染
     await waitFor(() => {
-      expect(screen.getByText('FMS 知识库')).toBeInTheDocument()
-    })
-  })
+      expect(screen.getByText("FMS 知识库")).toBeInTheDocument();
+    });
+  });
 
-  it('应该正确渲染训练页面', async () => {
+  it("应该正确渲染训练页面", async () => {
     useAppStore.getState().setReportData({
       scores: {
-        'deep-squat': 2,
-        'hurdle-step': 2,
-        'inline-lunge': 2,
-        'shoulder-mobility': 2,
-        'active-straight-leg-raise': 2,
-        'trunk-stability-push-up': 2,
-        'rotary-stability': 2,
+        "deep-squat": 2,
+        "hurdle-step": 2,
+        "inline-lunge": 2,
+        "shoulder-mobility": 2,
+        "active-straight-leg-raise": 2,
+        "trunk-stability-push-up": 2,
+        "rotary-stability": 2,
       },
       bilateralScores: {},
       asymmetryIssues: {},
       painfulTests: [],
-      basicTests: ['deep-squat'],
+      basicTests: ["deep-squat"],
       clearanceTests: [],
-      sessionId: 'test-session',
-    })
-    renderApp(['/training'])
-    
+      sessionId: "test-session",
+    });
+    renderApp(["/training"]);
+
     // 检查训练页面是否正确渲染 - 使用实际存在的文本
     await waitFor(() => {
-      expect(screen.getByText('个性化纠正训练方案')).toBeInTheDocument()
-    })
-  })
-})
+      expect(screen.getByText("个性化纠正训练方案")).toBeInTheDocument();
+    });
+  });
+});
 
-describe('App 路由加载状态', () => {
-  it('应该提供可访问的路由加载提示', () => {
-    render(<RouteLoading />)
+describe("App 路由加载状态", () => {
+  it("应该提供可访问的路由加载提示", () => {
+    render(<RouteLoading />);
 
-    expect(screen.getByRole('status', { name: '正在载入训练伤防治模块' })).toBeInTheDocument()
-    expect(screen.getByText('模块载入中')).toBeInTheDocument()
-  })
-})
+    expect(
+      screen.getByRole("status", { name: "正在载入训练伤防治模块" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("模块载入中")).toBeInTheDocument();
+  });
+});
 
-describe('首次访问开场页拦截', () => {
-  const renderFirstVisitDetector = (initialEntries = ['/']) => {
+describe("首次访问开场页拦截", () => {
+  const renderFirstVisitDetector = (initialEntries = ["/"]) => {
     return render(
       <MemoryRouter initialEntries={initialEntries}>
         <Routes>
           <Route
             path="/"
-            element={(
+            element={
               <FirstVisitDetector>
                 <PathProbe />
               </FirstVisitDetector>
-            )}
+            }
           />
           <Route
             path="/assessment"
-            element={(
+            element={
               <FirstVisitDetector>
                 <PathProbe />
               </FirstVisitDetector>
-            )}
+            }
           />
           <Route path="/opening" element={<PathProbe />} />
         </Routes>
       </MemoryRouter>,
-    )
-  }
+    );
+  };
 
   beforeEach(() => {
-    localStorage.clear()
-  })
+    localStorage.clear();
+  });
 
-  it('首次访问根路径时显示开场页', async () => {
-    renderFirstVisitDetector(['/'])
-
-    await waitFor(() => {
-      expect(screen.getByTestId('current-path')).toHaveTextContent('/opening')
-    })
-  })
-
-  it('首次访问任务深链接时不跳转到开场页', async () => {
-    renderFirstVisitDetector(['/assessment'])
+  it("首次访问根路径时显示开场页", async () => {
+    renderFirstVisitDetector(["/"]);
 
     await waitFor(() => {
-      expect(screen.getByTestId('current-path')).toHaveTextContent('/assessment')
-    })
-  })
-})
+      expect(screen.getByTestId("current-path")).toHaveTextContent("/opening");
+    });
+  });
 
-describe('App 响应式测试', () => {
+  it("首次访问任务深链接时不跳转到开场页", async () => {
+    renderFirstVisitDetector(["/assessment"]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("current-path")).toHaveTextContent(
+        "/assessment",
+      );
+    });
+  });
+});
+
+describe("App 响应式测试", () => {
   beforeEach(() => {
     // 模拟移动端视口
-    Object.defineProperty(window, 'innerWidth', {
+    Object.defineProperty(window, "innerWidth", {
       writable: true,
       configurable: true,
       value: 375,
-    })
-    Object.defineProperty(window, 'innerHeight', {
+    });
+    Object.defineProperty(window, "innerHeight", {
       writable: true,
       configurable: true,
       value: 667,
-    })
-  })
+    });
+  });
 
-  it('应该在移动端正确显示', async () => {
-    renderApp()
-    
+  it("应该在移动端正确显示", async () => {
+    renderApp();
+
     // 检查响应式布局
-    const container = screen.getByText('功能性动作筛查').closest('.hys-section')
-    expect(container).toBeInTheDocument()
-  })
-})
+    const container = screen
+      .getByText("功能性动作筛查")
+      .closest(".hys-section");
+    expect(container).toBeInTheDocument();
+  });
+});
 
-describe('App 错误处理测试', () => {
-  it('应该处理不存在的路由', async () => {
-    renderApp(['/non-existent-route'])
-    
+describe("App 错误处理测试", () => {
+  it("应该处理不存在的路由", async () => {
+    renderApp(["/non-existent-route"]);
+
     // 应该显示默认布局或错误页面
     await waitFor(() => {
       // 检查是否有基本的布局结构
-      expect(document.body).toBeInTheDocument()
-    })
-  })
-}) 
+      expect(document.body).toBeInTheDocument();
+    });
+  });
+});

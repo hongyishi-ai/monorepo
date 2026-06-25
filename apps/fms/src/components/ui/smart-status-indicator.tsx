@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import {
   AlertTriangle,
   ArrowLeftRight,
-  ChevronUp,
+  ChevronRight,
   Zap,
   Eye,
   Target,
@@ -174,16 +174,15 @@ export const SmartStatusIndicator = React.forwardRef<
         <div
           className="z-10 mb-4 lg:fixed lg:right-6 lg:bottom-6 lg:z-50 lg:mb-0"
           data-hys-assist-control="status"
-          data-tour-id="assessment-status-detail"
         >
           <AnimatePresence mode="wait">
             <motion.div
               ref={ref}
               initial={{ opacity: 0, scale: 0.8, y: 20 }}
               animate={{
-                opacity: isScrollingDown ? 0.3 : 1,
-                scale: isScrollingDown ? 0.9 : 1,
-                y: isScrollingDown ? 10 : 0,
+                opacity: isScrollingDown ? 0.82 : 1,
+                scale: isScrollingDown ? 0.98 : 1,
+                y: 0,
               }}
               exit={{ opacity: 0, scale: 0.8, y: 20 }}
               transition={{
@@ -197,14 +196,14 @@ export const SmartStatusIndicator = React.forwardRef<
             >
               <Card
                 className={cn(
-                  "hys-card hys-mobile-assist-card bg-card/95 backdrop-blur-md border shadow-lg hover:shadow-xl cursor-pointer overflow-hidden md:h-auto md:w-auto",
-                  "active:scale-95 touch-manipulation smart-status-transition smart-indicator-border-glow",
+                  "hys-mobile-assist-card hys-assist-card hys-assist-card--status cursor-pointer overflow-hidden bg-card/95 backdrop-blur-md md:h-auto md:w-[18rem]",
+                  "active:scale-95 touch-manipulation smart-status-transition",
                   isScrollingDown && "indicator-dimmed",
                   !isScrollingDown && "indicator-focused",
                   (requiresBilateralAssessment ||
                     asymmetryCount > 0 ||
                     painfulCount > 0) &&
-                    "smart-indicator-border-glow",
+                    "hys-assist-card--attention",
                   isDemoDrawerOpen && "opacity-40 pointer-events-none",
                 )}
                 onClick={() => setIsDrawerOpen(true)}
@@ -220,102 +219,42 @@ export const SmartStatusIndicator = React.forwardRef<
                 aria-expanded={isDrawerOpen}
               >
                 <CardContent className="p-0">
-                  {/* 始终显示收缩状态的状态指示器 */}
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="p-3 md:p-4"
+                    className="hys-assist-card__inner"
                   >
-                    <div className="flex items-center gap-3">
-                      {/* 动态状态图标 */}
-                      <div
-                        className={cn(
-                          "relative",
-                          requiresBilateralAssessment && "smart-indicator-glow",
-                          (asymmetryCount > 0 || painfulCount > 0) &&
-                            "smart-indicator-pulse",
-                        )}
-                      >
-                        <div
-                          className={cn(
-                            "w-9 h-9 md:h-10 md:w-10 flex items-center justify-center border-2 transition-all duration-300",
-                            requiresBilateralAssessment
-                              ? "bg-blue-50 border-blue-200"
-                              : currentTestType === "clearance"
-                                ? "bg-amber-50 border-amber-200"
-                                : asymmetryCount > 0 || painfulCount > 0
-                                  ? "bg-red-50 border-red-200"
-                                  : "bg-secondary/10 border-transparent",
-                          )}
-                        >
-                          {getStatusIcon()}
-                        </div>
+                    <div className="hys-assist-card__icon" aria-hidden="true">
+                      {getStatusIcon()}
+                    </div>
 
-                        {/* 进度环 */}
-                        <svg
-                          className="absolute inset-0 h-9 w-9 -rotate-90 md:h-10 md:w-10"
-                          viewBox="0 0 40 40"
-                        >
-                          <circle
-                            cx="20"
-                            cy="20"
-                            r="18"
-                            fill="none"
-                            stroke="hsl(var(--border))"
-                            strokeWidth="1.5"
-                            opacity="0.2"
-                          />
-                          <circle
-                            cx="20"
-                            cy="20"
-                            r="18"
-                            fill="none"
-                            stroke={
-                              requiresBilateralAssessment
-                                ? "hsl(217 91% 60%)"
-                                : currentTestType === "clearance"
-                                  ? "hsl(43 96% 56%)"
-                                  : asymmetryCount > 0 || painfulCount > 0
-                                    ? "hsl(0 84% 60%)"
-                                    : "hsl(var(--primary))"
-                            }
-                            strokeWidth="2"
-                            strokeDasharray={`${2 * Math.PI * 18}`}
-                            strokeDashoffset={`${2 * Math.PI * 18 * (1 - progressPercentage / 100)}`}
-                            className="transition-all duration-700 ease-out"
-                            strokeLinecap="round"
-                          />
-                        </svg>
-
-                        {/* 状态指示点 */}
-                        {requiresBilateralAssessment && (
-                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 border-2 border-card">
-                            <div className="w-full h-full bg-blue-400 animate-ping opacity-75" />
-                          </div>
-                        )}
-
-                        {/* 警告指示点 */}
-                        {(asymmetryCount > 0 || painfulCount > 0) &&
-                          !requiresBilateralAssessment && (
-                            <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 border-2 border-card">
-                              <div className="w-full h-full bg-red-400 animate-pulse" />
-                            </div>
-                          )}
+                    <div className="hys-assist-card__body">
+                      <div className="hys-assist-card__title-row">
+                        <span className="hys-assist-card__title">测试状态</span>
+                        <span className="hys-assist-card__count">
+                          {totalCompleted}/{totalTests}
+                        </span>
                       </div>
-
-                      {/* 核心信息 */}
-                      <div className="hys-mobile-assist-label min-w-0 text-left">
-                        <div className="text-sm font-medium text-foreground flex items-center gap-2">
-                          <span>
-                            {totalCompleted}/{totalTests}
-                          </span>
-                          <ChevronUp className="w-3 h-3 text-muted-foreground opacity-50" />
-                        </div>
-                        <div className="text-xs text-muted-foreground truncate">
-                          {getStatusText()}
-                        </div>
+                      <div className="hys-assist-card__meta">
+                        {getStatusText()}
+                        {currentTestName ? ` · ${currentTestName}` : ""}
                       </div>
                     </div>
+
+                    <div
+                      className="hys-assist-card__meter"
+                      aria-hidden="true"
+                      style={
+                        {
+                          "--hys-assist-progress": `${progressPercentage}%`,
+                        } as React.CSSProperties
+                      }
+                    />
+
+                    <ChevronRight
+                      className="hys-assist-card__chevron"
+                      aria-hidden="true"
+                    />
                   </motion.div>
                 </CardContent>
               </Card>

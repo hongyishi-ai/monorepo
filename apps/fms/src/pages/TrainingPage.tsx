@@ -1,20 +1,49 @@
-import { useMemo, useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import ContainerWithIcon from '@/components/ui/container-with-icon';
-import { CheckCircle, Target, AlertTriangle, BarChart3, TrendingUp, RefreshCw, ChevronLeft, ChevronRight, User, Ban, Building2, TrendingDown, Clock, CheckCheck, ArrowRight, Download, RotateCcw, ArrowLeft, Play } from 'lucide-react';
-import { useAppStore } from '@/stores/useAppStore';
-import { useAssessmentStore } from '@/stores/useAssessmentStore';
-import { useStorage } from '@/hooks/use-storage';
-import { generateComprehensiveTrainingPlan, type Exercise } from '@/lib/trainingAlgorithm';
-import { BASIC_TESTS } from '@/data/fms-tests';
-import { FmsGuidePanel, FmsMetricCard, FmsPageHeader } from '@/components/shared/FmsPage';
+import { useMemo, useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import ContainerWithIcon from "@/components/ui/container-with-icon";
+import {
+  CheckCircle,
+  Target,
+  AlertTriangle,
+  BarChart3,
+  TrendingUp,
+  RefreshCw,
+  ChevronLeft,
+  ChevronRight,
+  User,
+  Ban,
+  Building2,
+  TrendingDown,
+  Clock,
+  CheckCheck,
+  ArrowRight,
+  Download,
+  RotateCcw,
+  ArrowLeft,
+  Play,
+} from "lucide-react";
+import { useAppStore } from "@/stores/useAppStore";
+import { useAssessmentStore } from "@/stores/useAssessmentStore";
+import { useStorage } from "@/hooks/use-storage";
+import {
+  generateComprehensiveTrainingPlan,
+  type Exercise,
+} from "@/lib/trainingAlgorithm";
+import { BASIC_TESTS } from "@/data/fms-tests";
+import { FmsMetricCard, FmsPageHeader } from "@/components/shared/FmsPage";
 
-const assetUrl = (assetPath: string) => `${import.meta.env.BASE_URL}${assetPath.replace(/^\/+/, '')}`;
+const assetUrl = (assetPath: string) =>
+  `${import.meta.env.BASE_URL}${assetPath.replace(/^\/+/, "")}`;
 
 const TrainingPage = () => {
   // 使用Zustand store获取训练数据
@@ -26,16 +55,19 @@ const TrainingPage = () => {
   const scores = reportData?.scores || {};
   const bilateralScores = reportData?.bilateralScores || {};
 
-  const [expandedPhase, setExpandedPhase] = useState<string>('');
-  const [expandedExercise, setExpandedExercise] = useState<string>('');
+  const [expandedPhase, setExpandedPhase] = useState<string>("");
+  const [expandedExercise, setExpandedExercise] = useState<string>("");
 
   // 记录当前页面访问并处理数据恢复
   useEffect(() => {
-    setLastVisitedPage('training');
+    setLastVisitedPage("training");
 
     // 检查是否需要从URL参数恢复数据
-    const recordId = searchParams.get('recordId');
-    if (recordId && (!reportData || Object.keys(reportData.scores || {}).length === 0)) {
+    const recordId = searchParams.get("recordId");
+    if (
+      recordId &&
+      (!reportData || Object.keys(reportData.scores || {}).length === 0)
+    ) {
       // 如果有recordId但没有reportData，则从存储中恢复数据
       const loadHistoryData = async () => {
         try {
@@ -46,11 +78,11 @@ const TrainingPage = () => {
               ...record.assessmentData.basicScores,
               // 添加排除测试分数
               ...Object.fromEntries(
-                record.assessmentData.clearanceResults.map(result => [
+                record.assessmentData.clearanceResults.map((result) => [
                   result.testId,
-                  result.isPositive ? 0 : 1  // 阳性为0分，阴性为1分
-                ])
-              )
+                  result.isPositive ? 0 : 1, // 阳性为0分，阴性为1分
+                ]),
+              ),
             };
 
             // 设置到AppStore用于训练方案生成
@@ -59,11 +91,16 @@ const TrainingPage = () => {
               bilateralScores: record.assessmentData.bilateralScores,
               asymmetryIssues: record.assessmentData.asymmetryIssues,
               painfulTests: record.assessmentData.painfulTests,
-              basicTests: record.assessmentData.completedTests.filter(id =>
-                !record.assessmentData.clearanceResults.some(c => c.testId === id)
+              basicTests: record.assessmentData.completedTests.filter(
+                (id) =>
+                  !record.assessmentData.clearanceResults.some(
+                    (c) => c.testId === id,
+                  ),
               ),
-              clearanceTests: record.assessmentData.clearanceResults.map(c => c.testId),
-              sessionId: record.sessionId
+              clearanceTests: record.assessmentData.clearanceResults.map(
+                (c) => c.testId,
+              ),
+              sessionId: record.sessionId,
             };
 
             setReportData(reportDataToSet);
@@ -72,13 +109,20 @@ const TrainingPage = () => {
             loadFromRecord(record);
           }
         } catch (error) {
-          console.error('加载历史记录失败:', error);
+          console.error("加载历史记录失败:", error);
         }
       };
 
       loadHistoryData();
     }
-  }, [setLastVisitedPage, searchParams, reportData, getAssessmentById, setReportData, loadFromRecord]);
+  }, [
+    setLastVisitedPage,
+    searchParams,
+    reportData,
+    getAssessmentById,
+    setReportData,
+    loadFromRecord,
+  ]);
 
   // 视频播放状态管理 - 优化内存使用和防止泄漏
   const [videoLoading, setVideoLoading] = useState<Set<string>>(new Set());
@@ -86,9 +130,9 @@ const TrainingPage = () => {
 
   // 视频播放控制函数 - 添加边界检查和防重复
   const handleVideoLoadStart = (exerciseId: string) => {
-    if (!exerciseId || typeof exerciseId !== 'string') return;
+    if (!exerciseId || typeof exerciseId !== "string") return;
 
-    setVideoLoading(prev => {
+    setVideoLoading((prev) => {
       if (prev.has(exerciseId)) return prev; // 避免重复添加
       const newSet = new Set(prev);
       newSet.add(exerciseId);
@@ -96,7 +140,7 @@ const TrainingPage = () => {
     });
 
     // 清除之前的错误状态
-    setVideoErrors(prev => {
+    setVideoErrors((prev) => {
       if (!prev.has(exerciseId)) return prev;
       const newSet = new Set(prev);
       newSet.delete(exerciseId);
@@ -105,9 +149,9 @@ const TrainingPage = () => {
   };
 
   const handleVideoLoadEnd = (exerciseId: string) => {
-    if (!exerciseId || typeof exerciseId !== 'string') return;
+    if (!exerciseId || typeof exerciseId !== "string") return;
 
-    setVideoLoading(prev => {
+    setVideoLoading((prev) => {
       if (!prev.has(exerciseId)) return prev; // 避免无效操作
       const newSet = new Set(prev);
       newSet.delete(exerciseId);
@@ -116,16 +160,16 @@ const TrainingPage = () => {
   };
 
   const handleVideoError = (exerciseId: string) => {
-    if (!exerciseId || typeof exerciseId !== 'string') return;
+    if (!exerciseId || typeof exerciseId !== "string") return;
 
-    setVideoErrors(prev => {
+    setVideoErrors((prev) => {
       if (prev.has(exerciseId)) return prev; // 避免重复添加
       const newSet = new Set(prev);
       newSet.add(exerciseId);
       return newSet;
     });
 
-    setVideoLoading(prev => {
+    setVideoLoading((prev) => {
       if (!prev.has(exerciseId)) return prev;
       const newSet = new Set(prev);
       newSet.delete(exerciseId);
@@ -149,7 +193,7 @@ const TrainingPage = () => {
   // 检查是否应该显示视频
   const shouldShowVideo = (exerciseId: string) => {
     // 排除没有视频的练习
-    const exercisesWithoutVideo = ['ds-priority-correction'];
+    const exercisesWithoutVideo = ["ds-priority-correction"];
     return !exercisesWithoutVideo.includes(exerciseId);
   };
 
@@ -159,7 +203,7 @@ const TrainingPage = () => {
 
     // 添加双侧测试的左右分数
     Object.entries(bilateralScores).forEach(([testId, scoreData]) => {
-      if (scoreData && typeof scoreData === 'object') {
+      if (scoreData && typeof scoreData === "object") {
         merged[`${testId}-left`] = scoreData.left;
         merged[`${testId}-right`] = scoreData.right;
       }
@@ -169,30 +213,48 @@ const TrainingPage = () => {
   }, [scores, bilateralScores]);
 
   // 使用lib中的算法
-  const comprehensiveTrainingPlan = useMemo(() => generateComprehensiveTrainingPlan(mergedScores), [mergedScores]);
+  const comprehensiveTrainingPlan = useMemo(
+    () => generateComprehensiveTrainingPlan(mergedScores),
+    [mergedScores],
+  );
 
   // 计算总分和风险评估 - 只计算基础测试分数，不包含排除测试
   const totalScore = useMemo(() => {
-    const basicTestIds = BASIC_TESTS.map(test => test.id);
+    const basicTestIds = BASIC_TESTS.map((test) => test.id);
     return Object.entries(scores)
       .filter(([testId]) => basicTestIds.includes(testId))
-      .reduce((sum, [, score]) => sum + (typeof score === 'number' ? score : 0), 0);
+      .reduce(
+        (sum, [, score]) => sum + (typeof score === "number" ? score : 0),
+        0,
+      );
   }, [scores]);
 
   // 风险等级评估（以14分为分界线）
   const riskAssessment = useMemo(() => {
     if (comprehensiveTrainingPlan.hasPainIssues) {
-      return { level: '需要关注', color: 'text-red-600', description: '存在疼痛信号' };
+      return {
+        level: "需要关注",
+        color: "text-red-600",
+        description: "存在疼痛信号",
+      };
     } else if (totalScore <= 14) {
-      return { level: '相对高风险', color: 'text-orange-600', description: '功能缺陷较多' };
+      return {
+        level: "相对高风险",
+        color: "text-orange-600",
+        description: "功能缺陷较多",
+      };
     } else {
-      return { level: '相对低风险', color: 'text-green-600', description: '功能状态良好' };
+      return {
+        level: "相对低风险",
+        color: "text-green-600",
+        description: "功能状态良好",
+      };
     }
   }, [comprehensiveTrainingPlan.hasPainIssues, totalScore]);
 
   // 页面进入时滚动到顶部
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   // 检查是否有评估数据
@@ -200,16 +262,6 @@ const TrainingPage = () => {
     return (
       <div className="hys-section">
         <div className="hys-container">
-          <FmsGuidePanel
-            summary="训练方案必须基于一次评估或历史记录。"
-            steps={[
-              { title: '先完成评估', description: '系统需要评分、疼痛和不对称数据来生成训练优先级。' },
-              { title: '或恢复历史', description: '如果已经评估过，可以从历史记录进入报告，再进入训练方案。' },
-              { title: '按阶段执行', description: '训练方案生成后，从第一阶段开始，不跳过疼痛和禁忌提示。' },
-            ]}
-            boundary="没有评估数据时不生成训练建议，避免给出脱离个体状态的训练动作。"
-            tourId="training-guide"
-          />
           <ContainerWithIcon
             icon={AlertTriangle}
             iconColor="text-muted-foreground"
@@ -227,7 +279,10 @@ const TrainingPage = () => {
                 <Button className="hys-button px-8">开始 FMS 评估</Button>
               </Link>
               <Link to="/history">
-                <Button variant="outline" className="hys-button px-8 text-foreground border-primary/20 hover:border-primary/40 hover:bg-primary/5 hover:text-foreground">
+                <Button
+                  variant="outline"
+                  className="hys-button px-8 text-foreground border-primary/20 hover:border-primary/40 hover:bg-primary/5 hover:text-foreground"
+                >
                   查看历史记录
                 </Button>
               </Link>
@@ -254,13 +309,14 @@ const TrainingPage = () => {
 
           // 获取元素位置并手动计算滚动位置
           const elementRect = phaseElement.getBoundingClientRect();
-          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const scrollTop =
+            window.pageYOffset || document.documentElement.scrollTop;
           const targetScrollTop = scrollTop + elementRect.top - targetOffset;
 
           // 使用window.scrollTo获得更好的控制
           window.scrollTo({
             top: Math.max(0, targetScrollTop), // 确保不会滚动到负值
-            behavior: 'smooth'
+            behavior: "smooth",
           });
         }
       }
@@ -274,7 +330,9 @@ const TrainingPage = () => {
     // 给手风琴动画足够的时间完全展开，然后滚动到该练习
     setTimeout(() => {
       if (value) {
-        const exerciseElement = document.querySelector(`[data-exercise="${value}"]`);
+        const exerciseElement = document.querySelector(
+          `[data-exercise="${value}"]`,
+        );
         if (exerciseElement) {
           // 计算导航栏高度和适当的偏移量
           const navHeight = 72; // 导航栏高度约80px
@@ -283,13 +341,14 @@ const TrainingPage = () => {
 
           // 获取元素位置并手动计算滚动位置
           const elementRect = exerciseElement.getBoundingClientRect();
-          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const scrollTop =
+            window.pageYOffset || document.documentElement.scrollTop;
           const targetScrollTop = scrollTop + elementRect.top - targetOffset;
 
           // 使用window.scrollTo获得更好的控制
           window.scrollTo({
             top: Math.max(0, targetScrollTop), // 确保不会滚动到负值
-            behavior: 'smooth'
+            behavior: "smooth",
           });
         }
       }
@@ -304,22 +363,11 @@ const TrainingPage = () => {
           title="个性化纠正训练方案"
           description={
             <>
-            基于您的FMS评估结果，为您制定专业的分阶段纠正训练计划，
-            <br className="hidden sm:inline" />
-            系统性解决所有问题，循序渐进地改善动作功能。
+              基于您的FMS评估结果，为您制定专业的分阶段纠正训练计划，
+              <br className="hidden sm:inline" />
+              系统性解决所有问题，循序渐进地改善动作功能。
             </>
           }
-        />
-
-        <FmsGuidePanel
-          summary="按阶段展开，不要跳过疼痛和禁忌提示。"
-          steps={[
-            { title: '先看概览', description: '确认训练阶段、纠正项目、预计周期和总体风险。' },
-            { title: '再展开阶段', description: '从第一阶段开始，按优先级处理疼痛、功能障碍和不对称。' },
-            { title: '最后看执行指导', description: '按频率和阶段过渡标准训练，并在 4-6 周后重新评估。' },
-          ]}
-          boundary="出现疼痛、麻木、症状加重或不确定动作是否适合时，应停止训练并寻求专业指导。"
-          tourId="training-guide"
         />
 
         {/* 疼痛警告 */}
@@ -334,17 +382,33 @@ const TrainingPage = () => {
           >
             <Alert className="hys-card border-red-200 bg-red-50 dark:bg-red-900/20">
               <AlertDescription className="text-red-800 dark:text-red-200">
-                <strong>重要提醒：</strong>检测到疼痛信号，请优先处理疼痛问题。我们将为您提供完整的分阶段解决方案。
+                <strong>重要提醒：</strong>
+                检测到疼痛信号，请优先处理疼痛问题。我们将为您提供完整的分阶段解决方案。
               </AlertDescription>
             </Alert>
           </ContainerWithIcon>
         )}
 
         {/* 训练计划概览 - 移动端集约化显示 */}
-        <div className="hys-grid grid-cols-2 lg:grid-cols-4 mb-12 md:mb-16 lg:mb-24 gap-2 md:gap-4" data-tour-id="training-overview">
-          <FmsMetricCard icon={Clock} label="训练阶段" value={comprehensiveTrainingPlan.phases.length} />
-          <FmsMetricCard icon={Target} label="纠正项目" value={comprehensiveTrainingPlan.totalSteps} />
-          <FmsMetricCard icon={BarChart3} label="预计周数" value={comprehensiveTrainingPlan.estimatedWeeks} />
+        <div
+          className="hys-grid grid-cols-2 lg:grid-cols-4 mb-12 md:mb-16 lg:mb-24 gap-2 md:gap-4"
+          data-tour-id="training-overview"
+        >
+          <FmsMetricCard
+            icon={Clock}
+            label="训练阶段"
+            value={comprehensiveTrainingPlan.phases.length}
+          />
+          <FmsMetricCard
+            icon={Target}
+            label="纠正项目"
+            value={comprehensiveTrainingPlan.totalSteps}
+          />
+          <FmsMetricCard
+            icon={BarChart3}
+            label="预计周数"
+            value={comprehensiveTrainingPlan.estimatedWeeks}
+          />
           <FmsMetricCard
             icon={CheckCheck}
             label="总体评估"
@@ -354,12 +418,21 @@ const TrainingPage = () => {
         </div>
 
         {/* 分阶段训练计划 */}
-        <div className="space-y-12 md:space-y-16 mb-12 md:mb-16 lg:mb-24" data-tour-id="training-phases">
+        <div
+          className="space-y-12 md:space-y-16 mb-12 md:mb-16 lg:mb-24"
+          data-tour-id="training-phases"
+        >
           <div className="text-center">
-            <h2 className="text-2xl md:text-3xl font-light mb-4">分阶段训练计划</h2>
+            <h2 className="text-2xl md:text-3xl font-light mb-4">
+              分阶段训练计划
+            </h2>
             <div className="flex items-center justify-center gap-2">
-              <Badge variant="outline" className="hys-text">循序渐进</Badge>
-              <Badge variant="outline" className="hys-text">系统性纠正</Badge>
+              <Badge variant="outline" className="hys-text">
+                循序渐进
+              </Badge>
+              <Badge variant="outline" className="hys-text">
+                系统性纠正
+              </Badge>
             </div>
           </div>
 
@@ -398,18 +471,26 @@ const TrainingPage = () => {
                         {phase.phase}
                       </div>
                       <div className="flex-1 text-left min-w-0">
-                        <div className="text-lg md:text-xl mb-2 font-medium truncate">{phase.title}</div>
+                        <div className="text-lg md:text-xl mb-2 font-medium truncate">
+                          {phase.title}
+                        </div>
                         <p className="hys-text text-sm">{phase.description}</p>
                         {phase.prerequisite && (
                           <div className="flex items-center gap-2 mt-2">
                             <ArrowRight className="h-4 w-4 text-amber-600 flex-shrink-0" />
-                            <span className="text-sm text-amber-700 dark:text-amber-300 truncate">{phase.prerequisite}</span>
+                            <span className="text-sm text-amber-700 dark:text-amber-300 truncate">
+                              {phase.prerequisite}
+                            </span>
                           </div>
                         )}
                       </div>
                       <div className="text-right mr-3 md:mr-4 whitespace-nowrap">
-                        <div className="text-sm text-muted-foreground">预计周数</div>
-                        <div className="text-lg font-medium">{phase.estimatedWeeks}周</div>
+                        <div className="text-sm text-muted-foreground">
+                          预计周数
+                        </div>
+                        <div className="text-lg font-medium">
+                          {phase.estimatedWeeks}周
+                        </div>
                       </div>
                     </div>
                   </AccordionTrigger>
@@ -417,38 +498,72 @@ const TrainingPage = () => {
                   <AccordionContent className="p-4 md:p-6 lg:p-8">
                     <div className="space-y-6 md:space-y-8">
                       {phase.correctionPlans.map((step) => (
-                        <Card key={`${step.testId}-${step.step}`} className={`hys-card border-l-4 ${step.priority === 'critical' ? 'border-l-red-500' :
-                            step.priority === 'high' ? 'border-l-orange-500' :
-                              step.priority === 'medium' ? 'border-l-blue-500' : 'border-l-green-500'
-                          }`}>
+                        <Card
+                          key={`${step.testId}-${step.step}`}
+                          className={`hys-card border-l-4 ${
+                            step.priority === "critical"
+                              ? "border-l-red-500"
+                              : step.priority === "high"
+                                ? "border-l-orange-500"
+                                : step.priority === "medium"
+                                  ? "border-l-blue-500"
+                                  : "border-l-green-500"
+                          }`}
+                        >
                           <CardHeader className="border-b-2 border-border bg-muted/30 px-4 py-3 md:px-6 md:py-4">
                             <div className="flex justify-between items-start">
                               <div className="flex-1 min-w-0">
                                 <CardTitle className="text-base md:text-lg">
                                   <span className="inline-flex items-center gap-2 md:gap-3">
-                                    <div className={`w-6 h-6 md:w-7 md:h-7 border-2 flex items-center justify-center font-black text-xs md:text-sm flex-shrink-0 ${step.priority === 'critical' ? 'border-primary bg-primary text-primary-foreground' :
-                                        step.priority === 'high' ? 'border-foreground bg-foreground text-background' :
-                                          step.priority === 'medium' ? 'border-secondary bg-secondary text-secondary-foreground' : 'border-border bg-background text-foreground'
-                                      }`}>
+                                    <div
+                                      className={`w-6 h-6 md:w-7 md:h-7 border-2 flex items-center justify-center font-black text-xs md:text-sm flex-shrink-0 ${
+                                        step.priority === "critical"
+                                          ? "border-primary bg-primary text-primary-foreground"
+                                          : step.priority === "high"
+                                            ? "border-foreground bg-foreground text-background"
+                                            : step.priority === "medium"
+                                              ? "border-secondary bg-secondary text-secondary-foreground"
+                                              : "border-border bg-background text-foreground"
+                                      }`}
+                                    >
                                       {step.step}
                                     </div>
-                                    <span className="truncate">{step.testName}</span>
+                                    <span className="truncate">
+                                      {step.testName}
+                                    </span>
                                   </span>
                                 </CardTitle>
                                 <div className="flex items-center gap-2 md:gap-4 mt-2 md:mt-3 flex-wrap">
-                                  <Badge variant={
-                                    step.priority === 'critical' ? 'destructive' :
-                                      step.priority === 'high' ? 'default' :
-                                        step.priority === 'medium' ? 'secondary' : 'outline'
-                                  } className="text-xs flex-shrink-0">
-                                    {step.issue === 'pain' ? '疼痛信号' :
-                                      step.issue === 'asymmetry_with_dysfunction' ? '功能障碍性不对称' :
-                                        step.issue === 'dysfunction' ? '功能障碍' :
-                                          step.issue === 'asymmetry_performance' ? '表现性不对称' : '优化改善'}
+                                  <Badge
+                                    variant={
+                                      step.priority === "critical"
+                                        ? "destructive"
+                                        : step.priority === "high"
+                                          ? "default"
+                                          : step.priority === "medium"
+                                            ? "secondary"
+                                            : "outline"
+                                    }
+                                    className="text-xs flex-shrink-0"
+                                  >
+                                    {step.issue === "pain"
+                                      ? "疼痛信号"
+                                      : step.issue ===
+                                          "asymmetry_with_dysfunction"
+                                        ? "功能障碍性不对称"
+                                        : step.issue === "dysfunction"
+                                          ? "功能障碍"
+                                          : step.issue ===
+                                              "asymmetry_performance"
+                                            ? "表现性不对称"
+                                            : "优化改善"}
                                   </Badge>
-                                  {step.side && step.side !== 'bilateral' && (
-                                    <Badge variant="outline" className="text-xs flex items-center gap-1 flex-shrink-0">
-                                      {step.side === 'left' ? (
+                                  {step.side && step.side !== "bilateral" && (
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs flex items-center gap-1 flex-shrink-0"
+                                    >
+                                      {step.side === "left" ? (
                                         <>
                                           <ChevronLeft className="h-3 w-3" />
                                           左侧
@@ -467,13 +582,14 @@ const TrainingPage = () => {
                           </CardHeader>
 
                           <CardContent className="p-4 md:p-6">
-                            {step.issue === 'pain' ? (
+                            {step.issue === "pain" ? (
                               // 疼痛情况的特殊处理
                               <div className="space-y-4 md:space-y-6">
                                 <Alert className="hys-card border-red-200 bg-red-50 dark:bg-red-900/20">
                                   <AlertTriangle className="h-5 w-5 text-red-600" />
                                   <AlertDescription className="text-red-800 dark:text-red-200">
-                                    <strong>停止！请咨询医疗专业人士</strong><br />
+                                    <strong>停止！请咨询医疗专业人士</strong>
+                                    <br />
                                     任何疼痛都必须被视为潜在的健康问题，需要专业诊断。
                                   </AlertDescription>
                                 </Alert>
@@ -488,29 +604,56 @@ const TrainingPage = () => {
 
                                     <div className="hys-grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                                       <div className="hys-panel border-primary/70 bg-primary/5 p-3 md:p-4">
-                                        <h5 className="font-medium text-red-800 dark:text-red-200 mb-2">避免的训练</h5>
+                                        <h5 className="font-medium text-red-800 dark:text-red-200 mb-2">
+                                          避免的训练
+                                        </h5>
                                         <ul className="hys-text text-red-700 dark:text-red-300 space-y-1">
-                                          {step.contraindications.redLight?.map((item: string, index: number) => (
-                                            <li key={index} className="text-sm">• {item}</li>
-                                          ))}
+                                          {step.contraindications.redLight?.map(
+                                            (item: string, index: number) => (
+                                              <li
+                                                key={index}
+                                                className="text-sm"
+                                              >
+                                                • {item}
+                                              </li>
+                                            ),
+                                          )}
                                         </ul>
                                       </div>
 
                                       <div className="hys-panel bg-muted/40 p-3 md:p-4">
-                                        <h5 className="font-medium text-yellow-800 dark:text-yellow-200 mb-2">谨慎使用</h5>
+                                        <h5 className="font-medium text-yellow-800 dark:text-yellow-200 mb-2">
+                                          谨慎使用
+                                        </h5>
                                         <ul className="hys-text text-yellow-700 dark:text-yellow-300 space-y-1">
-                                          {step.contraindications.yellowLight?.map((item: string, index: number) => (
-                                            <li key={index} className="text-sm">• {item}</li>
-                                          ))}
+                                          {step.contraindications.yellowLight?.map(
+                                            (item: string, index: number) => (
+                                              <li
+                                                key={index}
+                                                className="text-sm"
+                                              >
+                                                • {item}
+                                              </li>
+                                            ),
+                                          )}
                                         </ul>
                                       </div>
 
                                       <div className="hys-panel bg-background p-3 md:p-4">
-                                        <h5 className="font-medium text-green-800 dark:text-green-200 mb-2">安全训练</h5>
+                                        <h5 className="font-medium text-green-800 dark:text-green-200 mb-2">
+                                          安全训练
+                                        </h5>
                                         <ul className="hys-text text-green-700 dark:text-green-300 space-y-1">
-                                          {step.contraindications.greenLight?.map((item: string, index: number) => (
-                                            <li key={index} className="text-sm">• {item}</li>
-                                          ))}
+                                          {step.contraindications.greenLight?.map(
+                                            (item: string, index: number) => (
+                                              <li
+                                                key={index}
+                                                className="text-sm"
+                                              >
+                                                • {item}
+                                              </li>
+                                            ),
+                                          )}
                                         </ul>
                                       </div>
                                     </div>
@@ -545,48 +688,65 @@ const TrainingPage = () => {
                                       value={expandedExercise}
                                       onValueChange={handleExerciseChange}
                                     >
-                                      {step.exercises.map((exercise: Exercise) => (
-                                        <AccordionItem
-                                          key={exercise.id}
-                                          value={exercise.id}
-                                          className="hys-card"
-                                          data-exercise={exercise.id}
-                                        >
-                                          <AccordionTrigger className="px-4 md:px-6 py-3 md:py-4 hover:no-underline hover:bg-muted/30 rounded-t-lg">
-                                            <div className="flex items-center justify-between w-full mr-2 md:mr-4 min-w-0">
-                                              <div className="flex items-center gap-2 md:gap-4 min-w-0">
-                                                <Badge variant="outline" className="bg-blue-50 dark:bg-blue-900 text-xs flex-shrink-0">
-                                                  {exercise.type}
-                                                </Badge>
-                                                <div className="text-left min-w-0">
-                                                  <h5 className="font-medium text-sm md:text-base truncate">{exercise.name}</h5>
-                                                  <p className="hys-text text-xs md:text-sm truncate">{exercise.parameters}</p>
+                                      {step.exercises.map(
+                                        (exercise: Exercise) => (
+                                          <AccordionItem
+                                            key={exercise.id}
+                                            value={exercise.id}
+                                            className="hys-card"
+                                            data-exercise={exercise.id}
+                                          >
+                                            <AccordionTrigger className="px-4 md:px-6 py-3 md:py-4 hover:no-underline hover:bg-muted/30 rounded-t-lg">
+                                              <div className="flex items-center justify-between w-full mr-2 md:mr-4 min-w-0">
+                                                <div className="flex items-center gap-2 md:gap-4 min-w-0">
+                                                  <Badge
+                                                    variant="outline"
+                                                    className="bg-blue-50 dark:bg-blue-900 text-xs flex-shrink-0"
+                                                  >
+                                                    {exercise.type}
+                                                  </Badge>
+                                                  <div className="text-left min-w-0">
+                                                    <h5 className="font-medium text-sm md:text-base truncate">
+                                                      {exercise.name}
+                                                    </h5>
+                                                    <p className="hys-text text-xs md:text-sm truncate">
+                                                      {exercise.parameters}
+                                                    </p>
+                                                  </div>
                                                 </div>
                                               </div>
-                                            </div>
-                                          </AccordionTrigger>
+                                            </AccordionTrigger>
 
-                                          <AccordionContent className="px-4 md:px-6 pb-4 md:pb-6">
-                                            <div className="space-y-4 pt-2">
-                                              <p className="hys-text">{exercise.description}</p>
+                                            <AccordionContent className="px-4 md:px-6 pb-4 md:pb-6">
+                                              <div className="space-y-4 pt-2">
+                                                <p className="hys-text">
+                                                  {exercise.description}
+                                                </p>
 
-                                              {/* 视频演示区域 - 只有当视频文件存在时才显示 */}
-                                              {shouldShowVideo(exercise.id) && !videoErrors.has(exercise.id) && (
-                                                <div className="hys-panel bg-muted/30 p-3 md:p-4">
-                                                  <h6 className="font-medium mb-3 flex items-center gap-2 text-sm md:text-base">
-                                                    <Play className="h-4 w-4 text-blue-600" />
-                                                    动作演示视频
-                                                    {videoLoading.has(exercise.id) && (
-                                                      <span className="text-xs text-muted-foreground ml-2">加载中...</span>
-                                                    )}
-                                                  </h6>
-                                                  <div className="relative overflow-hidden border-2 border-border bg-black">
-                                                    <video
-                                                      className="w-full h-auto max-h-80 object-contain"
-                                                      controls
-                                                      preload="metadata"
-                                                      playsInline
-                                                      poster={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
+                                                {/* 视频演示区域 - 只有当视频文件存在时才显示 */}
+                                                {shouldShowVideo(exercise.id) &&
+                                                  !videoErrors.has(
+                                                    exercise.id,
+                                                  ) && (
+                                                    <div className="hys-panel bg-muted/30 p-3 md:p-4">
+                                                      <h6 className="font-medium mb-3 flex items-center gap-2 text-sm md:text-base">
+                                                        <Play className="h-4 w-4 text-blue-600" />
+                                                        动作演示视频
+                                                        {videoLoading.has(
+                                                          exercise.id,
+                                                        ) && (
+                                                          <span className="text-xs text-muted-foreground ml-2">
+                                                            加载中...
+                                                          </span>
+                                                        )}
+                                                      </h6>
+                                                      <div className="relative overflow-hidden border-2 border-border bg-black">
+                                                        <video
+                                                          className="w-full h-auto max-h-80 object-contain"
+                                                          controls
+                                                          preload="metadata"
+                                                          playsInline
+                                                          poster={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
                                                       <svg width="100%" height="200" xmlns="http://www.w3.org/2000/svg">
                                                         <rect width="100%" height="100%" fill="#f8f9fa"/>
                                                         <g transform="translate(50%, 50%)">
@@ -598,76 +758,123 @@ const TrainingPage = () => {
                                                         </text>
                                                       </svg>
                                                     `)}`}
-                                                      onLoadStart={() => handleVideoLoadStart(exercise.id)}
-                                                      onLoadedData={() => handleVideoLoadEnd(exercise.id)}
-                                                      onError={() => handleVideoError(exercise.id)}
-                                                    >
-                                                      <source src={getVideoPath(exercise.id)} type="video/webm" />
-                                                      <div className="flex items-center justify-center h-48 bg-muted text-muted-foreground">
-                                                        <div className="text-center">
-                                                          <Play className="h-8 w-8 mx-auto mb-2" />
-                                                          <p className="text-sm">您的浏览器不支持视频播放</p>
-                                                        </div>
+                                                          onLoadStart={() =>
+                                                            handleVideoLoadStart(
+                                                              exercise.id,
+                                                            )
+                                                          }
+                                                          onLoadedData={() =>
+                                                            handleVideoLoadEnd(
+                                                              exercise.id,
+                                                            )
+                                                          }
+                                                          onError={() =>
+                                                            handleVideoError(
+                                                              exercise.id,
+                                                            )
+                                                          }
+                                                        >
+                                                          <source
+                                                            src={getVideoPath(
+                                                              exercise.id,
+                                                            )}
+                                                            type="video/webm"
+                                                          />
+                                                          <div className="flex items-center justify-center h-48 bg-muted text-muted-foreground">
+                                                            <div className="text-center">
+                                                              <Play className="h-8 w-8 mx-auto mb-2" />
+                                                              <p className="text-sm">
+                                                                您的浏览器不支持视频播放
+                                                              </p>
+                                                            </div>
+                                                          </div>
+                                                        </video>
                                                       </div>
-                                                    </video>
-                                                  </div>
-                                                  <p className="text-xs text-muted-foreground mt-2 text-center">
-                                                    建议先观看视频演示，再对照文字说明进行练习
-                                                  </p>
-                                                </div>
-                                              )}
+                                                      <p className="text-xs text-muted-foreground mt-2 text-center">
+                                                        建议先观看视频演示，再对照文字说明进行练习
+                                                      </p>
+                                                    </div>
+                                                  )}
 
-                                              <div className="space-y-3">
-                                                <h6 className="font-medium">动作要领</h6>
-                                                <ul className="hys-text space-y-2">
-                                                  {exercise.instructions.map((instruction: string, instIndex: number) => (
-                                                    <li key={instIndex} className="flex items-start gap-3">
-                                                      <span className="text-primary font-medium min-w-[20px]">{instIndex + 1}.</span>
-                                                      <span>{instruction}</span>
-                                                    </li>
-                                                  ))}
-                                                </ul>
-                                              </div>
-
-                                              {exercise.precautions && exercise.precautions.length > 0 && (
-                                                <div className="hys-inline-alert p-3 md:p-4">
-                                                  <h6 className="font-medium text-amber-800 dark:text-amber-200 mb-2 flex items-center gap-2 text-sm md:text-base">
-                                                    <AlertTriangle className="h-4 w-4" />
-                                                    注意事项
+                                                <div className="space-y-3">
+                                                  <h6 className="font-medium">
+                                                    动作要领
                                                   </h6>
-                                                  <ul className="hys-text text-amber-700 dark:text-amber-300 space-y-1 text-sm md:text-base">
-                                                    {exercise.precautions.map((precaution: string, precIndex: number) => (
-                                                      <li key={precIndex}>• {precaution}</li>
-                                                    ))}
+                                                  <ul className="hys-text space-y-2">
+                                                    {exercise.instructions.map(
+                                                      (
+                                                        instruction: string,
+                                                        instIndex: number,
+                                                      ) => (
+                                                        <li
+                                                          key={instIndex}
+                                                          className="flex items-start gap-3"
+                                                        >
+                                                          <span className="text-primary font-medium min-w-[20px]">
+                                                            {instIndex + 1}.
+                                                          </span>
+                                                          <span>
+                                                            {instruction}
+                                                          </span>
+                                                        </li>
+                                                      ),
+                                                    )}
                                                   </ul>
                                                 </div>
-                                              )}
 
-                                              <div className="hys-grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
-                                                {exercise.progression && (
-                                                  <div className="hys-panel bg-background p-3 md:p-4">
-                                                    <h6 className="font-medium text-green-800 dark:text-green-200 mb-2 flex items-center gap-2 text-sm md:text-base">
-                                                      <TrendingUp className="h-4 w-4" />
-                                                      进阶
-                                                    </h6>
-                                                    <p className="hys-text text-green-700 dark:text-green-300 text-sm md:text-base">{exercise.progression}</p>
-                                                  </div>
-                                                )}
+                                                {exercise.precautions &&
+                                                  exercise.precautions.length >
+                                                    0 && (
+                                                    <div className="hys-inline-alert p-3 md:p-4">
+                                                      <h6 className="font-medium text-amber-800 dark:text-amber-200 mb-2 flex items-center gap-2 text-sm md:text-base">
+                                                        <AlertTriangle className="h-4 w-4" />
+                                                        注意事项
+                                                      </h6>
+                                                      <ul className="hys-text text-amber-700 dark:text-amber-300 space-y-1 text-sm md:text-base">
+                                                        {exercise.precautions.map(
+                                                          (
+                                                            precaution: string,
+                                                            precIndex: number,
+                                                          ) => (
+                                                            <li key={precIndex}>
+                                                              • {precaution}
+                                                            </li>
+                                                          ),
+                                                        )}
+                                                      </ul>
+                                                    </div>
+                                                  )}
 
-                                                {exercise.regression && (
-                                                  <div className="hys-panel bg-muted/40 p-3 md:p-4">
-                                                    <h6 className="font-medium text-blue-800 dark:text-blue-200 mb-2 flex items-center gap-2 text-sm md:text-base">
-                                                      <TrendingDown className="h-4 w-4" />
-                                                      退阶
-                                                    </h6>
-                                                    <p className="hys-text text-blue-700 dark:text-blue-300 text-sm md:text-base">{exercise.regression}</p>
-                                                  </div>
-                                                )}
+                                                <div className="hys-grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
+                                                  {exercise.progression && (
+                                                    <div className="hys-panel bg-background p-3 md:p-4">
+                                                      <h6 className="font-medium text-green-800 dark:text-green-200 mb-2 flex items-center gap-2 text-sm md:text-base">
+                                                        <TrendingUp className="h-4 w-4" />
+                                                        进阶
+                                                      </h6>
+                                                      <p className="hys-text text-green-700 dark:text-green-300 text-sm md:text-base">
+                                                        {exercise.progression}
+                                                      </p>
+                                                    </div>
+                                                  )}
+
+                                                  {exercise.regression && (
+                                                    <div className="hys-panel bg-muted/40 p-3 md:p-4">
+                                                      <h6 className="font-medium text-blue-800 dark:text-blue-200 mb-2 flex items-center gap-2 text-sm md:text-base">
+                                                        <TrendingDown className="h-4 w-4" />
+                                                        退阶
+                                                      </h6>
+                                                      <p className="hys-text text-blue-700 dark:text-blue-300 text-sm md:text-base">
+                                                        {exercise.regression}
+                                                      </p>
+                                                    </div>
+                                                  )}
+                                                </div>
                                               </div>
-                                            </div>
-                                          </AccordionContent>
-                                        </AccordionItem>
-                                      ))}
+                                            </AccordionContent>
+                                          </AccordionItem>
+                                        ),
+                                      )}
                                     </Accordion>
                                   </div>
                                 )}
@@ -691,31 +898,57 @@ const TrainingPage = () => {
               <AccordionTrigger className="px-4 md:px-6 py-3 md:py-4 hover:no-underline hover:bg-muted/30 rounded-t-lg">
                 <div className="flex items-center gap-3 md:gap-4">
                   <Building2 className="h-5 w-5 text-muted-foreground" />
-                  <h3 className="text-lg md:text-xl font-medium">训练执行指导</h3>
+                  <h3 className="text-lg md:text-xl font-medium">
+                    训练执行指导
+                  </h3>
                 </div>
               </AccordionTrigger>
               <AccordionContent className="px-4 md:px-6 pb-4 md:pb-6">
                 <div className="space-y-6 md:space-y-8 pt-4">
                   <div className="hys-grid grid-cols-2 md:grid-cols-4 mb-6 md:mb-8 gap-2 md:gap-4">
                     <div className="hys-panel bg-muted/40 p-4 text-center md:p-6">
-                      <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2 text-sm md:text-base">1. 准备阶段</h4>
-                      <p className="hys-text text-blue-700 dark:text-blue-300 text-sm">5-10分钟</p>
-                      <p className="text-xs md:text-sm text-blue-600 dark:text-blue-400 mt-2">自我筋膜放松</p>
+                      <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2 text-sm md:text-base">
+                        1. 准备阶段
+                      </h4>
+                      <p className="hys-text text-blue-700 dark:text-blue-300 text-sm">
+                        5-10分钟
+                      </p>
+                      <p className="text-xs md:text-sm text-blue-600 dark:text-blue-400 mt-2">
+                        自我筋膜放松
+                      </p>
                     </div>
                     <div className="hys-panel bg-background p-4 text-center md:p-6">
-                      <h4 className="font-medium text-green-900 dark:text-green-100 mb-2 text-sm md:text-base">2. 活动度</h4>
-                      <p className="hys-text text-green-700 dark:text-green-300 text-sm">5分钟</p>
-                      <p className="text-xs md:text-sm text-green-600 dark:text-green-400 mt-2">关节活动范围训练</p>
+                      <h4 className="font-medium text-green-900 dark:text-green-100 mb-2 text-sm md:text-base">
+                        2. 活动度
+                      </h4>
+                      <p className="hys-text text-green-700 dark:text-green-300 text-sm">
+                        5分钟
+                      </p>
+                      <p className="text-xs md:text-sm text-green-600 dark:text-green-400 mt-2">
+                        关节活动范围训练
+                      </p>
                     </div>
                     <div className="hys-panel bg-primary/5 p-4 text-center md:p-6">
-                      <h4 className="font-medium text-orange-900 dark:text-orange-100 mb-2 text-sm md:text-base">3. 稳定性</h4>
-                      <p className="hys-text text-orange-700 dark:text-orange-300 text-sm">5分钟</p>
-                      <p className="text-xs md:text-sm text-orange-600 dark:text-orange-400 mt-2">运动控制训练</p>
+                      <h4 className="font-medium text-orange-900 dark:text-orange-100 mb-2 text-sm md:text-base">
+                        3. 稳定性
+                      </h4>
+                      <p className="hys-text text-orange-700 dark:text-orange-300 text-sm">
+                        5分钟
+                      </p>
+                      <p className="text-xs md:text-sm text-orange-600 dark:text-orange-400 mt-2">
+                        运动控制训练
+                      </p>
                     </div>
                     <div className="hys-panel bg-muted/30 p-4 text-center md:p-6">
-                      <h4 className="font-medium text-purple-900 dark:text-purple-100 mb-2 text-sm md:text-base">4. 模式整合</h4>
-                      <p className="hys-text text-purple-700 dark:text-purple-300 text-sm">可选</p>
-                      <p className="text-xs md:text-sm text-purple-600 dark:text-purple-400 mt-2">低负荷动作练习</p>
+                      <h4 className="font-medium text-purple-900 dark:text-purple-100 mb-2 text-sm md:text-base">
+                        4. 模式整合
+                      </h4>
+                      <p className="hys-text text-purple-700 dark:text-purple-300 text-sm">
+                        可选
+                      </p>
+                      <p className="text-xs md:text-sm text-purple-600 dark:text-purple-400 mt-2">
+                        低负荷动作练习
+                      </p>
                     </div>
                   </div>
 
@@ -755,13 +988,19 @@ const TrainingPage = () => {
         {/* 操作按钮 */}
         <div className="flex flex-col sm:flex-row justify-center gap-4 items-center mt-12 md:mt-16">
           <Link to="/report">
-            <Button variant="outline" className="hys-button px-6 md:px-8 text-foreground border-primary/20 hover:border-primary/40 hover:bg-primary/5 hover:text-foreground">
+            <Button
+              variant="outline"
+              className="hys-button px-6 md:px-8 text-foreground border-primary/20 hover:border-primary/40 hover:bg-primary/5 hover:text-foreground"
+            >
               <ArrowLeft className="w-4 h-4 mr-2" />
               返回报告页
             </Button>
           </Link>
           <Link to="/assessment">
-            <Button variant="outline" className="hys-button px-6 md:px-8 text-foreground border-primary/20 hover:border-primary/40 hover:bg-primary/5 hover:text-foreground">
+            <Button
+              variant="outline"
+              className="hys-button px-6 md:px-8 text-foreground border-primary/20 hover:border-primary/40 hover:bg-primary/5 hover:text-foreground"
+            >
               <RotateCcw className="w-4 h-4 mr-2" />
               重新评估
             </Button>
@@ -779,4 +1018,4 @@ const TrainingPage = () => {
   );
 };
 
-export default TrainingPage; 
+export default TrainingPage;
