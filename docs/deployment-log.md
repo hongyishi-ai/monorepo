@@ -27,6 +27,31 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-25 - b60047e - 统一全站日夜与跟随系统主题切换
+
+- Commit: `b60047edd2612884454f5009f993b2b46b8f5963`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://a5fc722c.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.104.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - `pnpm --filter @hongyishi/fms type-check` passed
+  - `pnpm test:cloudflare` passed: `45/45`
+  - `pnpm --filter @hongyishi/fms test:run` passed: FMS `161/161`
+  - `pnpm lint` passed with existing FMS warnings: `0 errors, 24 warnings`
+  - `pnpm build:cloudflare` passed
+  - `pnpm audit:links -- --base=http://127.0.0.1:3021` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`, theme controls `4/4`
+  - Mobile Playwright theme smoke passed: Portal, FMS, heat stroke, and TCCC theme menus visible; dark mode applied; no mobile bottom-nav overlap
+  - `pnpm test` passed: utils `18/18`, FMS `161/161`
+  - `pnpm type-check` passed
+  - `pnpm audit:links -- --base=https://a5fc722c.hongyishi-monorepo.pages.dev` passed after deploy propagation settled: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`, theme controls `4/4`
+  - `pnpm audit:links -- --base=https://hongyishi.cn` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`, theme controls `4/4`
+- Notes:
+  - Portal, FMS, heat stroke, and TCCC now share the `hongyishi-theme` preference with `system | light | dark` values.
+  - Portal and FMS theme controls now use explicit three-option menus instead of hidden two-state or click-cycle behavior.
+  - Static heat stroke and TCCC pages now receive a shared theme runtime during Cloudflare build rewriting, including dark-mode coverage for injected shells, content banners, and mobile navigation.
+  - FMS opening page now also exposes the unified theme control so first-entry users can change theme before entering the app.
+
 ## 2026-06-25 - 4bfd902 - 移除使用引导并优化 FMS 检测辅助控件
 
 - Commit: `4bfd902d03b32b87b92cad493b2f3cab3a5544e1`
