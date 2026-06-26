@@ -1,79 +1,23 @@
 "use client";
 
 import styles from "./switch.module.css";
-import { memo, useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 declare global {
-  interface Window {
-    updateDOM?: () => void;
-  }
+  var updateDOM: () => void;
 }
 
 type ColorSchemePreference = "system" | "dark" | "light";
-type ResolvedColorScheme = "dark" | "light";
 
-const STORAGE_KEY = "hongyishi-theme";
-const LEGACY_STORAGE_KEYS = ["hongyishi-blog-theme", "theme"];
-const modes: ColorSchemePreference[] = ["system", "light", "dark"];
-const modeLabels: Record<ColorSchemePreference, string> = {
-  system: "跟随系统",
-  light: "日间",
-  dark: "夜间",
-};
-
-function isColorSchemePreference(value: string | null): value is ColorSchemePreference {
-  return value === "system" || value === "light" || value === "dark";
-}
-
-function readStoredMode(): ColorSchemePreference {
-  if (typeof window === "undefined") return "system";
-
-  try {
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (isColorSchemePreference(stored)) return stored;
-
-    for (const legacyKey of LEGACY_STORAGE_KEYS) {
-      const legacyValue = window.localStorage.getItem(legacyKey);
-      if (isColorSchemePreference(legacyValue)) {
-        window.localStorage.setItem(STORAGE_KEY, legacyValue);
-        return legacyValue;
-      }
-    }
-  } catch {
-    return "system";
-  }
-
-  return "system";
-}
+const STORAGE_KEY = "hongyishi-blog-theme";
+const modes: ColorSchemePreference[] = ["system", "dark", "light"];
 
 /** to reuse updateDOM function defined inside injected script */
 
 /** function to be injected in script tag for avoiding FOUC (Flash of Unstyled Content) */
-export const NoFOUCScript = (storageKey: string, legacyStorageKeys: string[]) => {
+export const NoFOUCScript = (storageKey: string) => {
   /* can not use outside constants or function as this script will be injected in a different context */
   const [SYSTEM, DARK, LIGHT] = ["system", "dark", "light"];
-
-  const isValidMode = (value: string | null): value is ColorSchemePreference =>
-    value === SYSTEM || value === DARK || value === LIGHT;
-
-  const getStoredMode = () => {
-    try {
-      const stored = localStorage.getItem(storageKey);
-      if (isValidMode(stored)) return stored;
-
-      for (const legacyKey of legacyStorageKeys) {
-        const legacyValue = localStorage.getItem(legacyKey);
-        if (isValidMode(legacyValue)) {
-          localStorage.setItem(storageKey, legacyValue);
-          return legacyValue;
-        }
-      }
-    } catch {
-      return SYSTEM;
-    }
-
-    return SYSTEM;
-  };
 
   /** Modify transition globally to avoid patched transitions */
   const modifyTransition = () => {
@@ -89,27 +33,22 @@ export const NoFOUCScript = (storageKey: string, legacyStorageKeys: string[]) =>
     };
   };
 
-  const media =
-    typeof matchMedia === "function"
-      ? matchMedia(`(prefers-color-scheme: ${DARK})`)
-      : null;
+  const media = matchMedia(`(prefers-color-scheme: ${DARK})`);
 
   /** function to add remove dark class */
   window.updateDOM = () => {
     const restoreTransitions = modifyTransition();
-    const mode = getStoredMode();
-    const systemMode = media?.matches ? DARK : LIGHT;
+    const mode = localStorage.getItem(storageKey) ?? SYSTEM;
+    const systemMode = media.matches ? DARK : LIGHT;
     const resolvedMode = mode === SYSTEM ? systemMode : mode;
     const classList = document.documentElement.classList;
     if (resolvedMode === DARK) classList.add(DARK);
     else classList.remove(DARK);
     document.documentElement.setAttribute("data-mode", mode);
-    document.documentElement.setAttribute("data-hys-theme", mode);
-    document.documentElement.setAttribute("data-hys-theme-resolved", resolvedMode);
     restoreTransitions();
   };
   window.updateDOM();
-  media?.addEventListener?.("change", window.updateDOM);
+  media.addEventListener("change", window.updateDOM);
 };
 
 let updateDOM: () => void;
@@ -119,22 +58,15 @@ const fallbackUpdateDOM = (storageKey: string) => {
   const DARK = "dark";
   const LIGHT = "light";
   const SYSTEM = "system" as const;
-  const media =
-    typeof window !== "undefined" && typeof window.matchMedia === "function"
-      ? window.matchMedia(`(prefers-color-scheme: ${DARK})`)
-      : null;
+  const media = typeof window !== 'undefined' ? matchMedia(`(prefers-color-scheme: ${DARK})`) : (null as any);
   const apply = () => {
-    const storedMode = readStoredMode();
-    const mode = isColorSchemePreference(storedMode) ? storedMode : SYSTEM;
-    const systemMode = media?.matches ? DARK : LIGHT;
-    const resolvedMode: ResolvedColorScheme =
-      mode === SYSTEM ? systemMode : mode;
+    const mode = (localStorage.getItem(storageKey) ?? SYSTEM) as ColorSchemePreference;
+    const systemMode = media && media.matches ? DARK : LIGHT;
+    const resolvedMode = mode === SYSTEM ? (systemMode as ColorSchemePreference) : mode;
     const classList = document.documentElement.classList;
     if (resolvedMode === DARK) classList.add(DARK);
     else classList.remove(DARK);
     document.documentElement.setAttribute("data-mode", mode);
-    document.documentElement.setAttribute("data-hys-theme", mode);
-    document.documentElement.setAttribute("data-hys-theme-resolved", resolvedMode);
   };
   apply();
   media?.addEventListener?.("change", apply);
@@ -145,77 +77,38 @@ const fallbackUpdateDOM = (storageKey: string) => {
  * Switch button to quickly toggle user preference.
  */
 const Switch = () => {
-  const [mode, setMode] = useState<ColorSchemePreference>(readStoredMode);
-  const [open, setOpen] = useState(false);
-  const currentLabel = modeLabels[mode];
+  const [mode, setMode] = useState<ColorSchemePreference>(
+    () =>
+      ((typeof localStorage !== "undefined" &&
+        localStorage.getItem(STORAGE_KEY)) ??
+        "system") as ColorSchemePreference,
+  );
 
   useEffect(() => {
     // store global functions to local variables to avoid any interference
     updateDOM = window.updateDOM ?? fallbackUpdateDOM(STORAGE_KEY);
     /** Sync the tabs */
-    const handleStorage = (e: StorageEvent): void => {
-      if (e.key === STORAGE_KEY && isColorSchemePreference(e.newValue)) {
-        setMode(e.newValue);
-      }
-    };
-    addEventListener("storage", handleStorage);
-    return () => removeEventListener("storage", handleStorage);
+    addEventListener("storage", (e: StorageEvent): void => {
+      e.key === STORAGE_KEY && setMode(e.newValue as ColorSchemePreference);
+    });
   }, []);
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem(STORAGE_KEY, mode);
-    } catch {
-      // Theme preference is optional; DOM state still updates.
-    }
+    localStorage.setItem(STORAGE_KEY, mode);
     updateDOM();
   }, [mode]);
 
-  const items = useMemo(
-    () =>
-      modes.map((item) => ({
-        mode: item,
-        label: modeLabels[item],
-        active: item === mode,
-      })),
-    [mode],
-  );
-
+  /** toggle mode */
+  const handleModeSwitch = () => {
+    const index = modes.indexOf(mode);
+    setMode(modes[(index + 1) % modes.length]);
+  };
   return (
-    <div className={styles.wrapper} data-hongyishi-theme-control>
-      <button
-        suppressHydrationWarning
-        className={styles.switch}
-        aria-label={`主题：${currentLabel}`}
-        aria-haspopup="menu"
-        aria-expanded={open}
-        onClick={() => setOpen((value) => !value)}
-      >
-        <span className={styles.icon} aria-hidden="true" data-mode-icon={mode} />
-        <span className={styles.label}>{currentLabel}</span>
-      </button>
-      {open && (
-        <div className={styles.menu} role="menu" aria-label="选择主题">
-          {items.map((item) => (
-            <button
-              key={item.mode}
-              className={styles.menuItem}
-              data-active={item.active ? "true" : undefined}
-              data-theme-mode={item.mode}
-              role="menuitemradio"
-              aria-checked={item.active}
-              onClick={() => {
-                setMode(item.mode);
-                setOpen(false);
-              }}
-            >
-              <span className={styles.menuIcon} aria-hidden="true" />
-              <span>{item.label}</span>
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
+    <button
+      suppressHydrationWarning
+      className={styles.switch}
+      onClick={handleModeSwitch}
+    />
   );
 };
 
@@ -223,7 +116,7 @@ const Script = memo(() => (
   <script
     suppressHydrationWarning
     dangerouslySetInnerHTML={{
-      __html: `(${NoFOUCScript.toString()})('${STORAGE_KEY}', ${JSON.stringify(LEGACY_STORAGE_KEYS)})`,
+      __html: `(${NoFOUCScript.toString()})('${STORAGE_KEY}')`,
     }}
   />
 ));

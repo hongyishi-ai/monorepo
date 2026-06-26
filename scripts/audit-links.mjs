@@ -9,7 +9,6 @@ const baseUrl =
 const shouldCheckExternal = args.has("--external");
 const shouldCheckMobileNav = !args.has("--no-mobile-nav");
 const shouldCheckGuideSurfaces = !args.has("--no-usage-guides");
-const shouldCheckThemeControls = !args.has("--no-theme-controls");
 
 const representativeRoutes = [
   "/",
@@ -499,84 +498,6 @@ async function checkGuideSurfaces() {
   return results;
 }
 
-async function checkThemeControls() {
-  if (!shouldCheckThemeControls) {
-    return [];
-  }
-
-  const { chromium } = await import("playwright");
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage({
-    viewport: { width: 390, height: 844 },
-    isMobile: true,
-    hasTouch: true,
-  });
-  await page.addInitScript(() => {
-    window.localStorage.setItem("hongyishi-theme", "dark");
-  });
-
-  const routesToCheck = ["/", "/fms/", "/heat-stroke/", "/tccc/"];
-  const results = [];
-
-  try {
-    for (const route of routesToCheck) {
-      await page.goto(new URL(route, baseUrl).href, {
-        waitUntil: "domcontentloaded",
-        timeout: 15_000,
-      });
-      await page.waitForTimeout(400);
-      const trigger = page
-        .locator(
-          '[data-hongyishi-theme-control] button, button[data-hongyishi-theme-control]',
-        )
-        .first();
-
-      await trigger.click({ timeout: 5_000 }).catch(() => undefined);
-      await page.waitForTimeout(150);
-
-      results.push(
-        await page.evaluate((path) => {
-          const control = document.querySelector(
-            "[data-hongyishi-theme-control]",
-          );
-          const labels = Array.from(
-            document.querySelectorAll('[role="menuitemradio"]'),
-          ).map(
-            (item) => item.textContent?.replace(/\s+/g, " ").trim() ?? "",
-          );
-          const rect = control?.getBoundingClientRect();
-          const nav = document.querySelector(
-            'nav[data-hongyishi-mobile-nav], nav[aria-label="训练伤防治项目移动端导航"]',
-          );
-          const navRect = nav?.getBoundingClientRect();
-
-          return {
-            path,
-            hasControl: Boolean(control),
-            labels,
-            mode: document.documentElement.getAttribute("data-mode"),
-            hysTheme: document.documentElement.getAttribute("data-hys-theme"),
-            resolved: document.documentElement.getAttribute(
-              "data-hys-theme-resolved",
-            ),
-            darkClass: document.documentElement.classList.contains("dark"),
-            overlapsMobileNav:
-              Boolean(rect && navRect) &&
-              rect.left < navRect.right &&
-              rect.right > navRect.left &&
-              rect.top < navRect.bottom &&
-              rect.bottom > navRect.top + 1,
-          };
-        }, route),
-      );
-    }
-  } finally {
-    await browser.close();
-  }
-
-  return results;
-}
-
 function summarizeStatus(items) {
   return items.reduce((summary, item) => {
     const key = item.status ?? item.error ?? "unknown";
@@ -589,7 +510,6 @@ const crawl = await crawlInternalLinks();
 const representative = await checkRepresentativeRoutes();
 const mobileNav = await checkMobileNav();
 const guideSurfaces = await checkGuideSurfaces();
-const themeControls = await checkThemeControls();
 const externalResults = shouldCheckExternal
   ? await checkExternalLinks(crawl.external)
   : [];
@@ -620,25 +540,12 @@ const guideSurfaceFailures = guideSurfaces.filter(
       (control) => !control.visible || control.overlapsNav,
     ),
 );
-const themeControlFailures = themeControls.filter(
-  (item) =>
-    !item.hasControl ||
-    item.mode !== "dark" ||
-    item.hysTheme !== "dark" ||
-    item.resolved !== "dark" ||
-    !item.darkClass ||
-    item.overlapsMobileNav ||
-    !["跟随系统", "日间", "夜间"].every((label) =>
-      item.labels.includes(label),
-    ),
-);
 const externalFailures = externalResults.filter((item) => !item.ok);
 const failed =
   crawl.failures.length > 0 ||
   representativeFailures.length > 0 ||
   mobileNavFailures.length > 0 ||
   guideSurfaceFailures.length > 0 ||
-  themeControlFailures.length > 0 ||
   externalFailures.length > 0;
 
 const report = {
@@ -660,10 +567,6 @@ const report = {
   guideSurfaces: {
     checked: guideSurfaces.length,
     failures: guideSurfaceFailures,
-  },
-  themeControls: {
-    checked: themeControls.length,
-    failures: themeControlFailures,
   },
   external: shouldCheckExternal
     ? {

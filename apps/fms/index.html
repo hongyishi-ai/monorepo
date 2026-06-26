@@ -13,44 +13,6 @@
     <meta name="description" content="红医师训练伤防治：功能性动作筛查、评估报告与个性化训练方案。" />
     
     <title>红医师训练伤防治</title>
-    <script>
-      (function () {
-        var storageKey = "hongyishi-theme";
-        var legacyKeys = ["theme", "hongyishi-blog-theme"];
-        var modes = ["system", "light", "dark"];
-        var mode = "system";
-
-        function isMode(value) {
-          return modes.indexOf(value) !== -1;
-        }
-
-        try {
-          var stored = window.localStorage.getItem(storageKey);
-          if (isMode(stored)) {
-            mode = stored;
-          } else {
-            for (var index = 0; index < legacyKeys.length; index += 1) {
-              var legacyValue = window.localStorage.getItem(legacyKeys[index]);
-              if (isMode(legacyValue)) {
-                mode = legacyValue;
-                window.localStorage.setItem(storageKey, legacyValue);
-                break;
-              }
-            }
-          }
-        } catch (error) {}
-
-        var media = window.matchMedia
-          ? window.matchMedia("(prefers-color-scheme: dark)")
-          : null;
-        var resolved = mode === "system" ? (media && media.matches ? "dark" : "light") : mode;
-
-        document.documentElement.classList.toggle("dark", resolved === "dark");
-        document.documentElement.setAttribute("data-mode", mode);
-        document.documentElement.setAttribute("data-hys-theme", mode);
-        document.documentElement.setAttribute("data-hys-theme-resolved", resolved);
-      })();
-    </script>
   </head>
   <body>
     <div id="root"></div>

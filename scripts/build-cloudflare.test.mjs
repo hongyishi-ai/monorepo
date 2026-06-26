@@ -12,7 +12,6 @@ import {
   collectCloudflareFreeTierStats,
   injectMobileBottomNav,
   injectContentGovernanceBanner,
-  injectThemeRuntime,
   injectTcccBrandShell,
   mapHeatStrokeOutputPath,
   mapTcccOutputPath,
@@ -149,29 +148,6 @@ test("Cloudflare build contract reports free-tier file count and file-size guard
   }
 });
 
-test("injectThemeRuntime adds one unified three-mode theme control", () => {
-  const input = "<html><head></head><body><main>content</main></body></html>";
-  const output = injectThemeRuntime(input);
-  const secondPass = injectThemeRuntime(output);
-
-  assert.match(output, /data-hongyishi-theme-runtime/);
-  assert.match(output, /data-hongyishi-theme-control/);
-  assert.match(output, /hongyishi-theme/);
-  assert.match(output, /hongyishi-blog-theme/);
-  assert.match(output, /data-hys-theme-resolved/);
-  assert.match(output, /data-theme-mode="system"/);
-  assert.match(output, /data-theme-mode="light"/);
-  assert.match(output, /data-theme-mode="dark"/);
-  assert.equal(
-    output.match(/data-hongyishi-theme-runtime/g)?.length,
-    secondPass.match(/data-hongyishi-theme-runtime/g)?.length,
-  );
-  assert.equal(
-    output.match(/data-hongyishi-theme-control/g)?.length,
-    secondPass.match(/data-hongyishi-theme-control/g)?.length,
-  );
-});
-
 test("rewriteHeatStrokeText scopes root-relative static links and service worker registration", () => {
   const input = `
     <html><head><title>热射病</title></head><body>
@@ -191,8 +167,6 @@ test("rewriteHeatStrokeText scopes root-relative static links and service worker
   );
   assert.match(output, /data-hongyishi-mobile-nav/);
   assert.match(output, /data-hongyishi-content-governance/);
-  assert.match(output, /data-hongyishi-theme-runtime/);
-  assert.match(output, /data-hongyishi-theme-control/);
   assert.doesNotMatch(output, /data-hongyishi-guide-runtime/);
   assert.doesNotMatch(output, /data-hongyishi-guide-trigger/);
   assert.doesNotMatch(output, /data-hongyishi-guide-entry/);
@@ -200,7 +174,6 @@ test("rewriteHeatStrokeText scopes root-relative static links and service worker
   assert.match(output, /内容状态：待复核/);
   assert.match(output, /不替代急救指挥、临床诊疗和当地规范/);
   assert.match(output, /data-hys-mobile-nav-scope="heatStroke"/);
-  assert.match(output, /html\.dark \.hys-mobile-nav/);
   assert.match(
     output,
     /href="\/heat-stroke\/" aria-current="page" title="打开热射病资料"><span>资料<\/span>/,
@@ -333,7 +306,7 @@ test("FMS visual system uses the Hongyishi namespace instead of Brooklyn naming"
 
 test("rewriteTcccText scopes root-relative app links, manifest, and service worker registration", () => {
   const input = `
-    <html><head><title>TCCC</title></head><body>
+    <html><body>
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="/assets/css/tailwind.css">
     <script src="/pwa-register.js"></script>
@@ -356,8 +329,6 @@ test("rewriteTcccText scopes root-relative app links, manifest, and service work
   );
   assert.match(output, /data-hongyishi-mobile-nav/);
   assert.match(output, /data-hys-mobile-nav-scope="tccc"/);
-  assert.match(output, /data-hongyishi-theme-runtime/);
-  assert.match(output, /data-hongyishi-theme-control/);
   assert.match(
     output,
     /href="\/tccc\/" aria-current="page" title="打开 TCCC 目录"><span>目录<\/span>/,
@@ -376,8 +347,6 @@ test("rewriteTcccText scopes root-relative app links, manifest, and service work
   );
   assert.match(flowOutput, /data-hongyishi-tccc-shell/);
   assert.match(flowOutput, /data-hongyishi-content-governance/);
-  assert.match(flowOutput, /data-hongyishi-theme-runtime/);
-  assert.match(flowOutput, /data-hongyishi-theme-control/);
   assert.doesNotMatch(flowOutput, /data-hongyishi-guide-runtime/);
   assert.doesNotMatch(flowOutput, /data-hongyishi-guide-trigger/);
   assert.doesNotMatch(flowOutput, /data-hongyishi-guide-entry/);
