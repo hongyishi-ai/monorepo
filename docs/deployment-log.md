@@ -27,6 +27,26 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-26 - d70797e - 撤回主题切换统一修改
+
+- Commit: `d70797e07d237c72d751b9384da53b25775b7885`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://725231cf.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.105.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - `pnpm --filter @hongyishi/fms type-check` passed
+  - `pnpm test:cloudflare` passed: `44/44`
+  - `pnpm build:cloudflare` passed
+  - `pnpm lint` passed with existing FMS warnings: `0 errors, 24 warnings`
+  - `pnpm audit:links -- --base=http://127.0.0.1:3021` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `pnpm audit:links -- --base=https://725231cf.hongyishi-monorepo.pages.dev` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `pnpm audit:links -- --base=https://hongyishi.cn` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - Reverted `b60047e` and `8d6ff83` after the unified theme switching experience was judged unsatisfactory.
+  - Restored the previous Portal/FMS theme behavior and removed the static heat stroke/TCCC theme runtime injection.
+  - Removed the temporary theme-control audit extension and FMS theme hook tests introduced by the reverted change.
+
 ## 2026-06-25 - 4bfd902 - 移除使用引导并优化 FMS 检测辅助控件
 
 - Commit: `4bfd902d03b32b87b92cad493b2f3cab3a5544e1`
