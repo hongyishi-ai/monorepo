@@ -1,6 +1,9 @@
 import type { Config } from "tailwindcss";
 
+const hongyishiPreset = require("@hongyishi/config/tailwind");
+
 const config: Config = {
+  presets: [hongyishiPreset],
   darkMode: "class",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -37,7 +40,7 @@ const config: Config = {
         '3': '3px',
       },
       letterSpacing: {
-        tighter: "-.04em",
+        tighter: "0",
       },
       fontSize: {
         "5xl": "2.5rem",

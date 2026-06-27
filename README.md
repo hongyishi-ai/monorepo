@@ -38,6 +38,7 @@ hongyishi-monorepo/
 | UI 框架 | React 18.3.0 |
 | SSR 框架 | Next.js 15（portal） |
 | 构建工具 | Vite 5/6 |
+| 设计系统 | `@hongyishi/config/tailwind` + `@hongyishi/ui` brand tokens |
 | 代码规范 | ESLint 9 + Prettier 3 |
 | 单元测试 | Vitest 2 |
 
@@ -111,6 +112,8 @@ Cloudflare Pages 单站输出目录为 `.cloudflare/site`：
 - `hongyishiPlatformPaths`：统一入口平台的基础路径约定
 
 UI/UX 重构先读根目录 `DESIGN.md`。新增项目接入按 `docs/adding-project.md` 执行。当前设计方向是“医疗指挥台 + 新构成主义”：保留各原项目内容创意和流程功能，统一品牌入口、状态表达、项目卡片、移动端触控尺度和安全/性能基线。
+
+技术栈统一策略：不把所有项目强制迁移到同一框架。Portal 继续承担 Next 静态入口和内容页，FMS 继续作为 Vite React 复杂工具，热射病与 TCCC 继续作为静态 HTML/Tailwind PWA。统一边界放在项目注册表、共享品牌 token、`@hongyishi/config/tailwind`、Cloudflare 单站构建和 CI 门禁上。
 
 Cloudflare Pages 配置：
 

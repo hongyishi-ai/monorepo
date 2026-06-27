@@ -1,4 +1,4 @@
-import tokens from './tokens.json';
+import tokens from '@hongyishi/config/brand/tokens.json';
 
 export const hongyishiBrand = tokens;
 
@@ -24,4 +24,5 @@ export const hongyishiPlatformPaths = {
   home: '/',
   fms: '/fms/',
   heatStroke: '/heat-stroke/',
+  tccc: '/tccc/',
 } as const;

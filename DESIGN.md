@@ -16,6 +16,16 @@
 - 功能不删减：重构 UI 时默认迁移功能，不把复杂功能简化成静态展示。
 - 可信医疗工具感：界面可以大胆，但信息层级必须清楚，风险提示、边界说明和操作反馈必须明确。
 
+## 1.1 技术栈统一原则
+
+红医师统一的是产品平台、品牌系统、部署入口和质量门禁，不强制所有项目迁移到同一个前端框架。
+
+- Portal 保持 Next 静态导出，负责首页、内容、SEO、项目注册和统一入口。
+- FMS 保持 Vite + React SPA，负责本地数据、评估流程、PWA、图表和复杂交互。
+- 热射病和 TCCC 保持静态 HTML/Tailwind PWA，短期通过共享 Tailwind preset、移动底栏、内容治理 banner 和 Cloudflare 构建注入获得统一体验。
+- 只有当静态项目持续新增复杂状态、跨页数据、表单校验、IndexedDB、权限/同步或大量组件复用时，才迁移为 Vite + React。
+- 新项目先选择最小合适运行时：内容型资料优先静态，复杂工具优先 Vite React，内容入口和平台页优先 Portal。
+
 ## 2. 视觉论点
 
 红医师采用“战地医疗海报 + 医疗指挥台”的视觉方向：巨型中文块字、暗红主信号、米白纸底、战地深蓝分区、心电线和强网格，用有力量的海报结构承载复杂医疗内容。
@@ -29,7 +39,7 @@
 
 ## 3. 品牌色板
 
-共享 token 源位于 `packages/ui/src/brand/tokens.json`，TypeScript 导出位于 `packages/ui/src/brand/index.ts`，CSS 变量位于 `packages/ui/src/styles/variables.css`。
+共享 token 源位于 `packages/config/brand/tokens.json`，TypeScript 导出位于 `packages/ui/src/brand/index.ts`，CSS 变量位于 `packages/ui/src/styles/variables.css`。Tailwind 统一 preset 位于 `packages/config/tailwind/index.cjs`，所有 Tailwind 项目必须通过 `@hongyishi/config/tailwind` 引入，不再各自复制品牌色、字体和圆角。
 
 - 主信号红：`#D93025`，用于品牌、危险、重点入口、关键提示。
 - 战地暗红：`#A51F18`，用于海报主视觉、强警示背景和品牌封面。
@@ -136,10 +146,11 @@
 1. 在 `apps/<project-id>` 放置项目源码或静态资源。
 2. 在 `apps/portal/src/lib/projects.ts` 增加项目记录。
 3. 如果项目能静态部署，加入 `scripts/build-cloudflare.mjs` 的复制或构建流程。
-4. 使用 `packages/ui/src/brand/tokens.json` 和 `packages/ui/src/styles/variables.css` 的品牌 token，不单独定义另一套主色。
-5. 保留原项目核心内容、工作流、数据结构、离线能力和说明文档。
-6. 补充构建测试、路径测试、安全头测试和至少一个关键用户流程测试。
-7. 在 README 中登记访问路径、部署要求和必要环境变量。
+4. 使用 `packages/config/brand/tokens.json`、`packages/ui/src/brand/index.ts` 和 `packages/ui/src/styles/variables.css` 的品牌 token，不单独定义另一套主色。
+5. Tailwind 项目必须引入 `@hongyishi/config/tailwind`，只在本项目配置里追加必要的 content globs、插件和少量项目特定扩展。
+6. 保留原项目核心内容、工作流、数据结构、离线能力和说明文档。
+7. 补充构建测试、路径测试、安全头测试和至少一个关键用户流程测试。
+8. 在 README 中登记访问路径、部署要求和必要环境变量。
 
 当前优先级：
 

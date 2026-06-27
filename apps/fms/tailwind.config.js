@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
+const hongyishiPreset = require("@hongyishi/config/tailwind");
+
 module.exports = {
+  presets: [hongyishiPreset],
   darkMode: ["class"],
   content: [
     './pages/**/*.{ts,tsx}',

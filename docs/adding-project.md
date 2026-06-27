@@ -14,6 +14,13 @@
 
 当前站内项目是 `portal`、`fms`、`heat-stroke` 和 `tccc`。已移除的旧项目不再作为外部入口保留；如未来恢复，按新项目重新接入。
 
+运行时选择规则：
+
+- 内容资料、少量脚本、离线查阅型页面：保留静态 HTML/Tailwind。
+- 本地数据、复杂表单、图表、跨页状态、IndexedDB、PWA 交互工具：使用 Vite + React。
+- 平台首页、博客、SEO 内容和项目入口：使用 Portal 的 Next 静态导出。
+- 不为了“技术栈看起来统一”迁移项目；只有维护成本或功能复杂度超过静态方案时才迁移。
+
 ## 2. 入口注册
 
 所有首页、博客页和后续导航入口都应优先来自：
@@ -37,14 +44,16 @@ apps/portal/src/lib/projects.ts
 
 ```text
 DESIGN.md
-packages/ui/src/brand/tokens.json
+packages/config/brand/tokens.json
 packages/ui/src/brand/index.ts
 packages/ui/src/styles/variables.css
+packages/config/tailwind/index.cjs
 ```
 
 规则：
 
 - 使用 `hongyishiBrand`、`hongyishiBrandCssVariables` 和 `--hys-*` CSS 变量。
+- Tailwind 项目必须通过 `@hongyishi/config/tailwind` 引入共享 preset。
 - 不单独发明另一套主色或卡片样式。
 - 首屏必须能返回总入口。
 - 移动端 375px 宽度不得横向溢出。
