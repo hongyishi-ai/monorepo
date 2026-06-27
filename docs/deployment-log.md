@@ -27,6 +27,28 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-28 - 7f9ae7e - 热射病移动端菜单改为 FMS 式顶部面板
+
+- Commit: `7f9ae7ed3d5701dacb56229c46f83d5757cb2954`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://d4712911.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.105.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - `node --test scripts/build-cloudflare.test.mjs` passed: `28/28`
+  - `pnpm test:cloudflare` passed: `48/48`
+  - `pnpm build:cloudflare` passed
+  - `pnpm audit:links -- --base=http://127.0.0.1:8788` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - Mobile Playwright interaction check passed for `/heat-stroke/pages/field-treatment`: top menu is inside `.brand-nav`, position is `static`, panel opens below the header, bottom nav remains `热指数`, `处置`, `法则`, `资料`, and no horizontal overflow
+  - Mobile theme toggle check passed for `/heat-stroke/`: `light` toggled to `dark`, `html.dark` was applied, and `hys:heatStroke:theme` was saved to `localStorage`
+  - `pnpm audit:links -- --base=https://d4712911.hongyishi-monorepo.pages.dev` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `pnpm audit:links -- --base=https://hongyishi.cn` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - GitHub Actions passed for `7f9ae7e`: CI, Cloudflare Build Check, Storybook, React Version Check
+- Notes:
+  - Heat stroke mobile menu now matches the FMS pattern: brand row, theme toggle, blue menu/close control, and a full-width menu panel below the header instead of a floating standalone button.
+  - The previous top links and broader heat-stroke content links remain inside the hamburger panel.
+  - Mobile nav audit now checks that the heat-stroke menu is embedded in `.brand-nav`, is not `fixed`, has a theme toggle, and still hides `.brand-nav-links` on mobile.
+
 ## 2026-06-28 - 90fed4b - 热射病移动端顶部入口并入汉堡菜单
 
 - Commit: `90fed4b1ccedf2c57c81351e0012c31fcd95603c`
