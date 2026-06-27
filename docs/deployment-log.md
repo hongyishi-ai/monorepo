@@ -42,7 +42,7 @@
   - Mobile Playwright interaction check passed for `/heat-stroke/pages/field-treatment`: hamburger menu opened with `总入口`, `项目首页`, and guide links; bottom nav kept `热指数`, `处置`, `法则`, `资料`; visible `.brand-nav-links` count was `0`
   - `pnpm audit:links -- --base=https://13f75d62.hongyishi-monorepo.pages.dev` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
   - `pnpm audit:links -- --base=https://hongyishi.cn` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
-  - GitHub Actions for `90fed4b`: Storybook, Cloudflare Build Check, and React Version Check passed; CI was still in progress when this entry was written
+  - GitHub Actions passed for `90fed4b`: CI, Cloudflare Build Check, Storybook, React Version Check
 - Notes:
   - Heat stroke mobile now keeps the bottom four-item navigation focused on the core flows.
   - The top-right hamburger menu now carries the former top links (`总入口`, `项目首页`) plus the broader heat-stroke content links such as diagnosis/treatment guideline, consensus, heat tolerance, cooling, challenge, and about.
