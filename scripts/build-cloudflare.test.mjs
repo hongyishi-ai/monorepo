@@ -179,20 +179,34 @@ test("rewriteHeatStrokeText scopes root-relative static links and service worker
   assert.match(output, /hys-mobile-nav__item/);
   assert.match(output, /class="hys-mobile-top-menu t-panel-reveal"/);
   assert.match(output, /data-hys-mobile-menu-toggle/);
+  assert.match(output, /data-hys-theme-toggle/);
+  assert.match(output, /fa-regular fa-moon/);
+  assert.match(output, /fa-solid fa-xmark/);
+  assert.match(output, /data-hys-mobile-menu-panel hidden/);
+  assert.doesNotMatch(output, /\.hys-mobile-top-menu \{\s+position: fixed;/);
   assert.match(output, /\.brand-nav-links \{\s+display: none !important;/);
   assert.match(
     output,
     /href="\/heat-stroke\/" aria-current="page" title="打开热射病资料"><span>资料<\/span>/,
   );
-  assert.match(output, /href="\/" title="打开热射病总入口"><span>总入口<\/span>/);
+  assert.match(
+    output,
+    /href="\/" title="打开热射病总入口"><span>总入口<\/span>/,
+  );
   assert.match(output, /项目首页/);
   assert.match(
     output,
     /href="\/heat-stroke\/pages\/field-treatment" title="打开热射病处置"/,
   );
-  assert.match(output, /href="\/heat-stroke\/pages\/diagnosis-treatment-guideline"/);
+  assert.match(
+    output,
+    /href="\/heat-stroke\/pages\/diagnosis-treatment-guideline"/,
+  );
   assert.match(output, /诊断与治疗指南/);
-  assert.match(output, /href="\/heat-stroke\/pages\/treatment-system-consensus"/);
+  assert.match(
+    output,
+    /href="\/heat-stroke\/pages\/treatment-system-consensus"/,
+  );
   assert.match(output, /href="\/heat-stroke\/pages\/heat-tolerance"/);
   assert.match(output, /href="\/heat-stroke\/pages\/core-temperature-cooling"/);
   assert.match(output, /href="\/heat-stroke\/pages\/challenge"/);
@@ -422,8 +436,9 @@ test("injectMobileBottomNav can render project-local tabs", () => {
   assert.doesNotMatch(output, /主站|\/\?tab=/);
 });
 
-test("injectMobileHamburgerNav renders a top-right heat-stroke menu button", () => {
-  const input = "<html><body><main>content</main></body></html>";
+test("injectMobileHamburgerNav renders FMS-style heat-stroke header controls", () => {
+  const input =
+    '<html><head></head><body><header class="brand-nav"><nav class="brand-nav-inner"><a class="brand-mark" href="/heat-stroke/">红医师 / 热射病防治</a><div class="brand-nav-links"><a href="/">总入口</a></div></nav></header><main>content</main></body></html>';
   const output = injectMobileHamburgerNav(input, "field-treatment", {
     scope: "heatStroke",
     basePath: "/heat-stroke/",
@@ -437,10 +452,23 @@ test("injectMobileHamburgerNav renders a top-right heat-stroke menu button", () 
   assert.match(output, /data-hys-mobile-menu-scope="heatStroke"/);
   assert.match(output, /class="hys-mobile-top-menu t-panel-reveal"/);
   assert.match(output, /data-hys-mobile-menu-toggle/);
+  assert.match(output, /data-hys-theme-toggle/);
+  assert.match(output, /切换热射病日间夜间模式/);
+  assert.match(output, /fa-regular fa-moon/);
+  assert.match(output, /fa-regular fa-sun/);
+  assert.match(output, /fa-solid fa-bars/);
+  assert.match(output, /fa-solid fa-xmark/);
   assert.match(output, /aria-expanded="false"/);
-  assert.match(output, /hys-mobile-top-menu__panel/);
+  assert.match(output, /data-hys-mobile-menu-panel hidden/);
+  assert.match(output, /brand-nav-inner[\s\S]*hys-mobile-top-menu/);
+  assert.match(output, /hys:heatStroke:theme|hys:heatStroke:theme/);
+  assert.match(output, /html\[data-hys-theme="dark"\]/);
+  assert.doesNotMatch(output, /\.hys-mobile-top-menu \{\s+position: fixed;/);
   assert.match(output, /\.brand-nav-links \{\s+display: none !important;/);
-  assert.match(output, /href="\/" title="打开热射病总入口"><span>总入口<\/span>/);
+  assert.match(
+    output,
+    /href="\/" title="打开热射病总入口"><span>总入口<\/span>/,
+  );
   assert.match(
     output,
     /href="\/heat-stroke\/" title="打开热射病项目首页"><span>项目首页<\/span>/,
@@ -464,7 +492,7 @@ test("injectMobileHamburgerNav renders a top-right heat-stroke menu button", () 
   assert.match(output, /href="\/heat-stroke\/pages\/core-temperature-cooling"/);
   assert.match(output, /href="\/heat-stroke\/pages\/challenge"/);
   assert.match(output, /href="\/heat-stroke\/"/);
-  assert.doesNotMatch(output, /hys-mobile-nav__item/);
+  assert.doesNotMatch(output, /class="hys-mobile-nav__item/);
   assert.doesNotMatch(output, /主站|\/\?tab=/);
   assert.equal(twice, output);
 });

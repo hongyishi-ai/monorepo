@@ -108,7 +108,11 @@ export const mobileNavConfigs = {
       { id: "platform", label: "总入口", href: "/" },
       { id: "library", label: "项目首页", href: "" },
       { id: "heat-index", label: "热指数查询", href: "pages/heat-index" },
-      { id: "field-treatment", label: "现场处置", href: "pages/field-treatment" },
+      {
+        id: "field-treatment",
+        label: "现场处置",
+        href: "pages/field-treatment",
+      },
       { id: "rule", label: "8-4-6法则", href: "pages/8-4-6-rule" },
       {
         id: "guide",
@@ -120,7 +124,11 @@ export const mobileNavConfigs = {
         label: "救治体系共识",
         href: "pages/treatment-system-consensus",
       },
-      { id: "heat-tolerance", label: "热耐力评估", href: "pages/heat-tolerance" },
+      {
+        id: "heat-tolerance",
+        label: "热耐力评估",
+        href: "pages/heat-tolerance",
+      },
       {
         id: "cooling",
         label: "核心体温与降温",
@@ -567,7 +575,7 @@ export function injectMobileHamburgerNav(
 ) {
   if (
     !/<\/body>/i.test(content) ||
-    /<nav\b[^>]*data-hongyishi-mobile-menu/i.test(content)
+    /<[^>]+\bdata-hongyishi-mobile-menu\b/i.test(content)
   ) {
     return content;
   }
@@ -593,96 +601,174 @@ export function injectMobileHamburgerNav(
     })
     .join("");
 
-  const nav = `
+  const styles = `
 <style data-hongyishi-mobile-menu>
 @media (min-width: 769px) {
-  .hys-mobile-top-menu {
+  .hys-mobile-top-menu,
+  .hys-mobile-top-menu__panel {
     display: none;
   }
 }
 @media (max-width: 768px) {
+  .brand-nav {
+    border-bottom-color: #12313c;
+  }
+  .brand-nav-inner {
+    display: flex !important;
+    width: min(100% - 32px, 1200px) !important;
+    min-height: 78px !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 14px 0 !important;
+    border-bottom: 2px solid #12313c;
+  }
   .brand-nav-links {
     display: none !important;
   }
+  .brand-mark {
+    min-width: 0;
+    white-space: normal;
+    font-size: clamp(1.15rem, 6.2vw, 1.8rem);
+    line-height: 1.1;
+  }
   .hys-mobile-top-menu {
-    position: fixed;
-    right: 14px;
-    top: calc(14px + env(safe-area-inset-top));
-    z-index: 2147483000;
     display: flex;
-    max-width: calc(100vw - 28px);
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 10px;
-    animation: hys-mobile-top-menu-enter 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+    position: static;
+    z-index: 1;
   }
   .hys-mobile-top-menu__panel {
-    display: none;
-    width: min(312px, calc(100vw - 28px));
-    border: 2px solid #111;
-    background: rgba(244, 236, 220, 0.98);
-    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
-    backdrop-filter: blur(10px);
-    padding: 10px;
+    width: min(100% - 32px, 1200px);
+    margin: 0 auto;
+    padding: 26px 0 26px;
+    border-bottom: 2px solid #12313c;
+    animation: hys-mobile-top-menu-enter 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
-  .hys-mobile-top-menu.is-open .hys-mobile-top-menu__panel {
+  .hys-mobile-top-menu__panel:not([hidden]) {
     display: grid;
-    gap: 6px;
+    gap: 14px;
+  }
+  .hys-mobile-top-menu__panel[hidden] {
+    display: none !important;
   }
   .hys-mobile-top-menu__link {
     display: flex;
-    min-height: 48px;
+    min-height: 60px;
     align-items: center;
-    justify-content: space-between;
-    border: 2px solid transparent;
-    color: #12313c;
-    font: 900 14px/1.1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    border: 0;
+    color: #526569;
+    font: 900 1.12rem/1.1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     letter-spacing: 0;
-    padding: 0 12px;
+    padding: 0 28px;
     text-decoration: none;
   }
-  .hys-mobile-top-menu__link::after {
-    content: ">";
-    color: #d93025;
-    font-size: 13px;
-  }
   .hys-mobile-top-menu__link--active {
-    border-color: #111;
-    background: #111;
-    color: #f4ecdc;
+    background: rgba(255, 255, 255, 0.64);
+    box-shadow: inset 0 -4px 0 #d93025;
+    color: #d93025;
+  }
+  .hys-mobile-top-menu__button,
+  .hys-mobile-theme-toggle {
+    display: inline-flex;
+    width: 52px;
+    min-width: 52px;
+    min-height: 52px;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.3rem;
+    line-height: 1;
+    transition:
+      background-color 180ms cubic-bezier(0.22, 1, 0.36, 1),
+      color 180ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .hys-mobile-theme-toggle {
+    background: transparent;
+    color: #12313c;
   }
   .hys-mobile-top-menu__button {
-    display: inline-flex;
-    min-height: 54px;
-    align-items: center;
-    gap: 10px;
-    border: 2px solid #111;
-    background: #111;
-    color: #f4ecdc;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
-    cursor: pointer;
-    font: 900 14px/1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    letter-spacing: 0;
-    padding: 0 16px;
+    background: #78c7e7;
+    color: #12313c;
   }
   .hys-mobile-top-menu__icon {
-    display: inline-grid;
-    gap: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
-  .hys-mobile-top-menu__icon span {
-    display: block;
-    width: 18px;
-    height: 2px;
-    background: currentColor;
+  .hys-mobile-top-menu__button [data-hys-menu-icon="close"],
+  .hys-mobile-top-menu.is-open [data-hys-menu-icon="menu"],
+  html[data-hys-theme="dark"] .hys-mobile-theme-toggle [data-hys-theme-icon="moon"],
+  .hys-mobile-theme-toggle [data-hys-theme-icon="sun"] {
+    display: none;
+  }
+  .hys-mobile-top-menu.is-open [data-hys-menu-icon="close"],
+  html[data-hys-theme="dark"] .hys-mobile-theme-toggle [data-hys-theme-icon="sun"] {
+    display: inline-block;
   }
   .hys-mobile-top-menu__button:focus-visible,
-  .hys-mobile-top-menu__link:focus-visible {
+  .hys-mobile-top-menu__link:focus-visible,
+  .hys-mobile-theme-toggle:focus-visible {
     outline: 2px solid #d93025;
     outline-offset: 2px;
   }
   .hys-mobile-top-menu__button:active,
-  .hys-mobile-top-menu__link:active {
+  .hys-mobile-top-menu__link:active,
+  .hys-mobile-theme-toggle:active {
     transform: translateY(1px);
+  }
+  html[data-hys-theme="dark"] body {
+    background-color: #0f171a;
+    background-image:
+      linear-gradient(rgba(120, 199, 231, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(120, 199, 231, 0.06) 1px, transparent 1px);
+    color: #f4ecdc;
+  }
+  html[data-hys-theme="dark"] .brand-nav {
+    background: rgba(15, 23, 26, 0.98);
+    border-bottom-color: #78c7e7;
+  }
+  html[data-hys-theme="dark"] .brand-nav-inner,
+  html[data-hys-theme="dark"] .hys-mobile-top-menu__panel {
+    border-color: #78c7e7;
+  }
+  html[data-hys-theme="dark"] .brand-mark,
+  html[data-hys-theme="dark"] .hys-mobile-theme-toggle {
+    color: #f4ecdc;
+  }
+  html[data-hys-theme="dark"] .brand-mark-red,
+  html[data-hys-theme="dark"] .hys-mobile-top-menu__link--active {
+    color: #ff6b00;
+  }
+  html[data-hys-theme="dark"] .brand-mark-divider,
+  html[data-hys-theme="dark"] .hys-mobile-top-menu__link {
+    color: #a9c3c8;
+  }
+  html[data-hys-theme="dark"] .hys-mobile-top-menu__link--active {
+    background: rgba(244, 236, 220, 0.08);
+    box-shadow: inset 0 -4px 0 #ff6b00;
+  }
+  html[data-hys-theme="dark"] .hys-mobile-top-menu__button {
+    background: #78c7e7;
+    color: #0f171a;
+  }
+  html[data-hys-theme="dark"] .hys-mobile-nav {
+    border-top-color: #78c7e7;
+    background: rgba(15, 23, 26, 0.96);
+  }
+  html[data-hys-theme="dark"] .hys-mobile-nav__item {
+    color: #a9c3c8;
+  }
+  html[data-hys-theme="dark"] .hys-mobile-nav__item--active {
+    border-color: #78c7e7;
+    background: #78c7e7;
+    color: #0f171a;
   }
   @keyframes hys-mobile-top-menu-enter {
     from {
@@ -705,24 +791,54 @@ export function injectMobileHamburgerNav(
   }
 }
 </style>
-<nav class="hys-mobile-top-menu t-panel-reveal" data-hongyishi-mobile-menu data-hys-mobile-menu-scope="${escapeHtml(scope)}" aria-label="${escapeHtml(config.ariaLabel)}">
-  <div class="hys-mobile-top-menu__panel" id="${escapeHtml(menuId)}">${menuItems}</div>
-  <button class="hys-mobile-top-menu__button" type="button" aria-label="打开${escapeHtml(config.ariaLabel)}菜单" aria-expanded="false" aria-controls="${escapeHtml(menuId)}" data-hys-mobile-menu-toggle>
-    <span class="hys-mobile-top-menu__icon" aria-hidden="true"><span></span><span></span><span></span></span>
-    <span>菜单</span>
+`;
+  const controls = `<div class="hys-mobile-top-menu t-panel-reveal" data-hongyishi-mobile-menu data-hys-mobile-menu-scope="${escapeHtml(scope)}" aria-label="${escapeHtml(config.ariaLabel)}">
+  <button class="hys-mobile-theme-toggle" type="button" aria-label="切换热射病日间夜间模式" data-hys-theme-toggle>
+    <i class="fa-regular fa-moon" data-hys-theme-icon="moon" aria-hidden="true"></i>
+    <i class="fa-regular fa-sun" data-hys-theme-icon="sun" aria-hidden="true"></i>
   </button>
-</nav>
+  <button class="hys-mobile-top-menu__button" type="button" aria-label="打开${escapeHtml(config.ariaLabel)}菜单" aria-expanded="false" aria-controls="${escapeHtml(menuId)}" data-hys-mobile-menu-toggle>
+    <span class="hys-mobile-top-menu__icon" aria-hidden="true">
+      <i class="fa-solid fa-bars" data-hys-menu-icon="menu"></i>
+      <i class="fa-solid fa-xmark" data-hys-menu-icon="close"></i>
+    </span>
+  </button>
+</div>`;
+  const panel = `<div class="hys-mobile-top-menu__panel" id="${escapeHtml(menuId)}" data-hys-mobile-menu-panel hidden>${menuItems}</div>`;
+  const script = `
 <script data-hongyishi-mobile-menu>
 (() => {
-  const nav = document.querySelector('nav[data-hongyishi-mobile-menu][data-hys-mobile-menu-scope="${escapeHtml(scope)}"]');
+  const nav = document.querySelector('[data-hongyishi-mobile-menu][data-hys-mobile-menu-scope="${escapeHtml(scope)}"]');
   const button = nav?.querySelector('[data-hys-mobile-menu-toggle]');
-  const panel = nav?.querySelector('.hys-mobile-top-menu__panel');
+  const panel = document.getElementById('${escapeHtml(menuId)}');
+  const themeButton = nav?.querySelector('[data-hys-theme-toggle]');
+  const root = document.documentElement;
+  const storageKey = 'hys:heatStroke:theme';
   if (!nav || !button || !panel) return;
 
   const setOpen = (isOpen) => {
     nav.classList.toggle('is-open', isOpen);
+    nav.closest('.brand-nav')?.classList.toggle('hys-mobile-menu-open', isOpen);
     button.setAttribute('aria-expanded', String(isOpen));
+    panel.hidden = !isOpen;
   };
+  const getPreferredTheme = () => {
+    try {
+      const stored = localStorage.getItem(storageKey) || localStorage.getItem('theme');
+      if (stored === 'light' || stored === 'dark') return stored;
+    } catch {}
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  };
+  const applyTheme = (theme) => {
+    root.dataset.hysTheme = theme;
+    root.classList.toggle('dark', theme === 'dark');
+    themeButton?.setAttribute('aria-label', theme === 'dark' ? '切换热射病日间模式' : '切换热射病夜间模式');
+    try {
+      localStorage.setItem(storageKey, theme);
+    } catch {}
+  };
+
+  applyTheme(getPreferredTheme());
 
   button.addEventListener('click', () => {
     setOpen(!nav.classList.contains('is-open'));
@@ -730,8 +846,18 @@ export function injectMobileHamburgerNav(
   panel.addEventListener('click', (event) => {
     if (event.target.closest('a[href]')) setOpen(false);
   });
+  themeButton?.addEventListener('click', (event) => {
+    root.style.setProperty('--x', event.clientX + 'px');
+    root.style.setProperty('--y', event.clientY + 'px');
+    const nextTheme = root.dataset.hysTheme === 'dark' ? 'light' : 'dark';
+    if (document.startViewTransition) {
+      document.startViewTransition(() => applyTheme(nextTheme));
+    } else {
+      applyTheme(nextTheme);
+    }
+  });
   document.addEventListener('click', (event) => {
-    if (!nav.contains(event.target)) setOpen(false);
+    if (!nav.contains(event.target) && !panel.contains(event.target)) setOpen(false);
   });
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') setOpen(false);
@@ -739,7 +865,21 @@ export function injectMobileHamburgerNav(
 })();
 </script>`;
 
-  return content.replace(/<\/body>/i, `${nav}\n</body>`);
+  let output = content;
+  if (/<\/head>/i.test(output)) {
+    output = output.replace(/<\/head>/i, `${styles}\n</head>`);
+  }
+
+  const navPattern =
+    /(<nav\b[^>]*class=["'][^"']*\bbrand-nav-inner\b[^"']*["'][^>]*>[\s\S]*?)(<\/nav>)(\s*<\/header>)/i;
+  if (navPattern.test(output)) {
+    output = output.replace(navPattern, `$1${controls}\n$2\n${panel}$3`);
+  } else {
+    const fallback = `${/<\/head>/i.test(content) ? "" : styles}\n${controls}\n${panel}`;
+    output = output.replace(/<\/body>/i, `${fallback}\n</body>`);
+  }
+
+  return output.replace(/<\/body>/i, `${script}\n</body>`);
 }
 
 function extractHtmlTitle(content, fallbackTitle) {

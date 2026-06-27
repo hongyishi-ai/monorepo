@@ -354,20 +354,33 @@ async function checkMobileNav() {
             (label) => !labels.includes(label),
           );
           const topMenu = document.querySelector(
-            'nav[data-hongyishi-mobile-menu]',
+            "[data-hongyishi-mobile-menu][data-hys-mobile-menu-scope]",
           );
+          const topMenuStyle = topMenu ? getComputedStyle(topMenu) : null;
+          const topMenuButton = topMenu?.querySelector(
+            "[data-hys-mobile-menu-toggle]",
+          );
+          const topMenuPanelId = topMenuButton?.getAttribute("aria-controls");
+          const topMenuPanel = topMenuPanelId
+            ? document.getElementById(topMenuPanelId)
+            : null;
+          const topMenuLinkRoots = [topMenu, topMenuPanel].filter(Boolean);
           const topMenuHrefs = topMenu
-            ? Array.from(topMenu.querySelectorAll("a[href]")).map((link) => {
-                const url = new URL(
-                  link.getAttribute("href"),
-                  window.location.href,
-                );
-                return `${url.pathname}${url.search}`;
-              })
+            ? topMenuLinkRoots.flatMap((root) =>
+                Array.from(root.querySelectorAll("a[href]")).map((link) => {
+                  const url = new URL(
+                    link.getAttribute("href"),
+                    window.location.href,
+                  );
+                  return `${url.pathname}${url.search}`;
+                }),
+              )
             : [];
           const topMenuLabels = topMenu
-            ? Array.from(topMenu.querySelectorAll("a[href]")).map(
-                (item) => item.textContent?.replace(/\s+/g, " ").trim() ?? "",
+            ? topMenuLinkRoots.flatMap((root) =>
+                Array.from(root.querySelectorAll("a[href]")).map(
+                  (item) => item.textContent?.replace(/\s+/g, " ").trim() ?? "",
+                ),
               )
             : [];
           const visibleBrandNavLinks = Array.from(
@@ -402,8 +415,11 @@ async function checkMobileNav() {
             hasTopMenu: Boolean(topMenu),
             topMenuScope:
               topMenu?.getAttribute("data-hys-mobile-menu-scope") ?? "",
-            hasTopMenuButton: Boolean(
-              topMenu?.querySelector("[data-hys-mobile-menu-toggle]"),
+            topMenuPosition: topMenuStyle?.position ?? "",
+            topMenuInBrandNav: Boolean(topMenu?.closest(".brand-nav")),
+            hasTopMenuButton: Boolean(topMenuButton),
+            hasThemeToggle: Boolean(
+              topMenu?.querySelector("[data-hys-theme-toggle]"),
             ),
             visibleBrandNavLinks,
             missingTopMenuHrefs,
@@ -596,7 +612,10 @@ const mobileNavFailures = mobileNav.filter(
     (item.expectedScope === "heatStroke" &&
       (!item.hasTopMenu ||
         item.topMenuScope !== "heatStroke" ||
+        item.topMenuPosition === "fixed" ||
+        !item.topMenuInBrandNav ||
         !item.hasTopMenuButton ||
+        !item.hasThemeToggle ||
         item.visibleBrandNavLinks > 0 ||
         item.missingTopMenuHrefs.length > 0 ||
         item.missingTopMenuLabels.length > 0)),
