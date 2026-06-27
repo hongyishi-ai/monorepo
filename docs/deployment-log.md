@@ -27,6 +27,27 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-28 - 90fed4b - 热射病移动端顶部入口并入汉堡菜单
+
+- Commit: `90fed4b1ccedf2c57c81351e0012c31fcd95603c`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://13f75d62.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.105.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - `node --test scripts/build-cloudflare.test.mjs` passed: `28/28`
+  - `pnpm test:cloudflare` passed: `48/48`
+  - `pnpm build:cloudflare` passed
+  - `pnpm audit:links -- --base=http://127.0.0.1:8788` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - Mobile Playwright interaction check passed for `/heat-stroke/pages/field-treatment`: hamburger menu opened with `总入口`, `项目首页`, and guide links; bottom nav kept `热指数`, `处置`, `法则`, `资料`; visible `.brand-nav-links` count was `0`
+  - `pnpm audit:links -- --base=https://13f75d62.hongyishi-monorepo.pages.dev` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `pnpm audit:links -- --base=https://hongyishi.cn` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - GitHub Actions for `90fed4b`: Storybook, Cloudflare Build Check, and React Version Check passed; CI was still in progress when this entry was written
+- Notes:
+  - Heat stroke mobile now keeps the bottom four-item navigation focused on the core flows.
+  - The top-right hamburger menu now carries the former top links (`总入口`, `项目首页`) plus the broader heat-stroke content links such as diagnosis/treatment guideline, consensus, heat tolerance, cooling, challenge, and about.
+  - Mobile link audit now validates the heat-stroke hamburger menu contract and fails if the old `.brand-nav-links` remain visible on mobile.
+
 ## 2026-06-27 - 4cdf411 - 共享品牌 token 与 Tailwind preset
 
 - Commit: `4cdf411727f6b2427c02cbf73075c9e412570e57`
