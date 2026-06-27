@@ -27,6 +27,29 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-27 - 4cdf411 - 共享品牌 token 与 Tailwind preset
+
+- Commit: `4cdf411727f6b2427c02cbf73075c9e412570e57`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://18a4f36e.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.105.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - `node --test scripts/brand-tokens.test.mjs` passed: `5/5`
+  - `pnpm type-check` passed
+  - `pnpm lint` passed with existing FMS warnings: `0 errors, 24 warnings`
+  - `pnpm test` passed: utils `18/18`, FMS `157/157`
+  - `pnpm build:cloudflare` passed
+  - `pnpm size:budget` passed: `392 files, 50.68 MiB total`
+  - `pnpm test:cloudflare` passed: `47/47`
+  - `pnpm audit:links -- --base=https://18a4f36e.hongyishi-monorepo.pages.dev` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `pnpm audit:links -- --base=https://hongyishi.cn` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `https://18a4f36e.hongyishi-monorepo.pages.dev/` and `https://hongyishi.cn/` returned HTTP `200`
+- Notes:
+  - Moved the shared brand token JSON into `@hongyishi/config` and exported it as `@hongyishi/config/brand/tokens.json`.
+  - Added `@hongyishi/config/tailwind` as the shared Tailwind preset for Portal, FMS, heat-stroke, TCCC, and the UI package.
+  - Documented the runtime-unification rule: keep Portal on Next static export, FMS on Vite React, and heat-stroke/TCCC as static HTML/Tailwind until complexity justifies migration.
+
 ## 2026-06-26 - d70797e - 撤回主题切换统一修改
 
 - Commit: `d70797e07d237c72d751b9384da53b25775b7885`
