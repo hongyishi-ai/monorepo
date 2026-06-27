@@ -104,6 +104,31 @@ export const mobileNavConfigs = {
       { id: "rule", label: "法则", href: "pages/8-4-6-rule" },
       { id: "library", label: "资料", href: "" },
     ],
+    menuTabs: [
+      { id: "platform", label: "总入口", href: "/" },
+      { id: "library", label: "项目首页", href: "" },
+      { id: "heat-index", label: "热指数查询", href: "pages/heat-index" },
+      { id: "field-treatment", label: "现场处置", href: "pages/field-treatment" },
+      { id: "rule", label: "8-4-6法则", href: "pages/8-4-6-rule" },
+      {
+        id: "guide",
+        label: "诊断与治疗指南",
+        href: "pages/diagnosis-treatment-guideline",
+      },
+      {
+        id: "consensus",
+        label: "救治体系共识",
+        href: "pages/treatment-system-consensus",
+      },
+      { id: "heat-tolerance", label: "热耐力评估", href: "pages/heat-tolerance" },
+      {
+        id: "cooling",
+        label: "核心体温与降温",
+        href: "pages/core-temperature-cooling",
+      },
+      { id: "challenge", label: "通关挑战", href: "pages/challenge" },
+      { id: "about", label: "关于项目", href: "pages/about" },
+    ],
   },
   tccc: {
     ariaLabel: "TCCC 项目移动端导航",
@@ -164,6 +189,22 @@ export function resolveProjectMobileActiveTab(project, relativePath) {
   }
 
   return undefined;
+}
+
+function resolveHeatStrokeMenuActiveItem(relativePath) {
+  const normalizedPath = relativePath.split(path.sep).join("/");
+  const fileName = path.posix.basename(normalizedPath);
+
+  if (fileName === "heat-index.html") return "heat-index";
+  if (fileName === "field-treatment.html") return "field-treatment";
+  if (fileName === "8-4-6-rule.html") return "rule";
+  if (fileName === "diagnosis-treatment-guideline.html") return "guide";
+  if (fileName === "treatment-system-consensus.html") return "consensus";
+  if (fileName === "heat-tolerance.html") return "heat-tolerance";
+  if (fileName === "core-temperature-cooling.html") return "cooling";
+  if (fileName === "challenge.html") return "challenge";
+  if (fileName === "about.html") return "about";
+  return "library";
 }
 
 export function buildRedirects({
@@ -519,6 +560,188 @@ export function injectMobileBottomNav(
   return content.replace(/<\/body>/i, `${nav}\n</body>`);
 }
 
+export function injectMobileHamburgerNav(
+  content,
+  activeTab = "tools",
+  options = {},
+) {
+  if (
+    !/<\/body>/i.test(content) ||
+    /<nav\b[^>]*data-hongyishi-mobile-menu/i.test(content)
+  ) {
+    return content;
+  }
+
+  const scope = options.scope ?? "platform";
+  const config =
+    options.config ?? mobileNavConfigs[scope] ?? mobileNavConfigs.platform;
+  const basePath = options.basePath ?? "/";
+  const menuId = `hys-mobile-top-menu-panel-${scope}`;
+  const menuTabs = options.menuTabs ?? config.menuTabs ?? config.tabs;
+  const tabs = menuTabs.map((tab) => ({
+    ...tab,
+    href: joinBasePath(basePath, tab.href),
+  }));
+
+  const menuItems = tabs
+    .map((tab) => {
+      const activeClass =
+        tab.id === activeTab ? " hys-mobile-top-menu__link--active" : "";
+      const ariaCurrent = tab.id === activeTab ? ' aria-current="page"' : "";
+      const title = `${config.titlePrefix}${tab.label}`;
+      return `<a class="hys-mobile-top-menu__link${activeClass}" href="${escapeHtml(tab.href)}"${ariaCurrent} title="${escapeHtml(title)}"><span>${escapeHtml(tab.label)}</span></a>`;
+    })
+    .join("");
+
+  const nav = `
+<style data-hongyishi-mobile-menu>
+@media (min-width: 769px) {
+  .hys-mobile-top-menu {
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+  .brand-nav-links {
+    display: none !important;
+  }
+  .hys-mobile-top-menu {
+    position: fixed;
+    right: 14px;
+    top: calc(14px + env(safe-area-inset-top));
+    z-index: 2147483000;
+    display: flex;
+    max-width: calc(100vw - 28px);
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    animation: hys-mobile-top-menu-enter 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .hys-mobile-top-menu__panel {
+    display: none;
+    width: min(312px, calc(100vw - 28px));
+    border: 2px solid #111;
+    background: rgba(244, 236, 220, 0.98);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
+    backdrop-filter: blur(10px);
+    padding: 10px;
+  }
+  .hys-mobile-top-menu.is-open .hys-mobile-top-menu__panel {
+    display: grid;
+    gap: 6px;
+  }
+  .hys-mobile-top-menu__link {
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid transparent;
+    color: #12313c;
+    font: 900 14px/1.1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    letter-spacing: 0;
+    padding: 0 12px;
+    text-decoration: none;
+  }
+  .hys-mobile-top-menu__link::after {
+    content: ">";
+    color: #d93025;
+    font-size: 13px;
+  }
+  .hys-mobile-top-menu__link--active {
+    border-color: #111;
+    background: #111;
+    color: #f4ecdc;
+  }
+  .hys-mobile-top-menu__button {
+    display: inline-flex;
+    min-height: 54px;
+    align-items: center;
+    gap: 10px;
+    border: 2px solid #111;
+    background: #111;
+    color: #f4ecdc;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+    cursor: pointer;
+    font: 900 14px/1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    letter-spacing: 0;
+    padding: 0 16px;
+  }
+  .hys-mobile-top-menu__icon {
+    display: inline-grid;
+    gap: 4px;
+  }
+  .hys-mobile-top-menu__icon span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: currentColor;
+  }
+  .hys-mobile-top-menu__button:focus-visible,
+  .hys-mobile-top-menu__link:focus-visible {
+    outline: 2px solid #d93025;
+    outline-offset: 2px;
+  }
+  .hys-mobile-top-menu__button:active,
+  .hys-mobile-top-menu__link:active {
+    transform: translateY(1px);
+  }
+  @keyframes hys-mobile-top-menu-enter {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hys-mobile-top-menu {
+      animation: none !important;
+    }
+    .hys-mobile-top-menu__button,
+    .hys-mobile-top-menu__link {
+      transition: none !important;
+    }
+  }
+}
+</style>
+<nav class="hys-mobile-top-menu t-panel-reveal" data-hongyishi-mobile-menu data-hys-mobile-menu-scope="${escapeHtml(scope)}" aria-label="${escapeHtml(config.ariaLabel)}">
+  <div class="hys-mobile-top-menu__panel" id="${escapeHtml(menuId)}">${menuItems}</div>
+  <button class="hys-mobile-top-menu__button" type="button" aria-label="打开${escapeHtml(config.ariaLabel)}菜单" aria-expanded="false" aria-controls="${escapeHtml(menuId)}" data-hys-mobile-menu-toggle>
+    <span class="hys-mobile-top-menu__icon" aria-hidden="true"><span></span><span></span><span></span></span>
+    <span>菜单</span>
+  </button>
+</nav>
+<script data-hongyishi-mobile-menu>
+(() => {
+  const nav = document.querySelector('nav[data-hongyishi-mobile-menu][data-hys-mobile-menu-scope="${escapeHtml(scope)}"]');
+  const button = nav?.querySelector('[data-hys-mobile-menu-toggle]');
+  const panel = nav?.querySelector('.hys-mobile-top-menu__panel');
+  if (!nav || !button || !panel) return;
+
+  const setOpen = (isOpen) => {
+    nav.classList.toggle('is-open', isOpen);
+    button.setAttribute('aria-expanded', String(isOpen));
+  };
+
+  button.addEventListener('click', () => {
+    setOpen(!nav.classList.contains('is-open'));
+  });
+  panel.addEventListener('click', (event) => {
+    if (event.target.closest('a[href]')) setOpen(false);
+  });
+  document.addEventListener('click', (event) => {
+    if (!nav.contains(event.target)) setOpen(false);
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') setOpen(false);
+  });
+})();
+</script>`;
+
+  return content.replace(/<\/body>/i, `${nav}\n</body>`);
+}
+
 function extractHtmlTitle(content, fallbackTitle) {
   const titleMatch = content.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
   const bodyWithoutScripts = content.replace(
@@ -818,6 +1041,14 @@ export function rewriteHeatStrokeText(content, relativePath, basePath) {
         "heatStroke",
         mapHeatStrokeOutputPath(normalizedPath),
       ),
+      {
+        scope: "heatStroke",
+        basePath: base,
+      },
+    );
+    output = injectMobileHamburgerNav(
+      output,
+      resolveHeatStrokeMenuActiveItem(mapHeatStrokeOutputPath(normalizedPath)),
       {
         scope: "heatStroke",
         basePath: base,

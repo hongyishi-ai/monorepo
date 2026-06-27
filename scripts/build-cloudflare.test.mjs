@@ -11,6 +11,7 @@ import {
   CLOUDFLARE_FREE_TIER_LIMITS,
   collectCloudflareFreeTierStats,
   injectMobileBottomNav,
+  injectMobileHamburgerNav,
   injectContentGovernanceBanner,
   injectTcccBrandShell,
   mapHeatStrokeOutputPath,
@@ -174,14 +175,27 @@ test("rewriteHeatStrokeText scopes root-relative static links and service worker
   assert.match(output, /内容状态：待复核/);
   assert.match(output, /不替代急救指挥、临床诊疗和当地规范/);
   assert.match(output, /data-hys-mobile-nav-scope="heatStroke"/);
+  assert.match(output, /class="hys-mobile-nav t-panel-reveal"/);
+  assert.match(output, /hys-mobile-nav__item/);
+  assert.match(output, /class="hys-mobile-top-menu t-panel-reveal"/);
+  assert.match(output, /data-hys-mobile-menu-toggle/);
+  assert.match(output, /\.brand-nav-links \{\s+display: none !important;/);
   assert.match(
     output,
     /href="\/heat-stroke\/" aria-current="page" title="打开热射病资料"><span>资料<\/span>/,
   );
+  assert.match(output, /href="\/" title="打开热射病总入口"><span>总入口<\/span>/);
+  assert.match(output, /项目首页/);
   assert.match(
     output,
     /href="\/heat-stroke\/pages\/field-treatment" title="打开热射病处置"/,
   );
+  assert.match(output, /href="\/heat-stroke\/pages\/diagnosis-treatment-guideline"/);
+  assert.match(output, /诊断与治疗指南/);
+  assert.match(output, /href="\/heat-stroke\/pages\/treatment-system-consensus"/);
+  assert.match(output, /href="\/heat-stroke\/pages\/heat-tolerance"/);
+  assert.match(output, /href="\/heat-stroke\/pages\/core-temperature-cooling"/);
+  assert.match(output, /href="\/heat-stroke\/pages\/challenge"/);
   assert.doesNotMatch(output, /主站|\/\?tab=tools/);
   assert.doesNotMatch(output, /data-hongyishi-tccc-shell/);
 });
@@ -406,6 +420,53 @@ test("injectMobileBottomNav can render project-local tabs", () => {
   assert.match(output, /href="\/heat-stroke\/pages\/heat-index"/);
   assert.match(output, /href="\/heat-stroke\/"/);
   assert.doesNotMatch(output, /主站|\/\?tab=/);
+});
+
+test("injectMobileHamburgerNav renders a top-right heat-stroke menu button", () => {
+  const input = "<html><body><main>content</main></body></html>";
+  const output = injectMobileHamburgerNav(input, "field-treatment", {
+    scope: "heatStroke",
+    basePath: "/heat-stroke/",
+  });
+  const twice = injectMobileHamburgerNav(output, "field-treatment", {
+    scope: "heatStroke",
+    basePath: "/heat-stroke/",
+  });
+
+  assert.match(output, /aria-label="热射病项目移动端导航"/);
+  assert.match(output, /data-hys-mobile-menu-scope="heatStroke"/);
+  assert.match(output, /class="hys-mobile-top-menu t-panel-reveal"/);
+  assert.match(output, /data-hys-mobile-menu-toggle/);
+  assert.match(output, /aria-expanded="false"/);
+  assert.match(output, /hys-mobile-top-menu__panel/);
+  assert.match(output, /\.brand-nav-links \{\s+display: none !important;/);
+  assert.match(output, /href="\/" title="打开热射病总入口"><span>总入口<\/span>/);
+  assert.match(
+    output,
+    /href="\/heat-stroke\/" title="打开热射病项目首页"><span>项目首页<\/span>/,
+  );
+  assert.match(
+    output,
+    /href="\/heat-stroke\/pages\/field-treatment" aria-current="page" title="打开热射病现场处置"/,
+  );
+  assert.match(output, /href="\/heat-stroke\/pages\/heat-index"/);
+  assert.match(
+    output,
+    /href="\/heat-stroke\/pages\/diagnosis-treatment-guideline"/,
+  );
+  assert.match(output, /诊断与治疗指南/);
+  assert.match(
+    output,
+    /href="\/heat-stroke\/pages\/treatment-system-consensus"/,
+  );
+  assert.match(output, /救治体系共识/);
+  assert.match(output, /href="\/heat-stroke\/pages\/heat-tolerance"/);
+  assert.match(output, /href="\/heat-stroke\/pages\/core-temperature-cooling"/);
+  assert.match(output, /href="\/heat-stroke\/pages\/challenge"/);
+  assert.match(output, /href="\/heat-stroke\/"/);
+  assert.doesNotMatch(output, /hys-mobile-nav__item/);
+  assert.doesNotMatch(output, /主站|\/\?tab=/);
+  assert.equal(twice, output);
 });
 
 test("injectContentGovernanceBanner adds source and review state once", () => {

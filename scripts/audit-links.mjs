@@ -241,6 +241,17 @@ async function checkMobileNav() {
         "/heat-stroke/pages/8-4-6-rule",
         "/heat-stroke/",
       ],
+      expectedTopMenuHrefs: [
+        "/",
+        "/heat-stroke/",
+        "/heat-stroke/pages/diagnosis-treatment-guideline",
+        "/heat-stroke/pages/treatment-system-consensus",
+        "/heat-stroke/pages/heat-tolerance",
+        "/heat-stroke/pages/core-temperature-cooling",
+        "/heat-stroke/pages/challenge",
+        "/heat-stroke/pages/about",
+      ],
+      expectedTopMenuLabels: ["总入口", "项目首页", "诊断与治疗指南"],
     },
     {
       path: "/heat-stroke/pages/field-treatment",
@@ -252,6 +263,17 @@ async function checkMobileNav() {
         "/heat-stroke/pages/8-4-6-rule",
         "/heat-stroke/",
       ],
+      expectedTopMenuHrefs: [
+        "/",
+        "/heat-stroke/",
+        "/heat-stroke/pages/diagnosis-treatment-guideline",
+        "/heat-stroke/pages/treatment-system-consensus",
+        "/heat-stroke/pages/heat-tolerance",
+        "/heat-stroke/pages/core-temperature-cooling",
+        "/heat-stroke/pages/challenge",
+        "/heat-stroke/pages/about",
+      ],
+      expectedTopMenuLabels: ["总入口", "项目首页", "诊断与治疗指南"],
     },
     {
       path: "/tccc/",
@@ -331,6 +353,41 @@ async function checkMobileNav() {
           const missingRequiredLabels = (expected.requiredLabels ?? []).filter(
             (label) => !labels.includes(label),
           );
+          const topMenu = document.querySelector(
+            'nav[data-hongyishi-mobile-menu]',
+          );
+          const topMenuHrefs = topMenu
+            ? Array.from(topMenu.querySelectorAll("a[href]")).map((link) => {
+                const url = new URL(
+                  link.getAttribute("href"),
+                  window.location.href,
+                );
+                return `${url.pathname}${url.search}`;
+              })
+            : [];
+          const topMenuLabels = topMenu
+            ? Array.from(topMenu.querySelectorAll("a[href]")).map(
+                (item) => item.textContent?.replace(/\s+/g, " ").trim() ?? "",
+              )
+            : [];
+          const visibleBrandNavLinks = Array.from(
+            document.querySelectorAll(".brand-nav-links"),
+          ).filter((element) => {
+            const elementStyle = getComputedStyle(element);
+            const rect = element.getBoundingClientRect();
+            return (
+              elementStyle.display !== "none" &&
+              elementStyle.visibility !== "hidden" &&
+              rect.width > 0 &&
+              rect.height > 0
+            );
+          }).length;
+          const missingTopMenuHrefs = (
+            expected.expectedTopMenuHrefs ?? []
+          ).filter((href) => !topMenuHrefs.includes(href));
+          const missingTopMenuLabels = (
+            expected.expectedTopMenuLabels ?? []
+          ).filter((label) => !topMenuLabels.includes(label));
 
           return {
             path: expected.path,
@@ -342,6 +399,15 @@ async function checkMobileNav() {
             missingRequiredHrefs,
             missingRequiredLabels,
             outOfScopeLinks,
+            hasTopMenu: Boolean(topMenu),
+            topMenuScope:
+              topMenu?.getAttribute("data-hys-mobile-menu-scope") ?? "",
+            hasTopMenuButton: Boolean(
+              topMenu?.querySelector("[data-hys-mobile-menu-toggle]"),
+            ),
+            visibleBrandNavLinks,
+            missingTopMenuHrefs,
+            missingTopMenuLabels,
             horizontalOverflow:
               document.documentElement.scrollWidth >
               document.documentElement.clientWidth + 2,
@@ -526,7 +592,14 @@ const mobileNavFailures = mobileNav.filter(
     item.missingRequiredHrefs.length > 0 ||
     item.missingRequiredLabels.length > 0 ||
     item.outOfScopeLinks.length > 0 ||
-    (item.expectedScope && item.scope !== item.expectedScope),
+    (item.expectedScope && item.scope !== item.expectedScope) ||
+    (item.expectedScope === "heatStroke" &&
+      (!item.hasTopMenu ||
+        item.topMenuScope !== "heatStroke" ||
+        !item.hasTopMenuButton ||
+        item.visibleBrandNavLinks > 0 ||
+        item.missingTopMenuHrefs.length > 0 ||
+        item.missingTopMenuLabels.length > 0)),
 );
 const guideSurfaceFailures = guideSurfaces.filter(
   (item) =>
