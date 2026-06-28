@@ -27,6 +27,28 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-28 - e668b37 - 静态项目移动端顶部控件与主题统一
+
+- Commit: `e668b3742cbd21a559f0855d1d560550867a860a`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://a5aca380.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.105.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - `pnpm exec prettier --check scripts/build-cloudflare.mjs scripts/build-cloudflare.test.mjs scripts/audit-links.mjs` passed
+  - `pnpm test:cloudflare` passed: `48/48`
+  - `npm run build:cloudflare` passed
+  - `node scripts/audit-links.mjs --base=http://127.0.0.1:3021` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - Mobile Playwright computed-style check passed for `/heat-stroke/` and `/tccc/`: header controls are inside `.brand-nav`, nav direction is `row`, theme/menu font size is `16px`, controls are about `49x48`, and dark mode changes `main` background to `rgb(15, 23, 26)` with text `rgb(244, 236, 220)`
+  - `node scripts/audit-links.mjs --base=https://a5aca380.hongyishi-monorepo.pages.dev` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `node scripts/audit-links.mjs --base=https://hongyishi.cn` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `https://hongyishi.cn/` returned HTTP `200`
+  - GitHub Actions passed for `e668b37`: CI, Cloudflare Build Check, Storybook, React Version Check
+- Notes:
+  - Heat stroke mobile header controls now use the same FMS-style `hys-nav-link` and `t-icon-swap h-5 w-5 place-items-center` structure instead of Font Awesome-specific buttons.
+  - TCCC now gets the same top-right theme toggle and hamburger menu, with core TCCC links in the expanded panel while keeping the bottom four-item nav.
+  - Static-project dark mode now covers page content as well as the app shell, including heat stroke `.project-shell` content and TCCC pages.
+
 ## 2026-06-28 - 7f9ae7e - 热射病移动端菜单改为 FMS 式顶部面板
 
 - Commit: `7f9ae7ed3d5701dacb56229c46f83d5757cb2954`
