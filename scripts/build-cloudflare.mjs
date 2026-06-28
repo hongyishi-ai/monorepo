@@ -147,6 +147,25 @@ export const mobileNavConfigs = {
       { id: "tacevac", label: "TACEVAC", href: "pages/tacevac-reassessment" },
       { id: "directory", label: "目录", href: "" },
     ],
+    menuTabs: [
+      { id: "platform", label: "总入口", href: "/" },
+      { id: "directory", label: "项目首页", href: "" },
+      { id: "standard", label: "标准流程", href: "pages/tccc-standard" },
+      { id: "tfc", label: "TFC 大出血", href: "pages/tfc-hemorrhage" },
+      { id: "airway", label: "TFC 气道", href: "pages/tfc-airway" },
+      { id: "breathing", label: "呼吸管理", href: "pages/tccc-breathing" },
+      {
+        id: "hypothermia",
+        label: "低体温预防",
+        href: "pages/tccc-hypothermia",
+      },
+      {
+        id: "tacevac",
+        label: "TACEVAC 复评",
+        href: "pages/tacevac-reassessment",
+      },
+      { id: "course", label: "课程目录", href: "pages/tccc-flow-framework" },
+    ],
   },
 };
 
@@ -213,6 +232,20 @@ function resolveHeatStrokeMenuActiveItem(relativePath) {
   if (fileName === "challenge.html") return "challenge";
   if (fileName === "about.html") return "about";
   return "library";
+}
+
+function resolveTcccMenuActiveItem(relativePath) {
+  const normalizedPath = relativePath.split(path.sep).join("/");
+  const fileName = path.posix.basename(normalizedPath);
+
+  if (fileName === "tccc-standard.html") return "standard";
+  if (fileName === "tfc-hemorrhage.html") return "tfc";
+  if (fileName === "tfc-airway.html") return "airway";
+  if (fileName === "tccc-breathing.html") return "breathing";
+  if (fileName === "tccc-hypothermia.html") return "hypothermia";
+  if (fileName.startsWith("tacevac-")) return "tacevac";
+  if (fileName === "tccc-flow-framework.html") return "course";
+  return "directory";
 }
 
 export function buildRedirects({
@@ -586,6 +619,8 @@ export function injectMobileHamburgerNav(
   const basePath = options.basePath ?? "/";
   const menuId = `hys-mobile-top-menu-panel-${scope}`;
   const menuTabs = options.menuTabs ?? config.menuTabs ?? config.tabs;
+  const themeName = options.themeName ?? (scope === "tccc" ? "TCCC" : "热射病");
+  const storageKey = `hys:${scope}:theme`;
   const tabs = menuTabs.map((tab) => ({
     ...tab,
     href: joinBasePath(basePath, tab.href),
@@ -597,7 +632,7 @@ export function injectMobileHamburgerNav(
         tab.id === activeTab ? " hys-mobile-top-menu__link--active" : "";
       const ariaCurrent = tab.id === activeTab ? ' aria-current="page"' : "";
       const title = `${config.titlePrefix}${tab.label}`;
-      return `<a class="hys-mobile-top-menu__link${activeClass}" href="${escapeHtml(tab.href)}"${ariaCurrent} title="${escapeHtml(title)}"><span>${escapeHtml(tab.label)}</span></a>`;
+      return `<a class="hys-mobile-top-menu__link hys-nav-link${activeClass}" href="${escapeHtml(tab.href)}"${ariaCurrent} title="${escapeHtml(title)}"><span>${escapeHtml(tab.label)}</span></a>`;
     })
     .join("");
 
@@ -615,6 +650,7 @@ export function injectMobileHamburgerNav(
   }
   .brand-nav-inner {
     display: flex !important;
+    flex-direction: row !important;
     width: min(100% - 32px, 1200px) !important;
     min-height: 78px !important;
     align-items: center !important;
@@ -631,6 +667,19 @@ export function injectMobileHamburgerNav(
     white-space: normal;
     font-size: clamp(1.15rem, 6.2vw, 1.8rem);
     line-height: 1.1;
+  }
+  .hys-nav-link {
+    border-radius: 4px;
+    color: #5f6567;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    padding: 0.7rem 0.9rem;
+    text-decoration: none;
+    transition:
+      background-color 180ms cubic-bezier(0.22, 1, 0.36, 1),
+      color 180ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
   }
   .hys-mobile-top-menu {
     display: flex;
@@ -657,60 +706,87 @@ export function injectMobileHamburgerNav(
   }
   .hys-mobile-top-menu__link {
     display: flex;
-    min-height: 60px;
+    min-height: 58px;
     align-items: center;
     border: 0;
     color: #526569;
-    font: 900 1.12rem/1.1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    letter-spacing: 0;
-    padding: 0 28px;
-    text-decoration: none;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-weight: 900;
+    line-height: 1.1;
   }
   .hys-mobile-top-menu__link--active {
     background: rgba(255, 255, 255, 0.64);
     box-shadow: inset 0 -4px 0 #d93025;
     color: #d93025;
   }
-  .hys-mobile-top-menu__button,
-  .hys-mobile-theme-toggle {
+  .hys-mobile-top-menu__button.hys-nav-link,
+  .hys-mobile-theme-toggle.hys-nav-link {
     display: inline-flex;
-    width: 52px;
-    min-width: 52px;
-    min-height: 52px;
+    min-width: 48px;
+    min-height: 48px;
     align-items: center;
     justify-content: center;
     border: 0;
-    border-radius: 4px;
     cursor: pointer;
-    font-size: 1.3rem;
     line-height: 1;
-    transition:
-      background-color 180ms cubic-bezier(0.22, 1, 0.36, 1),
-      color 180ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .hys-mobile-theme-toggle {
+  .hys-mobile-theme-toggle.hys-nav-link {
     background: transparent;
     color: #12313c;
   }
-  .hys-mobile-top-menu__button {
+  .hys-mobile-top-menu__button.hys-nav-link {
     background: #78c7e7;
     color: #12313c;
   }
-  .hys-mobile-top-menu__icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  .t-icon-swap {
+    display: inline-grid;
+    place-items: center;
+    position: relative;
   }
-  .hys-mobile-top-menu__button [data-hys-menu-icon="close"],
-  .hys-mobile-top-menu.is-open [data-hys-menu-icon="menu"],
-  html[data-hys-theme="dark"] .hys-mobile-theme-toggle [data-hys-theme-icon="moon"],
-  .hys-mobile-theme-toggle [data-hys-theme-icon="sun"] {
-    display: none;
+  .h-5 {
+    height: 1.25rem;
   }
-  .hys-mobile-top-menu.is-open [data-hys-menu-icon="close"],
-  html[data-hys-theme="dark"] .hys-mobile-theme-toggle [data-hys-theme-icon="sun"] {
-    display: inline-block;
+  .w-5 {
+    width: 1.25rem;
+  }
+  .place-items-center {
+    place-items: center;
+  }
+  .t-icon-swap .t-icon {
+    grid-area: 1 / 1;
+    display: inline-grid;
+    place-items: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    opacity: 0;
+    transform: scale(0.88);
+    transition:
+      opacity 160ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .t-icon-swap[data-state="moon"] .t-icon[data-icon="moon"],
+  .t-icon-swap[data-state="sun"] .t-icon[data-icon="sun"],
+  .t-icon-swap[data-state="menu"] .t-icon[data-icon="menu"],
+  .t-icon-swap[data-state="close"] .t-icon[data-icon="close"] {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .t-icon::before {
+    display: block;
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+  .t-icon[data-icon="moon"]::before {
+    content: "☾";
+  }
+  .t-icon[data-icon="sun"]::before {
+    content: "☀";
+  }
+  .t-icon[data-icon="menu"]::before {
+    content: "☰";
+  }
+  .t-icon[data-icon="close"]::before {
+    content: "×";
   }
   .hys-mobile-top-menu__button:focus-visible,
   .hys-mobile-top-menu__link:focus-visible,
@@ -750,11 +826,54 @@ export function injectMobileHamburgerNav(
   html[data-hys-theme="dark"] .hys-mobile-top-menu__link {
     color: #a9c3c8;
   }
+  html[data-hys-theme="dark"] main,
+  html[data-hys-theme="dark"] .project-shell,
+  html[data-hys-theme="dark"] section,
+  html[data-hys-theme="dark"] article {
+    background-color: #0f171a;
+    color: #f4ecdc !important;
+    border-color: #78c7e7;
+  }
+  html[data-hys-theme="dark"] body.hys-heat-page .project-shell,
+  html[data-hys-theme="dark"] body.hys-heat-page :is(main, #app, .project-shell, .container) :is(h1, h2, h3, h4, h5, h6, p, li, dd, dt, label, span) {
+    color: #f4ecdc !important;
+  }
+  html[data-hys-theme="dark"] .project-shell,
+  html[data-hys-theme="dark"] .poster-hero-content,
+  html[data-hys-theme="dark"] .section-heading,
+  html[data-hys-theme="dark"] .bento-item,
+  html[data-hys-theme="dark"] .grid-item,
+  html[data-hys-theme="dark"] .card,
+  html[data-hys-theme="dark"] .content-card,
+  html[data-hys-theme="dark"] .flow-card {
+    color: #f4ecdc !important;
+  }
+  html[data-hys-theme="dark"] .poster-title,
+  html[data-hys-theme="dark"] .hero-copy,
+  html[data-hys-theme="dark"] .section-heading h2,
+  html[data-hys-theme="dark"] .section-heading p,
+  html[data-hys-theme="dark"] .item-title,
+  html[data-hys-theme="dark"] .card-title {
+    color: #f4ecdc !important;
+  }
+  html[data-hys-theme="dark"] .poster-hero,
+  html[data-hys-theme="dark"] .grid-item,
+  html[data-hys-theme="dark"] .hys-content-governance,
+  html[data-hys-theme="dark"] .hys-tccc-shell,
+  html[data-hys-theme="dark"] .hys-tccc-shell__inner,
+  html[data-hys-theme="dark"] .hys-tccc-shell__meta {
+    background: rgba(15, 23, 26, 0.94);
+    color: #f4ecdc;
+    border-color: #78c7e7;
+  }
+  html[data-hys-theme="dark"] a:not(.hys-mobile-top-menu__link):not(.hys-mobile-nav__item) {
+    color: #78c7e7;
+  }
   html[data-hys-theme="dark"] .hys-mobile-top-menu__link--active {
     background: rgba(244, 236, 220, 0.08);
     box-shadow: inset 0 -4px 0 #ff6b00;
   }
-  html[data-hys-theme="dark"] .hys-mobile-top-menu__button {
+  html[data-hys-theme="dark"] .hys-mobile-top-menu__button.hys-nav-link {
     background: #78c7e7;
     color: #0f171a;
   }
@@ -793,14 +912,16 @@ export function injectMobileHamburgerNav(
 </style>
 `;
   const controls = `<div class="hys-mobile-top-menu t-panel-reveal" data-hongyishi-mobile-menu data-hys-mobile-menu-scope="${escapeHtml(scope)}" aria-label="${escapeHtml(config.ariaLabel)}">
-  <button class="hys-mobile-theme-toggle" type="button" aria-label="切换热射病日间夜间模式" data-hys-theme-toggle>
-    <i class="fa-regular fa-moon" data-hys-theme-icon="moon" aria-hidden="true"></i>
-    <i class="fa-regular fa-sun" data-hys-theme-icon="sun" aria-hidden="true"></i>
+  <button class="hys-mobile-theme-toggle hys-nav-link" type="button" aria-label="切换${escapeHtml(themeName)}日间夜间模式" data-hys-theme-toggle>
+    <span class="t-icon-swap h-5 w-5 place-items-center" data-state="moon" aria-hidden="true">
+      <span class="t-icon" data-icon="moon"></span>
+      <span class="t-icon" data-icon="sun"></span>
+    </span>
   </button>
-  <button class="hys-mobile-top-menu__button" type="button" aria-label="打开${escapeHtml(config.ariaLabel)}菜单" aria-expanded="false" aria-controls="${escapeHtml(menuId)}" data-hys-mobile-menu-toggle>
-    <span class="hys-mobile-top-menu__icon" aria-hidden="true">
-      <i class="fa-solid fa-bars" data-hys-menu-icon="menu"></i>
-      <i class="fa-solid fa-xmark" data-hys-menu-icon="close"></i>
+  <button class="hys-mobile-top-menu__button hys-nav-link" type="button" aria-label="打开${escapeHtml(config.ariaLabel)}菜单" aria-expanded="false" aria-controls="${escapeHtml(menuId)}" data-hys-mobile-menu-toggle>
+    <span class="t-icon-swap h-5 w-5 place-items-center" data-state="menu" aria-hidden="true">
+      <span class="t-icon" data-icon="menu"></span>
+      <span class="t-icon" data-icon="close"></span>
     </span>
   </button>
 </div>`;
@@ -812,14 +933,17 @@ export function injectMobileHamburgerNav(
   const button = nav?.querySelector('[data-hys-mobile-menu-toggle]');
   const panel = document.getElementById('${escapeHtml(menuId)}');
   const themeButton = nav?.querySelector('[data-hys-theme-toggle]');
+  const menuIcon = button?.querySelector('.t-icon-swap');
+  const themeIcon = themeButton?.querySelector('.t-icon-swap');
   const root = document.documentElement;
-  const storageKey = 'hys:heatStroke:theme';
+  const storageKey = '${escapeHtml(storageKey)}';
   if (!nav || !button || !panel) return;
 
   const setOpen = (isOpen) => {
     nav.classList.toggle('is-open', isOpen);
     nav.closest('.brand-nav')?.classList.toggle('hys-mobile-menu-open', isOpen);
     button.setAttribute('aria-expanded', String(isOpen));
+    menuIcon?.setAttribute('data-state', isOpen ? 'close' : 'menu');
     panel.hidden = !isOpen;
   };
   const getPreferredTheme = () => {
@@ -832,7 +956,8 @@ export function injectMobileHamburgerNav(
   const applyTheme = (theme) => {
     root.dataset.hysTheme = theme;
     root.classList.toggle('dark', theme === 'dark');
-    themeButton?.setAttribute('aria-label', theme === 'dark' ? '切换热射病日间模式' : '切换热射病夜间模式');
+    themeIcon?.setAttribute('data-state', theme === 'dark' ? 'sun' : 'moon');
+    themeButton?.setAttribute('aria-label', theme === 'dark' ? '切换${escapeHtml(themeName)}日间模式' : '切换${escapeHtml(themeName)}夜间模式');
     try {
       localStorage.setItem(storageKey, theme);
     } catch {}
@@ -871,9 +996,9 @@ export function injectMobileHamburgerNav(
   }
 
   const navPattern =
-    /(<nav\b[^>]*class=["'][^"']*\bbrand-nav-inner\b[^"']*["'][^>]*>[\s\S]*?)(<\/nav>)(\s*<\/header>)/i;
+    /(<nav\b[^>]*class=["'][^"']*\bbrand-nav-inner\b[^"']*["'][^>]*>[\s\S]*?)(<\/nav>)/i;
   if (navPattern.test(output)) {
-    output = output.replace(navPattern, `$1${controls}\n$2\n${panel}$3`);
+    output = output.replace(navPattern, `$1${controls}\n$2\n${panel}`);
   } else {
     const fallback = `${/<\/head>/i.test(content) ? "" : styles}\n${controls}\n${panel}`;
     output = output.replace(/<\/body>/i, `${fallback}\n</body>`);
@@ -993,10 +1118,7 @@ export function injectContentGovernanceBanner(content, config) {
 export function injectTcccBrandShell(content, relativePath) {
   const normalizedPath = relativePath.split(path.sep).join("/");
 
-  if (
-    !normalizedPath.startsWith("pages/") ||
-    !normalizedPath.endsWith(".html")
-  ) {
+  if (!normalizedPath.endsWith(".html")) {
     return content;
   }
 
@@ -1097,15 +1219,15 @@ export function injectTcccBrandShell(content, relativePath) {
     </style>`;
   const shell = `
     <a class="hys-tccc-skip" href="#hys-tccc-main">跳到流程</a>
-    <header class="hys-tccc-shell" data-hongyishi-tccc-shell>
+    <header class="hys-tccc-shell brand-nav" data-hongyishi-tccc-shell>
       <div class="hys-tccc-shell__inner">
-        <div class="hys-tccc-shell__nav">
+        <nav class="hys-tccc-shell__nav brand-nav-inner" aria-label="红医师战场救护导航">
           <a class="hys-tccc-shell__brand" href="/">红医师 / 战场救护</a>
-          <div class="hys-tccc-shell__links" aria-label="TCCC 导航">
+          <div class="hys-tccc-shell__links brand-nav-links" aria-label="TCCC 导航">
             <a href="/">总入口</a>
             <a href="/tccc/">项目首页</a>
           </div>
-        </div>
+        </nav>
         <div class="hys-tccc-shell__meta">
           <span class="hys-tccc-shell__title">当前流程：${flowTitle}</span>
           <span>教育训练用途</span>
@@ -1263,6 +1385,14 @@ export function rewriteTcccText(content, relativePath, basePath) {
     output = injectMobileBottomNav(
       output,
       resolveProjectMobileActiveTab("tccc", mapTcccOutputPath(normalizedPath)),
+      {
+        scope: "tccc",
+        basePath: base,
+      },
+    );
+    output = injectMobileHamburgerNav(
+      output,
+      resolveTcccMenuActiveItem(mapTcccOutputPath(normalizedPath)),
       {
         scope: "tccc",
         basePath: base,

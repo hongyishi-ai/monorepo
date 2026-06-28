@@ -285,6 +285,15 @@ async function checkMobileNav() {
         "/tccc/pages/tacevac-reassessment",
         "/tccc/",
       ],
+      expectedTopMenuHrefs: [
+        "/",
+        "/tccc/",
+        "/tccc/pages/tccc-standard",
+        "/tccc/pages/tfc-hemorrhage",
+        "/tccc/pages/tacevac-reassessment",
+        "/tccc/pages/tccc-flow-framework",
+      ],
+      expectedTopMenuLabels: ["总入口", "项目首页", "标准流程"],
     },
     {
       path: "/tccc/pages/tccc-standard",
@@ -296,6 +305,15 @@ async function checkMobileNav() {
         "/tccc/pages/tacevac-reassessment",
         "/tccc/",
       ],
+      expectedTopMenuHrefs: [
+        "/",
+        "/tccc/",
+        "/tccc/pages/tccc-standard",
+        "/tccc/pages/tfc-hemorrhage",
+        "/tccc/pages/tacevac-reassessment",
+        "/tccc/pages/tccc-flow-framework",
+      ],
+      expectedTopMenuLabels: ["总入口", "项目首页", "标准流程"],
     },
     {
       path: "/fms/assessment",
@@ -609,9 +627,9 @@ const mobileNavFailures = mobileNav.filter(
     item.missingRequiredLabels.length > 0 ||
     item.outOfScopeLinks.length > 0 ||
     (item.expectedScope && item.scope !== item.expectedScope) ||
-    (item.expectedScope === "heatStroke" &&
+    (["heatStroke", "tccc"].includes(item.expectedScope) &&
       (!item.hasTopMenu ||
-        item.topMenuScope !== "heatStroke" ||
+        item.topMenuScope !== item.expectedScope ||
         item.topMenuPosition === "fixed" ||
         !item.topMenuInBrandNav ||
         !item.hasTopMenuButton ||
