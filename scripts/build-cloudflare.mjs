@@ -89,6 +89,42 @@ export const contentGovernance = {
   tccc: buildContentGovernanceFromRegistry(getRegistryProject("tccc")),
 };
 
+const cloudflareBasePathKeys = {
+  fms: "fmsBase",
+  "heat-stroke": "heatStrokeBase",
+  tccc: "tcccBase",
+};
+
+export function buildCloudflareBasePathsFromRegistry(registry) {
+  const basePaths = {};
+  const integratedProjects = registry.platformProjects.filter(
+    (project) => project.status === "integrated",
+  );
+
+  for (const project of integratedProjects) {
+    const key = cloudflareBasePathKeys[project.id];
+
+    if (!key) {
+      throw new Error(
+        `Integrated project ${project.id} must be mapped in scripts/build-cloudflare.mjs`,
+      );
+    }
+
+    basePaths[key] = normalizeBasePath(project.href);
+  }
+
+  for (const key of Object.values(cloudflareBasePathKeys)) {
+    if (!basePaths[key]) {
+      throw new Error(`Missing Cloudflare base path ${key}`);
+    }
+  }
+
+  return basePaths;
+}
+
+export const cloudflareBasePaths =
+  buildCloudflareBasePathsFromRegistry(projectRegistry);
+
 export const heatStrokePageAliases = new Map([
   ["8-4-6黄金法则.html", "8-4-6-rule.html"],
   ["中国热射病诊断与治疗指南.html", "diagnosis-treatment-guideline.html"],
@@ -224,6 +260,18 @@ export function normalizeBasePath(basePath) {
   return normalized;
 }
 
+function resolveCloudflareBasePaths(overrides = {}) {
+  const resolved = { ...cloudflareBasePaths };
+
+  for (const key of Object.values(cloudflareBasePathKeys)) {
+    if (overrides[key] !== undefined) {
+      resolved[key] = normalizeBasePath(overrides[key]);
+    }
+  }
+
+  return resolved;
+}
+
 function joinBasePath(basePath, relativeHref) {
   if (relativeHref.startsWith("/")) {
     return relativeHref;
@@ -293,11 +341,9 @@ function resolveTcccMenuActiveItem(relativePath) {
   return "directory";
 }
 
-export function buildRedirects({
-  fmsBase = "/fms/",
-  heatStrokeBase = "/heat-stroke/",
-  tcccBase = "/tccc/",
-} = {}) {
+export function buildRedirects(options = {}) {
+  const { fmsBase, heatStrokeBase, tcccBase } =
+    resolveCloudflareBasePaths(options);
   const fms = normalizeBasePath(fmsBase);
   const heatStroke = normalizeBasePath(heatStrokeBase);
   const tccc = normalizeBasePath(tcccBase);
@@ -314,11 +360,9 @@ export function buildRedirects({
   ].join("\n");
 }
 
-export function buildHeaders({
-  fmsBase = "/fms/",
-  heatStrokeBase = "/heat-stroke/",
-  tcccBase = "/tccc/",
-} = {}) {
+export function buildHeaders(options = {}) {
+  const { fmsBase, heatStrokeBase, tcccBase } =
+    resolveCloudflareBasePaths(options);
   const fms = normalizeBasePath(fmsBase);
   const heatStroke = normalizeBasePath(heatStrokeBase);
   const tccc = normalizeBasePath(tcccBase);
@@ -1277,12 +1321,10 @@ export async function validateCloudflareFreeTierBudget(
   return stats;
 }
 
-export async function buildCloudflareSite({
-  fmsBase = "/fms/",
-  heatStrokeBase = "/heat-stroke/",
-  tcccBase = "/tccc/",
-  skipBuilds = false,
-} = {}) {
+export async function buildCloudflareSite(options = {}) {
+  const { skipBuilds = false, ...basePathOverrides } = options;
+  const { fmsBase, heatStrokeBase, tcccBase } =
+    resolveCloudflareBasePaths(basePathOverrides);
   const pnpm = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
   const outputDir = path.join(repoRoot, ".cloudflare", "site");
   const portalOutput = path.join(repoRoot, "apps", "portal", "out");

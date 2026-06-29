@@ -6,9 +6,11 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
+  buildCloudflareBasePathsFromRegistry,
+  cloudflareBasePaths,
+  buildContentGovernanceFromRegistry,
   buildHeaders,
   buildRedirects,
-  buildContentGovernanceFromRegistry,
   CLOUDFLARE_FREE_TIER_LIMITS,
   collectCloudflareFreeTierStats,
   contentGovernance,
@@ -81,11 +83,7 @@ test("normalizeBasePath enforces leading and trailing slashes", () => {
 });
 
 test("buildRedirects contains the unified single-site routing rules", () => {
-  const redirects = buildRedirects({
-    fmsBase: "/fms/",
-    heatStrokeBase: "/heat-stroke/",
-    tcccBase: "/tccc/",
-  });
+  const redirects = buildRedirects();
 
   assert.match(redirects, /\/fms\s+\/fms\/\s+301/);
   assert.match(redirects, /\/heat-stroke\s+\/heat-stroke\/\s+301/);
@@ -94,11 +92,7 @@ test("buildRedirects contains the unified single-site routing rules", () => {
 });
 
 test("buildHeaders adds security headers and long-lived hashed asset caching", () => {
-  const headers = buildHeaders({
-    fmsBase: "/fms/",
-    heatStrokeBase: "/heat-stroke/",
-    tcccBase: "/tccc/",
-  });
+  const headers = buildHeaders();
 
   assert.match(headers, /\/\*/);
   assert.match(headers, /X-Frame-Options: DENY/);
@@ -122,6 +116,28 @@ test("buildHeaders adds security headers and long-lived hashed asset caching", (
   assert.match(headers, /\/fms\/sw\.js\n  Cache-Control: no-cache/);
   assert.match(headers, /\/heat-stroke\/sw\.js\n  Cache-Control: no-cache/);
   assert.match(headers, /\/tccc\/sw\.js\n  Cache-Control: no-cache/);
+});
+
+test("Cloudflare app base paths are derived from the portal project registry", async () => {
+  const registry = JSON.parse(await readFile(projectRegistryPath, "utf8"));
+  const source = await readFile(
+    path.join(repoRoot, "scripts", "build-cloudflare.mjs"),
+    "utf8",
+  );
+  const expectedBasePaths = {
+    fmsBase: "/fms/",
+    heatStrokeBase: "/heat-stroke/",
+    tcccBase: "/tccc/",
+  };
+
+  assert.deepEqual(
+    buildCloudflareBasePathsFromRegistry(registry),
+    expectedBasePaths,
+  );
+  assert.deepEqual(cloudflareBasePaths, expectedBasePaths);
+  assert.doesNotMatch(source, /fmsBase\s*=\s*"\/fms\/"/);
+  assert.doesNotMatch(source, /heatStrokeBase\s*=\s*"\/heat-stroke\/"/);
+  assert.doesNotMatch(source, /tcccBase\s*=\s*"\/tccc\/"/);
 });
 
 test("Cloudflare build contract reports free-tier file count and file-size guardrails", async () => {
