@@ -9,6 +9,7 @@ import {
   buildHeaders,
   buildRedirects,
 } from "./build-cloudflare.mjs";
+import { buildRepresentativeRoutesFromRegistry } from "./audit-links.mjs";
 
 const repoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -175,6 +176,34 @@ test("integrated projects are represented in the Cloudflare single-site build co
       );
     }
   }
+});
+
+test("link audit representative project roots are derived from the project registry", async () => {
+  const registry = await readRegistry();
+  const remappedRegistry = structuredClone(registry);
+  const remappedPaths = {
+    fms: "/training-injury/",
+    "heat-stroke": "/heat-defense/",
+    tccc: "/combat-care/",
+  };
+
+  for (const project of remappedRegistry.platformProjects) {
+    if (remappedPaths[project.id]) {
+      project.href = remappedPaths[project.id];
+    }
+  }
+
+  const routes = buildRepresentativeRoutesFromRegistry(remappedRegistry);
+
+  assert.ok(routes.includes("/training-injury/"));
+  assert.ok(routes.includes("/training-injury/assessment"));
+  assert.ok(routes.includes("/heat-defense/"));
+  assert.ok(routes.includes("/heat-defense/pages/field-treatment"));
+  assert.ok(routes.includes("/combat-care/"));
+  assert.ok(routes.includes("/combat-care/pages/tccc-standard"));
+  assert.equal(routes.includes("/fms/"), false);
+  assert.equal(routes.includes("/heat-stroke/"), false);
+  assert.equal(routes.includes("/tccc/"), false);
 });
 
 test("project registry entries expose content credibility metadata", async () => {

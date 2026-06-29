@@ -1,5 +1,21 @@
 #!/usr/bin/env node
 
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const scriptPath = fileURLToPath(import.meta.url);
+const repoRoot = path.resolve(path.dirname(scriptPath), "..");
+const projectRegistryPath = path.join(
+  repoRoot,
+  "apps",
+  "portal",
+  "src",
+  "lib",
+  "projects.json",
+);
+const projectRegistry = JSON.parse(readFileSync(projectRegistryPath, "utf8"));
+
 const defaultBaseUrl = "http://127.0.0.1:3021";
 const args = new Set(process.argv.slice(2));
 const baseArg = process.argv.find((arg) => arg.startsWith("--base="));
@@ -10,26 +26,75 @@ const shouldCheckExternal = args.has("--external");
 const shouldCheckMobileNav = !args.has("--no-mobile-nav");
 const shouldCheckGuideSurfaces = !args.has("--no-usage-guides");
 
-const representativeRoutes = [
-  "/",
-  "/blog",
-  "/offline",
-  "/heat-stroke/",
-  "/heat-stroke/pages/field-treatment",
-  "/heat-stroke/pages/heat-index",
-  "/heat-stroke/pages/8-4-6-rule",
-  "/tccc/",
-  "/tccc/pages/tccc-standard",
-  "/tccc/pages/tfc-airway",
-  "/tccc/pages/tccc-flow-framework",
-  "/fms/",
-  "/fms/assessment",
-  "/fms/history",
-  "/fms/report",
-  "/fms/training",
-  "/fms/education",
-  "/fms/about",
-];
+const siteRepresentativeRoutes = ["/", "/blog", "/offline"];
+
+const representativeProjectRouteSuffixes = {
+  fms: ["assessment", "history", "report", "training", "education", "about"],
+  "heat-stroke": [
+    "pages/field-treatment",
+    "pages/heat-index",
+    "pages/8-4-6-rule",
+  ],
+  tccc: [
+    "pages/tccc-standard",
+    "pages/tfc-airway",
+    "pages/tccc-flow-framework",
+  ],
+};
+
+function normalizeProjectBasePath(value, projectId) {
+  if (typeof value !== "string" || !value.startsWith("/")) {
+    throw new Error(
+      `Integrated project ${projectId} must use a root-relative href`,
+    );
+  }
+
+  const normalized = value.endsWith("/") ? value : `${value}/`;
+
+  if (!/^\/[a-z0-9-]+\/$/.test(normalized)) {
+    throw new Error(
+      `Integrated project ${projectId} has unsupported base path ${value}`,
+    );
+  }
+
+  return normalized;
+}
+
+function joinProjectRoute(basePath, suffix) {
+  return `${basePath}${suffix.replace(/^\/+/, "")}`;
+}
+
+export function buildRepresentativeRoutesFromRegistry(
+  registry,
+  siteRoutes = siteRepresentativeRoutes,
+) {
+  const routes = [...siteRoutes];
+  const integratedProjects = registry.platformProjects.filter(
+    (project) => project.status === "integrated",
+  );
+
+  for (const project of integratedProjects) {
+    const suffixes = representativeProjectRouteSuffixes[project.id];
+
+    if (!suffixes) {
+      throw new Error(
+        `Integrated project ${project.id} must define representative audit routes`,
+      );
+    }
+
+    const basePath = normalizeProjectBasePath(project.href, project.id);
+    routes.push(basePath);
+
+    for (const suffix of suffixes) {
+      routes.push(joinProjectRoute(basePath, suffix));
+    }
+  }
+
+  return [...new Set(routes)];
+}
+
+export const representativeRoutes =
+  buildRepresentativeRoutesFromRegistry(projectRegistry);
 
 function normalizeUrl(value, currentPath = "/") {
   try {
@@ -606,92 +671,100 @@ function summarizeStatus(items) {
   }, {});
 }
 
-const crawl = await crawlInternalLinks();
-const representative = await checkRepresentativeRoutes();
-const mobileNav = await checkMobileNav();
-const guideSurfaces = await checkGuideSurfaces();
-const externalResults = shouldCheckExternal
-  ? await checkExternalLinks(crawl.external)
-  : [];
+export async function runAudit() {
+  const crawl = await crawlInternalLinks();
+  const representative = await checkRepresentativeRoutes();
+  const mobileNav = await checkMobileNav();
+  const guideSurfaces = await checkGuideSurfaces();
+  const externalResults = shouldCheckExternal
+    ? await checkExternalLinks(crawl.external)
+    : [];
 
-const representativeFailures = representative.filter(
-  (item) => item.error || item.status >= 400,
-);
-const mobileNavFailures = mobileNav.filter(
-  (item) =>
-    !item.hasNav ||
-    item.position !== "fixed" ||
-    item.horizontalOverflow ||
-    item.hasMainSiteLabel ||
-    item.missingRequiredHrefs.length > 0 ||
-    item.missingRequiredLabels.length > 0 ||
-    item.outOfScopeLinks.length > 0 ||
-    (item.expectedScope && item.scope !== item.expectedScope) ||
-    (["heatStroke", "tccc"].includes(item.expectedScope) &&
-      (!item.hasTopMenu ||
-        item.topMenuScope !== item.expectedScope ||
-        item.topMenuPosition === "fixed" ||
-        !item.topMenuInBrandNav ||
-        !item.hasTopMenuButton ||
-        !item.hasThemeToggle ||
-        item.visibleBrandNavLinks > 0 ||
-        item.missingTopMenuHrefs.length > 0 ||
-        item.missingTopMenuLabels.length > 0)),
-);
-const guideSurfaceFailures = guideSurfaces.filter(
-  (item) =>
-    item.guideSurfaceCount > 0 ||
-    item.horizontalOverflow ||
-    (item.assistControls.length > 0 &&
-      !["demo", "status"].every((id) =>
-        item.assistControls.some((control) => control.id === id),
-      )) ||
-    item.assistControls.some(
-      (control) => !control.visible || control.overlapsNav,
-    ),
-);
-const externalFailures = externalResults.filter((item) => !item.ok);
-const failed =
-  crawl.failures.length > 0 ||
-  representativeFailures.length > 0 ||
-  mobileNavFailures.length > 0 ||
-  guideSurfaceFailures.length > 0 ||
-  externalFailures.length > 0;
+  const representativeFailures = representative.filter(
+    (item) => item.error || item.status >= 400,
+  );
+  const mobileNavFailures = mobileNav.filter(
+    (item) =>
+      !item.hasNav ||
+      item.position !== "fixed" ||
+      item.horizontalOverflow ||
+      item.hasMainSiteLabel ||
+      item.missingRequiredHrefs.length > 0 ||
+      item.missingRequiredLabels.length > 0 ||
+      item.outOfScopeLinks.length > 0 ||
+      (item.expectedScope && item.scope !== item.expectedScope) ||
+      (["heatStroke", "tccc"].includes(item.expectedScope) &&
+        (!item.hasTopMenu ||
+          item.topMenuScope !== item.expectedScope ||
+          item.topMenuPosition === "fixed" ||
+          !item.topMenuInBrandNav ||
+          !item.hasTopMenuButton ||
+          !item.hasThemeToggle ||
+          item.visibleBrandNavLinks > 0 ||
+          item.missingTopMenuHrefs.length > 0 ||
+          item.missingTopMenuLabels.length > 0)),
+  );
+  const guideSurfaceFailures = guideSurfaces.filter(
+    (item) =>
+      item.guideSurfaceCount > 0 ||
+      item.horizontalOverflow ||
+      (item.assistControls.length > 0 &&
+        !["demo", "status"].every((id) =>
+          item.assistControls.some((control) => control.id === id),
+        )) ||
+      item.assistControls.some(
+        (control) => !control.visible || control.overlapsNav,
+      ),
+  );
+  const externalFailures = externalResults.filter((item) => !item.ok);
+  const failed =
+    crawl.failures.length > 0 ||
+    representativeFailures.length > 0 ||
+    mobileNavFailures.length > 0 ||
+    guideSurfaceFailures.length > 0 ||
+    externalFailures.length > 0;
 
-const report = {
-  baseUrl,
-  internal: {
-    checked: crawl.checked.length,
-    byStatus: summarizeStatus(crawl.checked),
-    failures: crawl.failures,
-  },
-  representative: {
-    checked: representative.length,
-    byStatus: summarizeStatus(representative),
-    failures: representativeFailures,
-  },
-  mobileNav: {
-    checked: mobileNav.length,
-    failures: mobileNavFailures,
-  },
-  guideSurfaces: {
-    checked: guideSurfaces.length,
-    failures: guideSurfaceFailures,
-  },
-  external: shouldCheckExternal
-    ? {
-        checked: externalResults.length,
-        byStatus: summarizeStatus(externalResults),
-        failures: externalFailures.map((item) => ({
-          ...item,
-          from: Array.from(crawl.external.get(item.url) ?? []).slice(0, 3),
-        })),
-      }
-    : "skipped",
-};
+  const report = {
+    baseUrl,
+    internal: {
+      checked: crawl.checked.length,
+      byStatus: summarizeStatus(crawl.checked),
+      failures: crawl.failures,
+    },
+    representative: {
+      checked: representative.length,
+      byStatus: summarizeStatus(representative),
+      failures: representativeFailures,
+    },
+    mobileNav: {
+      checked: mobileNav.length,
+      failures: mobileNavFailures,
+    },
+    guideSurfaces: {
+      checked: guideSurfaces.length,
+      failures: guideSurfaceFailures,
+    },
+    external: shouldCheckExternal
+      ? {
+          checked: externalResults.length,
+          byStatus: summarizeStatus(externalResults),
+          failures: externalFailures.map((item) => ({
+            ...item,
+            from: Array.from(crawl.external.get(item.url) ?? []).slice(0, 3),
+          })),
+        }
+      : "skipped",
+  };
 
-console.log(JSON.stringify(report, null, 2));
+  return { failed, report };
+}
 
-if (failed) {
-  process.exitCode = 1;
+if (process.argv[1] && path.resolve(process.argv[1]) === scriptPath) {
+  const { failed, report } = await runAudit();
+
+  console.log(JSON.stringify(report, null, 2));
+
+  if (failed) {
+    process.exitCode = 1;
+  }
 }
