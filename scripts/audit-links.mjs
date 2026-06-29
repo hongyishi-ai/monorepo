@@ -4,6 +4,11 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import {
+  mobileNavConfigs,
+  resolveMobileNavItems,
+} from "./build-cloudflare.mjs";
+
 const scriptPath = fileURLToPath(import.meta.url);
 const repoRoot = path.resolve(path.dirname(scriptPath), "..");
 const projectRegistryPath = path.join(
@@ -279,107 +284,52 @@ async function checkExternalLinks(external) {
   return results;
 }
 
-async function checkMobileNav() {
-  if (!shouldCheckMobileNav) {
-    return [];
-  }
-
-  const { chromium } = await import("playwright");
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage({
-    viewport: { width: 390, height: 844 },
-    isMobile: true,
-    hasTouch: true,
+function buildStaticProjectMobileNavExpectation({
+  expectedScope,
+  linkBase,
+  path,
+}) {
+  const bottomTabs = resolveMobileNavItems(expectedScope, linkBase);
+  const menuTabs = resolveMobileNavItems(expectedScope, linkBase, {
+    surface: "menu",
   });
-  const routesToCheck = [
+
+  return {
+    path,
+    expectedScope,
+    linkBase,
+    requiredHrefs: bottomTabs.map((tab) => tab.href),
+    expectedTopMenuHrefs: menuTabs.map((tab) => tab.href),
+    expectedTopMenuLabels: menuTabs.map((tab) => tab.label),
+  };
+}
+
+export function buildMobileNavAuditExpectations() {
+  return [
     {
       path: "/",
-      requiredLabels: ["处置", "工具", "记录", "资料"],
+      requiredLabels: mobileNavConfigs.platform.tabs.map((tab) => tab.label),
     },
-    {
+    buildStaticProjectMobileNavExpectation({
       path: "/heat-stroke/",
       expectedScope: "heatStroke",
       linkBase: "/heat-stroke/",
-      requiredHrefs: [
-        "/heat-stroke/pages/heat-index",
-        "/heat-stroke/pages/field-treatment",
-        "/heat-stroke/pages/8-4-6-rule",
-        "/heat-stroke/",
-      ],
-      expectedTopMenuHrefs: [
-        "/",
-        "/heat-stroke/",
-        "/heat-stroke/pages/diagnosis-treatment-guideline",
-        "/heat-stroke/pages/treatment-system-consensus",
-        "/heat-stroke/pages/heat-tolerance",
-        "/heat-stroke/pages/core-temperature-cooling",
-        "/heat-stroke/pages/challenge",
-        "/heat-stroke/pages/about",
-      ],
-      expectedTopMenuLabels: ["总入口", "项目首页", "诊断与治疗指南"],
-    },
-    {
+    }),
+    buildStaticProjectMobileNavExpectation({
       path: "/heat-stroke/pages/field-treatment",
       expectedScope: "heatStroke",
       linkBase: "/heat-stroke/",
-      requiredHrefs: [
-        "/heat-stroke/pages/heat-index",
-        "/heat-stroke/pages/field-treatment",
-        "/heat-stroke/pages/8-4-6-rule",
-        "/heat-stroke/",
-      ],
-      expectedTopMenuHrefs: [
-        "/",
-        "/heat-stroke/",
-        "/heat-stroke/pages/diagnosis-treatment-guideline",
-        "/heat-stroke/pages/treatment-system-consensus",
-        "/heat-stroke/pages/heat-tolerance",
-        "/heat-stroke/pages/core-temperature-cooling",
-        "/heat-stroke/pages/challenge",
-        "/heat-stroke/pages/about",
-      ],
-      expectedTopMenuLabels: ["总入口", "项目首页", "诊断与治疗指南"],
-    },
-    {
+    }),
+    buildStaticProjectMobileNavExpectation({
       path: "/tccc/",
       expectedScope: "tccc",
       linkBase: "/tccc/",
-      requiredHrefs: [
-        "/tccc/pages/tccc-standard",
-        "/tccc/pages/tfc-hemorrhage",
-        "/tccc/pages/tacevac-reassessment",
-        "/tccc/",
-      ],
-      expectedTopMenuHrefs: [
-        "/",
-        "/tccc/",
-        "/tccc/pages/tccc-standard",
-        "/tccc/pages/tfc-hemorrhage",
-        "/tccc/pages/tacevac-reassessment",
-        "/tccc/pages/tccc-flow-framework",
-      ],
-      expectedTopMenuLabels: ["总入口", "项目首页", "标准流程"],
-    },
-    {
+    }),
+    buildStaticProjectMobileNavExpectation({
       path: "/tccc/pages/tccc-standard",
       expectedScope: "tccc",
       linkBase: "/tccc/",
-      requiredHrefs: [
-        "/tccc/pages/tccc-standard",
-        "/tccc/pages/tfc-hemorrhage",
-        "/tccc/pages/tacevac-reassessment",
-        "/tccc/",
-      ],
-      expectedTopMenuHrefs: [
-        "/",
-        "/tccc/",
-        "/tccc/pages/tccc-standard",
-        "/tccc/pages/tfc-hemorrhage",
-        "/tccc/pages/tacevac-reassessment",
-        "/tccc/pages/tccc-flow-framework",
-      ],
-      expectedTopMenuLabels: ["总入口", "项目首页", "标准流程"],
-    },
+    }),
     {
       path: "/fms/assessment",
       expectedScope: "fms",
@@ -392,6 +342,21 @@ async function checkMobileNav() {
       ],
     },
   ];
+}
+
+async function checkMobileNav() {
+  if (!shouldCheckMobileNav) {
+    return [];
+  }
+
+  const { chromium } = await import("playwright");
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage({
+    viewport: { width: 390, height: 844 },
+    isMobile: true,
+    hasTouch: true,
+  });
+  const routesToCheck = buildMobileNavAuditExpectations();
   const results = [];
 
   try {

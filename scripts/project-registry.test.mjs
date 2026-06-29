@@ -8,8 +8,13 @@ import {
   buildCloudflareBasePathsFromRegistry,
   buildHeaders,
   buildRedirects,
+  mobileNavConfigs,
+  resolveMobileNavItems,
 } from "./build-cloudflare.mjs";
-import { buildRepresentativeRoutesFromRegistry } from "./audit-links.mjs";
+import {
+  buildMobileNavAuditExpectations,
+  buildRepresentativeRoutesFromRegistry,
+} from "./audit-links.mjs";
 
 const repoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -204,6 +209,52 @@ test("link audit representative project roots are derived from the project regis
   assert.equal(routes.includes("/fms/"), false);
   assert.equal(routes.includes("/heat-stroke/"), false);
   assert.equal(routes.includes("/tccc/"), false);
+});
+
+test("link audit mobile nav expectations reuse shared mobile nav config", () => {
+  const expectations = buildMobileNavAuditExpectations();
+  const platformHome = expectations.find((item) => item.path === "/");
+  const heatStrokeHome = expectations.find(
+    (item) => item.path === "/heat-stroke/",
+  );
+  const tcccHome = expectations.find((item) => item.path === "/tccc/");
+  const heatStrokeBottom = resolveMobileNavItems("heatStroke", "/heat-stroke/");
+  const heatStrokeMenu = resolveMobileNavItems("heatStroke", "/heat-stroke/", {
+    surface: "menu",
+  });
+  const tcccBottom = resolveMobileNavItems("tccc", "/tccc/");
+  const tcccMenu = resolveMobileNavItems("tccc", "/tccc/", {
+    surface: "menu",
+  });
+
+  assert.deepEqual(
+    platformHome.requiredLabels,
+    mobileNavConfigs.platform.tabs.map((tab) => tab.label),
+  );
+  assert.deepEqual(
+    heatStrokeHome.requiredHrefs,
+    heatStrokeBottom.map((tab) => tab.href),
+  );
+  assert.deepEqual(
+    heatStrokeHome.expectedTopMenuHrefs,
+    heatStrokeMenu.map((tab) => tab.href),
+  );
+  assert.deepEqual(
+    heatStrokeHome.expectedTopMenuLabels,
+    heatStrokeMenu.map((tab) => tab.label),
+  );
+  assert.deepEqual(
+    tcccHome.requiredHrefs,
+    tcccBottom.map((tab) => tab.href),
+  );
+  assert.deepEqual(
+    tcccHome.expectedTopMenuHrefs,
+    tcccMenu.map((tab) => tab.href),
+  );
+  assert.deepEqual(
+    tcccHome.expectedTopMenuLabels,
+    tcccMenu.map((tab) => tab.label),
+  );
 });
 
 test("project registry entries expose content credibility metadata", async () => {

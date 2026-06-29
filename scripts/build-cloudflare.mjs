@@ -286,6 +286,20 @@ function joinBasePath(basePath, relativeHref) {
   return `${base}${relativeHref.replace(/^\/+/, "")}`;
 }
 
+export function resolveMobileNavItems(scope, basePath = "/", options = {}) {
+  const config =
+    options.config ?? mobileNavConfigs[scope] ?? mobileNavConfigs.platform;
+  const sourceTabs =
+    options.surface === "menu"
+      ? (options.menuTabs ?? config.menuTabs ?? config.tabs)
+      : (options.tabs ?? config.tabs);
+
+  return sourceTabs.map((tab) => ({
+    ...tab,
+    href: joinBasePath(basePath, tab.href),
+  }));
+}
+
 export function resolveProjectMobileActiveTab(project, relativePath) {
   const normalizedPath = relativePath.split(path.sep).join("/");
   const fileName = path.posix.basename(normalizedPath);
@@ -710,10 +724,7 @@ export function injectMobileBottomNav(
   const config =
     options.config ?? mobileNavConfigs[scope] ?? mobileNavConfigs.platform;
   const basePath = options.basePath ?? "/";
-  const tabs = config.tabs.map((tab) => ({
-    ...tab,
-    href: joinBasePath(basePath, tab.href),
-  }));
+  const tabs = resolveMobileNavItems(scope, basePath, { config });
 
   const navItems = tabs
     .map((tab) => {
@@ -822,11 +833,11 @@ export function injectMobileHamburgerNav(
     options.config ?? mobileNavConfigs[scope] ?? mobileNavConfigs.platform;
   const basePath = options.basePath ?? "/";
   const menuId = `hys-mobile-top-menu-panel-${scope}`;
-  const menuTabs = options.menuTabs ?? config.menuTabs ?? config.tabs;
-  const tabs = menuTabs.map((tab) => ({
-    ...tab,
-    href: joinBasePath(basePath, tab.href),
-  }));
+  const tabs = resolveMobileNavItems(scope, basePath, {
+    config,
+    menuTabs: options.menuTabs,
+    surface: "menu",
+  });
 
   const controls = renderStaticMobileMenuControls({
     scope,
