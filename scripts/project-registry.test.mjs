@@ -8,13 +8,15 @@ import {
   buildCloudflareBasePathsFromRegistry,
   buildHeaders,
   buildRedirects,
-  mobileNavConfigs,
-  resolveMobileNavItems,
 } from "./build-cloudflare.mjs";
 import {
   buildMobileNavAuditExpectations,
   buildRepresentativeRoutesFromRegistry,
 } from "./audit-links.mjs";
+import {
+  mobileNavConfigs,
+  resolveMobileNavItems,
+} from "../packages/config/app-shell/mobile-nav.mjs";
 
 const repoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -35,6 +37,12 @@ const taskEntriesPath = path.join(
   "src",
   "lib",
   "task-entries.json",
+);
+const configPackagePath = path.join(
+  repoRoot,
+  "packages",
+  "config",
+  "package.json",
 );
 const publicDir = path.join(repoRoot, "apps", "portal", "public");
 
@@ -211,7 +219,7 @@ test("link audit representative project roots are derived from the project regis
   assert.equal(routes.includes("/tccc/"), false);
 });
 
-test("link audit mobile nav expectations reuse shared mobile nav config", () => {
+test("link audit mobile nav expectations reuse shared app shell mobile nav config", async () => {
   const expectations = buildMobileNavAuditExpectations();
   const platformHome = expectations.find((item) => item.path === "/");
   const heatStrokeHome = expectations.find(
@@ -226,6 +234,11 @@ test("link audit mobile nav expectations reuse shared mobile nav config", () => 
   const tcccMenu = resolveMobileNavItems("tccc", "/tccc/", {
     surface: "menu",
   });
+  const buildSource = await readFile(
+    path.join(repoRoot, "scripts", "build-cloudflare.mjs"),
+    "utf8",
+  );
+  const configPackage = JSON.parse(await readFile(configPackagePath, "utf8"));
 
   assert.deepEqual(
     platformHome.requiredLabels,
@@ -254,6 +267,12 @@ test("link audit mobile nav expectations reuse shared mobile nav config", () => 
   assert.deepEqual(
     tcccHome.expectedTopMenuLabels,
     tcccMenu.map((tab) => tab.label),
+  );
+  assert.doesNotMatch(buildSource, /export const mobileNavConfigs/);
+  assert.doesNotMatch(buildSource, /export function resolveMobileNavItems/);
+  assert.equal(
+    configPackage.exports["./app-shell/mobile-nav"],
+    "./app-shell/mobile-nav.mjs",
   );
 });
 

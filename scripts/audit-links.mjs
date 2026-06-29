@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import {
   mobileNavConfigs,
   resolveMobileNavItems,
-} from "./build-cloudflare.mjs";
+} from "../packages/config/app-shell/mobile-nav.mjs";
 
 const scriptPath = fileURLToPath(import.meta.url);
 const repoRoot = path.resolve(path.dirname(scriptPath), "..");

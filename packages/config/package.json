@@ -9,6 +9,7 @@
     "./prettier": "./prettier/index.js",
     "./typescript": "./typescript/index.js",
     "./tailwind": "./tailwind/index.cjs",
+    "./app-shell/mobile-nav": "./app-shell/mobile-nav.mjs",
     "./app-shell/static-shell": "./app-shell/static-shell.mjs",
     "./app-shell/styles.css": "./app-shell/styles.css",
     "./brand/tokens.json": "./brand/tokens.json"
