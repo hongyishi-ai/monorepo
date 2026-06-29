@@ -177,30 +177,50 @@ test("rewriteHeatStrokeText scopes root-relative static links and service worker
   assert.match(output, /data-hys-mobile-nav-scope="heatStroke"/);
   assert.match(output, /class="hys-mobile-nav t-panel-reveal"/);
   assert.match(output, /hys-mobile-nav__item/);
+  assert.match(output, /data-hongyishi-app-shell/);
+  assert.match(output, /<style data-hongyishi-app-shell>/);
+  assert.match(output, /--background: 38 47% 91%;/);
+  assert.match(output, /\.dark\s*\{/);
+  assert.match(output, /--background: 0 0% 3%;/);
+  assert.match(output, /\.hys-nav\s*\{/);
+  assert.match(output, /\.hys-nav-link\s*\{/);
+  assert.match(output, /::view-transition-new\(root\)/);
   assert.match(output, /class="hys-mobile-top-menu t-panel-reveal"/);
   assert.match(output, /data-hys-mobile-menu-toggle/);
   assert.match(output, /data-hys-theme-toggle/);
+  assert.match(output, /切换深浅色主题/);
   assert.match(output, /class="hys-mobile-theme-toggle hys-nav-link"/);
   assert.match(output, /class="hys-mobile-top-menu__button hys-nav-link"/);
   assert.match(output, /class="t-icon-swap h-5 w-5 place-items-center"/);
+  assert.match(output, /<svg[^>]+data-icon="moon"/);
+  assert.match(output, /<svg[^>]+data-icon="sun"/);
+  assert.match(output, /<svg[^>]+data-icon="menu"/);
+  assert.match(output, /<svg[^>]+data-icon="close"/);
   assert.match(output, /data-icon="moon"/);
   assert.match(output, /data-icon="menu"/);
   assert.match(output, /data-icon="close"/);
   assert.doesNotMatch(output, /fa-regular|fa-solid/);
+  assert.doesNotMatch(output, /content: "☰"|content: "☀"|content: "☾"/);
+  assert.match(output, /localStorage\.getItem\('theme'\)/);
+  assert.match(output, /localStorage\.setItem\('theme', theme\)/);
+  assert.match(output, /root\.classList\.toggle\('dark', theme === 'dark'\)/);
   assert.match(output, /font-size: 1rem;/);
   assert.match(output, /padding: 0\.7rem 0\.9rem;/);
   assert.match(output, /flex-direction: row !important;/);
-  assert.match(output, /data-hys-mobile-menu-panel hidden/);
-  assert.doesNotMatch(output, /\.hys-mobile-top-menu \{\s+position: fixed;/);
-  assert.match(output, /html\[data-hys-theme="dark"\] main/);
-  assert.match(output, /html\[data-hys-theme="dark"\] \.project-shell/);
   assert.match(
     output,
-    /html\[data-hys-theme="dark"\] body\.hys-heat-page \.project-shell/,
+    /class="hys-mobile-top-menu__panel t-stagger lg:hidden border-t border-border bg-background"/,
   );
-  assert.match(output, /html\[data-hys-theme="dark"\] \.poster-hero/);
-  assert.match(output, /html\[data-hys-theme="dark"\] \.grid-item/);
+  assert.match(output, /data-hys-mobile-menu-panel hidden/);
+  assert.doesNotMatch(output, /\.hys-mobile-top-menu \{\s+position: fixed;/);
+  assert.doesNotMatch(output, /html\[data-hys-theme="dark"\]/);
+  assert.doesNotMatch(output, /hys:heatStroke:theme/);
+  assert.match(output, /\.dark body\.hys-heat-page/);
+  assert.match(output, /\.dark body\.hys-heat-page \.project-shell/);
+  assert.match(output, /\.dark body\.hys-heat-page \.poster-hero/);
+  assert.match(output, /\.dark body\.hys-heat-page \.grid-item/);
   assert.match(output, /\.brand-nav-links \{\s+display: none !important;/);
+  assert.match(output, /<header[^>]+class="[^"]*\bhys-nav\b[^"]*"/);
   assert.match(
     output,
     /href="\/heat-stroke\/" aria-current="page" title="打开热射病资料"><span>资料<\/span>/,
@@ -375,9 +395,20 @@ test("rewriteTcccText scopes root-relative app links, manifest, and service work
   assert.match(output, /data-hys-mobile-nav-scope="tccc"/);
   assert.match(output, /data-hongyishi-mobile-menu/);
   assert.match(output, /data-hys-mobile-menu-scope="tccc"/);
+  assert.match(output, /data-hongyishi-app-shell/);
+  assert.match(output, /<style data-hongyishi-app-shell>/);
+  assert.match(output, /--background: 38 47% 91%;/);
+  assert.match(output, /\.dark\s*\{/);
+  assert.match(output, /\.hys-nav\s*\{/);
+  assert.match(output, /::view-transition-new\(root\)/);
   assert.match(output, /class="hys-mobile-theme-toggle hys-nav-link"/);
   assert.match(output, /class="hys-mobile-top-menu__button hys-nav-link"/);
   assert.match(output, /class="t-icon-swap h-5 w-5 place-items-center"/);
+  assert.match(output, /切换深浅色主题/);
+  assert.match(output, /<svg[^>]+data-icon="moon"/);
+  assert.match(output, /<svg[^>]+data-icon="sun"/);
+  assert.match(output, /<svg[^>]+data-icon="menu"/);
+  assert.match(output, /<svg[^>]+data-icon="close"/);
   assert.match(output, /data-icon="moon"/);
   assert.match(output, /data-icon="menu"/);
   assert.match(output, /data-icon="close"/);
@@ -387,7 +418,13 @@ test("rewriteTcccText scopes root-relative app links, manifest, and service work
     /href="\/tccc\/" aria-current="page" title="打开 TCCC 项目首页"/,
   );
   assert.match(output, /href="\/tccc\/pages\/tccc-standard"/);
-  assert.match(output, /html\[data-hys-theme="dark"\] main/);
+  assert.match(output, /localStorage\.getItem\('theme'\)/);
+  assert.match(output, /localStorage\.setItem\('theme', theme\)/);
+  assert.match(output, /root\.classList\.toggle\('dark', theme === 'dark'\)/);
+  assert.doesNotMatch(output, /html\[data-hys-theme="dark"\]/);
+  assert.doesNotMatch(output, /hys:tccc:theme/);
+  assert.match(output, /body[^>]+class="[^"]*\bhys-tccc-page\b[^"]*"/);
+  assert.match(output, /\.dark body\.hys-tccc-page/);
   assert.match(
     output,
     /href="\/tccc\/" aria-current="page" title="打开 TCCC 目录"><span>目录<\/span>/,
@@ -397,7 +434,9 @@ test("rewriteTcccText scopes root-relative app links, manifest, and service work
     /href="\/tccc\/pages\/tfc-hemorrhage" title="打开 TCCC TFC"/,
   );
   assert.doesNotMatch(output, /主站|\/\?tab=tools/);
-  assert.doesNotMatch(output, /data-hongyishi-tccc-shell/);
+  assert.match(output, /data-hongyishi-tccc-shell/);
+  assert.doesNotMatch(output, /class="hys-tccc-shell\b/);
+  assert.doesNotMatch(output, /content: "☰"|content: "☀"|content: "☾"/);
 
   const flowOutput = rewriteTcccText(
     "<html><head><title>TCCC标准流程</title></head><body><main>流程</main></body></html>",
@@ -481,33 +520,49 @@ test("injectMobileHamburgerNav renders FMS-style heat-stroke header controls", (
 
   assert.match(output, /aria-label="热射病项目移动端导航"/);
   assert.match(output, /data-hys-mobile-menu-scope="heatStroke"/);
+  assert.match(output, /data-hongyishi-app-shell/);
+  assert.match(output, /<style data-hongyishi-app-shell>/);
+  assert.match(output, /--background: 38 47% 91%;/);
+  assert.match(output, /\.dark\s*\{/);
+  assert.match(output, /--background: 0 0% 3%;/);
+  assert.match(output, /\.hys-nav\s*\{/);
+  assert.match(output, /\.hys-nav-link\s*\{/);
+  assert.match(output, /::view-transition-new\(root\)/);
   assert.match(output, /class="hys-mobile-top-menu t-panel-reveal"/);
   assert.match(output, /data-hys-mobile-menu-toggle/);
   assert.match(output, /data-hys-theme-toggle/);
-  assert.match(output, /切换热射病日间夜间模式/);
+  assert.match(output, /切换深浅色主题/);
   assert.match(output, /class="hys-mobile-theme-toggle hys-nav-link"/);
   assert.match(output, /class="hys-mobile-top-menu__button hys-nav-link"/);
   assert.match(output, /class="t-icon-swap h-5 w-5 place-items-center"/);
+  assert.match(output, /<svg[^>]+data-icon="moon"/);
+  assert.match(output, /<svg[^>]+data-icon="sun"/);
+  assert.match(output, /<svg[^>]+data-icon="menu"/);
+  assert.match(output, /<svg[^>]+data-icon="close"/);
   assert.match(output, /data-icon="moon"/);
   assert.match(output, /data-icon="sun"/);
   assert.match(output, /data-icon="menu"/);
   assert.match(output, /data-icon="close"/);
   assert.doesNotMatch(output, /fa-regular|fa-solid/);
   assert.match(output, /aria-expanded="false"/);
-  assert.match(output, /data-hys-mobile-menu-panel hidden/);
-  assert.match(output, /brand-nav-inner[\s\S]*hys-mobile-top-menu/);
-  assert.match(output, /hys:heatStroke:theme|hys:heatStroke:theme/);
-  assert.match(output, /html\[data-hys-theme="dark"\]/);
-  assert.match(output, /html\[data-hys-theme="dark"\] main/);
-  assert.match(output, /html\[data-hys-theme="dark"\] \.project-shell/);
   assert.match(
     output,
-    /html\[data-hys-theme="dark"\] body\.hys-heat-page \.project-shell/,
+    /class="hys-mobile-top-menu__panel t-stagger lg:hidden border-t border-border bg-background"/,
   );
-  assert.match(output, /html\[data-hys-theme="dark"\] \.poster-hero/);
-  assert.match(output, /html\[data-hys-theme="dark"\] \.grid-item/);
+  assert.match(output, /data-hys-mobile-menu-panel hidden/);
+  assert.match(output, /brand-nav-inner[\s\S]*hys-mobile-top-menu/);
+  assert.match(output, /localStorage\.getItem\('theme'\)/);
+  assert.match(output, /localStorage\.setItem\('theme', theme\)/);
+  assert.match(output, /root\.classList\.toggle\('dark', theme === 'dark'\)/);
+  assert.doesNotMatch(output, /hys:heatStroke:theme/);
+  assert.doesNotMatch(output, /html\[data-hys-theme="dark"\]/);
+  assert.match(output, /\.dark body\.hys-heat-page/);
+  assert.match(output, /\.dark body\.hys-heat-page \.project-shell/);
+  assert.match(output, /\.dark body\.hys-heat-page \.poster-hero/);
+  assert.match(output, /\.dark body\.hys-heat-page \.grid-item/);
   assert.doesNotMatch(output, /\.hys-mobile-top-menu \{\s+position: fixed;/);
   assert.match(output, /\.brand-nav-links \{\s+display: none !important;/);
+  assert.match(output, /<header[^>]+class="[^"]*\bhys-nav\b[^"]*"/);
   assert.match(
     output,
     /href="\/" title="打开热射病总入口"><span>总入口<\/span>/,
@@ -582,12 +637,19 @@ test("injectTcccBrandShell adds unified brand context to TCCC pages", () => {
   const rootOutput = injectTcccBrandShell(input, "index.html");
 
   assert.match(output, /data-hongyishi-tccc-shell/);
+  assert.match(output, /data-hongyishi-app-shell/);
+  assert.match(output, /class="hys-nav hys-static-project-nav brand-nav"/);
+  assert.match(output, /class="hys-logo hys-static-logo brand-mark"/);
+  assert.match(output, /body[^>]+class="[^"]*\bhys-tccc-page\b[^"]*"/);
   assert.match(output, /红医师 \/ 战场救护/);
   assert.match(output, /href="\/tccc\/">项目首页/);
   assert.match(output, /当前流程：战术战斗伤员救护/);
   assert.match(output, /内容状态：待复核/);
   assert.match(output, /id="hys-tccc-main"/);
+  assert.doesNotMatch(output, /class="hys-tccc-shell\b/);
+  assert.doesNotMatch(output, /hys-tccc-shell__/);
   assert.match(rootOutput, /data-hongyishi-tccc-shell/);
+  assert.match(rootOutput, /data-hongyishi-app-shell/);
   assert.match(rootOutput, /红医师 \/ 战场救护/);
   assert.match(rootOutput, /当前流程：战术战斗伤员救护/);
   assert.equal(injectTcccBrandShell(output, "pages/TCCC标准流程.html"), output);

@@ -14,6 +14,15 @@ import {
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
+import {
+  renderFallbackBrandHeader,
+  renderStaticAppShellController,
+  renderStaticAppShellStyle,
+  renderStaticMobileMenuControls,
+  renderStaticMobileMenuPanel,
+  renderTcccBrandShell,
+} from "../packages/config/app-shell/static-shell.mjs";
+
 const scriptPath = fileURLToPath(import.meta.url);
 const repoRoot = path.resolve(path.dirname(scriptPath), "..");
 
@@ -490,6 +499,121 @@ function rewritePageHrefExtensions(content) {
   );
 }
 
+function injectStaticAppShellStyle(content) {
+  if (/<style\b[^>]*data-hongyishi-app-shell/i.test(content)) {
+    return content;
+  }
+
+  const style = renderStaticAppShellStyle();
+
+  if (/<\/head>/i.test(content)) {
+    return content.replace(/<\/head>/i, `${style}\n</head>`);
+  }
+
+  if (/<html\b[^>]*>/i.test(content)) {
+    return content.replace(/<html\b([^>]*)>/i, `<html$1><head>${style}</head>`);
+  }
+
+  return `${style}\n${content}`;
+}
+
+function ensureBodyClass(content, className) {
+  if (!/<body\b[^>]*>/i.test(content)) {
+    return content;
+  }
+
+  return content.replace(/<body\b([^>]*)>/i, (match, attrs) => {
+    const classMatch = attrs.match(/\bclass=(["'])(.*?)\1/i);
+
+    if (!classMatch) {
+      return `<body${attrs} class="${className}">`;
+    }
+
+    const existingClasses = classMatch[2].split(/\s+/).filter(Boolean);
+    if (existingClasses.includes(className)) {
+      return match;
+    }
+
+    const nextClasses = [...existingClasses, className].join(" ");
+    return match.replace(
+      /\bclass=(["'])(.*?)\1/i,
+      `class=${classMatch[1]}${nextClasses}${classMatch[1]}`,
+    );
+  });
+}
+
+function mergeClassNames(existingClasses, classesToAdd) {
+  const merged = [
+    ...classesToAdd,
+    ...existingClasses.split(/\s+/).filter(Boolean),
+  ];
+
+  return [...new Set(merged)].join(" ");
+}
+
+function addClassesToFirstTagWithClass(
+  content,
+  tagName,
+  requiredClass,
+  classes,
+) {
+  const pattern = new RegExp(
+    `<${tagName}\\b([^>]*)class=(["'])([^"']*\\b${escapeRegExp(requiredClass)}\\b[^"']*)\\2([^>]*)>`,
+    "i",
+  );
+
+  return content.replace(pattern, (match, before, quote, existing, after) => {
+    const nextClasses = mergeClassNames(existing, classes);
+    return `<${tagName}${before}class=${quote}${nextClasses}${quote}${after}>`;
+  });
+}
+
+function markFirstBrandHeaderAsAppShell(content) {
+  const pattern =
+    /<header\b([^>]*)class=(["'])([^"']*\bbrand-nav\b[^"']*)\2([^>]*)>/i;
+
+  return content.replace(pattern, (match, before, quote, existing, after) => {
+    const nextClasses = mergeClassNames(existing, [
+      "hys-nav",
+      "hys-static-project-nav",
+    ]);
+    const attrs = `${before}class=${quote}${nextClasses}${quote}${after}`;
+    const withMarker = /\bdata-hongyishi-app-shell\b/i.test(attrs)
+      ? attrs
+      : `${attrs} data-hongyishi-app-shell`;
+
+    return `<header${withMarker}>`;
+  });
+}
+
+function ensureProjectBrandHeaderContract(content, scope) {
+  let output = content;
+
+  if (/<header\b[^>]*class=["'][^"']*\bbrand-nav\b/i.test(output)) {
+    output = markFirstBrandHeaderAsAppShell(output);
+    output = addClassesToFirstTagWithClass(output, "nav", "brand-nav-inner", [
+      "hys-static-nav-row",
+    ]);
+    output = addClassesToFirstTagWithClass(output, "a", "brand-mark", [
+      "hys-logo",
+      "hys-static-logo",
+    ]);
+    return output;
+  }
+
+  if (!/<body\b[^>]*>/i.test(output)) {
+    return output;
+  }
+
+  const project = scope === "tccc" ? "战场救护" : "热射病防治";
+  const fallback = renderFallbackBrandHeader({
+    brand: "红医师",
+    project,
+  });
+
+  return output.replace(/<body\b[^>]*>/i, (match) => `${match}${fallback}`);
+}
+
 export function injectMobileBottomNav(
   content,
   activeTab = "tools",
@@ -619,389 +743,33 @@ export function injectMobileHamburgerNav(
   const basePath = options.basePath ?? "/";
   const menuId = `hys-mobile-top-menu-panel-${scope}`;
   const menuTabs = options.menuTabs ?? config.menuTabs ?? config.tabs;
-  const themeName = options.themeName ?? (scope === "tccc" ? "TCCC" : "热射病");
-  const storageKey = `hys:${scope}:theme`;
   const tabs = menuTabs.map((tab) => ({
     ...tab,
     href: joinBasePath(basePath, tab.href),
   }));
 
-  const menuItems = tabs
-    .map((tab) => {
-      const activeClass =
-        tab.id === activeTab ? " hys-mobile-top-menu__link--active" : "";
-      const ariaCurrent = tab.id === activeTab ? ' aria-current="page"' : "";
-      const title = `${config.titlePrefix}${tab.label}`;
-      return `<a class="hys-mobile-top-menu__link hys-nav-link${activeClass}" href="${escapeHtml(tab.href)}"${ariaCurrent} title="${escapeHtml(title)}"><span>${escapeHtml(tab.label)}</span></a>`;
-    })
-    .join("");
-
-  const styles = `
-<style data-hongyishi-mobile-menu>
-@media (min-width: 769px) {
-  .hys-mobile-top-menu,
-  .hys-mobile-top-menu__panel {
-    display: none;
-  }
-}
-@media (max-width: 768px) {
-  .brand-nav {
-    border-bottom-color: #12313c;
-  }
-  .brand-nav-inner {
-    display: flex !important;
-    flex-direction: row !important;
-    width: min(100% - 32px, 1200px) !important;
-    min-height: 78px !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 12px !important;
-    padding: 14px 0 !important;
-    border-bottom: 2px solid #12313c;
-  }
-  .brand-nav-links {
-    display: none !important;
-  }
-  .brand-mark {
-    min-width: 0;
-    white-space: normal;
-    font-size: clamp(1.15rem, 6.2vw, 1.8rem);
-    line-height: 1.1;
-  }
-  .hys-nav-link {
-    border-radius: 4px;
-    color: #5f6567;
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: 0;
-    padding: 0.7rem 0.9rem;
-    text-decoration: none;
-    transition:
-      background-color 180ms cubic-bezier(0.22, 1, 0.36, 1),
-      color 180ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .hys-mobile-top-menu {
-    display: flex;
-    flex: 0 0 auto;
-    align-items: center;
-    gap: 12px;
-    margin-left: auto;
-    position: static;
-    z-index: 1;
-  }
-  .hys-mobile-top-menu__panel {
-    width: min(100% - 32px, 1200px);
-    margin: 0 auto;
-    padding: 26px 0 26px;
-    border-bottom: 2px solid #12313c;
-    animation: hys-mobile-top-menu-enter 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-  .hys-mobile-top-menu__panel:not([hidden]) {
-    display: grid;
-    gap: 14px;
-  }
-  .hys-mobile-top-menu__panel[hidden] {
-    display: none !important;
-  }
-  .hys-mobile-top-menu__link {
-    display: flex;
-    min-height: 58px;
-    align-items: center;
-    border: 0;
-    color: #526569;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-weight: 900;
-    line-height: 1.1;
-  }
-  .hys-mobile-top-menu__link--active {
-    background: rgba(255, 255, 255, 0.64);
-    box-shadow: inset 0 -4px 0 #d93025;
-    color: #d93025;
-  }
-  .hys-mobile-top-menu__button.hys-nav-link,
-  .hys-mobile-theme-toggle.hys-nav-link {
-    display: inline-flex;
-    min-width: 48px;
-    min-height: 48px;
-    align-items: center;
-    justify-content: center;
-    border: 0;
-    cursor: pointer;
-    line-height: 1;
-  }
-  .hys-mobile-theme-toggle.hys-nav-link {
-    background: transparent;
-    color: #12313c;
-  }
-  .hys-mobile-top-menu__button.hys-nav-link {
-    background: #78c7e7;
-    color: #12313c;
-  }
-  .t-icon-swap {
-    display: inline-grid;
-    place-items: center;
-    position: relative;
-  }
-  .h-5 {
-    height: 1.25rem;
-  }
-  .w-5 {
-    width: 1.25rem;
-  }
-  .place-items-center {
-    place-items: center;
-  }
-  .t-icon-swap .t-icon {
-    grid-area: 1 / 1;
-    display: inline-grid;
-    place-items: center;
-    width: 1.25rem;
-    height: 1.25rem;
-    opacity: 0;
-    transform: scale(0.88);
-    transition:
-      opacity 160ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .t-icon-swap[data-state="moon"] .t-icon[data-icon="moon"],
-  .t-icon-swap[data-state="sun"] .t-icon[data-icon="sun"],
-  .t-icon-swap[data-state="menu"] .t-icon[data-icon="menu"],
-  .t-icon-swap[data-state="close"] .t-icon[data-icon="close"] {
-    opacity: 1;
-    transform: scale(1);
-  }
-  .t-icon::before {
-    display: block;
-    font-size: 1.25rem;
-    line-height: 1;
-  }
-  .t-icon[data-icon="moon"]::before {
-    content: "☾";
-  }
-  .t-icon[data-icon="sun"]::before {
-    content: "☀";
-  }
-  .t-icon[data-icon="menu"]::before {
-    content: "☰";
-  }
-  .t-icon[data-icon="close"]::before {
-    content: "×";
-  }
-  .hys-mobile-top-menu__button:focus-visible,
-  .hys-mobile-top-menu__link:focus-visible,
-  .hys-mobile-theme-toggle:focus-visible {
-    outline: 2px solid #d93025;
-    outline-offset: 2px;
-  }
-  .hys-mobile-top-menu__button:active,
-  .hys-mobile-top-menu__link:active,
-  .hys-mobile-theme-toggle:active {
-    transform: translateY(1px);
-  }
-  html[data-hys-theme="dark"] body {
-    background-color: #0f171a;
-    background-image:
-      linear-gradient(rgba(120, 199, 231, 0.08) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(120, 199, 231, 0.06) 1px, transparent 1px);
-    color: #f4ecdc;
-  }
-  html[data-hys-theme="dark"] .brand-nav {
-    background: rgba(15, 23, 26, 0.98);
-    border-bottom-color: #78c7e7;
-  }
-  html[data-hys-theme="dark"] .brand-nav-inner,
-  html[data-hys-theme="dark"] .hys-mobile-top-menu__panel {
-    border-color: #78c7e7;
-  }
-  html[data-hys-theme="dark"] .brand-mark,
-  html[data-hys-theme="dark"] .hys-mobile-theme-toggle {
-    color: #f4ecdc;
-  }
-  html[data-hys-theme="dark"] .brand-mark-red,
-  html[data-hys-theme="dark"] .hys-mobile-top-menu__link--active {
-    color: #ff6b00;
-  }
-  html[data-hys-theme="dark"] .brand-mark-divider,
-  html[data-hys-theme="dark"] .hys-mobile-top-menu__link {
-    color: #a9c3c8;
-  }
-  html[data-hys-theme="dark"] main,
-  html[data-hys-theme="dark"] .project-shell,
-  html[data-hys-theme="dark"] section,
-  html[data-hys-theme="dark"] article {
-    background-color: #0f171a;
-    color: #f4ecdc !important;
-    border-color: #78c7e7;
-  }
-  html[data-hys-theme="dark"] body.hys-heat-page .project-shell,
-  html[data-hys-theme="dark"] body.hys-heat-page :is(main, #app, .project-shell, .container) :is(h1, h2, h3, h4, h5, h6, p, li, dd, dt, label, span) {
-    color: #f4ecdc !important;
-  }
-  html[data-hys-theme="dark"] .project-shell,
-  html[data-hys-theme="dark"] .poster-hero-content,
-  html[data-hys-theme="dark"] .section-heading,
-  html[data-hys-theme="dark"] .bento-item,
-  html[data-hys-theme="dark"] .grid-item,
-  html[data-hys-theme="dark"] .card,
-  html[data-hys-theme="dark"] .content-card,
-  html[data-hys-theme="dark"] .flow-card {
-    color: #f4ecdc !important;
-  }
-  html[data-hys-theme="dark"] .poster-title,
-  html[data-hys-theme="dark"] .hero-copy,
-  html[data-hys-theme="dark"] .section-heading h2,
-  html[data-hys-theme="dark"] .section-heading p,
-  html[data-hys-theme="dark"] .item-title,
-  html[data-hys-theme="dark"] .card-title {
-    color: #f4ecdc !important;
-  }
-  html[data-hys-theme="dark"] .poster-hero,
-  html[data-hys-theme="dark"] .grid-item,
-  html[data-hys-theme="dark"] .hys-content-governance,
-  html[data-hys-theme="dark"] .hys-tccc-shell,
-  html[data-hys-theme="dark"] .hys-tccc-shell__inner,
-  html[data-hys-theme="dark"] .hys-tccc-shell__meta {
-    background: rgba(15, 23, 26, 0.94);
-    color: #f4ecdc;
-    border-color: #78c7e7;
-  }
-  html[data-hys-theme="dark"] a:not(.hys-mobile-top-menu__link):not(.hys-mobile-nav__item) {
-    color: #78c7e7;
-  }
-  html[data-hys-theme="dark"] .hys-mobile-top-menu__link--active {
-    background: rgba(244, 236, 220, 0.08);
-    box-shadow: inset 0 -4px 0 #ff6b00;
-  }
-  html[data-hys-theme="dark"] .hys-mobile-top-menu__button.hys-nav-link {
-    background: #78c7e7;
-    color: #0f171a;
-  }
-  html[data-hys-theme="dark"] .hys-mobile-nav {
-    border-top-color: #78c7e7;
-    background: rgba(15, 23, 26, 0.96);
-  }
-  html[data-hys-theme="dark"] .hys-mobile-nav__item {
-    color: #a9c3c8;
-  }
-  html[data-hys-theme="dark"] .hys-mobile-nav__item--active {
-    border-color: #78c7e7;
-    background: #78c7e7;
-    color: #0f171a;
-  }
-  @keyframes hys-mobile-top-menu-enter {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hys-mobile-top-menu {
-      animation: none !important;
-    }
-    .hys-mobile-top-menu__button,
-    .hys-mobile-top-menu__link {
-      transition: none !important;
-    }
-  }
-}
-</style>
-`;
-  const controls = `<div class="hys-mobile-top-menu t-panel-reveal" data-hongyishi-mobile-menu data-hys-mobile-menu-scope="${escapeHtml(scope)}" aria-label="${escapeHtml(config.ariaLabel)}">
-  <button class="hys-mobile-theme-toggle hys-nav-link" type="button" aria-label="切换${escapeHtml(themeName)}日间夜间模式" data-hys-theme-toggle>
-    <span class="t-icon-swap h-5 w-5 place-items-center" data-state="moon" aria-hidden="true">
-      <span class="t-icon" data-icon="moon"></span>
-      <span class="t-icon" data-icon="sun"></span>
-    </span>
-  </button>
-  <button class="hys-mobile-top-menu__button hys-nav-link" type="button" aria-label="打开${escapeHtml(config.ariaLabel)}菜单" aria-expanded="false" aria-controls="${escapeHtml(menuId)}" data-hys-mobile-menu-toggle>
-    <span class="t-icon-swap h-5 w-5 place-items-center" data-state="menu" aria-hidden="true">
-      <span class="t-icon" data-icon="menu"></span>
-      <span class="t-icon" data-icon="close"></span>
-    </span>
-  </button>
-</div>`;
-  const panel = `<div class="hys-mobile-top-menu__panel" id="${escapeHtml(menuId)}" data-hys-mobile-menu-panel hidden>${menuItems}</div>`;
-  const script = `
-<script data-hongyishi-mobile-menu>
-(() => {
-  const nav = document.querySelector('[data-hongyishi-mobile-menu][data-hys-mobile-menu-scope="${escapeHtml(scope)}"]');
-  const button = nav?.querySelector('[data-hys-mobile-menu-toggle]');
-  const panel = document.getElementById('${escapeHtml(menuId)}');
-  const themeButton = nav?.querySelector('[data-hys-theme-toggle]');
-  const menuIcon = button?.querySelector('.t-icon-swap');
-  const themeIcon = themeButton?.querySelector('.t-icon-swap');
-  const root = document.documentElement;
-  const storageKey = '${escapeHtml(storageKey)}';
-  if (!nav || !button || !panel) return;
-
-  const setOpen = (isOpen) => {
-    nav.classList.toggle('is-open', isOpen);
-    nav.closest('.brand-nav')?.classList.toggle('hys-mobile-menu-open', isOpen);
-    button.setAttribute('aria-expanded', String(isOpen));
-    menuIcon?.setAttribute('data-state', isOpen ? 'close' : 'menu');
-    panel.hidden = !isOpen;
-  };
-  const getPreferredTheme = () => {
-    try {
-      const stored = localStorage.getItem(storageKey) || localStorage.getItem('theme');
-      if (stored === 'light' || stored === 'dark') return stored;
-    } catch {}
-    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  };
-  const applyTheme = (theme) => {
-    root.dataset.hysTheme = theme;
-    root.classList.toggle('dark', theme === 'dark');
-    themeIcon?.setAttribute('data-state', theme === 'dark' ? 'sun' : 'moon');
-    themeButton?.setAttribute('aria-label', theme === 'dark' ? '切换${escapeHtml(themeName)}日间模式' : '切换${escapeHtml(themeName)}夜间模式');
-    try {
-      localStorage.setItem(storageKey, theme);
-    } catch {}
-  };
-
-  applyTheme(getPreferredTheme());
-
-  button.addEventListener('click', () => {
-    setOpen(!nav.classList.contains('is-open'));
+  const controls = renderStaticMobileMenuControls({
+    scope,
+    ariaLabel: config.ariaLabel,
+    menuId,
   });
-  panel.addEventListener('click', (event) => {
-    if (event.target.closest('a[href]')) setOpen(false);
+  const panel = renderStaticMobileMenuPanel({
+    activeTab,
+    config,
+    menuId,
+    tabs,
   });
-  themeButton?.addEventListener('click', (event) => {
-    root.style.setProperty('--x', event.clientX + 'px');
-    root.style.setProperty('--y', event.clientY + 'px');
-    const nextTheme = root.dataset.hysTheme === 'dark' ? 'light' : 'dark';
-    if (document.startViewTransition) {
-      document.startViewTransition(() => applyTheme(nextTheme));
-    } else {
-      applyTheme(nextTheme);
-    }
-  });
-  document.addEventListener('click', (event) => {
-    if (!nav.contains(event.target) && !panel.contains(event.target)) setOpen(false);
-  });
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') setOpen(false);
-  });
-})();
-</script>`;
+  const script = renderStaticAppShellController({ scope, menuId });
 
-  let output = content;
-  if (/<\/head>/i.test(output)) {
-    output = output.replace(/<\/head>/i, `${styles}\n</head>`);
-  }
+  let output = injectStaticAppShellStyle(content);
+  output = ensureProjectBrandHeaderContract(output, scope);
 
   const navPattern =
     /(<nav\b[^>]*class=["'][^"']*\bbrand-nav-inner\b[^"']*["'][^>]*>[\s\S]*?)(<\/nav>)/i;
   if (navPattern.test(output)) {
     output = output.replace(navPattern, `$1${controls}\n$2\n${panel}`);
   } else {
-    const fallback = `${/<\/head>/i.test(content) ? "" : styles}\n${controls}\n${panel}`;
-    output = output.replace(/<\/body>/i, `${fallback}\n</body>`);
+    output = output.replace(/<\/body>/i, `${controls}\n${panel}\n</body>`);
   }
 
   return output.replace(/<\/body>/i, `${script}\n</body>`);
@@ -1033,7 +801,7 @@ function escapeHtml(value) {
     .replace(/"/g, "&quot;");
 }
 
-export function injectContentGovernanceBanner(content, config) {
+export function injectContentGovernanceBanner(content, config, options = {}) {
   if (
     !/<\/head>/i.test(content) ||
     !/<body\b[^>]*>/i.test(content) ||
@@ -1045,9 +813,9 @@ export function injectContentGovernanceBanner(content, config) {
   const style = `
     <style data-hongyishi-content-governance>
       .hys-content-governance {
-        border-bottom: 2px solid #111;
-        background: #fff8e8;
-        color: #111;
+        border-bottom: 2px solid hsl(var(--border, 195 33% 24%));
+        background: hsl(var(--muted, 38 26% 85%) / 0.4);
+        color: hsl(var(--foreground, 195 54% 15%));
         font: 700 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       }
       .hys-content-governance__inner {
@@ -1060,17 +828,17 @@ export function injectContentGovernanceBanner(content, config) {
       .hys-content-governance__status {
         display: inline-flex;
         width: fit-content;
-        border: 2px solid #d93025;
-        background: #d93025;
-        color: #fff;
+        border: 2px solid hsl(var(--primary, 4 70% 50%));
+        background: hsl(var(--primary, 4 70% 50%));
+        color: hsl(var(--primary-foreground, 38 47% 91%));
         padding: 0.1rem 0.45rem;
         font-weight: 900;
       }
       .hys-content-governance__meta {
-        color: #4d4d4d;
+        color: hsl(var(--muted-foreground, 195 18% 35%));
       }
       .hys-content-governance a {
-        color: #12313c;
+        color: hsl(var(--foreground, 195 54% 15%));
         font-weight: 900;
         text-decoration: underline;
       }
@@ -1110,9 +878,13 @@ export function injectContentGovernanceBanner(content, config) {
       </div>
     </aside>`;
 
-  return content
-    .replace(/<\/head>/i, `${style}\n</head>`)
-    .replace(/<body\b([^>]*)>/i, `<body$1>${banner}`);
+  const output = content.replace(/<\/head>/i, `${style}\n</head>`);
+
+  if (options.placement === "afterHeader" && /<\/header>/i.test(output)) {
+    return output.replace(/<\/header>/i, `</header>${banner}`);
+  }
+
+  return output.replace(/<body\b([^>]*)>/i, `<body$1>${banner}`);
 }
 
 export function injectTcccBrandShell(content, relativePath) {
@@ -1123,124 +895,19 @@ export function injectTcccBrandShell(content, relativePath) {
   }
 
   if (
-    !/<\/head>/i.test(content) ||
     !/<body\b[^>]*>/i.test(content) ||
     content.includes("data-hongyishi-tccc-shell")
   ) {
     return content;
   }
 
-  const flowTitle = escapeHtml(extractHtmlTitle(content, "TCCC 流程"));
-  const style = `
-    <style data-hongyishi-tccc-shell>
-      .hys-tccc-skip {
-        position: fixed;
-        left: 1rem;
-        top: 1rem;
-        z-index: 2147483001;
-        transform: translateY(-150%);
-        background: #f4ecdc;
-        color: #111;
-        border: 2px solid #d93025;
-        padding: 0.5rem 0.75rem;
-        font-weight: 800;
-        text-decoration: none;
-      }
-      .hys-tccc-skip:focus {
-        transform: translateY(0);
-      }
-      .hys-tccc-shell {
-        position: sticky;
-        top: 0;
-        z-index: 60;
-        border-bottom: 2px solid #d93025;
-        background: rgba(244, 236, 220, 0.97);
-        color: #12313c;
-        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
-      }
-      .hys-tccc-shell__inner {
-        max-width: 1120px;
-        margin: 0 auto;
-        padding: 0.75rem 1rem;
-        display: grid;
-        gap: 0.5rem;
-      }
-      .hys-tccc-shell__nav {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.75rem;
-      }
-      .hys-tccc-shell__brand {
-        color: #d93025;
-        font-weight: 900;
-        text-decoration: none;
-      }
-      .hys-tccc-shell__links {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-        gap: 0.5rem;
-      }
-      .hys-tccc-shell__links a {
-        min-height: 36px;
-        display: inline-flex;
-        align-items: center;
-        border: 2px solid #12313c;
-        color: #12313c;
-        padding: 0.35rem 0.6rem;
-        font-size: 0.82rem;
-        font-weight: 800;
-        text-decoration: none;
-      }
-      .hys-tccc-shell__meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem 1rem;
-        font-size: 0.78rem;
-        color: #49606a;
-      }
-      .hys-tccc-shell__title {
-        color: #12313c;
-        font-weight: 900;
-      }
-      #hys-tccc-main {
-        scroll-margin-top: 92px;
-      }
-      @media (max-width: 640px) {
-        .hys-tccc-shell__nav {
-          align-items: flex-start;
-          flex-direction: column;
-        }
-        .hys-tccc-shell__links {
-          justify-content: flex-start;
-        }
-      }
-    </style>`;
-  const shell = `
-    <a class="hys-tccc-skip" href="#hys-tccc-main">跳到流程</a>
-    <header class="hys-tccc-shell brand-nav" data-hongyishi-tccc-shell>
-      <div class="hys-tccc-shell__inner">
-        <nav class="hys-tccc-shell__nav brand-nav-inner" aria-label="红医师战场救护导航">
-          <a class="hys-tccc-shell__brand" href="/">红医师 / 战场救护</a>
-          <div class="hys-tccc-shell__links brand-nav-links" aria-label="TCCC 导航">
-            <a href="/">总入口</a>
-            <a href="/tccc/">项目首页</a>
-          </div>
-        </nav>
-        <div class="hys-tccc-shell__meta">
-          <span class="hys-tccc-shell__title">当前流程：${flowTitle}</span>
-          <span>教育训练用途</span>
-          <span>内容状态：待复核</span>
-          <span>CoTCCC 2017 基础内容，需按 JTS / Deployed Medicine 更新复核</span>
-        </div>
-      </div>
-    </header>
-    <div id="hys-tccc-main" tabindex="-1"></div>`;
+  const flowTitle = extractHtmlTitle(content, "TCCC 流程");
+  const shell = renderTcccBrandShell({ flowTitle });
+  const output = injectStaticAppShellStyle(
+    ensureBodyClass(content, "hys-tccc-page"),
+  );
 
-  return content
-    .replace(/<\/head>/i, `${style}\n</head>`)
-    .replace(/<body\b([^>]*)>/i, `<body$1>${shell}`);
+  return output.replace(/<body\b([^>]*)>/i, `<body$1>${shell}`);
 }
 
 function rewriteHeatStrokePageAliases(content) {
@@ -1293,10 +960,7 @@ export function rewriteHeatStrokeText(content, relativePath, basePath) {
   output = rewritePageHrefExtensions(output);
 
   if (normalizedPath.endsWith(".html")) {
-    output = injectContentGovernanceBanner(
-      output,
-      contentGovernance.heatStroke,
-    );
+    output = ensureBodyClass(output, "hys-heat-page");
     output = injectMobileBottomNav(
       output,
       resolveProjectMobileActiveTab(
@@ -1315,6 +979,11 @@ export function rewriteHeatStrokeText(content, relativePath, basePath) {
         scope: "heatStroke",
         basePath: base,
       },
+    );
+    output = injectContentGovernanceBanner(
+      output,
+      contentGovernance.heatStroke,
+      { placement: "afterHeader" },
     );
   }
 
@@ -1381,7 +1050,6 @@ export function rewriteTcccText(content, relativePath, basePath) {
   output = injectTcccBrandShell(output, normalizedPath);
 
   if (normalizedPath.endsWith(".html")) {
-    output = injectContentGovernanceBanner(output, contentGovernance.tccc);
     output = injectMobileBottomNav(
       output,
       resolveProjectMobileActiveTab("tccc", mapTcccOutputPath(normalizedPath)),
@@ -1398,6 +1066,9 @@ export function rewriteTcccText(content, relativePath, basePath) {
         basePath: base,
       },
     );
+    output = injectContentGovernanceBanner(output, contentGovernance.tccc, {
+      placement: "afterHeader",
+    });
   }
 
   return output;
