@@ -8,8 +8,10 @@ import { fileURLToPath } from "node:url";
 import {
   buildHeaders,
   buildRedirects,
+  buildContentGovernanceFromRegistry,
   CLOUDFLARE_FREE_TIER_LIMITS,
   collectCloudflareFreeTierStats,
+  contentGovernance,
   injectMobileBottomNav,
   injectMobileHamburgerNav,
   injectContentGovernanceBanner,
@@ -39,6 +41,14 @@ const heatStrokeScriptsDir = path.join(
 const fmsSrcDir = path.join(repoRoot, "apps", "fms", "src");
 const tcccDir = path.join(repoRoot, "apps", "tccc");
 const tcccPagesDir = path.join(tcccDir, "pages");
+const projectRegistryPath = path.join(
+  repoRoot,
+  "apps",
+  "portal",
+  "src",
+  "lib",
+  "projects.json",
+);
 
 async function collectFiles(directory, extensions) {
   const files = [];
@@ -147,6 +157,32 @@ test("Cloudflare build contract reports free-tier file count and file-size guard
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
+});
+
+test("Cloudflare content governance is derived from the portal project registry", async () => {
+  const registry = JSON.parse(await readFile(projectRegistryPath, "utf8"));
+  const source = await readFile(
+    path.join(repoRoot, "scripts", "build-cloudflare.mjs"),
+    "utf8",
+  );
+  const projectById = new Map(
+    registry.platformProjects.map((project) => [project.id, project]),
+  );
+
+  assert.deepEqual(
+    contentGovernance.heatStroke,
+    buildContentGovernanceFromRegistry(projectById.get("heat-stroke")),
+  );
+  assert.deepEqual(
+    contentGovernance.tccc,
+    buildContentGovernanceFromRegistry(projectById.get("tccc")),
+  );
+  assert.match(source, /projects\.json/);
+  assert.doesNotMatch(source, /sourceName:\s*"热射病防治指南与现场处置资料"/);
+  assert.doesNotMatch(
+    source,
+    /sourceName:\s*"CoTCCC 2017 战术战伤救护流程资料"/,
+  );
 });
 
 test("rewriteHeatStrokeText scopes root-relative static links and service worker registration", () => {

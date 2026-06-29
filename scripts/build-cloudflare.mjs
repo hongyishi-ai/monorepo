@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { spawnSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import {
   copyFile,
   cp,
@@ -25,32 +26,67 @@ import {
 
 const scriptPath = fileURLToPath(import.meta.url);
 const repoRoot = path.resolve(path.dirname(scriptPath), "..");
+const projectRegistryPath = path.join(
+  repoRoot,
+  "apps",
+  "portal",
+  "src",
+  "lib",
+  "projects.json",
+);
+const projectRegistry = JSON.parse(readFileSync(projectRegistryPath, "utf8"));
 
 export const CLOUDFLARE_FREE_TIER_LIMITS = {
   maxFiles: 20_000,
   maxFileBytes: 25 * 1024 * 1024,
 };
 
+const projectContentStatusLabels = {
+  current: "已复核",
+  "review-required": "待复核",
+  "reference-only": "参考资料",
+};
+
+export function buildContentGovernanceFromRegistry(project) {
+  if (!project?.content) {
+    throw new Error(`Missing content governance metadata for ${project?.id}`);
+  }
+
+  const statusLabel = projectContentStatusLabels[project.content.status];
+  if (!statusLabel) {
+    throw new Error(
+      `Unsupported content status ${project.content.status} for ${project.id}`,
+    );
+  }
+
+  return {
+    label: project.shortTitle,
+    sourceName: project.content.sourceName,
+    version: project.content.version,
+    reviewedAt: project.content.reviewedAt,
+    statusLabel,
+    disclaimer: project.content.disclaimer,
+    officialUpdateUrl: project.content.officialUpdateUrl,
+  };
+}
+
+function getRegistryProject(id) {
+  const project = projectRegistry.platformProjects.find(
+    (entry) => entry.id === id,
+  );
+
+  if (!project) {
+    throw new Error(`Missing project registry entry for ${id}`);
+  }
+
+  return project;
+}
+
 export const contentGovernance = {
-  heatStroke: {
-    label: "热射病防治",
-    sourceName: "热射病防治指南与现场处置资料",
-    version: "指南/专家共识汇编，本地训练工具版",
-    reviewedAt: "2026-06-17",
-    statusLabel: "待复核",
-    disclaimer: "仅供训练和现场处置参考，不替代急救指挥、临床诊疗和当地规范。",
-    officialUpdateUrl: "https://www.nhc.gov.cn/",
-  },
-  tccc: {
-    label: "战场救护 TCCC",
-    sourceName: "CoTCCC 2017 战术战伤救护流程资料",
-    version: "CoTCCC 2017 基础内容，需按 JTS/Deployed Medicine 更新复核",
-    reviewedAt: "2026-06-17",
-    statusLabel: "待复核",
-    disclaimer:
-      "仅供教育训练和流程学习，不能替代现行作战医疗规范、医疗指挥链或正式认证课程。",
-    officialUpdateUrl: "https://jts.health.mil/index.cfm/committees/cotccc",
-  },
+  heatStroke: buildContentGovernanceFromRegistry(
+    getRegistryProject("heat-stroke"),
+  ),
+  tccc: buildContentGovernanceFromRegistry(getRegistryProject("tccc")),
 };
 
 export const heatStrokePageAliases = new Map([
