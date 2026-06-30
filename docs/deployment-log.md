@@ -27,6 +27,31 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-30 - 7ac436c - TCCC 首页 Next 接管
+
+- Commit: `7ac436ca9c57883e0daa5777d82653d17f70ff38`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://6bdaa0b8.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.105.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main --commit-dirty=true`
+- Verification:
+  - Red-green check: `pnpm exec node --test scripts/project-registry.test.mjs` first failed because TCCC was still `routeOwner: "cloudflare-build"`; after implementation it passed: `9/9`
+  - Red-green check: `pnpm exec node --test scripts/build-cloudflare.test.mjs` first failed because Next-owned TCCC mode still copied `index.html`; after implementation it passed: `34/34`
+  - `pnpm --filter @hongyishi/portal type-check` passed
+  - `pnpm test:cloudflare` passed: `58/58`
+  - `pnpm build:cloudflare` passed
+  - `.cloudflare/site/tccc/index.html`, `.cloudflare/site/tccc/pages/tccc-standard.html`, `.cloudflare/site/tccc/pwa-register.js`, and `.cloudflare/site/tccc/assets/css/tailwind.css` exist in the production bundle
+  - `HONGYISHI_AUDIT_BASE_URL=http://127.0.0.1:3021 pnpm audit:links` against local Pages preview passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `pnpm size:budget` passed: `398 files, 51.51 MiB total`
+  - Playwright smoke passed on `/tccc/`: desktop hamburger hidden, global theme button hidden, no horizontal overflow; mobile menu exposed the expected TCCC links, bottom nav stayed `fixed`, no horizontal overflow, and theme toggle set `html.dark`, `hongyishi-blog-theme`, and `theme` to `dark`
+  - `HONGYISHI_AUDIT_BASE_URL=https://6bdaa0b8.hongyishi-monorepo.pages.dev pnpm audit:links` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:links` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `https://hongyishi.cn/tccc/` returned HTTP `200` with title `战场救护 TCCC | 红医师`
+- Notes:
+  - TCCC root route is now owned by the Portal Next static export while legacy static child pages, assets, manifest, PWA registration, and service worker remain copied into `/tccc/`.
+  - Moved the heat-stroke project chrome into a shared Portal project shell and reused it for TCCC, keeping the same mobile top-menu, theme-toggle, and fixed bottom-nav contracts across static project handoffs.
+  - TCCC's professional flow pages remain static and unchanged; this deployment replaces the project entry experience and route ownership first.
+
 ## 2026-06-30 - e4019d5 - 热射病首页 Next 接管
 
 - Commit: `e4019d5e9bb877816b7e128d960d23c3eaabec68`
