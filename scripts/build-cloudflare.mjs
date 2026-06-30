@@ -84,6 +84,7 @@ export const heatStrokePageAliases = new Map([
 export const nextOwnedHeatStrokePageAliases = new Set([
   "pages/about.html",
   "pages/8-4-6-rule.html",
+  "pages/diagnosis-treatment-guideline.html",
 ]);
 
 export const tcccPageAliases = new Map([

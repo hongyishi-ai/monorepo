@@ -16,7 +16,7 @@ const urlsToCache = [
   '/pages/热耐力评估.html',
   '/pages/热射病现场处置.html',
   '/pages/热射病通关挑战.html',
-  '/pages/中国热射病诊断与治疗指南.html',
+  '/heat-stroke/pages/diagnosis-treatment-guideline',
   '/pages/热射病核心体温监测与降温方法.html',
   '/pages/热射病救治体系建设标准专家共识.html',
   '/heat-stroke/pages/about'

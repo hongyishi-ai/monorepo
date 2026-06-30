@@ -287,7 +287,7 @@ test("integrated project runtime ownership guards Next route handoff", async () 
   );
   assert.equal(
     runtimeById.get("heat-stroke").nextMigrationStage,
-    "next-home-about-and-rule-owned-static-deep-pages-pending",
+    "next-home-about-rule-and-guide-owned-static-deep-pages-pending",
   );
   assert.equal(
     runtimeById.get("tccc").routeOwner,
