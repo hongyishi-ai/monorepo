@@ -27,6 +27,26 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-30 - a9eb898 - 共享项目注册表契约
+
+- Commit: `a9eb89877be9da01f0b9b8540f1f51c5257c64b8`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://2eed39f3.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.105.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main --commit-dirty=true`
+- Verification:
+  - `pnpm exec prettier --check README.md docs/adding-project.md packages/config/package.json packages/config/project-registry.mjs scripts/build-cloudflare.mjs scripts/audit-links.mjs scripts/project-registry.test.mjs` passed
+  - `pnpm test:cloudflare` passed: `53/53`
+  - `pnpm build:cloudflare` passed
+  - `pnpm size:budget` passed: `392 files, 51.34 MiB total`
+  - `HONGYISHI_AUDIT_BASE_URL=http://127.0.0.1:3021 pnpm audit:links` against local Pages preview passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `HONGYISHI_AUDIT_BASE_URL=https://2eed39f3.hongyishi-monorepo.pages.dev pnpm audit:links` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:links` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - Added `@hongyishi/config/project-registry` as the shared contract layer for Cloudflare base paths, content governance, representative audit routes, and mobile navigation audit expectations.
+  - `scripts/build-cloudflare.mjs` and `scripts/audit-links.mjs` now consume shared registry-derived contracts instead of keeping duplicate routing and audit rules.
+  - Updated project onboarding documentation to point future integrated projects at the shared registry contract before changing build or audit scripts.
+
 ## 2026-06-30 - c7f3627 - 共享静态项目移动导航激活态解析
 
 - Commit: `c7f36275f16be98daeb55b48d99b0400f71f7c27`
