@@ -27,6 +27,28 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-30 - 72a7358 - 热射病 Next 接管构建准备
+
+- Commit: `72a7358e7a518fa1f42ae6916107fe76c04a67f2`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://717c9e68.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.105.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main --commit-dirty=true`
+- Verification:
+  - Red-green check: `node --test scripts/build-cloudflare.test.mjs` first failed because Next-owned heat-stroke mode still copied `index.html`; after implementation it passed: `32/32`
+  - `pnpm exec prettier --check scripts/build-cloudflare.mjs scripts/build-cloudflare.test.mjs` passed
+  - `pnpm test:cloudflare` passed: `56/56`
+  - `pnpm build:cloudflare` passed
+  - `.cloudflare/site/heat-stroke/index.html` and `.cloudflare/site/heat-stroke/pages/heat-index.html` exist under the current `cloudflare-build` route owner
+  - `HONGYISHI_AUDIT_BASE_URL=http://127.0.0.1:3021 pnpm audit:links` against local Pages preview passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `pnpm size:budget` passed: `392 files, 51.34 MiB total`
+  - `HONGYISHI_AUDIT_BASE_URL=https://717c9e68.hongyishi-monorepo.pages.dev pnpm audit:links` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:links` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - `copyHeatStrokeApp` is now route-owner-aware: when heat-stroke is later switched to `routeOwner: "next"`, the static copy step can preserve the Next-owned project entry instead of overwriting it with the legacy static `index.html`.
+  - Static heat-stroke child pages, assets, manifest, and service worker remain copyable in Next-owned mode, so the future migration can keep existing tools and deep links while replacing the entry route first.
+  - This deployment keeps the current `cloudflare-build` owner, so user-facing heat-stroke pages and business logic remain unchanged.
+
 ## 2026-06-30 - 67abd11 - Next 路由归属交接保护
 
 - Commit: `67abd11f897f867f999b3560f1faf3a9057b3441`
