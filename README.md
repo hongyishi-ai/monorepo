@@ -63,6 +63,9 @@ pnpm preview:cloudflare
 # 检查内部路由、代表页面和移动端底部栏
 pnpm audit:links
 
+# 检查静态 HTML 孤立样式和旧首页链接债务
+pnpm audit:static-debt
+
 # 类型检查
 pnpm type-check
 
@@ -137,6 +140,7 @@ OPENWEATHER_API_KEY=<your-openweather-key>
 
 ```bash
 pnpm test:cloudflare
+pnpm audit:static-debt
 pnpm build:cloudflare
 pnpm preview:cloudflare
 pnpm audit:links -- --base=http://127.0.0.1:8788

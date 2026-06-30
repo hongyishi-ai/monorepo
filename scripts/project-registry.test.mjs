@@ -286,7 +286,7 @@ test("integrated project runtime ownership guards Next route handoff", async () 
   );
   assert.equal(
     runtimeById.get("heat-stroke").nextMigrationStage,
-    "next-home-owned",
+    "next-home-owned-static-deep-pages-pending",
   );
   assert.equal(
     runtimeById.get("tccc").routeOwner,
@@ -297,10 +297,13 @@ test("integrated project runtime ownership guards Next route handoff", async () 
     portalTopLevelRoutes.has("tccc"),
     "tccc Next handoff requires apps/portal/src/app/tccc",
   );
-  assert.equal(runtimeById.get("tccc").nextMigrationStage, "next-home-owned");
+  assert.equal(
+    runtimeById.get("tccc").nextMigrationStage,
+    "next-home-owned-static-deep-pages-pending",
+  );
   assert.equal(
     runtimeById.get("fms").nextMigrationStage,
-    "deferred-stateful-tool",
+    "vite-owned-next-app-deferred",
   );
 });
 

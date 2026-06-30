@@ -909,8 +909,8 @@ test("heat-stroke source pages expose unified brand navigation", async () => {
     );
     assert.match(
       html,
-      /href=["']\.\.\/index\.html["'][^>]*>项目首页</,
-      `${file} should link back to heat-stroke home`,
+      /href=["']\/heat-stroke\/["'][^>]*>项目首页</,
+      `${file} should link back to the canonical heat-stroke home`,
     );
     assert.match(
       html,

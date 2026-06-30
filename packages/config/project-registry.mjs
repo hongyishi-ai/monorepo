@@ -40,19 +40,19 @@ export const projectRuntimeContracts = {
   fms: {
     runtime: "vite-react",
     routeOwner: "cloudflare-build",
-    nextMigrationStage: "deferred-stateful-tool",
+    nextMigrationStage: "vite-owned-next-app-deferred",
     migrationRisk: "high",
   },
   "heat-stroke": {
     runtime: "static-html-tailwind",
     routeOwner: "next",
-    nextMigrationStage: "next-home-owned",
+    nextMigrationStage: "next-home-owned-static-deep-pages-pending",
     migrationRisk: "medium",
   },
   tccc: {
     runtime: "static-html-tailwind",
     routeOwner: "next",
-    nextMigrationStage: "next-home-owned",
+    nextMigrationStage: "next-home-owned-static-deep-pages-pending",
     migrationRisk: "medium",
   },
 };
