@@ -27,6 +27,28 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-30 - ddf29ef - 静态 HTML 债务审计与旧首页链接收口
+
+- Commit: `ddf29ef528ecd09d1996097da2bbf7a42182308f`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://d012cf50.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.105.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main --commit-dirty=true`
+- Verification:
+  - `pnpm test:cloudflare` passed: `61/61`
+  - `pnpm audit:static-debt` passed: heat-stroke `9` style blocks, `43` style attrs, `0` legacy home links; TCCC `26` style blocks, `25` style attrs, `0` legacy home links
+  - `pnpm exec prettier --check package.json README.md docs/adding-project.md packages/config/project-registry.mjs scripts/audit-static-debt.mjs scripts/audit-static-debt.test.mjs scripts/project-registry.test.mjs scripts/build-cloudflare.test.mjs` passed
+  - `pnpm build:cloudflare` passed
+  - `pnpm size:budget` passed: `398 files, 51.51 MiB total`
+  - Cloudflare output old project-home link scan passed: `0` matches for `../index.html` or direct `index.html` home links under heat-stroke/TCCC HTML output
+  - `HONGYISHI_AUDIT_BASE_URL=http://127.0.0.1:3021 pnpm audit:links` against local Pages preview passed: internal `37/37`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `HONGYISHI_AUDIT_BASE_URL=https://d012cf50.hongyishi-monorepo.pages.dev pnpm audit:links` passed: internal `37/37`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:links` passed: internal `37/37`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - Added `scripts/audit-static-debt.mjs` and its tests to make remaining static HTML `<style>` blocks, inline `style=` attributes, and old project-home links explicit and non-growing.
+  - Clarified migration stages in the shared project registry: heat-stroke and TCCC have Next-owned home routes with static deep pages still pending; FMS remains a Vite-owned app deferred from full Next migration.
+  - Repointed heat-stroke static page home links from legacy relative `index.html` paths to canonical `/heat-stroke/`, without changing professional medical text or interactive tool contracts.
+
 ## 2026-06-30 - deed28b - Next 项目导航配置查缺补漏
 
 - Commit: `deed28b3d9c50df3977f4e6ebad6d30d7564b9d8`
