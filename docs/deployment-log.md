@@ -27,6 +27,26 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-30 - 67abd11 - Next 路由归属交接保护
+
+- Commit: `67abd11f897f867f999b3560f1faf3a9057b3441`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://6de45b38.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.105.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main --commit-dirty=true`
+- Verification:
+  - `node --test scripts/project-registry.test.mjs` passed: `9/9`
+  - `pnpm exec prettier --check README.md docs/adding-project.md packages/config/project-registry.mjs scripts/project-registry.test.mjs` passed
+  - `pnpm test:cloudflare` passed: `54/54`
+  - `pnpm build:cloudflare` passed
+  - `pnpm size:budget` passed: `392 files, 51.34 MiB total`
+  - `HONGYISHI_AUDIT_BASE_URL=https://6de45b38.hongyishi-monorepo.pages.dev pnpm audit:links` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:links` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - Added `projectRuntimeContracts` to record each integrated project's current runtime, route owner, Next migration stage, and migration risk.
+  - Added a registry test that scans Portal top-level routes and prevents `/fms/`, `/heat-stroke/`, or `/tccc/` from being claimed by Next before `routeOwner` is explicitly changed to `next`.
+  - This is a migration safety gate only; it does not change current user-facing URLs or child app business logic.
+
 ## 2026-06-30 - a9eb898 - 共享项目注册表契约
 
 - Commit: `a9eb89877be9da01f0b9b8540f1f51c5257c64b8`
