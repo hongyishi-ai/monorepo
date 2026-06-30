@@ -80,6 +80,7 @@ README.md
 - 中文文件名、空格文件名或特殊字符文件名要在部署产物中映射为 URL 安全路径。
 - 需要第三方 API 时，优先通过 `functions/api/*` 代理，不在前端暴露密钥。
 - 新增 `status: "integrated"` 项目后，必须在 `packages/config/project-registry.mjs` 补齐 base path key、代表性审计路由和移动导航审计期望，让 `scripts/project-registry.test.mjs` 识别它的站内 base path，并在 Cloudflare 构建脚本中生成对应产物。
+- 项目迁入 Next.js 前，必须先把 `projectRuntimeContracts` 中对应项目的 `routeOwner` 改为 `next`；否则 Portal 不应新增同名顶层路由，避免覆盖现有静态或 Vite 产物。
 - `wrangler.jsonc` 只保存 Pages 项目配置，不保存 `OPENWEATHER_API_KEY` 等密钥。
 
 ## 5. 验证命令

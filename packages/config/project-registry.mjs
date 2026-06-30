@@ -36,6 +36,27 @@ export const representativeProjectRouteSuffixes = {
   ],
 };
 
+export const projectRuntimeContracts = {
+  fms: {
+    runtime: "vite-react",
+    routeOwner: "cloudflare-build",
+    nextMigrationStage: "deferred-stateful-tool",
+    migrationRisk: "high",
+  },
+  "heat-stroke": {
+    runtime: "static-html-tailwind",
+    routeOwner: "cloudflare-build",
+    nextMigrationStage: "first-static-candidate",
+    migrationRisk: "medium",
+  },
+  tccc: {
+    runtime: "static-html-tailwind",
+    routeOwner: "cloudflare-build",
+    nextMigrationStage: "second-static-candidate",
+    migrationRisk: "medium",
+  },
+};
+
 export function normalizeBasePath(basePath) {
   if (!basePath || basePath === "/") {
     return "/";
@@ -143,6 +164,29 @@ export function buildCloudflareBasePathsFromRegistry(
   }
 
   return basePaths;
+}
+
+export function buildProjectRuntimeContractsFromRegistry(
+  registry,
+  runtimeContracts = projectRuntimeContracts,
+) {
+  return registry.platformProjects
+    .filter((project) => project.status === "integrated")
+    .map((project) => {
+      const contract = runtimeContracts[project.id];
+
+      if (!contract) {
+        throw new Error(
+          `Integrated project ${project.id} must define runtime ownership in @hongyishi/config/project-registry`,
+        );
+      }
+
+      return {
+        id: project.id,
+        href: normalizeProjectBasePath(project.href, project.id),
+        ...contract,
+      };
+    });
 }
 
 export function buildRepresentativeRoutesFromRegistry(

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { access, readFile, readdir } from "node:fs/promises";
 import { test } from "node:test";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -8,6 +8,7 @@ import { buildHeaders, buildRedirects } from "./build-cloudflare.mjs";
 import {
   buildMobileNavAuditExpectations,
   buildCloudflareBasePathsFromRegistry,
+  buildProjectRuntimeContractsFromRegistry,
   buildRepresentativeRoutesFromRegistry,
 } from "../packages/config/project-registry.mjs";
 import {
@@ -37,6 +38,7 @@ const taskEntriesPath = path.join(
   "lib",
   "task-entries.json",
 );
+const portalAppDir = path.join(repoRoot, "apps", "portal", "src", "app");
 const configPackagePath = path.join(
   repoRoot,
   "packages",
@@ -52,6 +54,13 @@ const allowedContentStatuses = new Set([
   "review-required",
   "reference-only",
 ]);
+const allowedRuntimes = new Set([
+  "next-static",
+  "vite-react",
+  "static-html-tailwind",
+]);
+const allowedRouteOwners = new Set(["next", "cloudflare-build"]);
+const allowedMigrationRisks = new Set(["low", "medium", "high"]);
 const allowedTaskUrgencies = new Set([
   "immediate",
   "guided",
@@ -216,6 +225,68 @@ test("link audit representative project roots are derived from the project regis
   assert.equal(routes.includes("/fms/"), false);
   assert.equal(routes.includes("/heat-stroke/"), false);
   assert.equal(routes.includes("/tccc/"), false);
+});
+
+test("integrated project runtime ownership guards Next route handoff", async () => {
+  const registry = await readRegistry();
+  const runtimeContracts = buildProjectRuntimeContractsFromRegistry(registry);
+  const runtimeById = new Map(
+    runtimeContracts.map((contract) => [contract.id, contract]),
+  );
+  const portalRouteEntries = await readdir(portalAppDir, {
+    withFileTypes: true,
+  });
+  const portalTopLevelRoutes = new Set(
+    portalRouteEntries
+      .filter((entry) => entry.isDirectory() && !entry.name.startsWith("_"))
+      .map((entry) => entry.name),
+  );
+
+  for (const project of registry.platformProjects.filter(
+    (entry) => entry.status === "integrated",
+  )) {
+    const contract = runtimeById.get(project.id);
+    const routeSegment = project.href.replace(/^\/|\/$/g, "");
+
+    assert.ok(contract, `${project.id} must define runtime ownership`);
+    assert.ok(
+      allowedRuntimes.has(contract.runtime),
+      `${project.id} must use an allowed runtime`,
+    );
+    assert.ok(
+      allowedRouteOwners.has(contract.routeOwner),
+      `${project.id} must use an allowed route owner`,
+    );
+    assert.ok(
+      allowedMigrationRisks.has(contract.migrationRisk),
+      `${project.id} must declare migration risk`,
+    );
+    assert.ok(
+      contract.nextMigrationStage,
+      `${project.id} must declare a Next migration stage`,
+    );
+
+    if (contract.routeOwner !== "next") {
+      assert.equal(
+        portalTopLevelRoutes.has(routeSegment),
+        false,
+        `${project.id} cannot add Portal route /${routeSegment} until routeOwner is next`,
+      );
+    }
+  }
+
+  assert.equal(
+    runtimeById.get("heat-stroke").nextMigrationStage,
+    "first-static-candidate",
+  );
+  assert.equal(
+    runtimeById.get("tccc").nextMigrationStage,
+    "second-static-candidate",
+  );
+  assert.equal(
+    runtimeById.get("fms").nextMigrationStage,
+    "deferred-stateful-tool",
+  );
 });
 
 test("link audit mobile nav expectations reuse shared app shell mobile nav config", async () => {

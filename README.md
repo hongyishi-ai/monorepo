@@ -113,7 +113,7 @@ Cloudflare Pages 单站输出目录为 `.cloudflare/site`：
 
 UI/UX 重构先读根目录 `DESIGN.md`。新增项目接入按 `docs/adding-project.md` 执行。当前设计方向是“医疗指挥台 + 新构成主义”：保留各原项目内容创意和流程功能，统一品牌入口、状态表达、项目卡片、移动端触控尺度和安全/性能基线。
 
-技术栈统一策略：不做一次性框架重写。当前统一边界先放在项目注册表、`@hongyishi/config/project-registry`、共享品牌 token、`@hongyishi/config/tailwind`、Cloudflare 单站构建和 CI 门禁上；后续再让 Next.js 逐步接管子项目路由和页面运行时。
+技术栈统一策略：不做一次性框架重写。当前统一边界先放在项目注册表、`@hongyishi/config/project-registry`、共享品牌 token、`@hongyishi/config/tailwind`、Cloudflare 单站构建和 CI 门禁上；后续再让 Next.js 逐步接管子项目路由和页面运行时。`projectRuntimeContracts` 记录每个集成项目当前运行时、路由归属、Next 迁移阶段和风险等级，避免 Portal 在未迁移前抢占现有 `/fms/`、`/heat-stroke/`、`/tccc/` 产物路径。
 
 Cloudflare Pages 配置：
 
