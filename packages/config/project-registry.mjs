@@ -28,6 +28,7 @@ export const representativeProjectRouteSuffixes = {
     "pages/field-treatment",
     "pages/heat-index",
     "pages/8-4-6-rule",
+    "pages/about",
   ],
   tccc: [
     "pages/tccc-standard",
@@ -46,7 +47,7 @@ export const projectRuntimeContracts = {
   "heat-stroke": {
     runtime: "static-html-tailwind",
     routeOwner: "next",
-    nextMigrationStage: "next-home-owned-static-deep-pages-pending",
+    nextMigrationStage: "next-home-and-about-owned-static-deep-pages-pending",
     migrationRisk: "medium",
   },
   tccc: {

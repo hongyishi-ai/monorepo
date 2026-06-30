@@ -19,7 +19,7 @@ const urlsToCache = [
   '/pages/中国热射病诊断与治疗指南.html',
   '/pages/热射病核心体温监测与降温方法.html',
   '/pages/热射病救治体系建设标准专家共识.html',
-  '/pages/关于本项目.html'
+  '/heat-stroke/pages/about'
 ];
 
 // 安装 Service Worker

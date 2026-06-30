@@ -81,6 +81,8 @@ export const heatStrokePageAliases = new Map([
   ["热耐力评估.html", "heat-tolerance.html"],
 ]);
 
+export const nextOwnedHeatStrokePageAliases = new Set(["pages/about.html"]);
+
 export const tcccPageAliases = new Map([
   ["TACEVAC休克与液体复苏.html", "tacevac-shock-fluid.html"],
   ["TACEVAC再评估.html", "tacevac-reassessment.html"],
@@ -230,6 +232,10 @@ export function shouldCopyHeatStrokePath(relativePath, options = {}) {
   }
 
   if (normalized === "index.html" && options.routeOwner === "next") {
+    return false;
+  }
+
+  if (options.nextOwnedPageAliases?.has(mapHeatStrokeOutputPath(normalized))) {
     return false;
   }
 
@@ -1217,7 +1223,10 @@ export async function buildCloudflareSite(options = {}) {
       normalizeBasePath(heatStrokeBase).replace(/^\/|\/$/g, ""),
     ),
     heatStrokeBase,
-    { routeOwner: runtimeById.get("heat-stroke")?.routeOwner },
+    {
+      routeOwner: runtimeById.get("heat-stroke")?.routeOwner,
+      nextOwnedPageAliases: nextOwnedHeatStrokePageAliases,
+    },
   );
   await copyTcccApp(
     tcccSource,

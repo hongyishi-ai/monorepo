@@ -406,6 +406,13 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
     true,
   );
   assert.equal(
+    shouldCopyHeatStrokePath("pages/关于本项目.html", {
+      ...nextOwnedOptions,
+      nextOwnedPageAliases: new Set(["pages/about.html"]),
+    }),
+    false,
+  );
+  assert.equal(
     shouldCopyHeatStrokePath("assets/js/script.js", nextOwnedOptions),
     true,
   );
@@ -440,12 +447,17 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
       '<html><body><a href="/index.html">首页</a></body></html>',
     );
     await writeFile(
+      path.join(srcDir, "pages", "关于本项目.html"),
+      "<html><body>legacy about page</body></html>",
+    );
+    await writeFile(
       path.join(srcDir, "assets", "js", "script.js"),
       "window.__heatStrokeTool = true;",
     );
 
     await copyHeatStrokeApp(srcDir, destDir, "/heat-stroke/", {
       routeOwner: "next",
+      nextOwnedPageAliases: new Set(["pages/about.html"]),
     });
 
     await assert.rejects(() => access(path.join(destDir, "index.html")), {
@@ -462,6 +474,10 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
     assert.match(
       await readFile(path.join(destDir, "pages", "heat-index.html"), "utf8"),
       /首页/,
+    );
+    await assert.rejects(
+      () => access(path.join(destDir, "pages", "about.html")),
+      { code: "ENOENT" },
     );
     assert.equal(
       await readFile(path.join(destDir, "assets", "js", "script.js"), "utf8"),

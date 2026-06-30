@@ -220,6 +220,7 @@ test("link audit representative project roots are derived from the project regis
   assert.ok(routes.includes("/training-injury/assessment"));
   assert.ok(routes.includes("/heat-defense/"));
   assert.ok(routes.includes("/heat-defense/pages/field-treatment"));
+  assert.ok(routes.includes("/heat-defense/pages/about"));
   assert.ok(routes.includes("/combat-care/"));
   assert.ok(routes.includes("/combat-care/pages/tccc-standard"));
   assert.equal(routes.includes("/fms/"), false);
@@ -286,7 +287,7 @@ test("integrated project runtime ownership guards Next route handoff", async () 
   );
   assert.equal(
     runtimeById.get("heat-stroke").nextMigrationStage,
-    "next-home-owned-static-deep-pages-pending",
+    "next-home-and-about-owned-static-deep-pages-pending",
   );
   assert.equal(
     runtimeById.get("tccc").routeOwner,
