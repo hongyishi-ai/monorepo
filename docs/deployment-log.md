@@ -27,6 +27,32 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-30 - c1e80ec - 热射病 8-4-6 法则页 Next 接管
+
+- Commit: `c1e80ecf381bc4b08b556a6ec74e776756a01bf9`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://3c0b56fd.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.105.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - Red-green checks: `pnpm exec node --test scripts/build-cloudflare.test.mjs` first failed because `pages/8-4-6-rule.html` was not in the default Next-owned heat-stroke deep-page set; after implementation it passed
+  - Red-green checks: `pnpm exec node --test scripts/project-registry.test.mjs` first failed because the heat-stroke migration stage still only mentioned home and About ownership; after implementation it passed
+  - `pnpm --filter @hongyishi/portal type-check` passed
+  - `pnpm audit:static-debt` passed: heat-stroke `8` HTML files, `7` style blocks, `43` style attrs, `0` legacy home links; TCCC unchanged at `26` HTML files, `26` style blocks, `25` style attrs, `0` legacy home links
+  - `pnpm test:cloudflare` passed: `62/62`
+  - `pnpm build:cloudflare` passed and exported `/heat-stroke/pages/8-4-6-rule`
+  - `pnpm size:budget` passed: `402 files, 51.57 MiB total`
+  - Local Pages preview `HONGYISHI_AUDIT_BASE_URL=http://127.0.0.1:3021 pnpm audit:links` passed: internal `37/37`, representative `19/19`, mobile nav `6/6`, guide surfaces `15/15`
+  - Playwright mobile smoke passed on `/heat-stroke/pages/8-4-6-rule`: project shell present, bottom nav active href `/heat-stroke/pages/8-4-6-rule`, hamburger menu includes the deeper guide links, no 390px horizontal overflow, day/night toggle updates the whole page palette, and back-to-top works
+  - `https://3c0b56fd.hongyishi-monorepo.pages.dev/heat-stroke/pages/8-4-6-rule` returned HTTP `200` with the Next project shell and no old `8-4-6黄金法则.html` reference
+  - `HONGYISHI_AUDIT_BASE_URL=https://3c0b56fd.hongyishi-monorepo.pages.dev pnpm audit:links` passed: internal `37/37`, representative `19/19`, mobile nav `6/6`, guide surfaces `15/15`
+  - `https://hongyishi.cn/heat-stroke/pages/8-4-6-rule` returned HTTP `200` with the Next project shell and no old `8-4-6黄金法则.html` reference
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:links` passed: internal `37/37`, representative `19/19`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - Moved heat-stroke `8-4-6黄金法则` from standalone static HTML into the Portal Next app at `/heat-stroke/pages/8-4-6-rule`, reusing the shared `ProjectChrome` navigation and day/night theme behavior.
+  - Deleted the old static 8-4-6 HTML source and repointed remaining heat-stroke links and service-worker cache entries to `/heat-stroke/pages/8-4-6-rule`.
+  - Tightened the heat-stroke static debt baseline from `8` to `7` style blocks and updated the migration stage to `next-home-about-and-rule-owned-static-deep-pages-pending`.
+
 ## 2026-06-30 - 5bf8380 - 热射病 About 深层页 Next 接管
 
 - Commit: `5bf83801d2d6bb7fc43397a87a0ee7932e466fd6`
