@@ -1,5 +1,13 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import {
+  access,
+  mkdir,
+  mkdtemp,
+  readdir,
+  readFile,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { test } from "node:test";
 import path from "node:path";
@@ -14,6 +22,7 @@ import {
   CLOUDFLARE_FREE_TIER_LIMITS,
   collectCloudflareFreeTierStats,
   contentGovernance,
+  copyHeatStrokeApp,
   injectMobileBottomNav,
   injectMobileHamburgerNav,
   injectContentGovernanceBanner,
@@ -380,6 +389,86 @@ test("shouldCopyHeatStrokePath keeps deployable static assets and excludes app i
   assert.equal(shouldCopyHeatStrokePath("assets/.DS_Store"), false);
   assert.equal(shouldCopyHeatStrokePath("api/openweather.js"), false);
   assert.equal(shouldCopyHeatStrokePath("package.json"), false);
+});
+
+test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
+  const nextOwnedOptions = { routeOwner: "next" };
+
+  assert.equal(shouldCopyHeatStrokePath("index.html", nextOwnedOptions), false);
+  assert.equal(
+    shouldCopyHeatStrokePath("manifest.json", nextOwnedOptions),
+    true,
+  );
+  assert.equal(shouldCopyHeatStrokePath("sw.js", nextOwnedOptions), true);
+  assert.equal(
+    shouldCopyHeatStrokePath("pages/热指数查询.html", nextOwnedOptions),
+    true,
+  );
+  assert.equal(
+    shouldCopyHeatStrokePath("assets/js/script.js", nextOwnedOptions),
+    true,
+  );
+});
+
+test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-stroke assets", async () => {
+  const tempDir = await mkdtemp(path.join(tmpdir(), "hongyishi-heat-copy-"));
+  const srcDir = path.join(tempDir, "src");
+  const destDir = path.join(tempDir, "dest");
+
+  try {
+    await mkdir(path.join(srcDir, "pages"), { recursive: true });
+    await mkdir(path.join(srcDir, "assets", "js"), { recursive: true });
+    await writeFile(
+      path.join(srcDir, "index.html"),
+      "<html><body>legacy heat stroke home</body></html>",
+    );
+    await writeFile(
+      path.join(srcDir, "manifest.json"),
+      JSON.stringify({
+        name: "红医师热射病防治",
+        start_url: "/index.html",
+        icons: [{ src: "/assets/images/icon.png" }],
+      }),
+    );
+    await writeFile(
+      path.join(srcDir, "sw.js"),
+      "const urlsToCache = ['/', '/index.html', '/manifest.json'];",
+    );
+    await writeFile(
+      path.join(srcDir, "pages", "热指数查询.html"),
+      '<html><body><a href="/index.html">首页</a></body></html>',
+    );
+    await writeFile(
+      path.join(srcDir, "assets", "js", "script.js"),
+      "window.__heatStrokeTool = true;",
+    );
+
+    await copyHeatStrokeApp(srcDir, destDir, "/heat-stroke/", {
+      routeOwner: "next",
+    });
+
+    await assert.rejects(() => access(path.join(destDir, "index.html")), {
+      code: "ENOENT",
+    });
+    assert.match(
+      await readFile(path.join(destDir, "manifest.json"), "utf8"),
+      /"start_url": "\/heat-stroke\/"/,
+    );
+    assert.match(
+      await readFile(path.join(destDir, "sw.js"), "utf8"),
+      /'\/heat-stroke\/manifest\.json'/,
+    );
+    assert.match(
+      await readFile(path.join(destDir, "pages", "heat-index.html"), "utf8"),
+      /首页/,
+    );
+    assert.equal(
+      await readFile(path.join(destDir, "assets", "js", "script.js"), "utf8"),
+      "window.__heatStrokeTool = true;",
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
 
 test("FMS demo media references are base-path aware for subdirectory deployment", async () => {

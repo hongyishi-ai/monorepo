@@ -31,6 +31,7 @@ import {
 } from "../packages/config/app-shell/static-shell.mjs";
 import {
   buildCloudflareBasePathsFromRegistry,
+  buildProjectRuntimeContractsFromRegistry,
   buildStaticProjectContentGovernanceFromRegistry,
   cloudflareBasePathKeys,
   normalizeBasePath,
@@ -64,6 +65,9 @@ export const contentGovernance =
 
 export const cloudflareBasePaths =
   buildCloudflareBasePathsFromRegistry(projectRegistry);
+
+export const projectRuntimeContracts =
+  buildProjectRuntimeContractsFromRegistry(projectRegistry);
 
 export const heatStrokePageAliases = new Map([
   ["8-4-6黄金法则.html", "8-4-6-rule.html"],
@@ -210,7 +214,7 @@ export function buildHeaders(options = {}) {
   ].join("\n");
 }
 
-export function shouldCopyHeatStrokePath(relativePath) {
+export function shouldCopyHeatStrokePath(relativePath, options = {}) {
   const normalized = relativePath.split(path.sep).join("/");
   const fileName = path.posix.basename(normalized);
 
@@ -222,6 +226,10 @@ export function shouldCopyHeatStrokePath(relativePath) {
     normalized === "assets/vendors/tailwind.compiler.js" ||
     normalized === "assets/vendors/framer-motion.js"
   ) {
+    return false;
+  }
+
+  if (normalized === "index.html" && options.routeOwner === "next") {
     return false;
   }
 
@@ -933,7 +941,12 @@ export function rewriteTcccText(content, relativePath, basePath) {
   return output;
 }
 
-async function copyHeatStrokeApp(srcDir, destDir, basePath) {
+export async function copyHeatStrokeApp(
+  srcDir,
+  destDir,
+  basePath,
+  options = {},
+) {
   async function copyEntry(currentDir) {
     const entries = await readdir(currentDir, { withFileTypes: true });
 
@@ -946,7 +959,7 @@ async function copyHeatStrokeApp(srcDir, destDir, basePath) {
         continue;
       }
 
-      if (!entry.isFile() || !shouldCopyHeatStrokePath(relativePath)) {
+      if (!entry.isFile() || !shouldCopyHeatStrokePath(relativePath, options)) {
         continue;
       }
 
@@ -1104,6 +1117,9 @@ export async function buildCloudflareSite(options = {}) {
   const { skipBuilds = false, ...basePathOverrides } = options;
   const { fmsBase, heatStrokeBase, tcccBase } =
     resolveCloudflareBasePaths(basePathOverrides);
+  const runtimeById = new Map(
+    projectRuntimeContracts.map((contract) => [contract.id, contract]),
+  );
   const pnpm = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
   const outputDir = path.join(repoRoot, ".cloudflare", "site");
   const portalOutput = path.join(repoRoot, "apps", "portal", "out");
@@ -1155,6 +1171,7 @@ export async function buildCloudflareSite(options = {}) {
       normalizeBasePath(heatStrokeBase).replace(/^\/|\/$/g, ""),
     ),
     heatStrokeBase,
+    { routeOwner: runtimeById.get("heat-stroke")?.routeOwner },
   );
   await copyTcccApp(
     tcccSource,
