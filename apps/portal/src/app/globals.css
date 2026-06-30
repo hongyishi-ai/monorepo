@@ -2,15 +2,71 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: 38 47% 91%;
+  --foreground: 195 54% 15%;
+  --card: 39 100% 96%;
+  --card-foreground: 195 54% 15%;
+  --popover: 39 100% 96%;
+  --popover-foreground: 195 54% 15%;
+  --primary: 4 70% 50%;
+  --primary-foreground: 38 47% 91%;
+  --secondary: 195 54% 15%;
+  --secondary-foreground: 38 47% 91%;
+  --muted: 38 26% 85%;
+  --muted-foreground: 195 18% 35%;
+  --accent: 198 65% 69%;
+  --accent-foreground: 195 54% 15%;
+  --destructive: 4 70% 50%;
+  --destructive-foreground: 38 47% 91%;
+  --border: 195 33% 24%;
+  --input: 38 26% 82%;
+  --ring: 4 70% 50%;
+  --radius: 4px;
+}
+
+.dark {
+  --background: 0 0% 3%;
+  --foreground: 38 47% 91%;
+  --card: 195 54% 10%;
+  --card-foreground: 38 47% 91%;
+  --popover: 195 54% 10%;
+  --popover-foreground: 38 47% 91%;
+  --primary: 4 70% 50%;
+  --primary-foreground: 38 47% 91%;
+  --secondary: 38 47% 91%;
+  --secondary-foreground: 195 54% 15%;
+  --muted: 195 30% 13%;
+  --muted-foreground: 38 18% 70%;
+  --accent: 198 65% 69%;
+  --accent-foreground: 195 54% 10%;
+  --destructive: 4 70% 50%;
+  --destructive-foreground: 38 47% 91%;
+  --border: 38 18% 35%;
+  --input: 195 30% 13%;
+  --ring: 4 70% 50%;
+}
+
 html {
-  background: #f4ecdc;
+  color-scheme: light;
+  background: hsl(var(--background));
   scroll-behavior: smooth;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
   min-height: 100vh;
   margin: 0;
-  background: #f4ecdc;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+body:has([data-hongyishi-project-theme-owner])
+  [data-hongyishi-global-theme-toggle] {
+  display: none;
 }
 
 @supports (min-height: 100dvh) {

@@ -276,8 +276,17 @@ test("integrated project runtime ownership guards Next route handoff", async () 
   }
 
   assert.equal(
+    runtimeById.get("heat-stroke").routeOwner,
+    "next",
+    "heat-stroke should now be owned by the Portal Next route",
+  );
+  assert.ok(
+    portalTopLevelRoutes.has("heat-stroke"),
+    "heat-stroke Next handoff requires apps/portal/src/app/heat-stroke",
+  );
+  assert.equal(
     runtimeById.get("heat-stroke").nextMigrationStage,
-    "first-static-candidate",
+    "next-home-owned",
   );
   assert.equal(
     runtimeById.get("tccc").nextMigrationStage,

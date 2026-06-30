@@ -45,8 +45,8 @@ export const projectRuntimeContracts = {
   },
   "heat-stroke": {
     runtime: "static-html-tailwind",
-    routeOwner: "cloudflare-build",
-    nextMigrationStage: "first-static-candidate",
+    routeOwner: "next",
+    nextMigrationStage: "next-home-owned",
     migrationRisk: "medium",
   },
   tccc: {

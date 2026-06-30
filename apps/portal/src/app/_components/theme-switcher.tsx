@@ -58,11 +58,16 @@ const fallbackUpdateDOM = (storageKey: string) => {
   const DARK = "dark";
   const LIGHT = "light";
   const SYSTEM = "system" as const;
-  const media = typeof window !== 'undefined' ? matchMedia(`(prefers-color-scheme: ${DARK})`) : (null as any);
+  const media =
+    typeof window !== "undefined"
+      ? matchMedia(`(prefers-color-scheme: ${DARK})`)
+      : (null as any);
   const apply = () => {
-    const mode = (localStorage.getItem(storageKey) ?? SYSTEM) as ColorSchemePreference;
+    const mode = (localStorage.getItem(storageKey) ??
+      SYSTEM) as ColorSchemePreference;
     const systemMode = media && media.matches ? DARK : LIGHT;
-    const resolvedMode = mode === SYSTEM ? (systemMode as ColorSchemePreference) : mode;
+    const resolvedMode =
+      mode === SYSTEM ? (systemMode as ColorSchemePreference) : mode;
     const classList = document.documentElement.classList;
     if (resolvedMode === DARK) classList.add(DARK);
     else classList.remove(DARK);
@@ -108,6 +113,7 @@ const Switch = () => {
       suppressHydrationWarning
       className={styles.switch}
       onClick={handleModeSwitch}
+      data-hongyishi-global-theme-toggle
     />
   );
 };
@@ -120,7 +126,7 @@ const Script = memo(() => (
     }}
   />
 ));
-Script.displayName = 'ThemeSwitcherScript';
+Script.displayName = "ThemeSwitcherScript";
 
 /**
  * This component wich applies classes and transitions.
