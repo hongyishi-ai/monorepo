@@ -4,15 +4,12 @@ import { test } from "node:test";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import {
-  buildCloudflareBasePathsFromRegistry,
-  buildHeaders,
-  buildRedirects,
-} from "./build-cloudflare.mjs";
+import { buildHeaders, buildRedirects } from "./build-cloudflare.mjs";
 import {
   buildMobileNavAuditExpectations,
+  buildCloudflareBasePathsFromRegistry,
   buildRepresentativeRoutesFromRegistry,
-} from "./audit-links.mjs";
+} from "../packages/config/project-registry.mjs";
 import {
   mobileNavConfigs,
   resolveMobileNavItems,
@@ -222,7 +219,8 @@ test("link audit representative project roots are derived from the project regis
 });
 
 test("link audit mobile nav expectations reuse shared app shell mobile nav config", async () => {
-  const expectations = buildMobileNavAuditExpectations();
+  const registry = await readRegistry();
+  const expectations = buildMobileNavAuditExpectations(registry);
   const platformHome = expectations.find((item) => item.path === "/");
   const heatStrokeHome = expectations.find(
     (item) => item.path === "/heat-stroke/",
@@ -238,6 +236,10 @@ test("link audit mobile nav expectations reuse shared app shell mobile nav confi
   });
   const buildSource = await readFile(
     path.join(repoRoot, "scripts", "build-cloudflare.mjs"),
+    "utf8",
+  );
+  const auditSource = await readFile(
+    path.join(repoRoot, "scripts", "audit-links.mjs"),
     "utf8",
   );
   const configPackage = JSON.parse(await readFile(configPackagePath, "utf8"));
@@ -272,9 +274,19 @@ test("link audit mobile nav expectations reuse shared app shell mobile nav confi
   );
   assert.doesNotMatch(buildSource, /export const mobileNavConfigs/);
   assert.doesNotMatch(buildSource, /export function resolveMobileNavItems/);
+  assert.doesNotMatch(auditSource, /representativeProjectRouteSuffixes/);
+  assert.doesNotMatch(auditSource, /function normalizeProjectBasePath/);
+  assert.doesNotMatch(
+    auditSource,
+    /function buildStaticProjectMobileNavExpectation/,
+  );
   assert.equal(
     configPackage.exports["./app-shell/mobile-nav"],
     "./app-shell/mobile-nav.mjs",
+  );
+  assert.equal(
+    configPackage.exports["./project-registry"],
+    "./project-registry.mjs",
   );
 });
 

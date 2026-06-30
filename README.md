@@ -30,17 +30,17 @@ hongyishi-monorepo/
 
 ## 技术栈
 
-| 类别 | 技术 |
-|------|------|
-| 包管理 | PNPM 10 |
-| 构建协调 | Turborepo 2 |
-| 语言 | TypeScript 5（严格模式） |
-| UI 框架 | React 18.3.0 |
-| SSR 框架 | Next.js 15（portal） |
-| 构建工具 | Vite 5/6 |
+| 类别     | 技术                                                        |
+| -------- | ----------------------------------------------------------- |
+| 包管理   | PNPM 10                                                     |
+| 构建协调 | Turborepo 2                                                 |
+| 语言     | TypeScript 5（严格模式）                                    |
+| UI 框架  | React 18.3.0                                                |
+| SSR 框架 | Next.js 15（portal）                                        |
+| 构建工具 | Vite 5/6                                                    |
 | 设计系统 | `@hongyishi/config/tailwind` + `@hongyishi/ui` brand tokens |
-| 代码规范 | ESLint 9 + Prettier 3 |
-| 单元测试 | Vitest 2 |
+| 代码规范 | ESLint 9 + Prettier 3                                       |
+| 单元测试 | Vitest 2                                                    |
 
 ## 快速开始
 
@@ -77,23 +77,23 @@ pnpm --filter @hongyishi/heat-stroke dev
 
 ## 应用端口
 
-| App | 端口 | 访问 |
-|-----|------|------|
-| portal | 3000 | http://localhost:3000 |
-| fms | 5175 | http://localhost:5175 |
-| heat-stroke | 3000 | `npx serve apps/heat-stroke -l 3000` |
-| tccc | 静态文件 | 由 `pnpm build:cloudflare` 拼装到 `/tccc/` |
+| App         | 端口     | 访问                                       |
+| ----------- | -------- | ------------------------------------------ |
+| portal      | 3000     | http://localhost:3000                      |
+| fms         | 5175     | http://localhost:5175                      |
+| heat-stroke | 3000     | `npx serve apps/heat-stroke -l 3000`       |
+| tccc        | 静态文件 | 由 `pnpm build:cloudflare` 拼装到 `/tccc/` |
 
 ## 统一入口平台
 
 Cloudflare Pages 单站输出目录为 `.cloudflare/site`：
 
-| 路径 | 来源 |
-|------|------|
-| `/` | `apps/portal` 静态导出 |
-| `/fms/` | `apps/fms` Vite PWA |
-| `/heat-stroke/` | `apps/heat-stroke` 静态 PWA |
-| `/tccc/` | `apps/tccc` 静态 PWA |
+| 路径               | 来源                           |
+| ------------------ | ------------------------------ |
+| `/`                | `apps/portal` 静态导出         |
+| `/fms/`            | `apps/fms` Vite PWA            |
+| `/heat-stroke/`    | `apps/heat-stroke` 静态 PWA    |
+| `/tccc/`           | `apps/tccc` 静态 PWA           |
 | `/api/openweather` | `functions/api/openweather.js` |
 
 `pnpm build:cloudflare` 会生成：
@@ -104,7 +104,7 @@ Cloudflare Pages 单站输出目录为 `.cloudflare/site`：
 - `.cloudflare/site/heat-stroke`：带 `/heat-stroke/` 路径重写的热射病静态产物
 - `.cloudflare/site/tccc`：带 `/tccc/` 路径重写的 TCCC 静态产物
 
-新增项目入口时，优先更新 `apps/portal/src/lib/projects.ts`。首页项目网格与博客页项目入口共用该注册表，避免链接、封面、颜色和状态分散维护。
+新增项目入口时，优先更新 `apps/portal/src/lib/projects.json`，再通过 `apps/portal/src/lib/projects.ts` 暴露给 Portal。Cloudflare base path、内容治理、代表性审计路由和移动端导航审计期望由 `@hongyishi/config/project-registry` 从同一注册表派生，避免链接、封面、颜色、状态和审计规则分散维护。
 
 共享品牌设计元素从 `@hongyishi/ui` 导出：
 
@@ -113,7 +113,7 @@ Cloudflare Pages 单站输出目录为 `.cloudflare/site`：
 
 UI/UX 重构先读根目录 `DESIGN.md`。新增项目接入按 `docs/adding-project.md` 执行。当前设计方向是“医疗指挥台 + 新构成主义”：保留各原项目内容创意和流程功能，统一品牌入口、状态表达、项目卡片、移动端触控尺度和安全/性能基线。
 
-技术栈统一策略：不把所有项目强制迁移到同一框架。Portal 继续承担 Next 静态入口和内容页，FMS 继续作为 Vite React 复杂工具，热射病与 TCCC 继续作为静态 HTML/Tailwind PWA。统一边界放在项目注册表、共享品牌 token、`@hongyishi/config/tailwind`、Cloudflare 单站构建和 CI 门禁上。
+技术栈统一策略：不做一次性框架重写。当前统一边界先放在项目注册表、`@hongyishi/config/project-registry`、共享品牌 token、`@hongyishi/config/tailwind`、Cloudflare 单站构建和 CI 门禁上；后续再让 Next.js 逐步接管子项目路由和页面运行时。
 
 Cloudflare Pages 配置：
 

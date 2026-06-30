@@ -6,11 +6,11 @@
 
 新增项先归入一种类型：
 
-| 类型 | 适用情况 | 必须接入 |
-|------|----------|----------|
-| 站内项目 | 可静态构建或可复制为静态资源 | `apps/<project-id>`、入口注册表、Cloudflare 构建 |
-| 外部项目 | 暂时保留独立域名或独立部署 | 入口注册表 |
-| 辅助入口 | 播客、博客、文档、报告等非工具项目 | 入口注册表 |
+| 类型     | 适用情况                           | 必须接入                                         |
+| -------- | ---------------------------------- | ------------------------------------------------ |
+| 站内项目 | 可静态构建或可复制为静态资源       | `apps/<project-id>`、入口注册表、Cloudflare 构建 |
+| 外部项目 | 暂时保留独立域名或独立部署         | 入口注册表                                       |
+| 辅助入口 | 播客、博客、文档、报告等非工具项目 | 入口注册表                                       |
 
 当前站内项目是 `portal`、`fms`、`heat-stroke` 和 `tccc`。已移除的旧项目不再作为外部入口保留；如未来恢复，按新项目重新接入。
 
@@ -67,6 +67,7 @@ packages/config/tailwind/index.cjs
 scripts/build-cloudflare.mjs
 scripts/build-cloudflare.test.mjs
 scripts/project-registry.test.mjs
+packages/config/project-registry.mjs
 wrangler.jsonc
 README.md
 ```
@@ -78,7 +79,7 @@ README.md
 - SPA 深链需要 fallback。
 - 中文文件名、空格文件名或特殊字符文件名要在部署产物中映射为 URL 安全路径。
 - 需要第三方 API 时，优先通过 `functions/api/*` 代理，不在前端暴露密钥。
-- 新增 `status: "integrated"` 项目后，必须让 `scripts/project-registry.test.mjs` 识别它的站内 base path，并在 Cloudflare 构建脚本中生成对应产物。
+- 新增 `status: "integrated"` 项目后，必须在 `packages/config/project-registry.mjs` 补齐 base path key、代表性审计路由和移动导航审计期望，让 `scripts/project-registry.test.mjs` 识别它的站内 base path，并在 Cloudflare 构建脚本中生成对应产物。
 - `wrangler.jsonc` 只保存 Pages 项目配置，不保存 `OPENWEATHER_API_KEY` 等密钥。
 
 ## 5. 验证命令

@@ -5,9 +5,14 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
-  mobileNavConfigs,
-  resolveMobileNavItems,
-} from "../packages/config/app-shell/mobile-nav.mjs";
+  buildMobileNavAuditExpectations,
+  buildRepresentativeRoutesFromRegistry,
+} from "../packages/config/project-registry.mjs";
+
+export {
+  buildMobileNavAuditExpectations,
+  buildRepresentativeRoutesFromRegistry,
+} from "../packages/config/project-registry.mjs";
 
 const scriptPath = fileURLToPath(import.meta.url);
 const repoRoot = path.resolve(path.dirname(scriptPath), "..");
@@ -30,73 +35,6 @@ const baseUrl =
 const shouldCheckExternal = args.has("--external");
 const shouldCheckMobileNav = !args.has("--no-mobile-nav");
 const shouldCheckGuideSurfaces = !args.has("--no-usage-guides");
-
-const siteRepresentativeRoutes = ["/", "/blog", "/offline"];
-
-const representativeProjectRouteSuffixes = {
-  fms: ["assessment", "history", "report", "training", "education", "about"],
-  "heat-stroke": [
-    "pages/field-treatment",
-    "pages/heat-index",
-    "pages/8-4-6-rule",
-  ],
-  tccc: [
-    "pages/tccc-standard",
-    "pages/tfc-airway",
-    "pages/tccc-flow-framework",
-  ],
-};
-
-function normalizeProjectBasePath(value, projectId) {
-  if (typeof value !== "string" || !value.startsWith("/")) {
-    throw new Error(
-      `Integrated project ${projectId} must use a root-relative href`,
-    );
-  }
-
-  const normalized = value.endsWith("/") ? value : `${value}/`;
-
-  if (!/^\/[a-z0-9-]+\/$/.test(normalized)) {
-    throw new Error(
-      `Integrated project ${projectId} has unsupported base path ${value}`,
-    );
-  }
-
-  return normalized;
-}
-
-function joinProjectRoute(basePath, suffix) {
-  return `${basePath}${suffix.replace(/^\/+/, "")}`;
-}
-
-export function buildRepresentativeRoutesFromRegistry(
-  registry,
-  siteRoutes = siteRepresentativeRoutes,
-) {
-  const routes = [...siteRoutes];
-  const integratedProjects = registry.platformProjects.filter(
-    (project) => project.status === "integrated",
-  );
-
-  for (const project of integratedProjects) {
-    const suffixes = representativeProjectRouteSuffixes[project.id];
-
-    if (!suffixes) {
-      throw new Error(
-        `Integrated project ${project.id} must define representative audit routes`,
-      );
-    }
-
-    const basePath = normalizeProjectBasePath(project.href, project.id);
-    routes.push(basePath);
-
-    for (const suffix of suffixes) {
-      routes.push(joinProjectRoute(basePath, suffix));
-    }
-  }
-
-  return [...new Set(routes)];
-}
 
 export const representativeRoutes =
   buildRepresentativeRoutesFromRegistry(projectRegistry);
@@ -284,66 +222,6 @@ async function checkExternalLinks(external) {
   return results;
 }
 
-function buildStaticProjectMobileNavExpectation({
-  expectedScope,
-  linkBase,
-  path,
-}) {
-  const bottomTabs = resolveMobileNavItems(expectedScope, linkBase);
-  const menuTabs = resolveMobileNavItems(expectedScope, linkBase, {
-    surface: "menu",
-  });
-
-  return {
-    path,
-    expectedScope,
-    linkBase,
-    requiredHrefs: bottomTabs.map((tab) => tab.href),
-    expectedTopMenuHrefs: menuTabs.map((tab) => tab.href),
-    expectedTopMenuLabels: menuTabs.map((tab) => tab.label),
-  };
-}
-
-export function buildMobileNavAuditExpectations() {
-  return [
-    {
-      path: "/",
-      requiredLabels: mobileNavConfigs.platform.tabs.map((tab) => tab.label),
-    },
-    buildStaticProjectMobileNavExpectation({
-      path: "/heat-stroke/",
-      expectedScope: "heatStroke",
-      linkBase: "/heat-stroke/",
-    }),
-    buildStaticProjectMobileNavExpectation({
-      path: "/heat-stroke/pages/field-treatment",
-      expectedScope: "heatStroke",
-      linkBase: "/heat-stroke/",
-    }),
-    buildStaticProjectMobileNavExpectation({
-      path: "/tccc/",
-      expectedScope: "tccc",
-      linkBase: "/tccc/",
-    }),
-    buildStaticProjectMobileNavExpectation({
-      path: "/tccc/pages/tccc-standard",
-      expectedScope: "tccc",
-      linkBase: "/tccc/",
-    }),
-    {
-      path: "/fms/assessment",
-      expectedScope: "fms",
-      linkBase: "/fms/",
-      requiredHrefs: [
-        "/fms",
-        "/fms/assessment",
-        "/fms/training",
-        "/fms/history",
-      ],
-    },
-  ];
-}
-
 async function checkMobileNav() {
   if (!shouldCheckMobileNav) {
     return [];
@@ -356,7 +234,7 @@ async function checkMobileNav() {
     isMobile: true,
     hasTouch: true,
   });
-  const routesToCheck = buildMobileNavAuditExpectations();
+  const routesToCheck = buildMobileNavAuditExpectations(projectRegistry);
   const results = [];
 
   try {

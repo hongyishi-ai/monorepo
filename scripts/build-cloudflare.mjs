@@ -29,6 +29,18 @@ import {
   renderStaticMobileMenuPanel,
   renderTcccBrandShell,
 } from "../packages/config/app-shell/static-shell.mjs";
+import {
+  buildCloudflareBasePathsFromRegistry,
+  buildStaticProjectContentGovernanceFromRegistry,
+  cloudflareBasePathKeys,
+  normalizeBasePath,
+} from "../packages/config/project-registry.mjs";
+
+export {
+  buildCloudflareBasePathsFromRegistry,
+  buildContentGovernanceFromRegistry,
+  normalizeBasePath,
+} from "../packages/config/project-registry.mjs";
 
 const scriptPath = fileURLToPath(import.meta.url);
 const repoRoot = path.resolve(path.dirname(scriptPath), "..");
@@ -47,86 +59,8 @@ export const CLOUDFLARE_FREE_TIER_LIMITS = {
   maxFileBytes: 25 * 1024 * 1024,
 };
 
-const projectContentStatusLabels = {
-  current: "已复核",
-  "review-required": "待复核",
-  "reference-only": "参考资料",
-};
-
-export function buildContentGovernanceFromRegistry(project) {
-  if (!project?.content) {
-    throw new Error(`Missing content governance metadata for ${project?.id}`);
-  }
-
-  const statusLabel = projectContentStatusLabels[project.content.status];
-  if (!statusLabel) {
-    throw new Error(
-      `Unsupported content status ${project.content.status} for ${project.id}`,
-    );
-  }
-
-  return {
-    label: project.shortTitle,
-    sourceName: project.content.sourceName,
-    version: project.content.version,
-    reviewedAt: project.content.reviewedAt,
-    statusLabel,
-    disclaimer: project.content.disclaimer,
-    officialUpdateUrl: project.content.officialUpdateUrl,
-  };
-}
-
-function getRegistryProject(id) {
-  const project = projectRegistry.platformProjects.find(
-    (entry) => entry.id === id,
-  );
-
-  if (!project) {
-    throw new Error(`Missing project registry entry for ${id}`);
-  }
-
-  return project;
-}
-
-export const contentGovernance = {
-  heatStroke: buildContentGovernanceFromRegistry(
-    getRegistryProject("heat-stroke"),
-  ),
-  tccc: buildContentGovernanceFromRegistry(getRegistryProject("tccc")),
-};
-
-const cloudflareBasePathKeys = {
-  fms: "fmsBase",
-  "heat-stroke": "heatStrokeBase",
-  tccc: "tcccBase",
-};
-
-export function buildCloudflareBasePathsFromRegistry(registry) {
-  const basePaths = {};
-  const integratedProjects = registry.platformProjects.filter(
-    (project) => project.status === "integrated",
-  );
-
-  for (const project of integratedProjects) {
-    const key = cloudflareBasePathKeys[project.id];
-
-    if (!key) {
-      throw new Error(
-        `Integrated project ${project.id} must be mapped in scripts/build-cloudflare.mjs`,
-      );
-    }
-
-    basePaths[key] = normalizeBasePath(project.href);
-  }
-
-  for (const key of Object.values(cloudflareBasePathKeys)) {
-    if (!basePaths[key]) {
-      throw new Error(`Missing Cloudflare base path ${key}`);
-    }
-  }
-
-  return basePaths;
-}
+export const contentGovernance =
+  buildStaticProjectContentGovernanceFromRegistry(projectRegistry);
 
 export const cloudflareBasePaths =
   buildCloudflareBasePathsFromRegistry(projectRegistry);
@@ -170,16 +104,6 @@ export const tcccPageAliases = new Map([
   ["TFC气道算法.html", "tfc-airway.html"],
   ["循环系统教案.html", "circulation-course.html"],
 ]);
-
-export function normalizeBasePath(basePath) {
-  if (!basePath || basePath === "/") {
-    return "/";
-  }
-
-  let normalized = basePath.startsWith("/") ? basePath : `/${basePath}`;
-  normalized = normalized.endsWith("/") ? normalized : `${normalized}/`;
-  return normalized;
-}
 
 function resolveCloudflareBasePaths(overrides = {}) {
   const resolved = { ...cloudflareBasePaths };
