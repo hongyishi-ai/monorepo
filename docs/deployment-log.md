@@ -27,6 +27,27 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-30 - a17b23a - Next 项目入口静态导出适配
+
+- Commit: `a17b23a531adf25e25951cdfafcec10771b83273`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://7d064e4c.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.105.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main --commit-dirty=true`
+- Verification:
+  - Red-green check: `node --test scripts/build-cloudflare.test.mjs` first failed because `materializeNextOwnedProjectEntry` did not exist; after implementation it passed: `33/33`
+  - `pnpm exec prettier --check scripts/build-cloudflare.mjs scripts/build-cloudflare.test.mjs` passed
+  - `pnpm test:cloudflare` passed: `57/57`
+  - `pnpm build:cloudflare` passed
+  - `.cloudflare/site/heat-stroke/index.html` and `.cloudflare/site/heat-stroke/pages/heat-index.html` exist under the current `cloudflare-build` route owner
+  - `HONGYISHI_AUDIT_BASE_URL=http://127.0.0.1:3021 pnpm audit:links` against local Pages preview passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `pnpm size:budget` passed: `392 files, 51.34 MiB total`
+  - `HONGYISHI_AUDIT_BASE_URL=https://7d064e4c.hongyishi-monorepo.pages.dev pnpm audit:links` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:links` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - Added `materializeNextOwnedProjectEntry` so a future Next static export such as `heat-stroke.html` can be materialized as `/heat-stroke/index.html` for the canonical slash route.
+  - The adapter is gated by `routeOwner: "next"` and is inert under the current `cloudflare-build` ownership, so this deployment does not change the visible heat-stroke route.
+
 ## 2026-06-30 - 72a7358 - 热射病 Next 接管构建准备
 
 - Commit: `72a7358e7a518fa1f42ae6916107fe76c04a67f2`
