@@ -27,6 +27,32 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-07-01 - ebcd789 - 热射病诊断与治疗指南页 Next 接管
+
+- Commit: `ebcd789f43cb8c56891063dc50088157fb722120`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://a33b71bf.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.106.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - Red-green checks: `pnpm exec node --test scripts/build-cloudflare.test.mjs` first failed because `pages/diagnosis-treatment-guideline.html` was not in the default Next-owned heat-stroke deep-page set; after implementation it passed
+  - Red-green checks: `pnpm exec node --test scripts/project-registry.test.mjs` first failed because the heat-stroke migration stage still only mentioned home, About, and 8-4-6 ownership; after implementation it passed
+  - `pnpm --filter @hongyishi/portal type-check` passed
+  - `pnpm audit:static-debt` passed: heat-stroke `7` HTML files, `6` style blocks, `29` style attrs, `0` legacy home links; TCCC unchanged at `26` HTML files, `26` style blocks, `25` style attrs, `0` legacy home links
+  - `pnpm test:cloudflare` passed: `62/62`
+  - `pnpm build:cloudflare` passed and exported `/heat-stroke/pages/diagnosis-treatment-guideline`
+  - `pnpm size:budget` passed: `404 files, 51.75 MiB total`
+  - Local Pages preview `HONGYISHI_AUDIT_BASE_URL=http://127.0.0.1:3021 pnpm audit:links` passed: internal `37/37`, representative `20/20`, mobile nav `6/6`, guide surfaces `15/15`
+  - Playwright mobile smoke passed on `/heat-stroke/pages/diagnosis-treatment-guideline`: project shell present, bottom nav active item `资料`, hamburger menu active href `/heat-stroke/pages/diagnosis-treatment-guideline`, no 390px horizontal overflow, day/night toggle updates page and cards, and back-to-top works
+  - `https://a33b71bf.hongyishi-monorepo.pages.dev/heat-stroke/pages/diagnosis-treatment-guideline` returned HTTP `200` with the Next project shell and no old `中国热射病诊断与治疗指南.html` reference
+  - `HONGYISHI_AUDIT_BASE_URL=https://a33b71bf.hongyishi-monorepo.pages.dev pnpm audit:links` passed: internal `37/37`, representative `20/20`, mobile nav `6/6`, guide surfaces `15/15`
+  - `https://hongyishi.cn/heat-stroke/pages/diagnosis-treatment-guideline` returned HTTP `200` with the Next project shell and no old `中国热射病诊断与治疗指南.html` reference
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:links` passed: internal `37/37`, representative `20/20`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - Moved heat-stroke `中国热射病诊断与治疗指南` from standalone static HTML into the Portal Next app at `/heat-stroke/pages/diagnosis-treatment-guideline`, reusing the shared `ProjectChrome` navigation and day/night theme behavior.
+  - Deleted the old static guideline HTML source and repointed remaining heat-stroke links and service-worker cache entries to `/heat-stroke/pages/diagnosis-treatment-guideline`.
+  - Tightened the heat-stroke static debt baseline from `7` to `6` style blocks and from `43` to `29` inline style attributes, and updated the migration stage to `next-home-about-rule-and-guide-owned-static-deep-pages-pending`.
+
 ## 2026-06-30 - c1e80ec - 热射病 8-4-6 法则页 Next 接管
 
 - Commit: `c1e80ecf381bc4b08b556a6ec74e776756a01bf9`
