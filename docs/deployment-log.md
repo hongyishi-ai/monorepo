@@ -27,6 +27,30 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-30 - deed28b - Next 项目导航配置查缺补漏
+
+- Commit: `deed28b3d9c50df3977f4e6ebad6d30d7564b9d8`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://e54fd3f3.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.105.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main --commit-dirty=true`
+- Verification:
+  - `pnpm exec prettier --check README.md apps/portal/src/types/hongyishi-config.d.ts apps/portal/src/app/_components/project/projectNav.ts apps/portal/src/app/heat-stroke/page.tsx apps/portal/src/app/tccc/page.tsx` passed after formatting README
+  - `pnpm --filter @hongyishi/portal type-check` passed
+  - `pnpm exec node --test scripts/project-registry.test.mjs scripts/build-cloudflare.test.mjs` passed: `43/43`
+  - `pnpm test:cloudflare` passed: `58/58`
+  - `pnpm build:cloudflare` passed
+  - `pnpm size:budget` passed: `398 files, 51.51 MiB total`
+  - `HONGYISHI_AUDIT_BASE_URL=http://127.0.0.1:3021 pnpm audit:links` against local Pages preview passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - Playwright smoke passed on `/heat-stroke/` and `/tccc/`: mobile top-menu labels and hrefs matched the shared `@hongyishi/config/app-shell/mobile-nav` config, bottom nav stayed `fixed`, and 390px mobile viewport had no horizontal overflow
+  - `https://e54fd3f3.hongyishi-monorepo.pages.dev/heat-stroke/`, `/tccc/`, and production `https://hongyishi.cn/heat-stroke/`, `/tccc/` returned HTTP `200` with expected titles and mobile nav scopes
+  - First audit against `https://e54fd3f3.hongyishi-monorepo.pages.dev` saw transient FMS `404` responses during Cloudflare propagation; rerunning `HONGYISHI_AUDIT_BASE_URL=https://e54fd3f3.hongyishi-monorepo.pages.dev pnpm audit:links` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:links` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - Removed duplicated heat-stroke and TCCC Next-page mobile navigation arrays and now derives those ProjectChrome items from `@hongyishi/config/app-shell/mobile-nav`.
+  - Added a Portal type declaration for the shared mobile-nav config package export so TypeScript can check the Next consumers.
+  - Updated README to reflect the current runtime ownership: heat-stroke and TCCC have Next-owned home routes with static deep pages and PWA assets preserved.
+
 ## 2026-06-30 - 7ac436c - TCCC 首页 Next 接管
 
 - Commit: `7ac436ca9c57883e0daa5777d82653d17f70ff38`
