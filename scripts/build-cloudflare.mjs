@@ -1113,6 +1113,38 @@ export async function validateCloudflareFreeTierBudget(
   return stats;
 }
 
+export async function materializeNextOwnedProjectEntry(
+  outputDir,
+  basePath,
+  routeOwner,
+) {
+  if (routeOwner !== "next") {
+    return false;
+  }
+
+  const segment = normalizeBasePath(basePath).replace(/^\/|\/$/g, "");
+  if (!segment) {
+    return false;
+  }
+
+  const exportedPage = path.join(outputDir, `${segment}.html`);
+  const targetPage = path.join(outputDir, segment, "index.html");
+
+  try {
+    await stat(exportedPage);
+  } catch (error) {
+    if (error?.code === "ENOENT") {
+      return false;
+    }
+
+    throw error;
+  }
+
+  await mkdir(path.dirname(targetPage), { recursive: true });
+  await copyFile(exportedPage, targetPage);
+  return true;
+}
+
 export async function buildCloudflareSite(options = {}) {
   const { skipBuilds = false, ...basePathOverrides } = options;
   const { fmsBase, heatStrokeBase, tcccBase } =
@@ -1145,6 +1177,11 @@ export async function buildCloudflareSite(options = {}) {
   await mkdir(outputDir, { recursive: true });
 
   await cp(portalOutput, outputDir, { recursive: true });
+  await materializeNextOwnedProjectEntry(
+    outputDir,
+    heatStrokeBase,
+    runtimeById.get("heat-stroke")?.routeOwner,
+  );
   await cp(
     fmsOutput,
     path.join(outputDir, normalizeBasePath(fmsBase).replace(/^\/|\/$/g, "")),

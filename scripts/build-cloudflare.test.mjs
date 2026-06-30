@@ -29,6 +29,7 @@ import {
   injectTcccBrandShell,
   mapHeatStrokeOutputPath,
   mapTcccOutputPath,
+  materializeNextOwnedProjectEntry,
   normalizeBasePath,
   rewriteHeatStrokeText,
   rewriteTcccText,
@@ -465,6 +466,41 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
     assert.equal(
       await readFile(path.join(destDir, "assets", "js", "script.js"), "utf8"),
       "window.__heatStrokeTool = true;",
+    );
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("materializeNextOwnedProjectEntry maps Next static export pages to project slash routes", async () => {
+  const tempDir = await mkdtemp(path.join(tmpdir(), "hongyishi-next-entry-"));
+
+  try {
+    await writeFile(
+      path.join(tempDir, "heat-stroke.html"),
+      "<html><body>Next heat stroke entry</body></html>",
+    );
+
+    const cloudflareOwned = await materializeNextOwnedProjectEntry(
+      tempDir,
+      "/heat-stroke/",
+      "cloudflare-build",
+    );
+    assert.equal(cloudflareOwned, false);
+    await assert.rejects(
+      () => access(path.join(tempDir, "heat-stroke", "index.html")),
+      { code: "ENOENT" },
+    );
+
+    const nextOwned = await materializeNextOwnedProjectEntry(
+      tempDir,
+      "/heat-stroke/",
+      "next",
+    );
+    assert.equal(nextOwned, true);
+    assert.equal(
+      await readFile(path.join(tempDir, "heat-stroke", "index.html"), "utf8"),
+      "<html><body>Next heat stroke entry</body></html>",
     );
   } finally {
     await rm(tempDir, { recursive: true, force: true });
