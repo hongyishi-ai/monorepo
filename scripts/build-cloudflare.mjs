@@ -81,7 +81,10 @@ export const heatStrokePageAliases = new Map([
   ["热耐力评估.html", "heat-tolerance.html"],
 ]);
 
-export const nextOwnedHeatStrokePageAliases = new Set(["pages/about.html"]);
+export const nextOwnedHeatStrokePageAliases = new Set([
+  "pages/about.html",
+  "pages/8-4-6-rule.html",
+]);
 
 export const tcccPageAliases = new Map([
   ["TACEVAC休克与液体复苏.html", "tacevac-shock-fluid.html"],

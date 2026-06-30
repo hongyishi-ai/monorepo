@@ -11,7 +11,7 @@ const urlsToCache = [
   '/assets/js/script.js',
   '/assets/images/favicon.ico',
   // pages 目录下的所有 HTML 页面
-  '/pages/8-4-6黄金法则.html',
+  '/heat-stroke/pages/8-4-6-rule',
   '/pages/热指数查询.html',
   '/pages/热耐力评估.html',
   '/pages/热射病现场处置.html',

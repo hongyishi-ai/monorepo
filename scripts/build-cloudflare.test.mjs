@@ -30,6 +30,7 @@ import {
   mapHeatStrokeOutputPath,
   mapTcccOutputPath,
   materializeNextOwnedProjectEntry,
+  nextOwnedHeatStrokePageAliases,
   normalizeBasePath,
   rewriteHeatStrokeText,
   rewriteTcccText,
@@ -408,12 +409,33 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
   assert.equal(
     shouldCopyHeatStrokePath("pages/关于本项目.html", {
       ...nextOwnedOptions,
-      nextOwnedPageAliases: new Set(["pages/about.html"]),
+      nextOwnedPageAliases: new Set([
+        "pages/about.html",
+        "pages/8-4-6-rule.html",
+      ]),
+    }),
+    false,
+  );
+  assert.equal(
+    shouldCopyHeatStrokePath("pages/8-4-6黄金法则.html", {
+      ...nextOwnedOptions,
+      nextOwnedPageAliases: new Set([
+        "pages/about.html",
+        "pages/8-4-6-rule.html",
+      ]),
     }),
     false,
   );
   assert.equal(
     shouldCopyHeatStrokePath("assets/js/script.js", nextOwnedOptions),
+    true,
+  );
+});
+
+test("default heat-stroke Next-owned pages include migrated deep pages", () => {
+  assert.equal(nextOwnedHeatStrokePageAliases.has("pages/about.html"), true);
+  assert.equal(
+    nextOwnedHeatStrokePageAliases.has("pages/8-4-6-rule.html"),
     true,
   );
 });
@@ -451,13 +473,20 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
       "<html><body>legacy about page</body></html>",
     );
     await writeFile(
+      path.join(srcDir, "pages", "8-4-6黄金法则.html"),
+      "<html><body>legacy rule page</body></html>",
+    );
+    await writeFile(
       path.join(srcDir, "assets", "js", "script.js"),
       "window.__heatStrokeTool = true;",
     );
 
     await copyHeatStrokeApp(srcDir, destDir, "/heat-stroke/", {
       routeOwner: "next",
-      nextOwnedPageAliases: new Set(["pages/about.html"]),
+      nextOwnedPageAliases: new Set([
+        "pages/about.html",
+        "pages/8-4-6-rule.html",
+      ]),
     });
 
     await assert.rejects(() => access(path.join(destDir, "index.html")), {
@@ -477,6 +506,10 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
     );
     await assert.rejects(
       () => access(path.join(destDir, "pages", "about.html")),
+      { code: "ENOENT" },
+    );
+    await assert.rejects(
+      () => access(path.join(destDir, "pages", "8-4-6-rule.html")),
       { code: "ENOENT" },
     );
     assert.equal(
