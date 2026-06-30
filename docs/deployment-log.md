@@ -27,6 +27,31 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-30 - e4019d5 - 热射病首页 Next 接管
+
+- Commit: `e4019d5e9bb877816b7e128d960d23c3eaabec68`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://dc9d46c3.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.105.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main --commit-dirty=true`
+- Verification:
+  - Red-green check: `pnpm exec node --test scripts/project-registry.test.mjs` first failed because heat-stroke was still `routeOwner: "cloudflare-build"`; after implementation it passed: `9/9`
+  - `pnpm exec prettier --check apps/portal/src/app/_components/theme-switcher.tsx apps/portal/src/app/globals.css apps/portal/src/app/heat-stroke/ProjectChrome.tsx apps/portal/src/app/heat-stroke/page.tsx packages/config/project-registry.mjs scripts/project-registry.test.mjs` passed
+  - `pnpm --filter @hongyishi/portal type-check` passed
+  - `pnpm test:cloudflare` passed: `57/57`
+  - `pnpm build:cloudflare` passed
+  - `.cloudflare/site/heat-stroke/index.html`, `.cloudflare/site/heat-stroke/pages/heat-index.html`, and `.cloudflare/site/heat-stroke/assets/css/tailwind.css` exist in the production bundle
+  - `HONGYISHI_AUDIT_BASE_URL=http://127.0.0.1:3021 pnpm audit:links` against local Pages preview passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `pnpm size:budget` passed: `395 files, 51.41 MiB total`
+  - Playwright smoke passed on `/heat-stroke/`: desktop hamburger hidden, global theme button hidden, no horizontal overflow; mobile theme toggled `html.dark`, `hongyishi-blog-theme`, and `theme` to `dark`, bottom nav stayed `fixed`, top menu stayed `static`, no horizontal overflow
+  - `HONGYISHI_AUDIT_BASE_URL=https://dc9d46c3.hongyishi-monorepo.pages.dev pnpm audit:links` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:links` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `https://hongyishi.cn/heat-stroke/` returned HTTP `200` with title `热射病防治 | 红医师`
+- Notes:
+  - Heat stroke root route is now owned by the Portal Next static export while legacy static child pages, assets, manifest, and service worker remain copied into `/heat-stroke/`.
+  - Added a project-specific React app shell for heat-stroke with the same mobile top-menu contract, fixed four-tab bottom nav, and shared day/night theme storage used by the existing static project shell.
+  - Added Portal global theme variables so token-based colors render consistently in both light and dark modes instead of only changing the outer app shell.
+
 ## 2026-06-30 - a17b23a - Next 项目入口静态导出适配
 
 - Commit: `a17b23a531adf25e25951cdfafcec10771b83273`
