@@ -1,5 +1,6 @@
 import { platformProjects } from "@/lib/projects";
 import { ProjectChrome } from "../_components/project/ProjectChrome";
+import { buildProjectChromeNav } from "../_components/project/projectNav";
 
 function getHeatStrokeProject() {
   const entry = platformProjects.find((item) => item.id === "heat-stroke");
@@ -12,55 +13,7 @@ function getHeatStrokeProject() {
 }
 
 const project = getHeatStrokeProject();
-
-const bottomItems = [
-  { id: "heat-index", label: "热指数", href: "/heat-stroke/pages/heat-index" },
-  {
-    id: "field-treatment",
-    label: "处置",
-    href: "/heat-stroke/pages/field-treatment",
-  },
-  { id: "rule", label: "法则", href: "/heat-stroke/pages/8-4-6-rule" },
-  { id: "library", label: "资料", href: "/heat-stroke/" },
-];
-
-const menuItems = [
-  { id: "platform", label: "总入口", href: "/" },
-  { id: "library", label: "项目首页", href: "/heat-stroke/" },
-  {
-    id: "heat-index",
-    label: "热指数查询",
-    href: "/heat-stroke/pages/heat-index",
-  },
-  {
-    id: "field-treatment",
-    label: "现场处置",
-    href: "/heat-stroke/pages/field-treatment",
-  },
-  { id: "rule", label: "8-4-6法则", href: "/heat-stroke/pages/8-4-6-rule" },
-  {
-    id: "guide",
-    label: "诊断与治疗指南",
-    href: "/heat-stroke/pages/diagnosis-treatment-guideline",
-  },
-  {
-    id: "consensus",
-    label: "救治体系共识",
-    href: "/heat-stroke/pages/treatment-system-consensus",
-  },
-  {
-    id: "heat-tolerance",
-    label: "热耐力评估",
-    href: "/heat-stroke/pages/heat-tolerance",
-  },
-  {
-    id: "cooling",
-    label: "核心体温与降温",
-    href: "/heat-stroke/pages/core-temperature-cooling",
-  },
-  { id: "challenge", label: "通关挑战", href: "/heat-stroke/pages/challenge" },
-  { id: "about", label: "关于项目", href: "/heat-stroke/pages/about" },
-];
+const projectChromeNav = buildProjectChromeNav("heatStroke", "/heat-stroke/");
 
 const priorityTools = [
   {
@@ -138,17 +91,17 @@ export default function HeatStrokePage() {
       <ProjectChrome
         activeBottomItemId="library"
         activeMenuItemId="library"
-        bottomAriaLabel="热射病项目移动端导航"
-        bottomItems={bottomItems}
+        bottomAriaLabel={projectChromeNav.bottomAriaLabel}
+        bottomItems={projectChromeNav.bottomItems}
         brandHref="/heat-stroke/"
         menuAriaLabel="热射病项目移动端菜单"
         menuButtonLabel="打开热射病项目移动端导航菜单"
-        menuItems={menuItems}
+        menuItems={projectChromeNav.menuItems}
         menuPanelId="hys-mobile-top-menu-panel-heatStroke"
         navAriaLabel="热射病防治导航"
         projectLabel="热射病防治"
         scope="heatStroke"
-        titlePrefix="打开热射病"
+        titlePrefix={projectChromeNav.titlePrefix}
       />
 
       <main id="main">

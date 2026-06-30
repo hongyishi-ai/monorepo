@@ -1,5 +1,6 @@
 import { platformProjects } from "@/lib/projects";
 import { ProjectChrome } from "../_components/project/ProjectChrome";
+import { buildProjectChromeNav } from "../_components/project/projectNav";
 
 function getTcccProject() {
   const entry = platformProjects.find((item) => item.id === "tccc");
@@ -12,37 +13,7 @@ function getTcccProject() {
 }
 
 const project = getTcccProject();
-
-const bottomItems = [
-  { id: "standard", label: "标准", href: "/tccc/pages/tccc-standard" },
-  { id: "tfc", label: "TFC", href: "/tccc/pages/tfc-hemorrhage" },
-  {
-    id: "tacevac",
-    label: "TACEVAC",
-    href: "/tccc/pages/tacevac-reassessment",
-  },
-  { id: "directory", label: "目录", href: "/tccc/" },
-];
-
-const menuItems = [
-  { id: "platform", label: "总入口", href: "/" },
-  { id: "directory", label: "项目首页", href: "/tccc/" },
-  { id: "standard", label: "标准流程", href: "/tccc/pages/tccc-standard" },
-  { id: "tfc", label: "TFC 大出血", href: "/tccc/pages/tfc-hemorrhage" },
-  { id: "airway", label: "TFC 气道", href: "/tccc/pages/tfc-airway" },
-  { id: "breathing", label: "呼吸管理", href: "/tccc/pages/tccc-breathing" },
-  {
-    id: "hypothermia",
-    label: "低体温预防",
-    href: "/tccc/pages/tccc-hypothermia",
-  },
-  {
-    id: "tacevac",
-    label: "TACEVAC 复评",
-    href: "/tccc/pages/tacevac-reassessment",
-  },
-  { id: "course", label: "课程目录", href: "/tccc/pages/tccc-flow-framework" },
-];
+const projectChromeNav = buildProjectChromeNav("tccc", "/tccc/");
 
 const primaryFlows = [
   {
@@ -182,17 +153,17 @@ export default function TcccPage() {
       <ProjectChrome
         activeBottomItemId="directory"
         activeMenuItemId="directory"
-        bottomAriaLabel="TCCC 项目移动端导航"
-        bottomItems={bottomItems}
+        bottomAriaLabel={projectChromeNav.bottomAriaLabel}
+        bottomItems={projectChromeNav.bottomItems}
         brandHref="/tccc/"
         menuAriaLabel="TCCC 项目移动端菜单"
         menuButtonLabel="打开 TCCC 项目移动端导航菜单"
-        menuItems={menuItems}
+        menuItems={projectChromeNav.menuItems}
         menuPanelId="hys-mobile-top-menu-panel-tccc"
         navAriaLabel="红医师战场救护导航"
         projectLabel="战场救护"
         scope="tccc"
-        titlePrefix="打开 TCCC "
+        titlePrefix={projectChromeNav.titlePrefix}
       />
 
       <main id="main">

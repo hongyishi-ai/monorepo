@@ -11,8 +11,8 @@ hongyishi-monorepo/
 ├── apps/
 │   ├── portal/        # 红医师门户（Next.js 15 + React 18）
 │   ├── fms/           # 训练伤防治平台（Vite + PWA + React 18）
-│   ├── heat-stroke/   # 热射病防治平台（静态 PWA）
-│   └── tccc/          # 战场救护 TCCC 平台（静态 PWA）
+│   ├── heat-stroke/   # 热射病防治平台（Next 首页 + 静态流程/PWA 资产）
+│   └── tccc/          # 战场救护 TCCC 平台（Next 首页 + 静态流程/PWA 资产）
 ├── packages/
 │   ├── ui/            # 共享 UI 组件库
 │   ├── utils/         # 共享工具库（含 format/validation/api）
@@ -77,32 +77,32 @@ pnpm --filter @hongyishi/heat-stroke dev
 
 ## 应用端口
 
-| App         | 端口     | 访问                                       |
-| ----------- | -------- | ------------------------------------------ |
-| portal      | 3000     | http://localhost:3000                      |
-| fms         | 5175     | http://localhost:5175                      |
-| heat-stroke | 3000     | `npx serve apps/heat-stroke -l 3000`       |
-| tccc        | 静态文件 | 由 `pnpm build:cloudflare` 拼装到 `/tccc/` |
+| App         | 端口 | 访问                                                                        |
+| ----------- | ---- | --------------------------------------------------------------------------- |
+| portal      | 3000 | http://localhost:3000                                                       |
+| fms         | 5175 | http://localhost:5175                                                       |
+| heat-stroke | 3000 | Portal Next 路由 `/heat-stroke/`；静态深层页由 `pnpm build:cloudflare` 拼装 |
+| tccc        | 3000 | Portal Next 路由 `/tccc/`；静态深层页由 `pnpm build:cloudflare` 拼装        |
 
 ## 统一入口平台
 
 Cloudflare Pages 单站输出目录为 `.cloudflare/site`：
 
-| 路径               | 来源                           |
-| ------------------ | ------------------------------ |
-| `/`                | `apps/portal` 静态导出         |
-| `/fms/`            | `apps/fms` Vite PWA            |
-| `/heat-stroke/`    | `apps/heat-stroke` 静态 PWA    |
-| `/tccc/`           | `apps/tccc` 静态 PWA           |
-| `/api/openweather` | `functions/api/openweather.js` |
+| 路径               | 来源                                                    |
+| ------------------ | ------------------------------------------------------- |
+| `/`                | `apps/portal` 静态导出                                  |
+| `/fms/`            | `apps/fms` Vite PWA                                     |
+| `/heat-stroke/`    | `apps/portal` Next 首页 + `apps/heat-stroke` 静态深层页 |
+| `/tccc/`           | `apps/portal` Next 首页 + `apps/tccc` 静态深层页        |
+| `/api/openweather` | `functions/api/openweather.js`                          |
 
 `pnpm build:cloudflare` 会生成：
 
 - `.cloudflare/site/_redirects`：统一站点路由和 FMS SPA fallback
 - `.cloudflare/site/_headers`：静态资源缓存、安全响应头和 CSP 基线
 - `.cloudflare/site/fms`：带 `/fms/` base path 的 FMS 产物
-- `.cloudflare/site/heat-stroke`：带 `/heat-stroke/` 路径重写的热射病静态产物
-- `.cloudflare/site/tccc`：带 `/tccc/` 路径重写的 TCCC 静态产物
+- `.cloudflare/site/heat-stroke`：Next 接管首页，保留带 `/heat-stroke/` 路径重写的热射病静态深层页与 PWA 资产
+- `.cloudflare/site/tccc`：Next 接管首页，保留带 `/tccc/` 路径重写的 TCCC 静态深层页与 PWA 资产
 
 新增项目入口时，优先更新 `apps/portal/src/lib/projects.json`，再通过 `apps/portal/src/lib/projects.ts` 暴露给 Portal。Cloudflare base path、内容治理、代表性审计路由和移动端导航审计期望由 `@hongyishi/config/project-registry` 从同一注册表派生，避免链接、封面、颜色、状态和审计规则分散维护。
 
