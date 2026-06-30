@@ -27,6 +27,26 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-06-30 - c7f3627 - 共享静态项目移动导航激活态解析
+
+- Commit: `c7f36275f16be98daeb55b48d99b0400f71f7c27`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://3c304170.hongyishi-monorepo.pages.dev
+- Deploy method: `HTTPS_PROXY=http://127.0.0.1:7897 HTTP_PROXY=http://127.0.0.1:7897 ALL_PROXY=http://127.0.0.1:7897 npx wrangler@4.105.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - `node --test scripts/project-registry.test.mjs scripts/build-cloudflare.test.mjs` passed: `38/38`
+  - `pnpm test:cloudflare` passed: `53/53`
+  - `pnpm build:cloudflare` passed
+  - `pnpm size:budget` passed: `392 files, 51.34 MiB total`
+  - `pnpm audit:links` against local Pages preview passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `HONGYISHI_AUDIT_BASE_URL=https://3c304170.hongyishi-monorepo.pages.dev pnpm audit:links` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:links` passed: internal `38/38`, representative `18/18`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - Moved static project bottom-nav active tab and top-menu active item resolution into `@hongyishi/config/app-shell/mobile-nav`.
+  - `scripts/build-cloudflare.mjs` now consumes shared app-shell mobile navigation state helpers instead of keeping its own heat-stroke/TCCC active-state mapping.
+  - The first deploy attempt failed before upload because the current shell did not inherit the macOS proxy while DNS returned a `198.18.x.x` fake-ip; rerunning Wrangler with explicit proxy environment variables succeeded.
+
 ## 2026-06-28 - e668b37 - 静态项目移动端顶部控件与主题统一
 
 - Commit: `e668b3742cbd21a559f0855d1d560550867a860a`
