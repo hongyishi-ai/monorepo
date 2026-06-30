@@ -107,6 +107,61 @@ export function resolveMobileNavItems(scope, basePath = "/", options = {}) {
   }));
 }
 
+export function resolveProjectMobileActiveTab(project, relativePath) {
+  const fileName = getMobileNavFileName(relativePath);
+
+  if (project === "heatStroke") {
+    if (fileName === "heat-index.html") return "heat-index";
+    if (fileName === "field-treatment.html") return "field-treatment";
+    if (fileName === "8-4-6-rule.html") return "rule";
+    return "library";
+  }
+
+  if (project === "tccc") {
+    if (
+      fileName === "tccc-standard.html" ||
+      fileName === "tccc-flow-framework.html"
+    ) {
+      return "standard";
+    }
+    if (fileName.startsWith("tfc-")) return "tfc";
+    if (fileName.startsWith("tacevac-")) return "tacevac";
+    return "directory";
+  }
+
+  return undefined;
+}
+
+export function resolveProjectMobileMenuActiveItem(project, relativePath) {
+  const fileName = getMobileNavFileName(relativePath);
+
+  if (project === "heatStroke") {
+    if (fileName === "heat-index.html") return "heat-index";
+    if (fileName === "field-treatment.html") return "field-treatment";
+    if (fileName === "8-4-6-rule.html") return "rule";
+    if (fileName === "diagnosis-treatment-guideline.html") return "guide";
+    if (fileName === "treatment-system-consensus.html") return "consensus";
+    if (fileName === "heat-tolerance.html") return "heat-tolerance";
+    if (fileName === "core-temperature-cooling.html") return "cooling";
+    if (fileName === "challenge.html") return "challenge";
+    if (fileName === "about.html") return "about";
+    return "library";
+  }
+
+  if (project === "tccc") {
+    if (fileName === "tccc-standard.html") return "standard";
+    if (fileName === "tfc-hemorrhage.html") return "tfc";
+    if (fileName === "tfc-airway.html") return "airway";
+    if (fileName === "tccc-breathing.html") return "breathing";
+    if (fileName === "tccc-hypothermia.html") return "hypothermia";
+    if (fileName.startsWith("tacevac-")) return "tacevac";
+    if (fileName === "tccc-flow-framework.html") return "course";
+    return "directory";
+  }
+
+  return undefined;
+}
+
 function joinMobileNavBasePath(basePath, relativeHref) {
   if (relativeHref.startsWith("/")) {
     return relativeHref;
@@ -119,4 +174,11 @@ function joinMobileNavBasePath(basePath, relativeHref) {
   }
 
   return `${base}${relativeHref.replace(/^\/+/, "")}`;
+}
+
+function getMobileNavFileName(relativePath) {
+  const normalizedPath = String(relativePath)
+    .split(/[\\/]+/)
+    .join("/");
+  return normalizedPath.split("/").pop() ?? "";
 }

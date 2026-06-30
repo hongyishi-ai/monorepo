@@ -18,6 +18,8 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import {
   mobileNavConfigs,
   resolveMobileNavItems,
+  resolveProjectMobileActiveTab,
+  resolveProjectMobileMenuActiveItem,
 } from "../packages/config/app-shell/mobile-nav.mjs";
 import {
   renderFallbackBrandHeader,
@@ -189,61 +191,6 @@ function resolveCloudflareBasePaths(overrides = {}) {
   }
 
   return resolved;
-}
-
-export function resolveProjectMobileActiveTab(project, relativePath) {
-  const normalizedPath = relativePath.split(path.sep).join("/");
-  const fileName = path.posix.basename(normalizedPath);
-
-  if (project === "heatStroke") {
-    if (fileName === "heat-index.html") return "heat-index";
-    if (fileName === "field-treatment.html") return "field-treatment";
-    if (fileName === "8-4-6-rule.html") return "rule";
-    return "library";
-  }
-
-  if (project === "tccc") {
-    if (
-      fileName === "tccc-standard.html" ||
-      fileName === "tccc-flow-framework.html"
-    )
-      return "standard";
-    if (fileName.startsWith("tfc-")) return "tfc";
-    if (fileName.startsWith("tacevac-")) return "tacevac";
-    return "directory";
-  }
-
-  return undefined;
-}
-
-function resolveHeatStrokeMenuActiveItem(relativePath) {
-  const normalizedPath = relativePath.split(path.sep).join("/");
-  const fileName = path.posix.basename(normalizedPath);
-
-  if (fileName === "heat-index.html") return "heat-index";
-  if (fileName === "field-treatment.html") return "field-treatment";
-  if (fileName === "8-4-6-rule.html") return "rule";
-  if (fileName === "diagnosis-treatment-guideline.html") return "guide";
-  if (fileName === "treatment-system-consensus.html") return "consensus";
-  if (fileName === "heat-tolerance.html") return "heat-tolerance";
-  if (fileName === "core-temperature-cooling.html") return "cooling";
-  if (fileName === "challenge.html") return "challenge";
-  if (fileName === "about.html") return "about";
-  return "library";
-}
-
-function resolveTcccMenuActiveItem(relativePath) {
-  const normalizedPath = relativePath.split(path.sep).join("/");
-  const fileName = path.posix.basename(normalizedPath);
-
-  if (fileName === "tccc-standard.html") return "standard";
-  if (fileName === "tfc-hemorrhage.html") return "tfc";
-  if (fileName === "tfc-airway.html") return "airway";
-  if (fileName === "tccc-breathing.html") return "breathing";
-  if (fileName === "tccc-hypothermia.html") return "hypothermia";
-  if (fileName.startsWith("tacevac-")) return "tacevac";
-  if (fileName === "tccc-flow-framework.html") return "course";
-  return "directory";
 }
 
 export function buildRedirects(options = {}) {
@@ -956,7 +903,10 @@ export function rewriteHeatStrokeText(content, relativePath, basePath) {
     );
     output = injectMobileHamburgerNav(
       output,
-      resolveHeatStrokeMenuActiveItem(mapHeatStrokeOutputPath(normalizedPath)),
+      resolveProjectMobileMenuActiveItem(
+        "heatStroke",
+        mapHeatStrokeOutputPath(normalizedPath),
+      ),
       {
         scope: "heatStroke",
         basePath: base,
@@ -1042,7 +992,10 @@ export function rewriteTcccText(content, relativePath, basePath) {
     );
     output = injectMobileHamburgerNav(
       output,
-      resolveTcccMenuActiveItem(mapTcccOutputPath(normalizedPath)),
+      resolveProjectMobileMenuActiveItem(
+        "tccc",
+        mapTcccOutputPath(normalizedPath),
+      ),
       {
         scope: "tccc",
         basePath: base,

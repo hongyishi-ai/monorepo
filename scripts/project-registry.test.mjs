@@ -16,6 +16,8 @@ import {
 import {
   mobileNavConfigs,
   resolveMobileNavItems,
+  resolveProjectMobileActiveTab,
+  resolveProjectMobileMenuActiveItem,
 } from "../packages/config/app-shell/mobile-nav.mjs";
 
 const repoRoot = path.resolve(
@@ -273,6 +275,61 @@ test("link audit mobile nav expectations reuse shared app shell mobile nav confi
   assert.equal(
     configPackage.exports["./app-shell/mobile-nav"],
     "./app-shell/mobile-nav.mjs",
+  );
+});
+
+test("static project mobile active states are resolved by the shared app shell config", async () => {
+  const buildSource = await readFile(
+    path.join(repoRoot, "scripts", "build-cloudflare.mjs"),
+    "utf8",
+  );
+
+  assert.equal(
+    resolveProjectMobileActiveTab("heatStroke", "pages/heat-index.html"),
+    "heat-index",
+  );
+  assert.equal(
+    resolveProjectMobileActiveTab("heatStroke", "index.html"),
+    "library",
+  );
+  assert.equal(
+    resolveProjectMobileActiveTab("tccc", "pages/tfc-airway.html"),
+    "tfc",
+  );
+  assert.equal(
+    resolveProjectMobileActiveTab("tccc", "pages/tacevac-airway.html"),
+    "tacevac",
+  );
+  assert.equal(
+    resolveProjectMobileMenuActiveItem(
+      "heatStroke",
+      "pages/diagnosis-treatment-guideline.html",
+    ),
+    "guide",
+  );
+  assert.equal(
+    resolveProjectMobileMenuActiveItem(
+      "heatStroke",
+      "pages/core-temperature-cooling.html",
+    ),
+    "cooling",
+  );
+  assert.equal(
+    resolveProjectMobileMenuActiveItem("tccc", "pages/tfc-airway.html"),
+    "airway",
+  );
+  assert.equal(
+    resolveProjectMobileMenuActiveItem(
+      "tccc",
+      "pages/tccc-flow-framework.html",
+    ),
+    "course",
+  );
+  assert.doesNotMatch(buildSource, /function resolveHeatStrokeMenuActiveItem/);
+  assert.doesNotMatch(buildSource, /function resolveTcccMenuActiveItem/);
+  assert.doesNotMatch(
+    buildSource,
+    /export function resolveProjectMobileActiveTab/,
   );
 });
 
