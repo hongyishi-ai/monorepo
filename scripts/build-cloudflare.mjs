@@ -257,11 +257,15 @@ export function mapHeatStrokeOutputPath(relativePath) {
   return path.posix.join(path.posix.dirname(normalized), alias);
 }
 
-export function shouldCopyTcccPath(relativePath) {
+export function shouldCopyTcccPath(relativePath, options = {}) {
   const normalized = relativePath.split(path.sep).join("/");
   const fileName = path.posix.basename(normalized);
 
   if (fileName.startsWith(".") || normalized.includes("/.")) {
+    return false;
+  }
+
+  if (normalized === "index.html" && options.routeOwner === "next") {
     return false;
   }
 
@@ -982,7 +986,7 @@ export async function copyHeatStrokeApp(
   await copyEntry(srcDir);
 }
 
-async function copyTcccApp(srcDir, destDir, basePath) {
+export async function copyTcccApp(srcDir, destDir, basePath, options = {}) {
   async function copyEntry(currentDir) {
     const entries = await readdir(currentDir, { withFileTypes: true });
 
@@ -995,7 +999,7 @@ async function copyTcccApp(srcDir, destDir, basePath) {
         continue;
       }
 
-      if (!entry.isFile() || !shouldCopyTcccPath(relativePath)) {
+      if (!entry.isFile() || !shouldCopyTcccPath(relativePath, options)) {
         continue;
       }
 
@@ -1182,6 +1186,11 @@ export async function buildCloudflareSite(options = {}) {
     heatStrokeBase,
     runtimeById.get("heat-stroke")?.routeOwner,
   );
+  await materializeNextOwnedProjectEntry(
+    outputDir,
+    tcccBase,
+    runtimeById.get("tccc")?.routeOwner,
+  );
   await cp(
     fmsOutput,
     path.join(outputDir, normalizeBasePath(fmsBase).replace(/^\/|\/$/g, "")),
@@ -1214,6 +1223,7 @@ export async function buildCloudflareSite(options = {}) {
     tcccSource,
     path.join(outputDir, normalizeBasePath(tcccBase).replace(/^\/|\/$/g, "")),
     tcccBase,
+    { routeOwner: runtimeById.get("tccc")?.routeOwner },
   );
   await writeFile(
     path.join(outputDir, "_redirects"),

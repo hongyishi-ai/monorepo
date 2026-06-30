@@ -51,8 +51,8 @@ export const projectRuntimeContracts = {
   },
   tccc: {
     runtime: "static-html-tailwind",
-    routeOwner: "cloudflare-build",
-    nextMigrationStage: "second-static-candidate",
+    routeOwner: "next",
+    nextMigrationStage: "next-home-owned",
     migrationRisk: "medium",
   },
 };

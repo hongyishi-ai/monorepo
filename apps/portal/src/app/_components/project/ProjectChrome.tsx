@@ -2,15 +2,26 @@
 
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 
-type NavItem = {
+export type ProjectNavItem = {
   id: string;
   label: string;
   href: string;
 };
 
 type ProjectChromeProps = {
-  bottomItems: NavItem[];
-  menuItems: NavItem[];
+  activeBottomItemId: string;
+  activeMenuItemId: string;
+  bottomAriaLabel: string;
+  bottomItems: ProjectNavItem[];
+  brandHref: string;
+  menuAriaLabel: string;
+  menuButtonLabel: string;
+  menuItems: ProjectNavItem[];
+  menuPanelId: string;
+  navAriaLabel: string;
+  projectLabel: string;
+  scope: string;
+  titlePrefix: string;
 };
 
 const portalThemeKey = "hongyishi-blog-theme";
@@ -91,11 +102,24 @@ function Icon({ name }: { name: "menu" | "close" | "moon" | "sun" }) {
   );
 }
 
-export function ProjectChrome({ bottomItems, menuItems }: ProjectChromeProps) {
+export function ProjectChrome({
+  activeBottomItemId,
+  activeMenuItemId,
+  bottomAriaLabel,
+  bottomItems,
+  brandHref,
+  menuAriaLabel,
+  menuButtonLabel,
+  menuItems,
+  menuPanelId,
+  navAriaLabel,
+  projectLabel,
+  scope,
+  titlePrefix,
+}: ProjectChromeProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const headerRef = useRef<HTMLElement>(null);
-  const menuPanelId = "hys-mobile-top-menu-panel-heatStroke";
 
   useEffect(() => {
     const initialTheme = readStoredTheme();
@@ -156,22 +180,22 @@ export function ProjectChrome({ bottomItems, menuItems }: ProjectChromeProps) {
         data-hongyishi-project-theme-owner
       >
         <nav
-          aria-label="热射病防治导航"
+          aria-label={navAriaLabel}
           className="mx-auto flex min-h-[78px] w-[min(1200px,calc(100%_-_32px))] items-center justify-between gap-3 border-b-2 border-border py-3 lg:border-b-0"
         >
           <a
-            aria-label="红医师 / 热射病防治"
+            aria-label={`红医师 / ${projectLabel}`}
             className="min-w-0 text-[clamp(1.15rem,6.2vw,1.8rem)] font-black leading-none text-foreground no-underline"
-            href="/heat-stroke/"
+            href={brandHref}
           >
             <span className="text-primary">红医师</span>
             <span className="mx-2 text-muted-foreground">/</span>
-            <span>热射病防治</span>
+            <span>{projectLabel}</span>
           </a>
 
           <div
             className="hidden items-center gap-1 lg:flex"
-            aria-label="热射病防治桌面导航"
+            aria-label={`${projectLabel}桌面导航`}
           >
             {menuItems.slice(0, 5).map((item) => (
               <a
@@ -185,10 +209,10 @@ export function ProjectChrome({ bottomItems, menuItems }: ProjectChromeProps) {
           </div>
 
           <div
-            aria-label="热射病项目移动端菜单"
+            aria-label={menuAriaLabel}
             className="hys-mobile-top-menu flex flex-none items-center gap-1"
             data-hongyishi-mobile-menu
-            data-hys-mobile-menu-scope="heatStroke"
+            data-hys-mobile-menu-scope={scope}
           >
             <button
               aria-label="切换深浅色主题"
@@ -202,9 +226,7 @@ export function ProjectChrome({ bottomItems, menuItems }: ProjectChromeProps) {
             <button
               aria-controls={menuPanelId}
               aria-expanded={isMenuOpen}
-              aria-label={
-                isMenuOpen ? "关闭菜单" : "打开热射病项目移动端导航菜单"
-              }
+              aria-label={isMenuOpen ? "关闭菜单" : menuButtonLabel}
               className="inline-grid min-h-14 min-w-14 place-items-center rounded bg-accent text-accent-foreground transition-transform active:translate-y-px lg:hidden"
               data-hys-mobile-menu-toggle
               onClick={() => setIsMenuOpen((current) => !current)}
@@ -223,9 +245,9 @@ export function ProjectChrome({ bottomItems, menuItems }: ProjectChromeProps) {
           <div className="grid gap-1">
             {menuItems.map((item) => (
               <a
-                aria-current={item.id === "library" ? "page" : undefined}
+                aria-current={item.id === activeMenuItemId ? "page" : undefined}
                 className={`min-h-[58px] rounded px-4 py-4 text-lg font-black no-underline transition-colors ${
-                  item.id === "library"
+                  item.id === activeMenuItemId
                     ? "bg-card text-primary shadow-[inset_0_-3px_0_hsl(var(--primary))]"
                     : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                 }`}
@@ -241,13 +263,13 @@ export function ProjectChrome({ bottomItems, menuItems }: ProjectChromeProps) {
       </header>
 
       <nav
-        aria-label="热射病项目移动端导航"
+        aria-label={bottomAriaLabel}
         className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-4 gap-1 border-t-2 border-foreground bg-background/95 px-3 pb-[calc(env(safe-area-inset-bottom)_+_0.5rem)] pt-2 shadow-[0_-10px_28px_rgba(0,0,0,0.16)] backdrop-blur md:hidden"
         data-hongyishi-mobile-nav
-        data-hys-mobile-nav-scope="heatStroke"
+        data-hys-mobile-nav-scope={scope}
       >
         {bottomItems.map((item) => {
-          const isActive = item.id === "library";
+          const isActive = item.id === activeBottomItemId;
 
           return (
             <a
@@ -259,7 +281,7 @@ export function ProjectChrome({ bottomItems, menuItems }: ProjectChromeProps) {
               }`}
               href={item.href}
               key={item.id}
-              title={`打开热射病${item.label}`}
+              title={`${titlePrefix}${item.label}`}
             >
               {item.label}
             </a>

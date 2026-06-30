@@ -870,6 +870,23 @@ test("shouldCopyTcccPath keeps deployable static assets and excludes app interna
   assert.equal(shouldCopyTcccPath("package.json"), false);
 });
 
+test("shouldCopyTcccPath can preserve a Next-owned project entry", () => {
+  const nextOwnedOptions = { routeOwner: "next" };
+
+  assert.equal(shouldCopyTcccPath("index.html", nextOwnedOptions), false);
+  assert.equal(shouldCopyTcccPath("manifest.json", nextOwnedOptions), true);
+  assert.equal(shouldCopyTcccPath("sw.js", nextOwnedOptions), true);
+  assert.equal(shouldCopyTcccPath("pwa-register.js", nextOwnedOptions), true);
+  assert.equal(
+    shouldCopyTcccPath("pages/TCCC标准流程.html", nextOwnedOptions),
+    true,
+  );
+  assert.equal(
+    shouldCopyTcccPath("images/01_heart_valves_diagram.webp", nextOwnedOptions),
+    true,
+  );
+});
+
 test("heat-stroke source pages expose unified brand navigation", async () => {
   const pageFiles = (await readdir(heatStrokePagesDir)).filter((file) =>
     file.endsWith(".html"),

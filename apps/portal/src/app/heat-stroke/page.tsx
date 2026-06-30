@@ -1,5 +1,5 @@
 import { platformProjects } from "@/lib/projects";
-import { ProjectChrome } from "./ProjectChrome";
+import { ProjectChrome } from "../_components/project/ProjectChrome";
 
 function getHeatStrokeProject() {
   const entry = platformProjects.find((item) => item.id === "heat-stroke");
@@ -135,7 +135,21 @@ export default function HeatStrokePage() {
       className="min-h-screen overflow-x-hidden bg-background pb-[calc(env(safe-area-inset-bottom)_+_5.75rem)] text-foreground md:pb-0"
       data-hongyishi-project-page
     >
-      <ProjectChrome bottomItems={bottomItems} menuItems={menuItems} />
+      <ProjectChrome
+        activeBottomItemId="library"
+        activeMenuItemId="library"
+        bottomAriaLabel="热射病项目移动端导航"
+        bottomItems={bottomItems}
+        brandHref="/heat-stroke/"
+        menuAriaLabel="热射病项目移动端菜单"
+        menuButtonLabel="打开热射病项目移动端导航菜单"
+        menuItems={menuItems}
+        menuPanelId="hys-mobile-top-menu-panel-heatStroke"
+        navAriaLabel="热射病防治导航"
+        projectLabel="热射病防治"
+        scope="heatStroke"
+        titlePrefix="打开热射病"
+      />
 
       <main id="main">
         <section

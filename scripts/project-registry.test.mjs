@@ -289,9 +289,15 @@ test("integrated project runtime ownership guards Next route handoff", async () 
     "next-home-owned",
   );
   assert.equal(
-    runtimeById.get("tccc").nextMigrationStage,
-    "second-static-candidate",
+    runtimeById.get("tccc").routeOwner,
+    "next",
+    "tccc should now be owned by the Portal Next route",
   );
+  assert.ok(
+    portalTopLevelRoutes.has("tccc"),
+    "tccc Next handoff requires apps/portal/src/app/tccc",
+  );
+  assert.equal(runtimeById.get("tccc").nextMigrationStage, "next-home-owned");
   assert.equal(
     runtimeById.get("fms").nextMigrationStage,
     "deferred-stateful-tool",
