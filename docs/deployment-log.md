@@ -27,6 +27,32 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-07-01 - d02afce - 热射病救治体系共识页 Next 接管
+
+- Commit: `d02afce42423d345a7348e399cac6623215a56e8`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://678887af.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.106.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - Red-green checks: `pnpm exec node --test scripts/build-cloudflare.test.mjs` first failed because `pages/treatment-system-consensus.html` was not in the default Next-owned heat-stroke deep-page set; after implementation it passed
+  - Red-green checks: `pnpm exec node --test scripts/project-registry.test.mjs` first failed because `/heat-stroke/pages/treatment-system-consensus` was not in representative audit routes and the migration stage was stale; after implementation it passed
+  - `pnpm --filter @hongyishi/portal type-check` passed
+  - `pnpm audit:static-debt` passed: heat-stroke `6` HTML files, `5` style blocks, `21` style attrs, `0` legacy home links; TCCC unchanged at `26` HTML files, `26` style blocks, `25` style attrs, `0` legacy home links
+  - `pnpm test:cloudflare` passed: `62/62`
+  - `pnpm build:cloudflare` passed and exported `/heat-stroke/pages/treatment-system-consensus`
+  - `pnpm size:budget` passed: `406 files, 51.83 MiB total`
+  - Local Pages preview `HONGYISHI_AUDIT_BASE_URL=http://127.0.0.1:3022 pnpm audit:links` passed: internal `37/37`, representative `21/21`, mobile nav `6/6`, guide surfaces `15/15`
+  - Playwright mobile smoke passed on `/heat-stroke/pages/treatment-system-consensus`: project shell present, key consensus sections visible, bottom nav active item `资料`, hamburger menu active href `/heat-stroke/pages/treatment-system-consensus`, no 390px horizontal overflow, day/night toggle updates page and cards, and back-to-top works
+  - `https://678887af.hongyishi-monorepo.pages.dev/heat-stroke/pages/treatment-system-consensus` returned HTTP `200` with the Next project shell and page title
+  - `HONGYISHI_AUDIT_BASE_URL=https://678887af.hongyishi-monorepo.pages.dev pnpm audit:links` passed: internal `37/37`, representative `21/21`, mobile nav `6/6`, guide surfaces `15/15`
+  - `https://hongyishi.cn/heat-stroke/pages/treatment-system-consensus` returned HTTP `200` with the Next project shell and page title
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:links` passed: internal `37/37`, representative `21/21`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - Moved heat-stroke `热射病救治体系建设标准专家共识` from standalone static HTML into the Portal Next app at `/heat-stroke/pages/treatment-system-consensus`, reusing the shared `ProjectChrome` navigation and day/night theme behavior.
+  - Deleted the old static consensus HTML source and repointed remaining heat-stroke links and service-worker cache entries to `/heat-stroke/pages/treatment-system-consensus`.
+  - Tightened the heat-stroke static debt baseline from `6` to `5` style blocks and from `29` to `21` inline style attributes, and updated the migration stage to `next-home-about-rule-guide-and-consensus-owned-static-deep-pages-pending`.
+
 ## 2026-07-01 - ebcd789 - 热射病诊断与治疗指南页 Next 接管
 
 - Commit: `ebcd789f43cb8c56891063dc50088157fb722120`
