@@ -27,6 +27,34 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-07-01 - 3f86e19 - 热射病现场处置页 Next 接管
+
+- Commit: `3f86e196b22d3f633e856ec9ae176104bf34283c`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://9206d34c.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.106.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - Red-green checks: `pnpm exec node --test scripts/build-cloudflare.test.mjs` first failed because the Next field-treatment source did not yet exist; after implementation it passed
+  - `pnpm exec node --test scripts/project-registry.test.mjs` passed
+  - `pnpm --filter @hongyishi/portal type-check` passed
+  - `pnpm audit:static-debt` passed: heat-stroke `2` HTML files, `1` style block, `0` style attrs, `0` legacy home links; TCCC unchanged at `26` HTML files, `26` style blocks, `25` style attrs, `0` legacy home links
+  - `pnpm test:cloudflare` passed: `65/65`
+  - `pnpm build:cloudflare` passed and exported `/heat-stroke/pages/field-treatment`
+  - `pnpm size:budget` passed: `414 files, 51.85 MiB total`
+  - Build output checks passed: `.cloudflare/site/heat-stroke/pages/field-treatment.html` exists and `.cloudflare/site/heat-stroke/pages/热射病现场处置.html` does not exist
+  - Local Pages preview `HONGYISHI_AUDIT_BASE_URL=http://127.0.0.1:3026 pnpm audit:links` passed: internal `37/37`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+  - Playwright mobile smoke passed on `/heat-stroke/pages/field-treatment`: project shell present, hamburger menu active item `现场处置`, bottom nav active item `处置`, no 390px horizontal overflow, day/night toggle switched page to dark mode, future steps stayed locked until reached, high-risk branch with seizure and unconscious care completed, high temperature/heart-rate/low-blood-pressure/low-oxygen alerts displayed, and summary reported `处置用时`, `40.5°C`, and continued cooling/oxygen warnings
+  - `https://9206d34c.hongyishi-monorepo.pages.dev/heat-stroke/pages/field-treatment` returned HTTP `200` with the Next project shell, page title, and flow markers; `https://9206d34c.hongyishi-monorepo.pages.dev/heat-stroke/pages/热射病现场处置.html` returned HTTP `404`
+  - `HONGYISHI_AUDIT_BASE_URL=https://9206d34c.hongyishi-monorepo.pages.dev pnpm audit:links` passed: internal `37/37`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+  - `https://hongyishi.cn/heat-stroke/pages/field-treatment` returned HTTP `200` with the Next project shell, page title, and flow markers; `https://hongyishi.cn/heat-stroke/pages/热射病现场处置.html` returned HTTP `404`
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:links` passed: internal `37/37`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - Moved heat-stroke `热射病现场处置` from standalone static HTML into the Portal Next app at `/heat-stroke/pages/field-treatment`, preserving the 6-step field treatment flow, conditional unconscious/seizure branches, vitals thresholds, oxygen/cooling warnings, timer, and final summary.
+  - Rebuilt the old page-local black/orange static shell as the shared Next `ProjectChrome` experience with unified mobile hamburger menu, bottom nav, and day/night theme behavior.
+  - Deleted the old static field-treatment HTML source and repointed remaining heat-stroke links and service-worker cache entries to `/heat-stroke/pages/field-treatment`.
+  - Tightened the heat-stroke static debt baseline from `2` to `1` style blocks and from `6` to `0` inline style attributes, and updated the migration stage to `next-home-about-rule-guide-consensus-cooling-tolerance-challenge-and-field-treatment-owned-static-deep-pages-pending`.
+
 ## 2026-07-01 - 245962b - 热射病通关挑战页 Next 接管
 
 - Commit: `245962b33813fcd61556966b892e504ed2d39e9c`
