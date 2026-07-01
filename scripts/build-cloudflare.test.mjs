@@ -416,6 +416,7 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
         "pages/treatment-system-consensus.html",
         "pages/core-temperature-cooling.html",
         "pages/heat-tolerance.html",
+        "pages/challenge.html",
       ]),
     }),
     false,
@@ -430,6 +431,7 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
         "pages/treatment-system-consensus.html",
         "pages/core-temperature-cooling.html",
         "pages/heat-tolerance.html",
+        "pages/challenge.html",
       ]),
     }),
     false,
@@ -444,6 +446,7 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
         "pages/treatment-system-consensus.html",
         "pages/core-temperature-cooling.html",
         "pages/heat-tolerance.html",
+        "pages/challenge.html",
       ]),
     }),
     false,
@@ -458,6 +461,7 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
         "pages/treatment-system-consensus.html",
         "pages/core-temperature-cooling.html",
         "pages/heat-tolerance.html",
+        "pages/challenge.html",
       ]),
     }),
     false,
@@ -472,6 +476,7 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
         "pages/treatment-system-consensus.html",
         "pages/core-temperature-cooling.html",
         "pages/heat-tolerance.html",
+        "pages/challenge.html",
       ]),
     }),
     false,
@@ -486,6 +491,22 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
         "pages/treatment-system-consensus.html",
         "pages/core-temperature-cooling.html",
         "pages/heat-tolerance.html",
+        "pages/challenge.html",
+      ]),
+    }),
+    false,
+  );
+  assert.equal(
+    shouldCopyHeatStrokePath("pages/热射病通关挑战.html", {
+      ...nextOwnedOptions,
+      nextOwnedPageAliases: new Set([
+        "pages/about.html",
+        "pages/8-4-6-rule.html",
+        "pages/diagnosis-treatment-guideline.html",
+        "pages/treatment-system-consensus.html",
+        "pages/core-temperature-cooling.html",
+        "pages/heat-tolerance.html",
+        "pages/challenge.html",
       ]),
     }),
     false,
@@ -518,6 +539,10 @@ test("default heat-stroke Next-owned pages include migrated deep pages", () => {
   );
   assert.equal(
     nextOwnedHeatStrokePageAliases.has("pages/heat-tolerance.html"),
+    true,
+  );
+  assert.equal(
+    nextOwnedHeatStrokePageAliases.has("pages/challenge.html"),
     true,
   );
 });
@@ -575,6 +600,10 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
       "<html><body>legacy heat tolerance page</body></html>",
     );
     await writeFile(
+      path.join(srcDir, "pages", "热射病通关挑战.html"),
+      "<html><body>legacy challenge page</body></html>",
+    );
+    await writeFile(
       path.join(srcDir, "assets", "js", "script.js"),
       "window.__heatStrokeTool = true;",
     );
@@ -588,6 +617,7 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
         "pages/treatment-system-consensus.html",
         "pages/core-temperature-cooling.html",
         "pages/heat-tolerance.html",
+        "pages/challenge.html",
       ]),
     });
 
@@ -633,6 +663,10 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
     );
     await assert.rejects(
       () => access(path.join(destDir, "pages", "heat-tolerance.html")),
+      { code: "ENOENT" },
+    );
+    await assert.rejects(
+      () => access(path.join(destDir, "pages", "challenge.html")),
       { code: "ENOENT" },
     );
     assert.equal(
@@ -1168,18 +1202,6 @@ test("heat-stroke interactive tool DOM contracts remain intact", async () => {
         'class="custom-checkbox"',
       ],
     },
-    {
-      file: "热射病通关挑战.html",
-      selectors: [
-        'id="intro"',
-        'id="prevention"',
-        'id="prevention-quiz"',
-        'id="warning"',
-        'id="treatment"',
-        'id="treatment-quiz"',
-        'id="quiz"',
-      ],
-    },
   ];
 
   for (const contract of contracts) {
@@ -1195,6 +1217,58 @@ test("heat-stroke interactive tool DOM contracts remain intact", async () => {
         `${contract.file} should retain ${selector}`,
       );
     }
+  }
+});
+
+test("heat-stroke Next-owned challenge page keeps game flow contracts", async () => {
+  const componentSource = await readFile(
+    path.join(
+      repoRoot,
+      "apps",
+      "portal",
+      "src",
+      "app",
+      "heat-stroke",
+      "pages",
+      "challenge",
+      "HeatStrokeChallenge.tsx",
+    ),
+    "utf8",
+  );
+  const pageSource = await readFile(
+    path.join(
+      repoRoot,
+      "apps",
+      "portal",
+      "src",
+      "app",
+      "heat-stroke",
+      "pages",
+      "challenge",
+      "page.tsx",
+    ),
+    "utf8",
+  );
+  const source = `${pageSource}\n${componentSource}`;
+
+  for (const selector of [
+    'id="intro"',
+    'id="prevention"',
+    'quizId="prevention-quiz"',
+    'id="warning"',
+    'id="treatment"',
+    'quizId="treatment-quiz"',
+    'id="quiz"',
+    "heatStrokeWarrior",
+    "热射病通关挑战",
+    "综合测验",
+    "太棒了，满分！",
+  ]) {
+    assert.match(
+      source,
+      new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+      `Next challenge page should retain ${selector}`,
+    );
   }
 });
 
