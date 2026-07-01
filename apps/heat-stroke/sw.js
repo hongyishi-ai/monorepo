@@ -13,7 +13,7 @@ const urlsToCache = [
   // pages 目录下的所有 HTML 页面
   '/heat-stroke/pages/8-4-6-rule',
   '/pages/热指数查询.html',
-  '/pages/热耐力评估.html',
+  '/heat-stroke/pages/heat-tolerance',
   '/pages/热射病现场处置.html',
   '/pages/热射病通关挑战.html',
   '/heat-stroke/pages/diagnosis-treatment-guideline',

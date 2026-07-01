@@ -51,7 +51,6 @@
 │   └── images/             # 图片资源
 └── pages/                  # 功能页面
     ├── 热指数查询.html          # 热指数 + 天气查询
-    ├── 热耐力评估.html          # TESS 热耐力评分
     ├── 热射病现场处置.html      # 处置流程模拟
     └── 热射病通关挑战.html      # 知识问答游戏
 ```
@@ -61,6 +60,7 @@
 `中国热射病诊断与治疗指南` 页面已由总站 Next 应用接管，线上路径为 `/heat-stroke/pages/diagnosis-treatment-guideline`。
 `热射病救治体系建设标准专家共识` 页面已由总站 Next 应用接管，线上路径为 `/heat-stroke/pages/treatment-system-consensus`。
 `热射病核心体温监测与降温方法` 页面已由总站 Next 应用接管，线上路径为 `/heat-stroke/pages/core-temperature-cooling`。
+`热耐力评估` 页面已由总站 Next 应用接管，线上路径为 `/heat-stroke/pages/heat-tolerance`。
 
 ## 如何运行
 
@@ -163,7 +163,6 @@
 - 引入 Framer Motion 10.16.4（CDN），并通过 Intersection Observer 触发滚动淡入
 - 页面已统一：
   - `pages/热指数查询.html`（修复重复 body、动效、CDN 升级）
-  - `pages/热耐力评估.html`（统一主色与 Tailwind 版本）
   - `pages/热射病现场处置.html`（升级 Tailwind、统一主色与动效库）
 
 规范要点（hongyishi-hs）：

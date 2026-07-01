@@ -31,6 +31,7 @@ export const representativeProjectRouteSuffixes = {
     "pages/diagnosis-treatment-guideline",
     "pages/treatment-system-consensus",
     "pages/core-temperature-cooling",
+    "pages/heat-tolerance",
     "pages/about",
   ],
   tccc: [
@@ -51,7 +52,7 @@ export const projectRuntimeContracts = {
     runtime: "static-html-tailwind",
     routeOwner: "next",
     nextMigrationStage:
-      "next-home-about-rule-guide-consensus-and-cooling-owned-static-deep-pages-pending",
+      "next-home-about-rule-guide-consensus-cooling-and-tolerance-owned-static-deep-pages-pending",
     migrationRisk: "medium",
   },
   tccc: {

@@ -415,6 +415,7 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
         "pages/diagnosis-treatment-guideline.html",
         "pages/treatment-system-consensus.html",
         "pages/core-temperature-cooling.html",
+        "pages/heat-tolerance.html",
       ]),
     }),
     false,
@@ -428,6 +429,7 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
         "pages/diagnosis-treatment-guideline.html",
         "pages/treatment-system-consensus.html",
         "pages/core-temperature-cooling.html",
+        "pages/heat-tolerance.html",
       ]),
     }),
     false,
@@ -441,6 +443,7 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
         "pages/diagnosis-treatment-guideline.html",
         "pages/treatment-system-consensus.html",
         "pages/core-temperature-cooling.html",
+        "pages/heat-tolerance.html",
       ]),
     }),
     false,
@@ -454,6 +457,7 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
         "pages/diagnosis-treatment-guideline.html",
         "pages/treatment-system-consensus.html",
         "pages/core-temperature-cooling.html",
+        "pages/heat-tolerance.html",
       ]),
     }),
     false,
@@ -467,6 +471,21 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
         "pages/diagnosis-treatment-guideline.html",
         "pages/treatment-system-consensus.html",
         "pages/core-temperature-cooling.html",
+        "pages/heat-tolerance.html",
+      ]),
+    }),
+    false,
+  );
+  assert.equal(
+    shouldCopyHeatStrokePath("pages/热耐力评估.html", {
+      ...nextOwnedOptions,
+      nextOwnedPageAliases: new Set([
+        "pages/about.html",
+        "pages/8-4-6-rule.html",
+        "pages/diagnosis-treatment-guideline.html",
+        "pages/treatment-system-consensus.html",
+        "pages/core-temperature-cooling.html",
+        "pages/heat-tolerance.html",
       ]),
     }),
     false,
@@ -495,6 +514,10 @@ test("default heat-stroke Next-owned pages include migrated deep pages", () => {
   );
   assert.equal(
     nextOwnedHeatStrokePageAliases.has("pages/core-temperature-cooling.html"),
+    true,
+  );
+  assert.equal(
+    nextOwnedHeatStrokePageAliases.has("pages/heat-tolerance.html"),
     true,
   );
 });
@@ -548,6 +571,10 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
       "<html><body>legacy core temperature cooling page</body></html>",
     );
     await writeFile(
+      path.join(srcDir, "pages", "热耐力评估.html"),
+      "<html><body>legacy heat tolerance page</body></html>",
+    );
+    await writeFile(
       path.join(srcDir, "assets", "js", "script.js"),
       "window.__heatStrokeTool = true;",
     );
@@ -560,6 +587,7 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
         "pages/diagnosis-treatment-guideline.html",
         "pages/treatment-system-consensus.html",
         "pages/core-temperature-cooling.html",
+        "pages/heat-tolerance.html",
       ]),
     });
 
@@ -601,6 +629,10 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
     await assert.rejects(
       () =>
         access(path.join(destDir, "pages", "core-temperature-cooling.html")),
+      { code: "ENOENT" },
+    );
+    await assert.rejects(
+      () => access(path.join(destDir, "pages", "heat-tolerance.html")),
       { code: "ENOENT" },
     );
     assert.equal(
@@ -1137,18 +1169,6 @@ test("heat-stroke interactive tool DOM contracts remain intact", async () => {
       ],
     },
     {
-      file: "热耐力评估.html",
-      selectors: [
-        'id="height"',
-        'id="weight"',
-        'id="rating-form"',
-        'data-question-id="q1"',
-        'data-question-id="q18"',
-        'id="score-section"',
-        'id="score-display"',
-      ],
-    },
-    {
       file: "热射病通关挑战.html",
       selectors: [
         'id="intro"',
@@ -1175,6 +1195,42 @@ test("heat-stroke interactive tool DOM contracts remain intact", async () => {
         `${contract.file} should retain ${selector}`,
       );
     }
+  }
+});
+
+test("heat-stroke Next-owned heat tolerance page keeps assessment contracts", async () => {
+  const source = await readFile(
+    path.join(
+      repoRoot,
+      "apps",
+      "portal",
+      "src",
+      "app",
+      "heat-stroke",
+      "pages",
+      "heat-tolerance",
+      "HeatToleranceAssessment.tsx",
+    ),
+    "utf8",
+  );
+
+  for (const selector of [
+    'id="bmi-calculator-inputs"',
+    'id="height"',
+    'id="weight"',
+    'id="rating-form"',
+    "data-question-id={question.id}",
+    'id="score-section"',
+    'id="score-display"',
+    "评估结果：耐热能力优秀",
+    "评估结果：耐热能力差，请注意！",
+    "q18",
+  ]) {
+    assert.match(
+      source,
+      new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+      `Next heat tolerance assessment should retain ${selector}`,
+    );
   }
 });
 
