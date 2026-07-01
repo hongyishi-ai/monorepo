@@ -414,6 +414,7 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
         "pages/8-4-6-rule.html",
         "pages/diagnosis-treatment-guideline.html",
         "pages/treatment-system-consensus.html",
+        "pages/core-temperature-cooling.html",
       ]),
     }),
     false,
@@ -426,6 +427,7 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
         "pages/8-4-6-rule.html",
         "pages/diagnosis-treatment-guideline.html",
         "pages/treatment-system-consensus.html",
+        "pages/core-temperature-cooling.html",
       ]),
     }),
     false,
@@ -438,6 +440,7 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
         "pages/8-4-6-rule.html",
         "pages/diagnosis-treatment-guideline.html",
         "pages/treatment-system-consensus.html",
+        "pages/core-temperature-cooling.html",
       ]),
     }),
     false,
@@ -450,6 +453,20 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
         "pages/8-4-6-rule.html",
         "pages/diagnosis-treatment-guideline.html",
         "pages/treatment-system-consensus.html",
+        "pages/core-temperature-cooling.html",
+      ]),
+    }),
+    false,
+  );
+  assert.equal(
+    shouldCopyHeatStrokePath("pages/热射病核心体温监测与降温方法.html", {
+      ...nextOwnedOptions,
+      nextOwnedPageAliases: new Set([
+        "pages/about.html",
+        "pages/8-4-6-rule.html",
+        "pages/diagnosis-treatment-guideline.html",
+        "pages/treatment-system-consensus.html",
+        "pages/core-temperature-cooling.html",
       ]),
     }),
     false,
@@ -474,6 +491,10 @@ test("default heat-stroke Next-owned pages include migrated deep pages", () => {
   );
   assert.equal(
     nextOwnedHeatStrokePageAliases.has("pages/treatment-system-consensus.html"),
+    true,
+  );
+  assert.equal(
+    nextOwnedHeatStrokePageAliases.has("pages/core-temperature-cooling.html"),
     true,
   );
 });
@@ -523,6 +544,10 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
       "<html><body>legacy treatment system consensus page</body></html>",
     );
     await writeFile(
+      path.join(srcDir, "pages", "热射病核心体温监测与降温方法.html"),
+      "<html><body>legacy core temperature cooling page</body></html>",
+    );
+    await writeFile(
       path.join(srcDir, "assets", "js", "script.js"),
       "window.__heatStrokeTool = true;",
     );
@@ -534,6 +559,7 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
         "pages/8-4-6-rule.html",
         "pages/diagnosis-treatment-guideline.html",
         "pages/treatment-system-consensus.html",
+        "pages/core-temperature-cooling.html",
       ]),
     });
 
@@ -570,6 +596,11 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
     await assert.rejects(
       () =>
         access(path.join(destDir, "pages", "treatment-system-consensus.html")),
+      { code: "ENOENT" },
+    );
+    await assert.rejects(
+      () =>
+        access(path.join(destDir, "pages", "core-temperature-cooling.html")),
       { code: "ENOENT" },
     );
     assert.equal(
