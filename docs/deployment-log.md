@@ -27,6 +27,34 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-07-01 - da6fb23 - 热射病热耐力评估页 Next 接管
+
+- Commit: `da6fb235e5c6a5e649333c84e949d9e9b85e66f5`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://8b2912e6.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.106.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - Red-green checks: `pnpm exec node --test scripts/build-cloudflare.test.mjs` first failed because `pages/heat-tolerance.html` was not in the default Next-owned heat-stroke deep-page set; after implementation it passed
+  - Red-green checks: `pnpm exec node --test scripts/project-registry.test.mjs` first failed because `/heat-stroke/pages/heat-tolerance` was not in representative audit routes and the migration stage was stale; after implementation it passed
+  - `pnpm --filter @hongyishi/portal type-check` passed
+  - `pnpm audit:static-debt` passed: heat-stroke `4` HTML files, `3` style blocks, `21` style attrs, `0` legacy home links; TCCC unchanged at `26` HTML files, `26` style blocks, `25` style attrs, `0` legacy home links
+  - `pnpm test:cloudflare` passed: `63/63`
+  - `pnpm build:cloudflare` passed and exported `/heat-stroke/pages/heat-tolerance`
+  - `pnpm size:budget` passed: `410 files, 51.88 MiB total`
+  - Build output checks passed: `.cloudflare/site/heat-stroke/pages/heat-tolerance.html` exists and `.cloudflare/site/heat-stroke/pages/热耐力评估.html` does not exist
+  - Local Pages preview `HONGYISHI_AUDIT_BASE_URL=http://127.0.0.1:3024 pnpm audit:links` passed: internal `37/37`, representative `23/23`, mobile nav `6/6`, guide surfaces `15/15`
+  - Playwright mobile smoke passed on `/heat-stroke/pages/heat-tolerance`: project shell present, hamburger menu active item `热耐力评估`, bottom nav active item `资料`, no 390px horizontal overflow, day/night toggle switched the page to dark mode, validation warning displayed before answering, BMI `175/70` auto-scored Q1 as `4`, selecting Q2-Q18 value `5` produced total score `89` and interpretation `评估结果：耐热能力优秀`
+  - The first Playwright smoke caught missing `id="height"` and `id="weight"` on the migrated inputs; the DOM contract was restored and the smoke was rerun successfully
+  - `https://8b2912e6.hongyishi-monorepo.pages.dev/heat-stroke/pages/heat-tolerance` returned HTTP `200` with the Next project shell, page title, assessment form markers, and no old `热耐力评估.html` reference
+  - `HONGYISHI_AUDIT_BASE_URL=https://8b2912e6.hongyishi-monorepo.pages.dev pnpm audit:links` passed: internal `37/37`, representative `23/23`, mobile nav `6/6`, guide surfaces `15/15`
+  - `https://hongyishi.cn/heat-stroke/pages/heat-tolerance` returned HTTP `200` with the Next project shell, page title, assessment form markers, and no old `热耐力评估.html` reference
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:links` passed: internal `37/37`, representative `23/23`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - Moved heat-stroke `热耐力评估` from standalone static HTML into the Portal Next app at `/heat-stroke/pages/heat-tolerance`, preserving the original BMI auto-selection, 18-question scoring, total-score calculation, and interpretation thresholds.
+  - Deleted the old static heat-tolerance HTML source and repointed remaining heat-stroke links and service-worker cache entries to `/heat-stroke/pages/heat-tolerance`.
+  - Tightened the heat-stroke static debt baseline from `4` to `3` style blocks and updated the migration stage to `next-home-about-rule-guide-consensus-cooling-and-tolerance-owned-static-deep-pages-pending`.
+
 ## 2026-07-01 - e7677ad - 热射病核心体温与降温页 Next 接管
 
 - Commit: `e7677adc12c68dcf675ce164e4ffd5122d538642`
