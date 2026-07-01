@@ -27,6 +27,34 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-07-01 - 245962b - 热射病通关挑战页 Next 接管
+
+- Commit: `245962b33813fcd61556966b892e504ed2d39e9c`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://88bd276f.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.106.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - Red-green checks: `pnpm exec node --test scripts/build-cloudflare.test.mjs` first failed because `pages/challenge.html` was not in the default Next-owned heat-stroke deep-page set and the Next challenge source did not yet exist; after implementation it passed
+  - Red-green checks: `pnpm exec node --test scripts/project-registry.test.mjs` first failed because `/heat-stroke/pages/challenge` was not in representative audit routes and the migration stage was stale; after implementation it passed
+  - `pnpm --filter @hongyishi/portal type-check` passed
+  - `pnpm audit:static-debt` passed: heat-stroke `3` HTML files, `2` style blocks, `6` style attrs, `0` legacy home links; TCCC unchanged at `26` HTML files, `26` style blocks, `25` style attrs, `0` legacy home links
+  - `pnpm test:cloudflare` passed: `64/64`
+  - `pnpm build:cloudflare` passed and exported `/heat-stroke/pages/challenge`
+  - `pnpm size:budget` passed: `412 files, 51.88 MiB total`
+  - Build output checks passed: `.cloudflare/site/heat-stroke/pages/challenge.html` exists and `.cloudflare/site/heat-stroke/pages/热射病通关挑战.html` does not exist
+  - Local Pages preview `HONGYISHI_AUDIT_BASE_URL=http://127.0.0.1:3025 pnpm audit:links` passed: internal `37/37`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+  - Playwright mobile smoke passed on `/heat-stroke/pages/challenge`: project shell present, hamburger menu active item `通关挑战`, bottom nav active item `资料`, no 390px horizontal overflow, day/night toggle switched the whole page to dark mode, intro scenario accepted the correct answer, prevention classification completed, warning-signal identification completed, treatment ordering completed, final quiz reached `100%` with `太棒了，满分！`, and `localStorage.heatStrokeWarrior` recorded quiz completion
+  - `https://88bd276f.hongyishi-monorepo.pages.dev/heat-stroke/pages/challenge` returned HTTP `200` with the Next project shell, page title, challenge flow markers, and no old `热射病通关挑战.html` route; `https://88bd276f.hongyishi-monorepo.pages.dev/heat-stroke/pages/热射病通关挑战.html` returned HTTP `404`
+  - `HONGYISHI_AUDIT_BASE_URL=https://88bd276f.hongyishi-monorepo.pages.dev pnpm audit:links` passed: internal `37/37`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+  - `https://hongyishi.cn/heat-stroke/pages/challenge` returned HTTP `200` with the Next project shell, page title, challenge flow markers, and final quiz result copy; `https://hongyishi.cn/heat-stroke/pages/热射病通关挑战.html` returned HTTP `404`
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:links` passed: internal `37/37`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - Moved heat-stroke `热射病通关挑战` from standalone static HTML into the Portal Next app at `/heat-stroke/pages/challenge`, preserving the original learning modules, XP rules, achievements, quick quizzes, final 15-question quiz, and `heatStrokeWarrior` localStorage key.
+  - Replaced fragile drag/drop interactions with mobile-stable click classification and click ordering while preserving the original category and sequence business logic.
+  - Deleted the old static challenge HTML source and repointed remaining heat-stroke links and service-worker cache entries to `/heat-stroke/pages/challenge`.
+  - Tightened the heat-stroke static debt baseline from `3` to `2` style blocks and from `21` to `6` inline style attributes, and updated the migration stage to `next-home-about-rule-guide-consensus-cooling-tolerance-and-challenge-owned-static-deep-pages-pending`.
+
 ## 2026-07-01 - da6fb23 - 热射病热耐力评估页 Next 接管
 
 - Commit: `da6fb235e5c6a5e649333c84e949d9e9b85e66f5`
