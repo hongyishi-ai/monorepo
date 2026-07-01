@@ -14,8 +14,8 @@ export const defaultStaticDebtProjects = [
 
 export const defaultStaticDebtBaselines = {
   "heat-stroke": {
-    styleBlockCount: 2,
-    styleAttributeCount: 6,
+    styleBlockCount: 1,
+    styleAttributeCount: 0,
     legacyHomeLinkCount: 0,
   },
   tccc: {

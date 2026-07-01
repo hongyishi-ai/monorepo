@@ -50,8 +50,7 @@
 │   │   └── cache.js        # 缓存模块（localStorage 管理）
 │   └── images/             # 图片资源
 └── pages/                  # 功能页面
-    ├── 热指数查询.html          # 热指数 + 天气查询
-    └── 热射病现场处置.html      # 处置流程模拟
+    └── 热指数查询.html          # 热指数 + 天气查询
 ```
 
 `关于本项目` 页面已由总站 Next 应用接管，线上路径为 `/heat-stroke/pages/about`。
@@ -61,6 +60,7 @@
 `热射病核心体温监测与降温方法` 页面已由总站 Next 应用接管，线上路径为 `/heat-stroke/pages/core-temperature-cooling`。
 `热耐力评估` 页面已由总站 Next 应用接管，线上路径为 `/heat-stroke/pages/heat-tolerance`。
 `热射病通关挑战` 页面已由总站 Next 应用接管，线上路径为 `/heat-stroke/pages/challenge`。
+`热射病现场处置` 页面已由总站 Next 应用接管，线上路径为 `/heat-stroke/pages/field-treatment`。
 
 ## 如何运行
 
@@ -163,7 +163,7 @@
 - 引入 Framer Motion 10.16.4（CDN），并通过 Intersection Observer 触发滚动淡入
 - 页面已统一：
   - `pages/热指数查询.html`（修复重复 body、动效、CDN 升级）
-  - `pages/热射病现场处置.html`（升级 Tailwind、统一主色与动效库）
+  - `热射病现场处置` 已改由总站 Next 应用接管：`/heat-stroke/pages/field-treatment`
 
 规范要点（hongyishi-hs）：
 

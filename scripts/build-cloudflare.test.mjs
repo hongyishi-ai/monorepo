@@ -395,6 +395,16 @@ test("shouldCopyHeatStrokePath keeps deployable static assets and excludes app i
 
 test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
   const nextOwnedOptions = { routeOwner: "next" };
+  const migratedPageAliases = new Set([
+    "pages/about.html",
+    "pages/8-4-6-rule.html",
+    "pages/diagnosis-treatment-guideline.html",
+    "pages/treatment-system-consensus.html",
+    "pages/core-temperature-cooling.html",
+    "pages/heat-tolerance.html",
+    "pages/challenge.html",
+    "pages/field-treatment.html",
+  ]);
 
   assert.equal(shouldCopyHeatStrokePath("index.html", nextOwnedOptions), false);
   assert.equal(
@@ -409,105 +419,56 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
   assert.equal(
     shouldCopyHeatStrokePath("pages/关于本项目.html", {
       ...nextOwnedOptions,
-      nextOwnedPageAliases: new Set([
-        "pages/about.html",
-        "pages/8-4-6-rule.html",
-        "pages/diagnosis-treatment-guideline.html",
-        "pages/treatment-system-consensus.html",
-        "pages/core-temperature-cooling.html",
-        "pages/heat-tolerance.html",
-        "pages/challenge.html",
-      ]),
+      nextOwnedPageAliases: migratedPageAliases,
     }),
     false,
   );
   assert.equal(
     shouldCopyHeatStrokePath("pages/8-4-6黄金法则.html", {
       ...nextOwnedOptions,
-      nextOwnedPageAliases: new Set([
-        "pages/about.html",
-        "pages/8-4-6-rule.html",
-        "pages/diagnosis-treatment-guideline.html",
-        "pages/treatment-system-consensus.html",
-        "pages/core-temperature-cooling.html",
-        "pages/heat-tolerance.html",
-        "pages/challenge.html",
-      ]),
+      nextOwnedPageAliases: migratedPageAliases,
     }),
     false,
   );
   assert.equal(
     shouldCopyHeatStrokePath("pages/中国热射病诊断与治疗指南.html", {
       ...nextOwnedOptions,
-      nextOwnedPageAliases: new Set([
-        "pages/about.html",
-        "pages/8-4-6-rule.html",
-        "pages/diagnosis-treatment-guideline.html",
-        "pages/treatment-system-consensus.html",
-        "pages/core-temperature-cooling.html",
-        "pages/heat-tolerance.html",
-        "pages/challenge.html",
-      ]),
+      nextOwnedPageAliases: migratedPageAliases,
     }),
     false,
   );
   assert.equal(
     shouldCopyHeatStrokePath("pages/热射病救治体系建设标准专家共识.html", {
       ...nextOwnedOptions,
-      nextOwnedPageAliases: new Set([
-        "pages/about.html",
-        "pages/8-4-6-rule.html",
-        "pages/diagnosis-treatment-guideline.html",
-        "pages/treatment-system-consensus.html",
-        "pages/core-temperature-cooling.html",
-        "pages/heat-tolerance.html",
-        "pages/challenge.html",
-      ]),
+      nextOwnedPageAliases: migratedPageAliases,
     }),
     false,
   );
   assert.equal(
     shouldCopyHeatStrokePath("pages/热射病核心体温监测与降温方法.html", {
       ...nextOwnedOptions,
-      nextOwnedPageAliases: new Set([
-        "pages/about.html",
-        "pages/8-4-6-rule.html",
-        "pages/diagnosis-treatment-guideline.html",
-        "pages/treatment-system-consensus.html",
-        "pages/core-temperature-cooling.html",
-        "pages/heat-tolerance.html",
-        "pages/challenge.html",
-      ]),
+      nextOwnedPageAliases: migratedPageAliases,
     }),
     false,
   );
   assert.equal(
     shouldCopyHeatStrokePath("pages/热耐力评估.html", {
       ...nextOwnedOptions,
-      nextOwnedPageAliases: new Set([
-        "pages/about.html",
-        "pages/8-4-6-rule.html",
-        "pages/diagnosis-treatment-guideline.html",
-        "pages/treatment-system-consensus.html",
-        "pages/core-temperature-cooling.html",
-        "pages/heat-tolerance.html",
-        "pages/challenge.html",
-      ]),
+      nextOwnedPageAliases: migratedPageAliases,
     }),
     false,
   );
   assert.equal(
     shouldCopyHeatStrokePath("pages/热射病通关挑战.html", {
       ...nextOwnedOptions,
-      nextOwnedPageAliases: new Set([
-        "pages/about.html",
-        "pages/8-4-6-rule.html",
-        "pages/diagnosis-treatment-guideline.html",
-        "pages/treatment-system-consensus.html",
-        "pages/core-temperature-cooling.html",
-        "pages/heat-tolerance.html",
-        "pages/challenge.html",
-      ]),
+      nextOwnedPageAliases: migratedPageAliases,
+    }),
+    false,
+  );
+  assert.equal(
+    shouldCopyHeatStrokePath("pages/热射病现场处置.html", {
+      ...nextOwnedOptions,
+      nextOwnedPageAliases: migratedPageAliases,
     }),
     false,
   );
@@ -543,6 +504,10 @@ test("default heat-stroke Next-owned pages include migrated deep pages", () => {
   );
   assert.equal(
     nextOwnedHeatStrokePageAliases.has("pages/challenge.html"),
+    true,
+  );
+  assert.equal(
+    nextOwnedHeatStrokePageAliases.has("pages/field-treatment.html"),
     true,
   );
 });
@@ -604,6 +569,10 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
       "<html><body>legacy challenge page</body></html>",
     );
     await writeFile(
+      path.join(srcDir, "pages", "热射病现场处置.html"),
+      "<html><body>legacy field treatment page</body></html>",
+    );
+    await writeFile(
       path.join(srcDir, "assets", "js", "script.js"),
       "window.__heatStrokeTool = true;",
     );
@@ -618,6 +587,7 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
         "pages/core-temperature-cooling.html",
         "pages/heat-tolerance.html",
         "pages/challenge.html",
+        "pages/field-treatment.html",
       ]),
     });
 
@@ -667,6 +637,10 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
     );
     await assert.rejects(
       () => access(path.join(destDir, "pages", "challenge.html")),
+      { code: "ENOENT" },
+    );
+    await assert.rejects(
+      () => access(path.join(destDir, "pages", "field-treatment.html")),
       { code: "ENOENT" },
     );
     assert.equal(
@@ -1186,22 +1160,6 @@ test("heat-stroke interactive tool DOM contracts remain intact", async () => {
         "../assets/js/script.js",
       ],
     },
-    {
-      file: "热射病现场处置.html",
-      selectors: [
-        'id="start-btn"',
-        'id="next-btn-1"',
-        'id="next-btn-2"',
-        'id="next-btn-3"',
-        'id="next-btn-4"',
-        'id="next-btn-5"',
-        'id="finish-btn"',
-        'id="restart-btn"',
-        'id="temperature-input"',
-        'class="progress-container hys-flow-status mb-8"',
-        'class="custom-checkbox"',
-      ],
-    },
   ];
 
   for (const contract of contracts) {
@@ -1217,6 +1175,60 @@ test("heat-stroke interactive tool DOM contracts remain intact", async () => {
         `${contract.file} should retain ${selector}`,
       );
     }
+  }
+});
+
+test("heat-stroke Next-owned field treatment page keeps flow contracts", async () => {
+  const componentSource = await readFile(
+    path.join(
+      repoRoot,
+      "apps",
+      "portal",
+      "src",
+      "app",
+      "heat-stroke",
+      "pages",
+      "field-treatment",
+      "HeatStrokeFieldTreatment.tsx",
+    ),
+    "utf8",
+  );
+  const pageSource = await readFile(
+    path.join(
+      repoRoot,
+      "apps",
+      "portal",
+      "src",
+      "app",
+      "heat-stroke",
+      "pages",
+      "field-treatment",
+      "page.tsx",
+    ),
+    "utf8",
+  );
+  const source = `${pageSource}\n${componentSource}`;
+
+  for (const selector of [
+    'id="start-btn"',
+    'nextId="next-btn-1"',
+    'nextId="next-btn-2"',
+    'nextId="next-btn-3"',
+    'nextId="next-btn-4"',
+    'nextId="next-btn-5"',
+    'id="finish-btn"',
+    'id="restart-btn"',
+    'id="temperature-input"',
+    "热射病现场处置",
+    "危险！体温过高，需立即降温！",
+    "注意：患者血氧饱和度低于95%，需继续氧疗！",
+    "处置用时",
+  ]) {
+    assert.match(
+      source,
+      new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+      `Next field-treatment page should retain ${selector}`,
+    );
   }
 });
 

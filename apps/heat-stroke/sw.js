@@ -14,7 +14,7 @@ const urlsToCache = [
   '/heat-stroke/pages/8-4-6-rule',
   '/pages/热指数查询.html',
   '/heat-stroke/pages/heat-tolerance',
-  '/pages/热射病现场处置.html',
+  '/heat-stroke/pages/field-treatment',
   '/heat-stroke/pages/challenge',
   '/heat-stroke/pages/diagnosis-treatment-guideline',
   '/heat-stroke/pages/core-temperature-cooling',

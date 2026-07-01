@@ -89,6 +89,7 @@ export const nextOwnedHeatStrokePageAliases = new Set([
   "pages/core-temperature-cooling.html",
   "pages/heat-tolerance.html",
   "pages/challenge.html",
+  "pages/field-treatment.html",
 ]);
 
 export const tcccPageAliases = new Map([
