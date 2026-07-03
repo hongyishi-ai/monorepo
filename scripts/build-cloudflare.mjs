@@ -90,6 +90,7 @@ export const nextOwnedHeatStrokePageAliases = new Set([
   "pages/heat-tolerance.html",
   "pages/challenge.html",
   "pages/field-treatment.html",
+  "pages/heat-index.html",
 ]);
 
 export const tcccPageAliases = new Map([
@@ -244,7 +245,10 @@ export function shouldCopyHeatStrokePath(relativePath, options = {}) {
     return false;
   }
 
-  if (options.nextOwnedPageAliases?.has(mapHeatStrokeOutputPath(normalized))) {
+  const nextOwnedPageAliases =
+    options.nextOwnedPageAliases ?? nextOwnedHeatStrokePageAliases;
+
+  if (nextOwnedPageAliases.has(mapHeatStrokeOutputPath(normalized))) {
     return false;
   }
 

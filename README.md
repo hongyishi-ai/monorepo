@@ -154,9 +154,9 @@ pnpm audit:links -- --base=http://127.0.0.1:8788
 - `/fms/`
 - `/fms/report`
 - `/heat-stroke/`
-- `/heat-stroke/pages/heat-index.html`
-- `/heat-stroke/pages/field-treatment.html`
-- `/heat-stroke/pages/8-4-6-rule.html`
+- `/heat-stroke/pages/heat-index`
+- `/heat-stroke/pages/field-treatment`
+- `/heat-stroke/pages/8-4-6-rule`
 - `/tccc/`
 - `/tccc/pages/tccc-standard.html`
 

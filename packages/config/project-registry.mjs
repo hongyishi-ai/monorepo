@@ -53,7 +53,7 @@ export const projectRuntimeContracts = {
     runtime: "static-html-tailwind",
     routeOwner: "next",
     nextMigrationStage:
-      "next-home-about-rule-guide-consensus-cooling-tolerance-challenge-and-field-treatment-owned-static-deep-pages-pending",
+      "next-home-about-rule-guide-consensus-cooling-tolerance-challenge-field-treatment-and-heat-index-owned",
     migrationRisk: "medium",
   },
   tccc: {

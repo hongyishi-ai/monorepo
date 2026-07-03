@@ -44,15 +44,10 @@
 ├── assets/                 # 资源文件夹
 │   ├── css/
 │   │   └── styles.css      # 补充样式
-│   ├── js/
-│   │   ├── script.js       # 主脚本（热指数查询）
-│   │   ├── api.js          # API 模块（配置、URL构建）
-│   │   └── cache.js        # 缓存模块（localStorage 管理）
 │   └── images/             # 图片资源
-└── pages/                  # 功能页面
-    └── 热指数查询.html          # 热指数 + 天气查询
 ```
 
+`热指数查询` 页面已由总站 Next 应用接管，线上路径为 `/heat-stroke/pages/heat-index`。
 `关于本项目` 页面已由总站 Next 应用接管，线上路径为 `/heat-stroke/pages/about`。
 `8-4-6黄金法则` 页面已由总站 Next 应用接管，线上路径为 `/heat-stroke/pages/8-4-6-rule`。
 `中国热射病诊断与治疗指南` 页面已由总站 Next 应用接管，线上路径为 `/heat-stroke/pages/diagnosis-treatment-guideline`。
@@ -148,11 +143,10 @@
 - 首页 `index.html` 以及功能页已适配新的布局与动画规范。
 - 移除了旧的 `styles.css` 中的大部分内容，主要依赖 Tailwind CSS。
 
-### 6. 图表样式更新
+### 6. 图表样式更新（历史记录）
 
-- 修改了 `script.js` 中的 `createHeatIndexChart` 函数，调整了 Chart.js 的颜色配置，使其与深色主题和亮橙色高亮风格一致。
-- 更新了图表背景注释区域的颜色和标签文字颜色。
-- 调整了图表线条、点、提示框和坐标轴的颜色。
+- 旧静态页曾通过 Chart.js 绘制热指数趋势；该页面现已由总站 Next 应用接管，图表由 React 组件内的 SVG 趋势图承担。
+- 旧 `assets/js/script.js`、`assets/js/api.js`、`assets/js/cache.js` 与 Chart.js vendor 文件已移除，避免孤立脚本继续进入维护面。
 
 ### 7. 热指数警告样式更新
 
@@ -162,7 +156,7 @@
 - 统一品牌主色为 `#FF6B00`，并以 CSS 变量 `--highlight-color(--rgb)` 管理
 - 引入 Framer Motion 10.16.4（CDN），并通过 Intersection Observer 触发滚动淡入
 - 页面已统一：
-  - `pages/热指数查询.html`（修复重复 body、动效、CDN 升级）
+  - `热指数查询` 已改由总站 Next 应用接管：`/heat-stroke/pages/heat-index`
   - `热射病现场处置` 已改由总站 Next 应用接管：`/heat-stroke/pages/field-treatment`
 
 规范要点（hongyishi-hs）：
@@ -172,15 +166,15 @@
 - 进入视口的 60fps 淡入动效（Intersection Observer + Motion）
 - 图标统一使用 Font Awesome 6
 
-* 修改了 `script.js` 中的 `displayHeatIndexAlert` 函数，使用 Tailwind CSS 类替代了内联样式，使警告框样式与整体主题更协调。
+* 热指数警告现由 Next 组件按相同阈值渲染，并跟随总站日夜主题。
 
 ### 9. 去重与稳态修复
 
 - **问题**：热指数查询页存在内联 CSS/JS 与 assets 版本重复，API 失败时用户只看到加载态且缺少兜底。
 - **解决方案**：
-  - 移除页面内联样式与脚本，统一引用 `assets/css/styles.css` 与 `assets/js/script.js`，避免多处维护。
-  - 为天气/地理接口增加超时与状态校验，定位失败自动切换到默认城市（北京）并提示用户。
-  - 合并滚动动画观察者并托管返回顶部按钮，减少重复监听与潜在性能开销。
+  - 将热指数查询页迁入总站 Next 应用，统一使用 `ProjectChrome`、移动端菜单、底部导航和日夜主题。
+  - 为天气/地理接口保留超时与状态校验，默认城市为北京，并在接口不可用时提示用户使用现场温湿度手动计算。
+  - 保留 `preventionChecklist` 本地缓存键，确保8项预防措施清单状态可延续。
 
 ### 10. API Key 与本地缓存
 
@@ -188,8 +182,8 @@
 - **解决方案**：
   - 生产环境默认通过 Cloudflare Pages Function `/api/openweather` 代理请求，由服务端 `OPENWEATHER_API_KEY` Secret 追加密钥。
   - 前端不保留演示默认 key；若代理或网络不可用，热指数页会突出提示用户使用现场温湿度手动计算。
-  - 为地理反查、城市搜索、当前天气、小时预报增加 10 分钟本地缓存；请求失败时可优先回退缓存数据。
-  - 统一 Chart 注解插件注册与容器检查，避免空节点时报错。
+  - 为城市搜索、当前天气、小时预报增加 10 分钟本地缓存；请求失败时可优先回退缓存数据。
+  - 前端不再加载 Chart.js，24小时趋势由 Next 组件内的 SVG 图表渲染。
 
 ### 11. 现场处置动效与交互稳态
 
@@ -204,14 +198,14 @@
 - `functions/api/openweather.js` 作为 Cloudflare Pages Function：限制允许的 OpenWeatherMap 路径，并在服务端追加 `OPENWEATHER_API_KEY`。
 - 环境变量：在 Cloudflare Pages 项目设置中添加 `OPENWEATHER_API_KEY` Secret。
 - 本地预览：在仓库根目录创建私有 `.dev.vars`，写入 `OPENWEATHER_API_KEY=<your-openweather-key>`。
-- 前端配置：天气页已添加 `<meta name="hs-api-base" content="/api/openweather">`，`assets/js/script.js` 固定通过代理请求；生产环境不允许前端直连 OpenWeather API。
+- 前端配置：天气页固定通过 `/api/openweather` 代理请求；生产环境不允许前端直连 OpenWeather API。
 
 ## 潜在改进
 
 - **错误处理**：可以进一步增强 API 调用失败或数据格式异常时的错误处理和用户提示。
 - **API 密钥管理**：密钥只允许存在于 Cloudflare Pages Secret 或本地 `.dev.vars`，不得写入前端源码和部署产物。
 - **加载状态**：可以为图表加载过程添加更细致的加载指示。
-- **代码模块化**：随着功能增加，可以将 `script.js` 中的不同功能（如 API 调用、图表绘制、UI 更新）拆分成更小的模块或函数。
-- **依赖管理**：目前所有库通过 CDN 引入，对于更大型的项目，可以考虑使用 npm/yarn 等包管理器来管理依赖。
+- **代码模块化**：热指数逻辑已经迁入 Next 组件；若继续扩展，可再抽出共享的天气 API/cache 工具与热指数计算单元测试。
+- **依赖管理**：热指数页已不再依赖页面级 CDN/静态 vendor，后续依赖应优先纳入总站包管理。
 - **缓存机制**：实现天气数据的本地缓存，减少API请求次数，提高应用响应速度。
 - **暗色/亮色主题切换**：添加主题切换功能，让用户选择自己喜欢的显示模式。

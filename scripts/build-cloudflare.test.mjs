@@ -379,7 +379,7 @@ test("shouldCopyHeatStrokePath keeps deployable static assets and excludes app i
   assert.equal(shouldCopyHeatStrokePath("index.html"), true);
   assert.equal(shouldCopyHeatStrokePath("assets/js/script.js"), true);
   assert.equal(shouldCopyHeatStrokePath("assets/css/tailwind.css"), true);
-  assert.equal(shouldCopyHeatStrokePath("pages/热指数查询.html"), true);
+  assert.equal(shouldCopyHeatStrokePath("pages/热指数查询.html"), false);
   assert.equal(
     shouldCopyHeatStrokePath("assets/vendors/tailwind.compiler.js"),
     false,
@@ -404,6 +404,7 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
     "pages/heat-tolerance.html",
     "pages/challenge.html",
     "pages/field-treatment.html",
+    "pages/heat-index.html",
   ]);
 
   assert.equal(shouldCopyHeatStrokePath("index.html", nextOwnedOptions), false);
@@ -414,7 +415,7 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
   assert.equal(shouldCopyHeatStrokePath("sw.js", nextOwnedOptions), true);
   assert.equal(
     shouldCopyHeatStrokePath("pages/热指数查询.html", nextOwnedOptions),
-    true,
+    false,
   );
   assert.equal(
     shouldCopyHeatStrokePath("pages/关于本项目.html", {
@@ -473,6 +474,13 @@ test("shouldCopyHeatStrokePath can preserve a Next-owned project entry", () => {
     false,
   );
   assert.equal(
+    shouldCopyHeatStrokePath("pages/热指数查询.html", {
+      ...nextOwnedOptions,
+      nextOwnedPageAliases: migratedPageAliases,
+    }),
+    false,
+  );
+  assert.equal(
     shouldCopyHeatStrokePath("assets/js/script.js", nextOwnedOptions),
     true,
   );
@@ -508,6 +516,10 @@ test("default heat-stroke Next-owned pages include migrated deep pages", () => {
   );
   assert.equal(
     nextOwnedHeatStrokePageAliases.has("pages/field-treatment.html"),
+    true,
+  );
+  assert.equal(
+    nextOwnedHeatStrokePageAliases.has("pages/heat-index.html"),
     true,
   );
 });
@@ -588,6 +600,7 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
         "pages/heat-tolerance.html",
         "pages/challenge.html",
         "pages/field-treatment.html",
+        "pages/heat-index.html",
       ]),
     });
 
@@ -602,9 +615,9 @@ test("copyHeatStrokeApp preserves a Next-owned entry while copying static heat-s
       await readFile(path.join(destDir, "sw.js"), "utf8"),
       /'\/heat-stroke\/manifest\.json'/,
     );
-    assert.match(
-      await readFile(path.join(destDir, "pages", "heat-index.html"), "utf8"),
-      /首页/,
+    await assert.rejects(
+      () => access(path.join(destDir, "pages", "heat-index.html")),
+      { code: "ENOENT" },
     );
     await assert.rejects(
       () => access(path.join(destDir, "pages", "about.html")),
@@ -1071,33 +1084,21 @@ test("heat-stroke source pages expose unified brand navigation", async () => {
   const pageFiles = (await readdir(heatStrokePagesDir)).filter((file) =>
     file.endsWith(".html"),
   );
+  const homeHtml = await readFile(
+    path.join(repoRoot, "apps", "heat-stroke", "index.html"),
+    "utf8",
+  );
 
-  assert.ok(pageFiles.length > 0, "expected heat-stroke source pages");
+  assert.equal(
+    pageFiles.length,
+    0,
+    "heat-stroke static deep pages should be fully handed off to Next",
+  );
 
-  for (const file of pageFiles) {
-    const html = await readFile(path.join(heatStrokePagesDir, file), "utf8");
-
-    assert.match(
-      html,
-      /class=["'][^"']*\bbrand-nav\b/,
-      `${file} should include brand nav`,
-    );
-    assert.match(
-      html,
-      /href=["']\/["'][^>]*>总入口</,
-      `${file} should link back to the portal`,
-    );
-    assert.match(
-      html,
-      /href=["']\/heat-stroke\/["'][^>]*>项目首页</,
-      `${file} should link back to the canonical heat-stroke home`,
-    );
-    assert.match(
-      html,
-      /class=["'][^"']*\bskip-link\b/,
-      `${file} should include a skip link`,
-    );
-  }
+  assert.match(homeHtml, /class=["'][^"']*\bbrand-nav\b/);
+  assert.match(homeHtml, /href=["']\/["'][^>]*>总入口</);
+  assert.match(homeHtml, /href=["']\/heat-stroke\/pages\/heat-index["']/);
+  assert.match(homeHtml, /class=["'][^"']*\bskip-link\b/);
 });
 
 test("heat-stroke source pages use the Hongyishi visual shell", async () => {
@@ -1146,36 +1147,63 @@ test("heat-stroke source pages use the Hongyishi visual shell", async () => {
   }
 });
 
-test("heat-stroke interactive tool DOM contracts remain intact", async () => {
-  const contracts = [
-    {
-      file: "热指数查询.html",
-      selectors: [
-        'id="location-input"',
-        'id="search-btn"',
-        'id="manual-temp"',
-        'id="manual-humidity"',
-        'id="calculate-hi-btn"',
-        'id="heat-index-chart"',
-        "../assets/js/script.js",
-      ],
-    },
-  ];
+test("heat-stroke Next-owned heat index page keeps weather tool contracts", async () => {
+  const componentSource = await readFile(
+    path.join(
+      repoRoot,
+      "apps",
+      "portal",
+      "src",
+      "app",
+      "heat-stroke",
+      "pages",
+      "heat-index",
+      "HeatIndexTool.tsx",
+    ),
+    "utf8",
+  );
+  const pageSource = await readFile(
+    path.join(
+      repoRoot,
+      "apps",
+      "portal",
+      "src",
+      "app",
+      "heat-stroke",
+      "pages",
+      "heat-index",
+      "page.tsx",
+    ),
+    "utf8",
+  );
 
-  for (const contract of contracts) {
-    const html = await readFile(
-      path.join(heatStrokePagesDir, contract.file),
-      "utf8",
+  for (const selector of [
+    'id="location-input"',
+    'id="search-btn"',
+    'id="manual-temp"',
+    'id="manual-humidity"',
+    'id="calculate-hi-btn"',
+    'id="heat-index-chart"',
+    "preventionChecklist",
+    "/api/openweather",
+    "calculateHeatIndex",
+    "OPENWEATHER_API_KEY",
+  ]) {
+    const source =
+      selector === "OPENWEATHER_API_KEY" ? pageSource : componentSource;
+    const assertion =
+      selector === "OPENWEATHER_API_KEY" ? assert.doesNotMatch : assert.match;
+    assertion(
+      source,
+      new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+      `heat-index Next source should ${
+        selector === "OPENWEATHER_API_KEY" ? "not expose" : "retain"
+      } ${selector}`,
     );
-
-    for (const selector of contract.selectors) {
-      assert.match(
-        html,
-        new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
-        `${contract.file} should retain ${selector}`,
-      );
-    }
   }
+
+  assert.match(pageSource, /activeBottomItemId="heat-index"/);
+  assert.match(pageSource, /activeMenuItemId="heat-index"/);
 });
 
 test("heat-stroke Next-owned field treatment page keeps flow contracts", async () => {
@@ -1350,7 +1378,11 @@ test("heat-stroke JavaScript sources do not expose fallback OpenWeather keys", a
     file.endsWith(".js"),
   );
 
-  assert.ok(scriptFiles.length > 0, "expected heat-stroke JavaScript sources");
+  assert.equal(
+    scriptFiles.length,
+    0,
+    "heat-stroke legacy JavaScript sources should be removed after Next handoff",
+  );
 
   for (const file of scriptFiles) {
     const source = await readFile(
@@ -1376,7 +1408,11 @@ test("heat-stroke source page filenames all map to ASCII deployment paths", asyn
     file.endsWith(".html"),
   );
 
-  assert.ok(pageFiles.length > 0, "expected heat-stroke source pages");
+  assert.equal(
+    pageFiles.length,
+    0,
+    "heat-stroke static deep pages should be fully handed off to Next",
+  );
 
   for (const file of pageFiles) {
     const outputPath = mapHeatStrokeOutputPath(`pages/${file}`);

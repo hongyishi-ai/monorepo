@@ -8,11 +8,10 @@ const urlsToCache = [
   '/manifest.json',
   '/assets/css/tailwind.css',
   '/assets/css/styles.css',
-  '/assets/js/script.js',
   '/assets/images/favicon.ico',
   // pages 目录下的所有 HTML 页面
   '/heat-stroke/pages/8-4-6-rule',
-  '/pages/热指数查询.html',
+  '/heat-stroke/pages/heat-index',
   '/heat-stroke/pages/heat-tolerance',
   '/heat-stroke/pages/field-treatment',
   '/heat-stroke/pages/challenge',
