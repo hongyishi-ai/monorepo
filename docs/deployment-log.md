@@ -27,6 +27,32 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-07-03 - 65353cf - 热射病移动端宽度修复
+
+- Commit: `65353cf9a1cfe99b5ae6c3929e347e4cbf2df097`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://1d2c182e.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.107.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - Red-green check: `HONGYISHI_AUDIT_BASE_URL=http://127.0.0.1:3028 pnpm audit:mobile-width` first failed on `/heat-stroke/pages/core-temperature-cooling` at `320px` because grid cards expanded to `668px`; after the fix it passed for `/heat-stroke/pages/core-temperature-cooling`, `/heat-stroke/pages/treatment-system-consensus`, and `/heat-stroke/pages/heat-index` at `320/360/375/390/414px`
+  - `pnpm build:cloudflare` passed
+  - `pnpm --filter @hongyishi/portal type-check` passed
+  - `pnpm test:cloudflare` passed: `65/65`
+  - `pnpm audit:static-debt` passed: heat-stroke `1` HTML file, `1` style block, `0` style attrs, `0` legacy home links; TCCC unchanged at `26` HTML files, `26` style blocks, `25` style attrs, `0` legacy home links
+  - `pnpm size:budget` passed: `411 files, 51.62 MiB total`
+  - `HONGYISHI_AUDIT_BASE_URL=http://127.0.0.1:3028 pnpm audit:links` passed: internal `37/37`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+  - 320px Playwright screenshots were reviewed for `/heat-stroke/pages/core-temperature-cooling`, `/heat-stroke/pages/treatment-system-consensus`, and `/heat-stroke/pages/heat-index`; the project title stayed on one line and the long hero headings no longer clipped horizontally
+  - `HONGYISHI_AUDIT_BASE_URL=https://1d2c182e.hongyishi-monorepo.pages.dev pnpm audit:mobile-width` passed for all three affected routes at `320/360/375/390/414px`
+  - `HONGYISHI_AUDIT_BASE_URL=https://1d2c182e.hongyishi-monorepo.pages.dev pnpm audit:links` initially saw three transient `/fms/*` `404` responses immediately after deployment; the unchanged rerun passed: internal `37/37`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:mobile-width` passed for all three affected routes at `320/360/375/390/414px`
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:links` passed: internal `37/37`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - Fixed the mobile-width root cause by making heat-stroke long-form grids explicit `grid-cols-1` on mobile and adding `min-w-0` to card/panel grid items, so tables and long content no longer set the page width.
+  - Kept the professional text and business logic unchanged; wide clinical tables still scroll inside their own card instead of forcing the full viewport wider.
+  - Added `pnpm audit:mobile-width` as a Playwright smoke test for the three affected heat-stroke routes across common phone widths.
+  - Slightly reduced the shared project brand text scale on narrow screens and tightened the slash spacing so `红医师 / 热射病防治` stays visually aligned with the mobile menu controls.
+
 ## 2026-07-03 - adf9513 - 热射病热指数查询页 Next 接管
 
 - Commit: `adf9513b8280fb567a4562b1b3601bf37b3ce9a4`
