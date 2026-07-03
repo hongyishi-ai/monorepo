@@ -127,7 +127,7 @@ function GovernanceBanner() {
       className="border-b-2 border-border bg-background"
       data-hongyishi-content-governance
     >
-      <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] gap-2 py-3 font-mono text-xs font-bold leading-5 text-muted-foreground md:grid-cols-[auto_1fr] md:items-center">
+      <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] grid-cols-1 gap-2 py-3 font-mono text-xs font-bold leading-5 text-muted-foreground md:grid-cols-[auto_1fr] md:items-center">
         <span className="w-fit border-2 border-primary bg-primary px-2 py-1 font-black text-primary-foreground">
           内容状态：待复核
         </span>
@@ -165,7 +165,7 @@ function Card({
 
   return (
     <article
-      className={`${spanClass} rounded border-2 border-border bg-card p-5 text-card-foreground shadow-[6px_6px_0_rgba(18,49,60,0.14)] dark:shadow-[6px_6px_0_rgba(217,48,37,0.18)]`}
+      className={`${spanClass} min-w-0 break-words rounded border-2 border-border bg-card p-5 text-card-foreground shadow-[6px_6px_0_rgba(18,49,60,0.14)] dark:shadow-[6px_6px_0_rgba(217,48,37,0.18)]`}
     >
       {children}
     </article>
@@ -192,7 +192,7 @@ function BulletList({ items }: { items: string[] }) {
 
 function DataTable({ headers, rows }: { headers: string[]; rows: TableRow[] }) {
   return (
-    <div className="mt-4 overflow-x-auto rounded border-2 border-border">
+    <div className="mt-4 max-w-full overflow-x-auto rounded border-2 border-border">
       <table className="w-full min-w-[620px] border-collapse text-left text-sm">
         <thead className="bg-foreground text-background dark:bg-muted dark:text-foreground">
           <tr>
@@ -247,12 +247,12 @@ export default function HeatStrokeCoreTemperatureCoolingPage() {
       <main id="main">
         <section className="relative isolate overflow-hidden border-b-2 border-border bg-foreground text-background dark:bg-card dark:text-card-foreground">
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(rgba(244,236,220,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(244,236,220,0.08)_1px,transparent_1px)] bg-[size:64px_64px]" />
-          <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] gap-8 py-12 md:grid-cols-[0.95fr_1.05fr] md:items-end md:py-20">
+          <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] grid-cols-1 gap-8 py-12 md:grid-cols-[0.95fr_1.05fr] md:items-end md:py-20">
             <div>
               <p className="font-mono text-sm font-black uppercase tracking-normal text-background/70 dark:text-muted-foreground">
                 Core Temperature Monitoring & Cooling
               </p>
-              <h1 className="mt-4 text-[clamp(3rem,9vw,6.8rem)] font-black leading-[0.9] text-primary">
+              <h1 className="mt-4 text-[clamp(2.35rem,12vw,4rem)] font-black leading-[0.9] text-primary md:text-[clamp(4rem,8vw,6.8rem)]">
                 核心体温监测
                 <br />
                 与降温方法
@@ -272,7 +272,7 @@ export default function HeatStrokeCoreTemperatureCoolingPage() {
 
         <GovernanceBanner />
 
-        <section className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] gap-5 py-12 md:grid-cols-3 lg:grid-cols-4">
+        <section className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] grid-cols-1 gap-5 py-12 md:grid-cols-3 lg:grid-cols-4">
           <Card span="wide">
             <SectionLabel>Critical Goal</SectionLabel>
             <h2 className="mt-2 text-3xl font-black text-primary">
@@ -281,7 +281,7 @@ export default function HeatStrokeCoreTemperatureCoolingPage() {
             <p className="mt-4 font-bold leading-8 text-muted-foreground">
               快速有效降温是治疗核心。研究表明，每延迟 1 分钟，病死率增加约 1%。
             </p>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="rounded border-2 border-primary bg-primary/10 p-5 text-center">
                 <p className="text-6xl font-black text-primary">30 min</p>
                 <p className="mt-2 font-black">黄金降温时间</p>
@@ -347,7 +347,7 @@ export default function HeatStrokeCoreTemperatureCoolingPage() {
             <h2 className="mt-2 text-3xl font-black text-primary">
               专业降温方法
             </h2>
-            <div className="mt-5 grid gap-4 md:grid-cols-3">
+            <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-3">
               {coolingMethods.map((method) => (
                 <div
                   className={`rounded border-2 p-5 ${
@@ -380,7 +380,7 @@ export default function HeatStrokeCoreTemperatureCoolingPage() {
             <h2 className="mt-2 text-3xl font-black text-primary">
               治疗目标与器官支持
             </h2>
-            <div className="mt-5 grid gap-4 md:grid-cols-2">
+            <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="rounded border-2 border-primary bg-primary/10 p-5">
                 <p className="font-black text-primary">第一阶段 (30min)</p>
                 <p className="mt-2 text-lg font-black">核心体温 &lt; 38.5°C</p>
@@ -406,7 +406,7 @@ export default function HeatStrokeCoreTemperatureCoolingPage() {
             <h2 className="mt-2 text-3xl font-black text-primary">
               急救流程总结
             </h2>
-            <div className="mt-6 grid gap-4 md:grid-cols-5">
+            <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-5">
               {processSteps.map((step, index) => (
                 <div
                   className="rounded border-2 border-border bg-muted/30 p-4"
@@ -461,7 +461,7 @@ export default function HeatStrokeCoreTemperatureCoolingPage() {
             <h2 className="mt-2 text-3xl font-black text-primary">
               核心要点与展望
             </h2>
-            <div className="mt-5 grid gap-3 md:grid-cols-4">
+            <div className="mt-5 grid grid-cols-1 gap-3 md:grid-cols-4">
               {keyPoints.map((point) => (
                 <div
                   className="rounded border-2 border-border bg-muted/30 p-4 text-sm font-black leading-7"
@@ -473,7 +473,7 @@ export default function HeatStrokeCoreTemperatureCoolingPage() {
             </div>
           </Card>
 
-          <div className="grid gap-3 md:col-span-3 md:grid-cols-3 lg:col-span-4">
+          <div className="grid min-w-0 grid-cols-1 gap-3 md:col-span-3 md:grid-cols-3 lg:col-span-4">
             <a
               className="rounded border-2 border-foreground bg-foreground px-5 py-4 text-center font-black text-background no-underline transition-transform active:translate-x-1 active:translate-y-1"
               href="/heat-stroke/pages/field-treatment"

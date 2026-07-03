@@ -343,7 +343,7 @@ function TrendChart({ forecast }: { forecast: ForecastItem[] }) {
 
   return (
     <div
-      className="overflow-hidden border-2 border-border bg-card shadow-[6px_6px_0_rgba(18,49,60,0.14)] dark:shadow-[6px_6px_0_rgba(217,48,37,0.18)]"
+      className="min-w-0 overflow-hidden border-2 border-border bg-card shadow-[6px_6px_0_rgba(18,49,60,0.14)] dark:shadow-[6px_6px_0_rgba(217,48,37,0.18)]"
       id="heat-index-chart"
     >
       <svg
@@ -604,18 +604,18 @@ export function HeatIndexTool() {
 
   return (
     <section className="bg-background py-8 md:py-12">
-      <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] gap-6">
-        <div className="grid gap-4 md:grid-cols-[1.4fr_0.8fr]">
-          <div className="border-2 border-border bg-card p-5 shadow-[6px_6px_0_rgba(18,49,60,0.14)] dark:shadow-[6px_6px_0_rgba(217,48,37,0.18)]">
+      <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-[1.4fr_0.8fr]">
+          <div className="min-w-0 border-2 border-border bg-card p-5 shadow-[6px_6px_0_rgba(18,49,60,0.14)] dark:shadow-[6px_6px_0_rgba(217,48,37,0.18)]">
             <p
               className="font-mono text-sm font-black text-muted-foreground"
               id="location-display"
             >
               {locationLabel}
             </p>
-            <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto_auto]">
+            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto_auto]">
               <input
-                className="min-h-12 border-2 border-border bg-background px-3 text-base font-bold text-foreground outline-none focus:ring-2 focus:ring-primary"
+                className="min-h-12 min-w-0 border-2 border-border bg-background px-3 text-base font-bold text-foreground outline-none focus:ring-2 focus:ring-primary"
                 id="location-input"
                 onChange={(event) => setCityInput(event.target.value)}
                 onKeyDown={(event) => {
@@ -652,7 +652,7 @@ export function HeatIndexTool() {
             ) : null}
           </div>
 
-          <div className="border-2 border-border bg-card p-5">
+          <div className="min-w-0 border-2 border-border bg-card p-5">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="font-mono text-xs font-black uppercase text-muted-foreground">
@@ -747,8 +747,8 @@ export function HeatIndexTool() {
           </div>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="border-2 border-border bg-card p-5">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="min-w-0 border-2 border-border bg-card p-5">
             <p className="font-mono text-xs font-black uppercase text-muted-foreground">
               Manual
             </p>
@@ -758,11 +758,11 @@ export function HeatIndexTool() {
             <p className="mt-2 text-sm font-bold leading-6 text-muted-foreground">
               自备温湿度计更准确。天气接口不可用时，仍可输入现场温度和湿度立即计算。
             </p>
-            <div className="mt-5 grid grid-cols-2 gap-3">
+            <div className="mt-5 grid min-w-0 grid-cols-2 gap-3">
               <label className="grid gap-2 text-sm font-black text-muted-foreground">
                 温度 (°C)
                 <input
-                  className="min-h-12 border-2 border-border bg-background px-3 text-base font-bold text-foreground outline-none focus:ring-2 focus:ring-primary"
+                  className="min-h-12 min-w-0 border-2 border-border bg-background px-3 text-base font-bold text-foreground outline-none focus:ring-2 focus:ring-primary"
                   id="manual-temp"
                   max={50}
                   min={0}
@@ -781,7 +781,7 @@ export function HeatIndexTool() {
               <label className="grid gap-2 text-sm font-black text-muted-foreground">
                 湿度 (%)
                 <input
-                  className="min-h-12 border-2 border-border bg-background px-3 text-base font-bold text-foreground outline-none focus:ring-2 focus:ring-primary"
+                  className="min-h-12 min-w-0 border-2 border-border bg-background px-3 text-base font-bold text-foreground outline-none focus:ring-2 focus:ring-primary"
                   id="manual-humidity"
                   max={100}
                   min={0}
@@ -847,7 +847,7 @@ export function HeatIndexTool() {
             ) : null}
           </div>
 
-          <div className="border-2 border-border bg-muted/25 p-5">
+          <div className="min-w-0 border-2 border-border bg-muted/25 p-5">
             <div className="mb-4 flex items-end justify-between gap-4">
               <div>
                 <p className="font-mono text-xs font-black uppercase text-muted-foreground">
@@ -865,8 +865,8 @@ export function HeatIndexTool() {
           </div>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
-          <aside className="border-2 border-border bg-card p-5">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[0.8fr_1.2fr]">
+          <aside className="min-w-0 border-2 border-border bg-card p-5">
             <p className="font-mono text-xs font-black uppercase text-muted-foreground">
               Tips
             </p>
@@ -884,7 +884,7 @@ export function HeatIndexTool() {
           </aside>
 
           <section
-            className="border-2 border-border bg-card p-5"
+            className="min-w-0 border-2 border-border bg-card p-5"
             aria-labelledby="checklist-heading"
           >
             <div className="flex flex-wrap items-center justify-between gap-3">

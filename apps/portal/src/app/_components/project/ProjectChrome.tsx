@@ -185,11 +185,11 @@ export function ProjectChrome({
         >
           <a
             aria-label={`红医师 / ${projectLabel}`}
-            className="min-w-0 text-[clamp(1.15rem,6.2vw,1.8rem)] font-black leading-none text-foreground no-underline"
+            className="min-w-0 text-[clamp(1rem,5.2vw,1.8rem)] font-black leading-none text-foreground no-underline"
             href={brandHref}
           >
             <span className="text-primary">红医师</span>
-            <span className="mx-2 text-muted-foreground">/</span>
+            <span className="mx-1.5 text-muted-foreground sm:mx-2">/</span>
             <span>{projectLabel}</span>
           </a>
 

@@ -181,7 +181,7 @@ function GovernanceBanner() {
       className="border-b-2 border-border bg-background"
       data-hongyishi-content-governance
     >
-      <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] gap-2 py-3 font-mono text-xs font-bold leading-5 text-muted-foreground md:grid-cols-[auto_1fr] md:items-center">
+      <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] grid-cols-1 gap-2 py-3 font-mono text-xs font-bold leading-5 text-muted-foreground md:grid-cols-[auto_1fr] md:items-center">
         <span className="w-fit border-2 border-primary bg-primary px-2 py-1 font-black text-primary-foreground">
           内容状态：待复核
         </span>
@@ -219,7 +219,7 @@ function Card({
 
   return (
     <article
-      className={`${spanClass} rounded border-2 border-border bg-card p-5 text-card-foreground shadow-[6px_6px_0_rgba(18,49,60,0.14)] dark:shadow-[6px_6px_0_rgba(217,48,37,0.18)]`}
+      className={`${spanClass} min-w-0 break-words rounded border-2 border-border bg-card p-5 text-card-foreground shadow-[6px_6px_0_rgba(18,49,60,0.14)] dark:shadow-[6px_6px_0_rgba(217,48,37,0.18)]`}
     >
       {children}
     </article>
@@ -252,7 +252,7 @@ function FigurePlaceholder({ children }: { children: ReactNode }) {
 
 function DataTable({ headers, rows }: { headers: string[]; rows: TableRow[] }) {
   return (
-    <div className="mt-4 overflow-x-auto rounded border-2 border-border">
+    <div className="mt-4 max-w-full overflow-x-auto rounded border-2 border-border">
       <table className="w-full min-w-[640px] border-collapse text-left text-sm">
         <thead className="bg-foreground text-background dark:bg-muted dark:text-foreground">
           <tr>
@@ -317,12 +317,12 @@ export default function HeatStrokeTreatmentSystemConsensusPage() {
       <main id="main">
         <section className="relative isolate overflow-hidden border-b-2 border-border bg-foreground text-background dark:bg-card dark:text-card-foreground">
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(rgba(244,236,220,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(244,236,220,0.08)_1px,transparent_1px)] bg-[size:64px_64px]" />
-          <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] gap-8 py-12 md:grid-cols-[0.95fr_1.05fr] md:items-end md:py-20">
+          <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] grid-cols-1 gap-8 py-12 md:grid-cols-[0.95fr_1.05fr] md:items-end md:py-20">
             <div>
               <p className="font-mono text-sm font-black uppercase tracking-normal text-background/70 dark:text-muted-foreground">
                 Heatstroke Treatment System Consensus
               </p>
-              <h1 className="mt-4 text-[clamp(3rem,9vw,6.8rem)] font-black leading-[0.9] text-primary">
+              <h1 className="mt-4 text-[clamp(2.35rem,12vw,4rem)] font-black leading-[0.9] text-primary md:text-[clamp(4rem,8vw,6.8rem)]">
                 热射病救治体系
                 <br />
                 建设标准
@@ -341,7 +341,7 @@ export default function HeatStrokeTreatmentSystemConsensusPage() {
 
         <GovernanceBanner />
 
-        <section className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] gap-5 py-12 md:grid-cols-3 lg:grid-cols-4">
+        <section className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] grid-cols-1 gap-5 py-12 md:grid-cols-3 lg:grid-cols-4">
           <Card span="wide">
             <SectionLabel>The Challenge</SectionLabel>
             <h2 className="mt-2 text-3xl font-black text-primary">严峻挑战</h2>
@@ -349,7 +349,7 @@ export default function HeatStrokeTreatmentSystemConsensusPage() {
               全球变暖加剧，极端高温频发，热射病核心体温可超过
               40°C，发生率显著上升，威胁生命健康。
             </p>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="rounded border-2 border-border bg-muted/30 p-5 text-center">
                 <p className="text-6xl font-black text-primary">20.7%</p>
                 <p className="mt-2 font-black">ICU 病死率</p>
@@ -391,7 +391,7 @@ export default function HeatStrokeTreatmentSystemConsensusPage() {
             <p className="mt-4 font-bold leading-8 text-muted-foreground">
               优化全流程防治体系：预防、现场、院前、院内、康复、慢病管理。提升及时性、规范性、科学性。
             </p>
-            <div className="mt-5 grid gap-3 md:grid-cols-4">
+            <div className="mt-5 grid grid-cols-1 gap-3 md:grid-cols-4">
               {consensusGoals.map((goal) => (
                 <div
                   className="border-2 border-border bg-muted/30 px-4 py-5 text-center text-lg font-black"
@@ -404,7 +404,7 @@ export default function HeatStrokeTreatmentSystemConsensusPage() {
             <RecommendationBox>{recommendations[0]}</RecommendationBox>
           </Card>
 
-          <div className="py-6 md:col-span-3 lg:col-span-4">
+          <div className="min-w-0 py-6 md:col-span-3 lg:col-span-4">
             <p className="font-mono text-sm font-black text-muted-foreground">
               System Construction Requirements
             </p>
@@ -433,7 +433,7 @@ export default function HeatStrokeTreatmentSystemConsensusPage() {
             <p className="mt-4 font-bold leading-8 text-muted-foreground">
               简明易记，适合普及培训。
             </p>
-            <div className="mt-5 grid gap-4 md:grid-cols-3">
+            <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-3">
               {ruleColumns.map((column) => (
                 <div
                   className="rounded border-2 border-border bg-muted/30 p-4"
@@ -501,7 +501,7 @@ export default function HeatStrokeTreatmentSystemConsensusPage() {
             <p className="mt-4 font-bold leading-8 text-muted-foreground">
               急诊科负责快速评估处理，危重症由重症医学科主导，需多学科团队(MDT)协作。倡导"十早一禁"原则，提供最佳器官功能支持。
             </p>
-            <div className="mt-5 grid gap-4 md:grid-cols-2">
+            <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
               <FigurePlaceholder>
                 图 3: 急诊接诊处置流程示意图
               </FigurePlaceholder>
@@ -547,7 +547,7 @@ export default function HeatStrokeTreatmentSystemConsensusPage() {
             <RecommendationBox>{recommendations[7]}</RecommendationBox>
           </Card>
 
-          <div className="py-6 md:col-span-3 lg:col-span-4">
+          <div className="min-w-0 py-6 md:col-span-3 lg:col-span-4">
             <p className="font-mono text-sm font-black text-muted-foreground">
               System Construction Content
             </p>
@@ -600,7 +600,7 @@ export default function HeatStrokeTreatmentSystemConsensusPage() {
               均需建立救治单元。具备快速降温、核心体温监测、急救复苏、生命支持能力。
             </p>
             <BulletList items={coolingPoints} />
-            <div className="mt-5 grid gap-4 md:grid-cols-2">
+            <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
               <FigurePlaceholder>
                 图 6: 现场降温方式示意图，水池或冰块包裹
               </FigurePlaceholder>
@@ -683,7 +683,7 @@ export default function HeatStrokeTreatmentSystemConsensusPage() {
             </p>
           </Card>
 
-          <div className="grid gap-3 md:col-span-3 md:grid-cols-3 lg:col-span-4">
+          <div className="grid min-w-0 grid-cols-1 gap-3 md:col-span-3 md:grid-cols-3 lg:col-span-4">
             <a
               className="rounded border-2 border-foreground bg-foreground px-5 py-4 text-center font-black text-background no-underline transition-transform active:translate-x-1 active:translate-y-1"
               href="/heat-stroke/pages/diagnosis-treatment-guideline"

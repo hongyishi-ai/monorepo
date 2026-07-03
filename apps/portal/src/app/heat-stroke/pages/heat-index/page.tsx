@@ -32,7 +32,7 @@ function GovernanceBanner() {
       className="border-b-2 border-border bg-background"
       data-hongyishi-content-governance
     >
-      <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] gap-2 py-3 font-mono text-xs font-bold leading-5 text-muted-foreground md:grid-cols-[auto_1fr] md:items-center">
+      <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] grid-cols-1 gap-2 py-3 font-mono text-xs font-bold leading-5 text-muted-foreground md:grid-cols-[auto_1fr] md:items-center">
         <span className="w-fit border-2 border-primary bg-primary px-2 py-1 font-black text-primary-foreground">
           内容状态：待复核
         </span>
@@ -78,7 +78,7 @@ export default function HeatIndexPage() {
 
       <main id="main">
         <section className="border-b-2 border-border bg-muted/30">
-          <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] gap-6 py-10 md:grid-cols-[1fr_0.9fr] md:items-end md:py-14">
+          <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] grid-cols-1 gap-6 py-10 md:grid-cols-[1fr_0.9fr] md:items-end md:py-14">
             <div>
               <p className="font-mono text-xs font-black uppercase text-muted-foreground">
                 Heat Index
