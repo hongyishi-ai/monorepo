@@ -86,6 +86,15 @@ async function collectFiles(directory, extensions) {
   return files;
 }
 
+async function readDirIfExists(directory) {
+  try {
+    return await readdir(directory);
+  } catch (error) {
+    if (error?.code === "ENOENT") return [];
+    throw error;
+  }
+}
+
 test("normalizeBasePath enforces leading and trailing slashes", () => {
   assert.equal(normalizeBasePath("fms"), "/fms/");
   assert.equal(normalizeBasePath("/heat-stroke"), "/heat-stroke/");
@@ -1081,7 +1090,7 @@ test("shouldCopyTcccPath can preserve a Next-owned project entry", () => {
 });
 
 test("heat-stroke source pages expose unified brand navigation", async () => {
-  const pageFiles = (await readdir(heatStrokePagesDir)).filter((file) =>
+  const pageFiles = (await readDirIfExists(heatStrokePagesDir)).filter((file) =>
     file.endsWith(".html"),
   );
   const homeHtml = await readFile(
@@ -1104,7 +1113,7 @@ test("heat-stroke source pages expose unified brand navigation", async () => {
 test("heat-stroke source pages use the Hongyishi visual shell", async () => {
   const htmlFiles = [
     path.join(repoRoot, "apps", "heat-stroke", "index.html"),
-    ...(await readdir(heatStrokePagesDir))
+    ...(await readDirIfExists(heatStrokePagesDir))
       .filter((file) => file.endsWith(".html"))
       .map((file) => path.join(heatStrokePagesDir, file)),
   ];
@@ -1351,7 +1360,7 @@ test("heat-stroke Next-owned heat tolerance page keeps assessment contracts", as
 test("heat-stroke source uses locally built Tailwind CSS without runtime animation vendor", async () => {
   const htmlFiles = [
     path.join(repoRoot, "apps", "heat-stroke", "index.html"),
-    ...(await readdir(heatStrokePagesDir))
+    ...(await readDirIfExists(heatStrokePagesDir))
       .filter((file) => file.endsWith(".html"))
       .map((file) => path.join(heatStrokePagesDir, file)),
   ];
@@ -1374,7 +1383,7 @@ test("heat-stroke source uses locally built Tailwind CSS without runtime animati
 });
 
 test("heat-stroke JavaScript sources do not expose fallback OpenWeather keys", async () => {
-  const scriptFiles = (await readdir(heatStrokeScriptsDir)).filter((file) =>
+  const scriptFiles = (await readDirIfExists(heatStrokeScriptsDir)).filter((file) =>
     file.endsWith(".js"),
   );
 
@@ -1404,7 +1413,7 @@ test("heat-stroke JavaScript sources do not expose fallback OpenWeather keys", a
 });
 
 test("heat-stroke source page filenames all map to ASCII deployment paths", async () => {
-  const pageFiles = (await readdir(heatStrokePagesDir)).filter((file) =>
+  const pageFiles = (await readDirIfExists(heatStrokePagesDir)).filter((file) =>
     file.endsWith(".html"),
   );
 
