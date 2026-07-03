@@ -27,6 +27,35 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-07-03 - adf9513 - 热射病热指数查询页 Next 接管
+
+- Commit: `adf9513b8280fb567a4562b1b3601bf37b3ce9a4`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://b8f3f5ca.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.107.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - Red-green checks: `pnpm exec node --test scripts/build-cloudflare.test.mjs` first failed because `pages/heat-index.html` was still copyable as a static heat-stroke page and was missing from the default Next-owned alias set; after implementation it passed
+  - `pnpm exec node --test scripts/project-registry.test.mjs` passed
+  - `pnpm --filter @hongyishi/portal type-check` passed
+  - `pnpm audit:static-debt` passed: heat-stroke `1` HTML file, `1` style block, `0` style attrs, `0` legacy home links; TCCC unchanged at `26` HTML files, `26` style blocks, `25` style attrs, `0` legacy home links
+  - `pnpm test:cloudflare` passed: `65/65`
+  - `pnpm build:cloudflare` passed and exported `/heat-stroke/pages/heat-index`
+  - `pnpm size:budget` passed: `411 files, 51.62 MiB total`
+  - Build output checks passed: `.cloudflare/site/heat-stroke/pages/heat-index.html` exists and `.cloudflare/site/heat-stroke/pages/热指数查询.html` does not exist
+  - Local Pages preview `HONGYISHI_AUDIT_BASE_URL=http://127.0.0.1:3027 pnpm audit:links` passed: internal `37/37`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+  - Playwright mobile smoke passed on `/heat-stroke/pages/heat-index`: project shell present, hamburger menu active item `热指数查询`, bottom nav active item `热指数`, no 390px horizontal overflow, day/night toggle changed the page theme, mocked OpenWeather city/current/forecast data rendered current weather and the SVG trend chart, manual `32°C / 70%` calculation produced a `°C` result and `警惕` level, and `preventionChecklist` persisted selected checklist items
+  - `https://b8f3f5ca.hongyishi-monorepo.pages.dev/heat-stroke/pages/heat-index` returned HTTP `200` with the Next project shell, page title, weather tool markers, and chart marker; `https://b8f3f5ca.hongyishi-monorepo.pages.dev/heat-stroke/pages/热指数查询.html` returned HTTP `404`
+  - `HONGYISHI_AUDIT_BASE_URL=https://b8f3f5ca.hongyishi-monorepo.pages.dev pnpm audit:links` passed: internal `37/37`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+  - `https://hongyishi.cn/heat-stroke/pages/heat-index` returned HTTP `200` with the Next project shell, page title, weather tool markers, and chart marker; `https://hongyishi.cn/heat-stroke/pages/热指数查询.html` returned HTTP `404`
+  - `HONGYISHI_AUDIT_BASE_URL=https://hongyishi.cn pnpm audit:links` passed: internal `37/37`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - Moved heat-stroke `热指数查询` from standalone static HTML into the Portal Next app at `/heat-stroke/pages/heat-index`, preserving OpenWeather proxy usage, the National Weather Service heat-index formula, 10-minute local cache behavior, manual temperature/humidity calculation, health-tip thresholds, and `preventionChecklist` localStorage key.
+  - Rebuilt the old standalone black/orange static tool as the shared Next `ProjectChrome` experience with unified mobile hamburger menu, bottom nav, content-governance banner, back-to-top control, and page-wide day/night theme behavior.
+  - Replaced page-local Chart.js with an inline SVG trend chart and removed the old static heat-index HTML, old heat-index JS modules, Chart.js vendor files, and runtime Tailwind/Framer vendor leftovers from the heat-stroke source tree.
+  - Heat-stroke deep static pages are now fully handed off to Next; remaining heat-stroke static source is only the legacy `index.html` source used by historical/static app packaging, with deep pages owned by Portal Next routes.
+  - Updated the migration stage to `next-home-about-rule-guide-consensus-cooling-tolerance-challenge-field-treatment-and-heat-index-owned`.
+
 ## 2026-07-01 - 3f86e19 - 热射病现场处置页 Next 接管
 
 - Commit: `3f86e196b22d3f633e856ec9ae176104bf34283c`
