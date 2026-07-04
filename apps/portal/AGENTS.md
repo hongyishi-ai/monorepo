@@ -1,6 +1,7 @@
 # Project Agent Brief
 
 ## Product Surface Summary
+- Before creating a new page or changing UI, read the repo root `DESIGN.md` and treat it as the binding Hongyishi design contract.
 - `/` is the portfolio landing page with constructivist styling (PortfolioHero, PortfolioGrid, AboutSection, PortfolioFooter).
 - `/blog` lists posts in the editorial layout (Intro, HeroPost, MoreStories, Footer with PortfolioLinks).
 - `/blog/posts/[slug]` renders Markdown articles sourced from `_posts/*.md`, including cover imagery, metadata, and markdown-styled content.
