@@ -1,9 +1,9 @@
 {
   "name": "TCCC战术战伤救护流程",
   "short_name": "TCCC流程",
-  "description": "基于CoTCCC 2017版官方指南的交互式战术战伤救护决策流程",
-  "start_url": "/index.html",
-  "scope": "/",
+  "description": "依据 JTS / CoTCCC 2026-05-01 指南复核的中文交互式战术战伤救护学习流程",
+  "start_url": "/tccc/",
+  "scope": "/tccc/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#EE1C25",

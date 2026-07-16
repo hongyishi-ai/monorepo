@@ -65,6 +65,7 @@ export const mobileNavConfigs = {
       { id: "platform", label: "总入口", href: "/" },
       { id: "directory", label: "项目首页", href: "" },
       { id: "standard", label: "标准流程", href: "pages/tccc-standard" },
+      { id: "threat", label: "直接威胁下救治", href: "pages/cuf-threat-care" },
       { id: "tfc", label: "TFC 大出血", href: "pages/tfc-hemorrhage" },
       { id: "airway", label: "TFC 气道", href: "pages/tfc-airway" },
       { id: "breathing", label: "呼吸管理", href: "pages/tccc-breathing" },
@@ -72,6 +73,20 @@ export const mobileNavConfigs = {
         id: "hypothermia",
         label: "低体温预防",
         href: "pages/tccc-hypothermia",
+      },
+      { id: "tbi", label: "中重度 TBI", href: "pages/tccc-tbi" },
+      { id: "eye", label: "穿透性眼外伤", href: "pages/tccc-eye-trauma" },
+      { id: "pain", label: "2026 镇痛", href: "pages/tccc-pain-management" },
+      {
+        id: "antibiotics",
+        label: "2026 抗菌药",
+        href: "pages/tccc-antibiotics",
+      },
+      { id: "wound", label: "伤口与烧伤", href: "pages/tccc-wound-care" },
+      {
+        id: "documentation",
+        label: "DD 1380 文书",
+        href: "pages/tccc-documentation",
       },
       {
         id: "tacevac",
@@ -154,6 +169,15 @@ export function resolveProjectMobileMenuActiveItem(project, relativePath) {
     if (fileName === "tfc-airway.html") return "airway";
     if (fileName === "tccc-breathing.html") return "breathing";
     if (fileName === "tccc-hypothermia.html") return "hypothermia";
+    if (fileName === "cuf-threat-care.html") return "threat";
+    if (fileName === "tccc-tbi.html") return "tbi";
+    if (fileName === "tccc-eye-trauma.html") return "eye";
+    if (fileName === "tccc-pain-management.html") return "pain";
+    if (fileName === "tccc-antibiotics.html") return "antibiotics";
+    if (fileName === "tccc-wound-care.html" || fileName === "tccc-burns.html") {
+      return "wound";
+    }
+    if (fileName === "tccc-documentation.html") return "documentation";
     if (fileName.startsWith("tacevac-")) return "tacevac";
     if (fileName === "tccc-flow-framework.html") return "course";
     return "directory";

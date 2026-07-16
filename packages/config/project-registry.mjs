@@ -57,11 +57,10 @@ export const projectRuntimeContracts = {
     migrationRisk: "medium",
   },
   tccc: {
-    runtime: "static-html-tailwind",
+    runtime: "next-static-export",
     routeOwner: "next",
-    nextMigrationStage:
-      "next-home-and-tfc-airway-owned-static-deep-pages-pending",
-    migrationRisk: "medium",
+    nextMigrationStage: "next-home-and-all-tccc-learning-pages-owned",
+    migrationRisk: "low",
   },
 };
 

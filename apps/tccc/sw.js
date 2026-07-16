@@ -1,36 +1,32 @@
 // 缓存名称和版本号
-const CACHE_NAME = 'tccc-flow-cache-v1';
+const CACHE_NAME = 'tccc-flow-cache-v2';
 
 // 需要缓存的资源列表（必需资源）
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/assets/css/tailwind.css',
-  '/assets/css/fontawesome-shim.css',
-  '/sw.js',
-  '/pwa-register.js',
-  '/offline.html',
-  '/README.md',
-  '/pages/TCCC标准流程.html',
-  '/pages/TCCC静脉通路与止血酸.html',
-  '/pages/TCCC骨盆绑带流程.html',
-  '/pages/TCCC呼吸管理算法.html',
-  '/pages/tfc-airway',
-  '/pages/TFC大出血算法.html',
-  '/pages/TCCC流程框架.html',
-  '/pages/TCCC战伤流程数据.js'
+  '/tccc/',
+  '/tccc/manifest.json',
+  '/tccc/assets/css/tailwind.css',
+  '/tccc/assets/css/fontawesome-shim.css',
+  '/tccc/sw.js',
+  '/tccc/pwa-register.js',
+  '/offline',
+  '/tccc/README.md',
+  '/tccc/pages/tccc-standard',
+  '/tccc/pages/tfc-hemorrhage',
+  '/tccc/pages/tfc-airway',
+  '/tccc/pages/tccc-breathing',
+  '/tccc/pages/tccc-flow-framework'
 ];
 
 // 可选缓存资源（如果不存在也不会导致安装失败）
 const optionalUrlsToCache = [
-  '/icons/favicon.ico',
-  '/icons/apple-touch-icon.png',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
-  '/icons/icon-192-maskable.png',
-  '/icons/icon-512-maskable.png',
-  '/icons/app-icon.svg'
+  '/tccc/icons/favicon.ico',
+  '/tccc/icons/apple-touch-icon.png',
+  '/tccc/icons/icon-192.png',
+  '/tccc/icons/icon-512.png',
+  '/tccc/icons/icon-192-maskable.png',
+  '/tccc/icons/icon-512-maskable.png',
+  '/tccc/icons/app-icon.svg'
 ];
 
 // Service Worker 安装事件，缓存必需资源
@@ -129,7 +125,7 @@ self.addEventListener('fetch', event => {
             // 网络请求失败时的处理
             if (event.request.mode === 'navigate') {
               // 如果是导航请求（访问页面），返回缓存中的离线页面
-              return caches.match('/offline.html');
+              return caches.match('/offline');
             } 
             
             // 对于资源请求，检查是否有可替代资源

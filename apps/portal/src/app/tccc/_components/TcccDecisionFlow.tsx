@@ -130,22 +130,24 @@ export function TcccDecisionFlow({ definition }: TcccDecisionFlowProps) {
       <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] grid-cols-1 gap-4 lg:grid-cols-[0.32fr_0.68fr] lg:grid-rows-[auto_1fr] lg:gap-x-5 lg:gap-y-0">
         <aside className="hidden min-w-0 border-r-2 border-border pr-6 pt-2 lg:col-start-1 lg:row-start-1 lg:block">
           <p className="font-mono text-xs font-black text-muted-foreground">
-            MARCH / A · 气道
+            {definition.sourceSection}
           </p>
           <p
-            className="mt-4 text-[clamp(4rem,18vw,8rem)] font-black leading-[0.75] text-primary"
+            className="mt-4 text-5xl font-black leading-none text-primary"
             aria-hidden="true"
           >
-            A
+            TCCC
           </p>
-          <p className="mt-5 text-xl font-black text-foreground">气道管理</p>
+          <p className="mt-5 text-xl font-black text-foreground">
+            {definition.title}
+          </p>
           <p className="mt-2 text-sm font-bold leading-6 text-muted-foreground">
-            根据伤员当前表现作出选择，直至气道通畅或完成直接气道干预。
+            根据伤员当前表现作出选择，完成处置后持续复评，直至当前问题得到控制。
           </p>
         </aside>
 
         <div
-          className="sticky top-[84px] z-30 self-start rounded border-2 border-border bg-background/95 p-2 shadow-[0_4px_0_hsl(var(--border)/0.08)] backdrop-blur lg:static lg:col-start-1 lg:row-start-2 lg:mt-0 lg:rounded-none lg:border-0 lg:border-r-2 lg:bg-transparent lg:p-0 lg:pr-6 lg:pt-6 lg:shadow-none lg:backdrop-blur-none"
+          className="sticky top-[84px] z-30 self-start rounded border-2 border-border bg-background/95 p-2 shadow-[0_4px_0_hsl(var(--border)/0.08)] backdrop-blur lg:top-[96px] lg:col-start-1 lg:row-start-2 lg:mt-0 lg:rounded-none lg:border-0 lg:border-r-2 lg:bg-background/90 lg:p-0 lg:pr-6 lg:pt-6 lg:shadow-none"
           data-tccc-mobile-controls
         >
           <div className="flex items-center gap-2 lg:block">

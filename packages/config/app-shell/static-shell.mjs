@@ -204,7 +204,7 @@ export function renderTcccBrandShell({ flowTitle }) {
             <strong>当前流程：${title}</strong>
             <span>教育训练用途</span>
             <span>内容状态：待复核</span>
-            <span>TFC 气道已按 2026-05-01 指南复核；其余静态流程仍保留 2017 基线</span>
+            <span>全部交互学习页已按 2026-05-01 指南复核，待医学专家终审</span>
           </div>
         </div>
       </div>

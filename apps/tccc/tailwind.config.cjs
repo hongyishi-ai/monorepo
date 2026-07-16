@@ -5,7 +5,7 @@ const typography = require('@tailwindcss/typography');
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   presets: [hongyishiPreset],
-  content: ['./index.html', './offline.html', './pages/**/*.{html,js}', './pwa-register.js'],
+  content: ['./index.html', './pwa-register.js'],
   theme: {
     extend: {},
   },

@@ -37,6 +37,7 @@ import {
   rewriteTcccText,
   shouldCopyHeatStrokePath,
   shouldCopyTcccPath,
+  tcccPageAliases,
   validateCloudflareFreeTierBudget,
 } from "./build-cloudflare.mjs";
 
@@ -55,6 +56,52 @@ const heatStrokeScriptsDir = path.join(
 const fmsSrcDir = path.join(repoRoot, "apps", "fms", "src");
 const tcccDir = path.join(repoRoot, "apps", "tccc");
 const tcccPagesDir = path.join(tcccDir, "pages");
+const tcccFlowRegistryPath = path.join(
+  repoRoot,
+  "apps",
+  "portal",
+  "src",
+  "app",
+  "tccc",
+  "_data",
+  "tcccFlowRegistry.ts",
+);
+const expectedTcccModuleSlugs = [
+  "cuf-threat-care",
+  "tccc-standard",
+  "tfc-hemorrhage",
+  "tccc-breathing",
+  "tccc-shock-fluid",
+  "tccc-iv-txa",
+  "tccc-pelvic-binder",
+  "tccc-hypothermia",
+  "tccc-tbi",
+  "tccc-eye-trauma",
+  "tccc-monitoring",
+  "tccc-pain-management",
+  "tccc-antibiotics",
+  "tccc-wound-care",
+  "tccc-burns",
+  "tccc-splints",
+  "tccc-cpr",
+  "tccc-casualty-communication",
+  "tccc-documentation",
+  "tccc-evac-prep",
+  "circulation-course",
+  "tccc-flow-framework",
+  "tacevac-reassessment",
+  "tacevac-airway",
+  "tacevac-breathing",
+  "tacevac-tbi",
+  "tacevac-shock-fluid",
+  "tacevac-iv-txa",
+  "tacevac-pelvic-binder",
+  "tacevac-pain-management",
+  "tacevac-hypothermia",
+  "tacevac-cpr",
+  "tacevac-handoff",
+  "tfc-airway",
+];
 const projectRegistryPath = path.join(
   repoRoot,
   "apps",
@@ -1085,7 +1132,7 @@ test("shouldCopyTcccPath can preserve a Next-owned project entry", () => {
   assert.equal(shouldCopyTcccPath("pwa-register.js", nextOwnedOptions), true);
   assert.equal(
     shouldCopyTcccPath("pages/TCCC标准流程.html", nextOwnedOptions),
-    true,
+    false,
   );
   assert.equal(
     shouldCopyTcccPath("pages/TFC气道算法.html", nextOwnedOptions),
@@ -1123,6 +1170,7 @@ test("TCCC Next-owned airway flow keeps a complete 2026 Chinese decision graph",
   );
   const flow = JSON.parse(await readFile(flowPath, "utf8"));
   const pageSource = await readFile(pagePath, "utf8");
+  const registrySource = await readFile(tcccFlowRegistryPath, "utf8");
   const componentSource = await readFile(componentPath, "utf8");
   const projectChromeSource = await readFile(
     path.join(
@@ -1195,9 +1243,10 @@ test("TCCC Next-owned airway flow keeps a complete 2026 Chinese decision graph",
     serializedFlow,
     /2017|textEng|actionTextEng|Begin Assessment/,
   );
-  assert.match(pageSource, /activeBottomItemId="tfc"/);
-  assert.match(pageSource, /activeMenuItemId="airway"/);
-  assert.match(pageSource, /2026-05-01/);
+  assert.match(pageSource, /TcccModulePage/);
+  assert.match(registrySource, /activeBottomItemId: "tfc"/);
+  assert.match(registrySource, /activeMenuItemId: "airway"/);
+  assert.match(registrySource, /const guidelineVersion = "2026-05-01"/);
   assert.match(componentSource, /export type TcccFlowDefinition/);
   assert.match(componentSource, /prefers-reduced-motion/);
   assert.match(componentSource, /data-tccc-mobile-controls/);
@@ -1215,6 +1264,78 @@ test("TCCC Next-owned airway flow keeps a complete 2026 Chinese decision graph",
     staticShellStyles,
     /\.hys-mobile-top-menu__button\.hys-nav-link\s*\{[\s\S]*?background:\s*hsl\(var\(--card\)\)/,
   );
+});
+
+test("TCCC registry exposes every 2026 Chinese learning module through Next", async () => {
+  const registrySource = await readFile(tcccFlowRegistryPath, "utf8");
+  const dynamicPageSource = await readFile(
+    path.join(
+      repoRoot,
+      "apps",
+      "portal",
+      "src",
+      "app",
+      "tccc",
+      "pages",
+      "[slug]",
+      "page.tsx",
+    ),
+    "utf8",
+  );
+  const modulePageSource = await readFile(
+    path.join(
+      repoRoot,
+      "apps",
+      "portal",
+      "src",
+      "app",
+      "tccc",
+      "_components",
+      "TcccModulePage.tsx",
+    ),
+    "utf8",
+  );
+  const moduleSlugs = [
+    ...registrySource.matchAll(/^\s+slug: "([a-z0-9-]+)",$/gm),
+  ].map((match) => match[1]);
+
+  assert.equal(moduleSlugs.length, expectedTcccModuleSlugs.length);
+  assert.deepEqual(
+    new Set(moduleSlugs),
+    new Set(expectedTcccModuleSlugs),
+    "the registry should contain the complete reviewed TCCC module set",
+  );
+  assert.equal(new Set(moduleSlugs).size, moduleSlugs.length);
+  for (const slug of moduleSlugs) assert.match(slug, /^[a-z0-9-]+$/);
+
+  assert.doesNotMatch(
+    registrySource,
+    /2017|Moxifloxacin|Ertapenem|textEng|actionTextEng|Begin Assessment/,
+  );
+  for (const requiredContent of [
+    "2026-05-01",
+    "Suzetrigine",
+    "Cefadroxil",
+    "Cephalexin",
+    "Ceftriaxone",
+    "SpO₂ ≥92%",
+    "CoERCCC",
+  ]) {
+    assert.match(registrySource, new RegExp(requiredContent));
+  }
+
+  assert.match(dynamicPageSource, /generateStaticParams/);
+  assert.match(dynamicPageSource, /export const dynamicParams = false/);
+  assert.match(modulePageSource, /ProjectChrome/);
+  assert.match(modulePageSource, /待医学专家终审/);
+
+  for (const alias of tcccPageAliases.values()) {
+    assert.equal(
+      nextOwnedTcccPageAliases.has(`pages/${alias}`),
+      true,
+      `${alias} should be excluded from the legacy copy once Next owns it`,
+    );
+  }
 });
 
 test("heat-stroke source pages expose unified brand navigation", async () => {
@@ -1562,9 +1683,13 @@ test("heat-stroke source page filenames all map to ASCII deployment paths", asyn
 });
 
 test("TCCC source homepage and service worker only reference existing deployable pages", async () => {
-  const pageFiles = new Set(
-    (await readdir(tcccPagesDir)).filter(
-      (file) => file.endsWith(".html") || file.endsWith(".js"),
+  const pageFiles = (await readDirIfExists(tcccPagesDir)).filter(
+    (file) => file.endsWith(".html") || file.endsWith(".js"),
+  );
+  const registrySource = await readFile(tcccFlowRegistryPath, "utf8");
+  const moduleSlugs = new Set(
+    [...registrySource.matchAll(/^\s+slug: "([a-z0-9-]+)",$/gm)].map(
+      (match) => match[1],
     ),
   );
   const sources = [
@@ -1572,25 +1697,26 @@ test("TCCC source homepage and service worker only reference existing deployable
     ["sw.js", await readFile(path.join(tcccDir, "sw.js"), "utf8")],
   ];
 
-  assert.ok(pageFiles.size > 0, "expected TCCC source pages");
+  assert.equal(pageFiles.length, 0, "legacy TCCC deep pages should be removed");
 
   for (const [sourceName, source] of sources) {
-    const references = [
-      ...source.matchAll(/pages\/([^"'`]+?\.(?:html|js))/g),
-    ].map((match) => decodeURI(match[1]));
+    assert.doesNotMatch(source, /pages\/[^"'`]+?\.(?:html|js)/);
+    const references = [...source.matchAll(/\/tccc\/pages\/([a-z0-9-]+)/g)].map(
+      (match) => match[1],
+    );
 
     for (const reference of references) {
       assert.ok(
-        pageFiles.has(reference),
-        `${sourceName} references missing TCCC page ${reference}`,
+        moduleSlugs.has(reference),
+        `${sourceName} references unregistered TCCC route ${reference}`,
       );
     }
   }
 });
 
 test("TCCC source uses locally built Tailwind CSS instead of the CDN runtime", async () => {
-  const rootFiles = ["index.html", "offline.html", "sw.js"];
-  const pageFiles = (await readdir(tcccPagesDir)).filter((file) =>
+  const rootFiles = ["index.html", "sw.js"];
+  const pageFiles = (await readDirIfExists(tcccPagesDir)).filter((file) =>
     file.endsWith(".html"),
   );
 
@@ -1617,8 +1743,8 @@ test("TCCC source uses locally built Tailwind CSS instead of the CDN runtime", a
 });
 
 test("TCCC source uses local icon CSS instead of Font Awesome CDN", async () => {
-  const rootFiles = ["index.html", "offline.html", "sw.js"];
-  const pageFiles = (await readdir(tcccPagesDir)).filter((file) =>
+  const rootFiles = ["index.html", "sw.js"];
+  const pageFiles = (await readDirIfExists(tcccPagesDir)).filter((file) =>
     file.endsWith(".html"),
   );
 
@@ -1645,18 +1771,18 @@ test("TCCC source uses local icon CSS instead of Font Awesome CDN", async () => 
 });
 
 test("TCCC source page filenames all map to ASCII deployment paths", async () => {
-  const pageFiles = (await readdir(tcccPagesDir)).filter(
+  const pageFiles = (await readDirIfExists(tcccPagesDir)).filter(
     (file) => file.endsWith(".html") || file.endsWith(".js"),
   );
+  const registrySource = await readFile(tcccFlowRegistryPath, "utf8");
+  const moduleSlugs = [
+    ...registrySource.matchAll(/^\s+slug: "([a-z0-9-]+)",$/gm),
+  ].map((match) => match[1]);
 
-  assert.ok(pageFiles.length > 0, "expected TCCC source pages");
+  assert.equal(pageFiles.length, 0, "legacy TCCC source pages should be gone");
+  assert.equal(moduleSlugs.length, expectedTcccModuleSlugs.length);
 
-  for (const file of pageFiles) {
-    const outputPath = mapTcccOutputPath(`pages/${file}`);
-    assert.doesNotMatch(
-      outputPath,
-      /[^\x00-\x7F]/,
-      `${file} should have an ASCII deployment alias`,
-    );
+  for (const slug of moduleSlugs) {
+    assert.doesNotMatch(slug, /[^\x00-\x7F]/);
   }
 });

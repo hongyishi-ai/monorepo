@@ -1,6 +1,7 @@
 import { platformProjects } from "@/lib/projects";
 import { ProjectChrome } from "../_components/project/ProjectChrome";
 import { buildProjectChromeNav } from "../_components/project/projectNav";
+import { tcccModuleBySlug, tcccModuleGroups } from "./_data/tcccFlowRegistry";
 
 function getTcccProject() {
   const entry = platformProjects.find((item) => item.id === "tccc");
@@ -15,127 +16,25 @@ function getTcccProject() {
 const project = getTcccProject();
 const projectChromeNav = buildProjectChromeNav("tccc", "/tccc/");
 
-const primaryFlows = [
-  {
-    phase: "MARCH",
-    title: "TCCC标准流程",
-    subtitle: "TCCC Standard Algorithm",
-    body: "全面的战术战斗伤员救护流程，包含从交火中救治到战术区域救护的完整步骤。",
-    href: "/tccc/pages/tccc-standard",
-    action: "查看流程",
-  },
-  {
-    phase: "M",
-    title: "大出血流程",
-    subtitle: "Massive Hemorrhage Algorithm",
-    body: "针对大出血情况的紧急处理流程，包括止血工具选择和操作步骤。",
-    href: "/tccc/pages/tfc-hemorrhage",
-    action: "查看流程",
-  },
-  {
-    phase: "A",
-    title: "气道管理算法",
-    subtitle: "Airway Management Algorithm",
-    body: "气道评估与管理流程，包括基础气道处理和高级气道技术的应急管理。",
-    href: "/tccc/pages/tfc-airway",
-    action: "查看流程",
-  },
-  {
-    phase: "R",
-    title: "呼吸管理算法",
-    subtitle: "Breathing Management Algorithm",
-    body: "战伤呼吸问题的评估与处理流程，包括胸部伤情的识别和紧急处理措施。",
-    href: "/tccc/pages/tccc-breathing",
-    action: "查看流程",
-  },
-];
+const primarySlugs = [
+  "tccc-standard",
+  "tfc-hemorrhage",
+  "tfc-airway",
+  "tccc-breathing",
+] as const;
 
-const flowCards = [
-  {
-    title: "静脉通路与止血酸",
-    subtitle: "Circulation Algorithm",
-    body: "静脉通路建立与止血酸使用的专项流程，包括适应症判断和操作步骤。",
-    href: "/tccc/pages/tccc-iv-txa",
-  },
-  {
-    title: "骨盆绑带流程",
-    subtitle: "Pelvic Binder Algorithm",
-    body: "针对骨盆出血的专项救治流程，详细说明骨盆绑带的使用适应症和操作步骤。",
-    href: "/tccc/pages/tccc-pelvic-binder",
-  },
-  {
-    title: "疼痛管理与镇痛",
-    subtitle: "Pain Management & Analgesia",
-    body: "战场疼痛评估与镇痛处理流程，包含不同程度疼痛的药物选择和给药剂量。",
-    href: "/tccc/pages/tccc-pain-management",
-  },
-  {
-    title: "休克与液体复苏",
-    subtitle: "Shock & Fluid Resuscitation",
-    body: "针对出血性休克的液体复苏决策流程，包括血制品使用和复苏目标。",
-    href: "/tccc/pages/tccc-shock-fluid",
-  },
-  {
-    title: "战术后送开放气道",
-    subtitle: "TACEVAC Airway Algorithm",
-    body: "战术后送阶段的气道再评估与开放气道流程，和 TFC 气道入口区分维护。",
-    href: "/tccc/pages/tacevac-airway",
-  },
-  {
-    title: "伤口处理",
-    subtitle: "Wound Care Algorithm",
-    body: "战伤伤口处理流程，包括烧伤评估、液体复苏和伤口包扎的决策路径。",
-    href: "/tccc/pages/tccc-wound-care",
-  },
-  {
-    title: "战术后送脑损伤",
-    subtitle: "TACEVAC TBI Algorithm",
-    body: "战术后送阶段创伤性脑损伤的评估与处理流程，包括脑疝识别与紧急处置。",
-    href: "/tccc/pages/tacevac-tbi",
-  },
-  {
-    title: "伤员沟通",
-    subtitle: "Casualty Communication",
-    body: "与伤员、指挥链和医疗后送链的有效沟通流程，包括伤情报告格式。",
-    href: "/tccc/pages/tccc-casualty-communication",
-  },
-  {
-    title: "预防低体温",
-    subtitle: "Hypothermia Prevention",
-    body: "预防战场低体温的专项流程，详细说明温度管理措施及其重要性。",
-    href: "/tccc/pages/tccc-hypothermia",
-  },
-  {
-    title: "TACEVAC预防低体温与眼外伤",
-    subtitle: "TACEVAC Hypothermia & Eye Trauma",
-    body: "战术后送护理阶段的低体温预防与贯通性眼外伤专项流程，包含体温管理和眼外伤处理流程。",
-    href: "/tccc/pages/tacevac-hypothermia",
-  },
-  {
-    title: "TACEVAC再评估",
-    subtitle: "TACEVAC Re-assessment",
-    body: "战术后送过程中伤员再评估流程，包括干预措施效果检查和出血再评估。",
-    href: "/tccc/pages/tacevac-reassessment",
-  },
-  {
-    title: "流程框架",
-    subtitle: "Flow Framework Demo",
-    body: "可复用的决策流程框架示例，展示如何创建和定制自己的TCCC流程。",
-    href: "/tccc/pages/tccc-flow-framework",
-  },
-  {
-    title: "循环系统教案",
-    subtitle: "Circulatory System Course",
-    body: "战斗环境下的循环系统：从生理学到前沿复苏的系统性教学内容，包含解剖学、病理生理学和临床应用。",
-    href: "/tccc/pages/circulation-course",
-  },
-  {
-    title: "使用说明",
-    subtitle: "Documentation",
-    body: "详细的项目说明文档，包含功能介绍、使用指南和开发扩展建议。",
-    href: "/tccc/README.md",
-  },
-];
+const primaryFlows = primarySlugs.flatMap((slug) => {
+  const module = tcccModuleBySlug.get(slug);
+  return module ? [module] : [];
+});
+
+const moduleGroups = tcccModuleGroups.map((group) => ({
+  ...group,
+  modules: group.slugs.flatMap((slug) => {
+    const module = tcccModuleBySlug.get(slug);
+    return module ? [module] : [];
+  }),
+}));
 
 export const metadata = {
   title: "战场救护 TCCC | 红医师",
@@ -169,7 +68,7 @@ export default function TcccPage() {
       <main id="main">
         <section
           aria-labelledby="tccc-title"
-          className="relative isolate flex min-h-[calc(100svh_-_78px)] items-end overflow-hidden border-b-2 border-border"
+          className="relative isolate flex min-h-[calc(100svh_-_84px)] items-end overflow-hidden border-b-2 border-border lg:min-h-[calc(100svh_-_80px)]"
         >
           <img
             alt="战场救护 TCCC 海报"
@@ -248,8 +147,8 @@ export default function TcccPage() {
               </h2>
             </div>
             <p className="max-w-xl font-bold leading-7 text-muted-foreground">
-              内容状态：TFC 气道已按 2026-05-01 指南复核；其余流程仍以 2017
-              基线为主，正在逐页更新。
+              全部 34 个交互学习入口已按 2026-05-01
+              指南复核，当前统一标记为待医学专家终审。
             </p>
           </div>
 
@@ -257,24 +156,24 @@ export default function TcccPage() {
             {primaryFlows.map((item) => (
               <a
                 className="group relative overflow-hidden rounded border-2 border-border bg-card p-5 text-card-foreground no-underline shadow-[6px_6px_0_rgba(18,49,60,0.16)] transition-transform hover:-translate-y-1 dark:shadow-[6px_6px_0_rgba(217,48,37,0.24)]"
-                href={item.href}
-                key={item.href}
+                href={`/tccc/pages/${item.slug}`}
+                key={item.slug}
               >
                 <span className="font-mono text-xs font-black text-primary">
-                  {item.subtitle}
+                  {item.stage} · {item.section}
                 </span>
                 <strong className="mt-5 block text-2xl font-black leading-tight">
                   {item.title}
                 </strong>
                 <span className="mt-4 block min-h-24 font-bold leading-7 text-muted-foreground">
-                  {item.body}
+                  {item.summary}
                 </span>
                 <span className="mt-8 flex items-end justify-between gap-4">
                   <span className="rounded bg-foreground px-3 py-2 font-black text-background">
-                    {item.action}
+                    进入训练
                   </span>
-                  <span className="text-5xl font-black leading-none text-primary opacity-90">
-                    {item.phase}
+                  <span className="font-mono text-xl font-black leading-none text-primary opacity-90">
+                    {item.shortTitle}
                   </span>
                 </span>
               </a>
@@ -282,24 +181,44 @@ export default function TcccPage() {
           </div>
         </section>
 
-        <section className="border-y-2 border-border bg-foreground text-background dark:bg-card dark:text-card-foreground">
-          <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] gap-4 py-12 md:grid-cols-2 lg:grid-cols-3">
-            {flowCards.map((item) => (
-              <a
-                className="rounded border-2 border-background/30 bg-background/[0.08] p-5 text-background no-underline transition-colors hover:border-primary hover:bg-background/[0.14] dark:text-card-foreground"
-                href={item.href}
-                key={item.href}
+        <section className="border-y-2 border-border bg-foreground py-12 text-background dark:bg-card dark:text-card-foreground">
+          <div className="mx-auto w-[min(1200px,calc(100%_-_32px))] space-y-10">
+            {moduleGroups.map((group) => (
+              <section
+                aria-labelledby={`tccc-group-${group.id}`}
+                key={group.id}
               >
-                <span className="font-mono text-xs font-black text-background/60 dark:text-muted-foreground">
-                  {item.subtitle}
-                </span>
-                <h3 className="mt-3 text-xl font-black leading-tight">
-                  {item.title}
-                </h3>
-                <p className="mt-3 font-bold leading-7 text-background/70 dark:text-muted-foreground">
-                  {item.body}
-                </p>
-              </a>
+                <div className="mb-4 flex items-end justify-between gap-4 border-b-2 border-background/30 pb-3 dark:border-border">
+                  <h2
+                    className="text-2xl font-black text-background dark:text-card-foreground md:text-3xl"
+                    id={`tccc-group-${group.id}`}
+                  >
+                    {group.title}
+                  </h2>
+                  <span className="font-mono text-xs font-black text-background/60 dark:text-muted-foreground">
+                    {group.modules.length} 个模块
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  {group.modules.map((module) => (
+                    <a
+                      className="min-w-0 rounded border-2 border-background/30 bg-background/[0.08] p-5 text-background no-underline transition-colors hover:border-primary hover:bg-background/[0.14] dark:text-card-foreground"
+                      href={`/tccc/pages/${module.slug}`}
+                      key={module.slug}
+                    >
+                      <span className="font-mono text-xs font-black text-background/60 dark:text-muted-foreground">
+                        {module.stage} · {module.section}
+                      </span>
+                      <h3 className="mt-3 text-xl font-black leading-tight">
+                        {module.title}
+                      </h3>
+                      <p className="mt-3 font-bold leading-7 text-background/70 dark:text-muted-foreground">
+                        {module.summary}
+                      </p>
+                    </a>
+                  ))}
+                </div>
+              </section>
             ))}
           </div>
         </section>
@@ -318,16 +237,16 @@ export default function TcccPage() {
             </p>
           </div>
           <div className="rounded border-2 border-border bg-muted/50 p-6">
-            <h2 className="text-2xl font-black">离线静态流程</h2>
+            <h2 className="text-2xl font-black">统一 Next 学习流程</h2>
             <p className="mt-4 font-bold leading-8 text-muted-foreground">
-              旧版 TCCC 深层流程、图片、视频、离线页、manifest 与 service worker
-              继续保留在 /tccc/ 下。
+              旧版深层 HTML
+              已停止发布。所有学习页共享同一决策引擎、主题、导航、移动控制条和内容治理状态。
             </p>
             <a
               className="mt-6 inline-flex rounded border-2 border-foreground bg-foreground px-4 py-3 font-black text-background no-underline"
-              href="/tccc/README.md"
+              href="/tccc/pages/tccc-flow-framework"
             >
-              查看文档
+              打开课程目录
             </a>
           </div>
         </section>

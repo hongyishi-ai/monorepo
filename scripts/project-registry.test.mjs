@@ -56,6 +56,7 @@ const allowedContentStatuses = new Set([
 ]);
 const allowedRuntimes = new Set([
   "next-static",
+  "next-static-export",
   "vite-react",
   "static-html-tailwind",
 ]);
@@ -304,7 +305,7 @@ test("integrated project runtime ownership guards Next route handoff", async () 
   );
   assert.equal(
     runtimeById.get("tccc").nextMigrationStage,
-    "next-home-and-tfc-airway-owned-static-deep-pages-pending",
+    "next-home-and-all-tccc-learning-pages-owned",
   );
   assert.equal(
     runtimeById.get("fms").nextMigrationStage,
@@ -492,8 +493,8 @@ test("project registry entries expose content credibility metadata", async () =>
   );
   assert.match(
     tccc.content.version,
-    /2017/,
-    "TCCC content version should expose the inherited 2017 baseline",
+    /2026-05-01/,
+    "TCCC content version should expose the reviewed 2026 baseline",
   );
   assert.match(
     tccc.content.officialUpdateUrl,

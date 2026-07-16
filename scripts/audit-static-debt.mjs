@@ -19,8 +19,8 @@ export const defaultStaticDebtBaselines = {
     legacyHomeLinkCount: 0,
   },
   tccc: {
-    styleBlockCount: 26,
-    styleAttributeCount: 25,
+    styleBlockCount: 1,
+    styleAttributeCount: 0,
     legacyHomeLinkCount: 0,
   },
 };

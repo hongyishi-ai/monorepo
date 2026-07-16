@@ -242,7 +242,7 @@ export function ProjectChrome({
         </nav>
 
         <div
-          className="mx-auto w-[min(1200px,calc(100%_-_32px))] border-b-2 border-border py-4 lg:hidden"
+          className="mx-auto max-h-[calc(100svh-84px)] w-[min(1200px,calc(100%_-_32px))] overflow-y-auto overscroll-contain border-b-2 border-border py-4 lg:hidden"
           hidden={!isMenuOpen}
           id={menuPanelId}
         >

@@ -121,7 +121,9 @@ export const tcccPageAliases = new Map([
   ["循环系统教案.html", "circulation-course.html"],
 ]);
 
-export const nextOwnedTcccPageAliases = new Set(["pages/tfc-airway.html"]);
+export const nextOwnedTcccPageAliases = new Set(
+  [...tcccPageAliases.values()].map((alias) => `pages/${alias}`),
+);
 
 function resolveCloudflareBasePaths(overrides = {}) {
   const resolved = { ...cloudflareBasePaths };
@@ -293,7 +295,10 @@ export function shouldCopyTcccPath(relativePath, options = {}) {
   const nextOwnedPageAliases =
     options.nextOwnedPageAliases ?? nextOwnedTcccPageAliases;
 
-  if (nextOwnedPageAliases.has(mapTcccOutputPath(normalized))) {
+  if (
+    options.routeOwner === "next" &&
+    nextOwnedPageAliases.has(mapTcccOutputPath(normalized))
+  ) {
     return false;
   }
 
