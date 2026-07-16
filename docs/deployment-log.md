@@ -27,6 +27,28 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-07-16 - d8c1ac7 - 项目顶栏与 TCCC 移动流程控制修复
+
+- Commit: `d8c1ac71f99df21bb9e07e952637af3d07a0102b`
+- Branch: `main`
+- Production: https://hongyishi.cn/tccc/pages/tfc-airway
+- Cloudflare deployment: https://6bd8517a.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.111.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - `pnpm test:cloudflare` passed: `66/66`
+  - `pnpm --filter @hongyishi/portal type-check` passed
+  - `pnpm build:cloudflare` passed; `/tccc/pages/tfc-airway` remained `104 kB` first load
+  - `pnpm size:budget` passed: `413 files, 51.65 MiB total`
+  - Local `pnpm audit:links` passed: internal `37/37`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+  - `pnpm test:tccc-airway-browser` passed locally, on the Cloudflare deployment, and on production: fixed project header, persistent TCCC progress/back/restart controls, neutral closed hamburger, day/night theme, reduced motion, and all three airway decision paths
+  - Browser width checks passed at `320/375/390/1280px` without horizontal overflow
+  - The shared header and neutral hamburger were also verified on `/heat-stroke/pages/heat-index`
+- Notes:
+  - Replaced `ProjectChrome` sticky positioning with a fixed header and responsive spacer, fixing pages whose `overflow-x-hidden` ancestor prevented viewport-sticky behavior.
+  - Reworked the TCCC mobile flow into one compact sticky control strip under the fixed header; it keeps progress, back, and restart visible without duplicating state or changing clinical flow logic.
+  - Changed unopened hamburger controls from clinical cyan to the semantic card surface in both Next and legacy static project shells; the open state uses the existing foreground/background inversion.
+  - Updated `DESIGN.md` so new pages inherit the fixed-header and neutral-hamburger contract.
+
 ## 2026-07-16 - 39c9030 - TCCC TFC 气道页 Next 接管
 
 - Commit: `39c90305def3ee679840d38f7d8b1effffb5b956`
