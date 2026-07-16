@@ -27,6 +27,31 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-07-16 - 39c9030 - TCCC TFC 气道页 Next 接管
+
+- Commit: `39c90305def3ee679840d38f7d8b1effffb5b956`
+- Branch: `main`
+- Production: https://hongyishi.cn/tccc/pages/tfc-airway
+- Cloudflare deployment: https://ee6d770c.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.111.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - Red-green contracts first failed because TCCC had no selective Next-owned alias set and the migration stage still marked every deep page as static; after implementation, `pnpm test:cloudflare` passed `66/66`
+  - `pnpm --filter @hongyishi/portal type-check` passed
+  - `pnpm build:cloudflare` passed and exported `/tccc/pages/tfc-airway` at `4.29 kB`, `104 kB` first load
+  - Build output contains `.cloudflare/site/tccc/pages/tfc-airway.html` and excludes the deleted `TFC气道算法.html`
+  - `pnpm audit:static-debt` passed: heat-stroke `1` HTML file and TCCC `25` HTML files; the migrated TCCC page removed one legacy style block and one static page
+  - `pnpm size:budget` passed: `416 files, 51.64 MiB total`
+  - Local `pnpm audit:links` passed: internal `37/37`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+  - `pnpm test:tccc-airway-browser` passed locally, on the Cloudflare deployment, and on production: conscious-clear, unconscious-effective, and traumatic-obstruction surgical paths; back, restart, next module, keyboard focus, theme, active menu, active bottom navigation, and reduced motion
+  - Browser width checks passed at `320/375/390/1280px` with no horizontal overflow on local, deployment, and production URLs
+  - Preview and production returned HTTP `200`, contained the `2026-05-01` guideline version and `TFC 气道管理决策训练`, and did not contain the legacy `2017 版本` marker
+  - GitHub Actions passed for commit `39c9030`: CI, Cloudflare Build Check, Storybook, and React Version Check
+- Notes:
+  - Moved only the TFC airway decision page into Portal Next and kept the other 24 TCCC deep static pages unchanged for this review cycle.
+  - Added the reusable `TcccDecisionFlow` client component and a structured flow definition without adding runtime dependencies or persistent state.
+  - Rechecked the Chinese teaching flow against the JTS / CoTCCC TCCC Guidelines dated `2026-05-01`, Tactical Field Care airway section; the page remains marked as pending final medical expert review.
+  - Removed the old standalone `TFC气道算法.html`, updated legacy links and service-worker references, and changed the migration stage to Next-owned TCCC home plus TFC airway.
+
 ## 2026-07-03 - 65353cf - 热射病移动端宽度修复
 
 - Commit: `65353cf9a1cfe99b5ae6c3929e347e4cbf2df097`
