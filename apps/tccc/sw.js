@@ -16,7 +16,7 @@ const urlsToCache = [
   '/pages/TCCC静脉通路与止血酸.html',
   '/pages/TCCC骨盆绑带流程.html',
   '/pages/TCCC呼吸管理算法.html',
-  '/pages/TFC气道算法.html',
+  '/pages/tfc-airway',
   '/pages/TFC大出血算法.html',
   '/pages/TCCC流程框架.html',
   '/pages/TCCC战伤流程数据.js'

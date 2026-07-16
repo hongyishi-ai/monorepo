@@ -121,6 +121,8 @@ export const tcccPageAliases = new Map([
   ["循环系统教案.html", "circulation-course.html"],
 ]);
 
+export const nextOwnedTcccPageAliases = new Set(["pages/tfc-airway.html"]);
+
 function resolveCloudflareBasePaths(overrides = {}) {
   const resolved = { ...cloudflareBasePaths };
 
@@ -285,6 +287,13 @@ export function shouldCopyTcccPath(relativePath, options = {}) {
   }
 
   if (normalized === "index.html" && options.routeOwner === "next") {
+    return false;
+  }
+
+  const nextOwnedPageAliases =
+    options.nextOwnedPageAliases ?? nextOwnedTcccPageAliases;
+
+  if (nextOwnedPageAliases.has(mapTcccOutputPath(normalized))) {
     return false;
   }
 
@@ -1245,7 +1254,10 @@ export async function buildCloudflareSite(options = {}) {
     tcccSource,
     path.join(outputDir, normalizeBasePath(tcccBase).replace(/^\/|\/$/g, "")),
     tcccBase,
-    { routeOwner: runtimeById.get("tccc")?.routeOwner },
+    {
+      routeOwner: runtimeById.get("tccc")?.routeOwner,
+      nextOwnedPageAliases: nextOwnedTcccPageAliases,
+    },
   );
   await writeFile(
     path.join(outputDir, "_redirects"),

@@ -193,7 +193,7 @@ export default function TcccPage() {
               战术战伤救护流程
             </h1>
             <p className="mt-6 max-w-2xl text-lg font-bold leading-8 text-background/85 dark:text-foreground/85 md:text-xl">
-              基于 CoTCCC 2017版官方指南的交互式决策流程
+              分阶段对照 JTS / CoTCCC 指南复核的交互式决策流程
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a
@@ -248,8 +248,8 @@ export default function TcccPage() {
               </h2>
             </div>
             <p className="max-w-xl font-bold leading-7 text-muted-foreground">
-              内容状态：CoTCCC 2017 基础内容，需按 JTS / Deployed Medicine
-              最新资料更新复核。
+              内容状态：TFC 气道已按 2026-05-01 指南复核；其余流程仍以 2017
+              基线为主，正在逐页更新。
             </p>
           </div>
 

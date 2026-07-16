@@ -1,0 +1,167 @@
+{
+  "title": "TFC 气道管理决策训练",
+  "version": "2026-05-01",
+  "sourceSection": "战术野战救治第 4 节：气道管理",
+  "startNodeId": "intro",
+  "nextModuleHref": "/tccc/pages/tccc-breathing",
+  "nextModuleLabel": "进入呼吸管理",
+  "nodes": [
+    {
+      "id": "intro",
+      "type": "intro",
+      "eyebrow": "战术野战救治 · 气道管理",
+      "title": "先确认气道是否通畅",
+      "body": "本流程用于 TFC（战术野战救治）阶段的气道评估训练。根据伤员意识、气道通畅情况和创伤表现作出选择，直到气道问题得到控制。",
+      "progress": 0,
+      "capability": "全员",
+      "details": [
+        "交火或直接威胁尚未解除时，气道管理通常延后至战术野战救治阶段。",
+        "保持战术态势感知，并持续防止伤员受到二次伤害。"
+      ],
+      "nextNodeId": "airway-assessment",
+      "nextLabel": "开始气道评估"
+    },
+    {
+      "id": "airway-assessment",
+      "type": "choice",
+      "eyebrow": "评估 01",
+      "title": "伤员当前属于哪种情况？",
+      "body": "先判断气道是否通畅，再结合意识状态以及是否存在创伤性气道阻塞或即将阻塞选择路径。",
+      "progress": 15,
+      "capability": "全员",
+      "choices": [
+        {
+          "id": "conscious-clear",
+          "label": "伤员清醒，气道通畅",
+          "nextNodeId": "conscious-clear"
+        },
+        {
+          "id": "unconscious-clear",
+          "label": "伤员无意识，但暂未发现气道阻塞",
+          "nextNodeId": "unconscious-clear"
+        },
+        {
+          "id": "traumatic-obstruction",
+          "label": "存在创伤性气道阻塞或即将阻塞",
+          "nextNodeId": "traumatic-obstruction",
+          "tone": "caution"
+        }
+      ]
+    },
+    {
+      "id": "conscious-clear",
+      "type": "action",
+      "eyebrow": "处置 02A",
+      "title": "允许伤员主动保护气道",
+      "body": "清醒伤员可采取最能保护自身气道的体位，包括坐起和／或前倾。不要强迫其保持不利于气道通畅的姿势。",
+      "progress": 40,
+      "capability": "全员",
+      "details": [
+        "观察说话、呼吸声音和胸廓起伏，警惕气道状态随时间变化。",
+        "如出现血液、分泌物或其他阻塞因素，有条件且适宜时使用吸引。"
+      ],
+      "nextNodeId": "reassessment",
+      "nextLabel": "进入持续复评"
+    },
+    {
+      "id": "unconscious-clear",
+      "type": "action",
+      "eyebrow": "处置 02B",
+      "title": "调整为恢复体位",
+      "body": "将无意识伤员置于恢复体位，头部后仰，并使下颌离开胸部，以帮助维持气道通畅。",
+      "progress": 40,
+      "capability": "全员",
+      "details": [
+        "有吸引设备且使用条件合适时，清除可能妨碍气道的血液或分泌物。",
+        "完成体位调整后立即再次判断气道是否通畅。"
+      ],
+      "nextNodeId": "initial-measures-effective",
+      "nextLabel": "检查处置是否有效"
+    },
+    {
+      "id": "traumatic-obstruction",
+      "type": "action",
+      "eyebrow": "处置 02C",
+      "title": "准备直接气道干预",
+      "body": "若存在创伤性气道阻塞或即将阻塞，应准备可能需要的直接气道干预，同时先实施可行的体位管理和吸引。",
+      "progress": 40,
+      "capability": "医护",
+      "details": [
+        "清醒伤员仍应允许采取最能保护气道的体位，包括坐起或前倾。",
+        "重点识别面部骨折、直接气道损伤、血液、组织变形或烧伤所致的气道阻塞。",
+        "有吸引设备且适宜时使用吸引。"
+      ],
+      "nextNodeId": "initial-measures-effective",
+      "nextLabel": "检查处置是否有效"
+    },
+    {
+      "id": "initial-measures-effective",
+      "type": "choice",
+      "eyebrow": "复评 03",
+      "title": "初步措施后气道是否通畅？",
+      "body": "重新观察气流、呼吸声音和伤员表现。若阻塞仍无法控制，应进入外科气道路径。",
+      "progress": 58,
+      "capability": "医护",
+      "choices": [
+        {
+          "id": "effective",
+          "label": "是，气道已经通畅",
+          "nextNodeId": "reassessment"
+        },
+        {
+          "id": "not-effective",
+          "label": "否，创伤性阻塞仍无法控制",
+          "nextNodeId": "cricothyroidotomy",
+          "tone": "caution"
+        }
+      ]
+    },
+    {
+      "id": "cricothyroidotomy",
+      "type": "action",
+      "eyebrow": "直接气道干预 04",
+      "title": "实施外科环甲膜切开术",
+      "body": "当前措施无效且创伤性气道阻塞无法控制时，由具备相应训练、授权和装备的人员实施外科环甲膜切开术。",
+      "progress": 74,
+      "capability": "专业人员",
+      "details": [
+        "可采用探条辅助开放式外科技法，或标准开放式外科技法。",
+        "使用带翼、带套囊气道套管：外径小于 10 mm，内径 6—7 mm，气管内长度 5—8 cm。",
+        "置入后使用连续呼气末二氧化碳监测（EtCO₂）确认位置。",
+        "伤员清醒时使用利多卡因。"
+      ],
+      "cautions": [
+        "本步骤为专业侵入性操作，只能由经过训练并获授权的人员实施。"
+      ],
+      "nextNodeId": "reassessment",
+      "nextLabel": "确认效果并持续复评"
+    },
+    {
+      "id": "reassessment",
+      "type": "action",
+      "eyebrow": "持续复评 05",
+      "title": "气道状态可能随时改变",
+      "body": "频繁复评气道通畅度、脉搏血氧饱和度（SpO₂）和呼气末二氧化碳（EtCO₂），及时识别再次阻塞或处置失效。",
+      "progress": 88,
+      "capability": "医护",
+      "details": [
+        "仅有穿透伤时，不需要常规进行颈椎稳定。",
+        "若伤员表现恶化，应回到气道评估并重新选择处置路径。"
+      ],
+      "nextNodeId": "complete",
+      "nextLabel": "确认气道问题已解决"
+    },
+    {
+      "id": "complete",
+      "type": "complete",
+      "eyebrow": "气道阶段完成",
+      "title": "气道已通畅，继续 MARCH",
+      "body": "当前气道问题已得到控制。继续保持复评，并进入呼吸管理，评估张力性气胸、开放性胸部伤口及氧合情况。",
+      "progress": 100,
+      "details": [
+        "转入下一模块不代表停止气道观察；任何恶化都需要立即重新评估。",
+        "记录关键评估、处置和伤员状态变化，随伤员向下一救治层级交接。"
+      ]
+    }
+  ]
+}

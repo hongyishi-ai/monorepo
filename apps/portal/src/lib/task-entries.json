@@ -24,7 +24,7 @@
     "intent": "按 MARCH、TFC 与 TACEVAC 路径快速定位战术救护流程。",
     "href": "/tccc/pages/tccc-standard",
     "urgency": "lookup",
-    "sourceNote": "CoTCCC 2017 基础内容，需按 JTS 最新资料更新复核。"
+    "sourceNote": "分阶段复核：TFC 气道已对照 JTS / CoTCCC 2026-05-01 指南，其余页面仍需更新。"
   },
   {
     "id": "local-records",

@@ -304,7 +304,7 @@ test("integrated project runtime ownership guards Next route handoff", async () 
   );
   assert.equal(
     runtimeById.get("tccc").nextMigrationStage,
-    "next-home-owned-static-deep-pages-pending",
+    "next-home-and-tfc-airway-owned-static-deep-pages-pending",
   );
   assert.equal(
     runtimeById.get("fms").nextMigrationStage,

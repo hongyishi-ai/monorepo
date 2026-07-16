@@ -59,7 +59,8 @@ export const projectRuntimeContracts = {
   tccc: {
     runtime: "static-html-tailwind",
     routeOwner: "next",
-    nextMigrationStage: "next-home-owned-static-deep-pages-pending",
+    nextMigrationStage:
+      "next-home-and-tfc-airway-owned-static-deep-pages-pending",
     migrationRisk: "medium",
   },
 };

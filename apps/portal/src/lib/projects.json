@@ -60,15 +60,15 @@
       "color": "red",
       "status": "integrated",
       "content": {
-        "sourceName": "CoTCCC 2017 战术战伤救护流程资料",
-        "version": "CoTCCC 2017 基础内容，需按 JTS/Deployed Medicine 更新复核",
-        "reviewedAt": "2026-06-17",
+        "sourceName": "JTS / CoTCCC 战术战伤救护指南",
+        "version": "分阶段复核：TFC 气道已对照 2026-05-01 指南，其余页面保留 2017 基线",
+        "reviewedAt": "2026-07-16",
         "status": "review-required",
         "audience": "战术救护训练、流程教学和复盘使用者",
         "disclaimer": "仅供教育训练和流程学习，不能替代现行作战医疗规范、医疗指挥链或正式认证课程。",
         "entryLabel": "MARCH、TFC 与 TACEVAC 流程查询",
         "dataPolicy": "离线流程内容不上传；训练记录如后续启用，默认仅保存在本机。",
-        "officialUpdateUrl": "https://jts.health.mil/index.cfm/committees/cotccc"
+        "officialUpdateUrl": "https://jts.health.mil/index.cfm/CPGs/cpgs"
       }
     }
   ],

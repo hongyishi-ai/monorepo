@@ -31,6 +31,7 @@ import {
   mapTcccOutputPath,
   materializeNextOwnedProjectEntry,
   nextOwnedHeatStrokePageAliases,
+  nextOwnedTcccPageAliases,
   normalizeBasePath,
   rewriteHeatStrokeText,
   rewriteTcccText,
@@ -1073,7 +1074,10 @@ test("shouldCopyTcccPath keeps deployable static assets and excludes app interna
 });
 
 test("shouldCopyTcccPath can preserve a Next-owned project entry", () => {
-  const nextOwnedOptions = { routeOwner: "next" };
+  const nextOwnedOptions = {
+    routeOwner: "next",
+    nextOwnedPageAliases: nextOwnedTcccPageAliases,
+  };
 
   assert.equal(shouldCopyTcccPath("index.html", nextOwnedOptions), false);
   assert.equal(shouldCopyTcccPath("manifest.json", nextOwnedOptions), true);
@@ -1084,9 +1088,101 @@ test("shouldCopyTcccPath can preserve a Next-owned project entry", () => {
     true,
   );
   assert.equal(
+    shouldCopyTcccPath("pages/TFC气道算法.html", nextOwnedOptions),
+    false,
+  );
+  assert.equal(nextOwnedTcccPageAliases.has("pages/tfc-airway.html"), true);
+  assert.equal(
     shouldCopyTcccPath("images/01_heart_valves_diagram.webp", nextOwnedOptions),
     true,
   );
+});
+
+test("TCCC Next-owned airway flow keeps a complete 2026 Chinese decision graph", async () => {
+  const flowPath = path.join(
+    repoRoot,
+    "apps",
+    "portal",
+    "src",
+    "app",
+    "tccc",
+    "pages",
+    "tfc-airway",
+    "airway-flow.json",
+  );
+  const pagePath = path.join(path.dirname(flowPath), "page.tsx");
+  const componentPath = path.join(
+    repoRoot,
+    "apps",
+    "portal",
+    "src",
+    "app",
+    "tccc",
+    "_components",
+    "TcccDecisionFlow.tsx",
+  );
+  const flow = JSON.parse(await readFile(flowPath, "utf8"));
+  const pageSource = await readFile(pagePath, "utf8");
+  const componentSource = await readFile(componentPath, "utf8");
+
+  assert.equal(flow.version, "2026-05-01");
+  assert.equal(flow.startNodeId, "intro");
+  assert.match(flow.sourceSection, /第 4 节.*气道管理/);
+
+  const nodeIds = flow.nodes.map((node) => node.id);
+  assert.equal(
+    new Set(nodeIds).size,
+    nodeIds.length,
+    "flow node ids must be unique",
+  );
+
+  const nodeById = new Map(flow.nodes.map((node) => [node.id, node]));
+  const targets = new Set();
+  for (const node of flow.nodes) {
+    if (node.nextNodeId) targets.add(node.nextNodeId);
+    for (const choice of node.choices ?? []) targets.add(choice.nextNodeId);
+  }
+  for (const target of targets) {
+    assert.ok(nodeById.has(target), `flow target ${target} must exist`);
+  }
+
+  const reachable = new Set();
+  const queue = [flow.startNodeId];
+  while (queue.length > 0) {
+    const id = queue.shift();
+    if (reachable.has(id)) continue;
+    reachable.add(id);
+    const node = nodeById.get(id);
+    if (node?.nextNodeId) queue.push(node.nextNodeId);
+    for (const choice of node?.choices ?? []) queue.push(choice.nextNodeId);
+  }
+  assert.deepEqual([...reachable].sort(), [...nodeIds].sort());
+
+  assert.deepEqual(
+    nodeById
+      .get("airway-assessment")
+      .choices.map((choice) => choice.nextNodeId),
+    ["conscious-clear", "unconscious-clear", "traumatic-obstruction"],
+  );
+  assert.deepEqual(
+    nodeById
+      .get("initial-measures-effective")
+      .choices.map((choice) => choice.nextNodeId),
+    ["reassessment", "cricothyroidotomy"],
+  );
+  assert.equal(nodeById.get("complete").type, "complete");
+  assert.equal(flow.nextModuleHref, "/tccc/pages/tccc-breathing");
+
+  const serializedFlow = JSON.stringify(flow);
+  assert.doesNotMatch(
+    serializedFlow,
+    /2017|textEng|actionTextEng|Begin Assessment/,
+  );
+  assert.match(pageSource, /activeBottomItemId="tfc"/);
+  assert.match(pageSource, /activeMenuItemId="airway"/);
+  assert.match(pageSource, /2026-05-01/);
+  assert.match(componentSource, /export type TcccFlowDefinition/);
+  assert.match(componentSource, /prefers-reduced-motion/);
 });
 
 test("heat-stroke source pages expose unified brand navigation", async () => {
@@ -1383,8 +1479,8 @@ test("heat-stroke source uses locally built Tailwind CSS without runtime animati
 });
 
 test("heat-stroke JavaScript sources do not expose fallback OpenWeather keys", async () => {
-  const scriptFiles = (await readDirIfExists(heatStrokeScriptsDir)).filter((file) =>
-    file.endsWith(".js"),
+  const scriptFiles = (await readDirIfExists(heatStrokeScriptsDir)).filter(
+    (file) => file.endsWith(".js"),
   );
 
   assert.equal(
