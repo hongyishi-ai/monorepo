@@ -176,7 +176,7 @@ export function ProjectChrome({
     <>
       <header
         ref={headerRef}
-        className="brand-nav sticky top-0 z-50 border-b-2 border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90"
+        className="brand-nav fixed inset-x-0 top-0 z-50 border-b-2 border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90"
         data-hongyishi-project-theme-owner
       >
         <nav
@@ -227,7 +227,11 @@ export function ProjectChrome({
               aria-controls={menuPanelId}
               aria-expanded={isMenuOpen}
               aria-label={isMenuOpen ? "关闭菜单" : menuButtonLabel}
-              className="inline-grid min-h-14 min-w-14 place-items-center rounded bg-accent text-accent-foreground transition-transform active:translate-y-px lg:hidden"
+              className={`inline-grid min-h-14 min-w-14 place-items-center rounded border-2 border-border transition-colors active:translate-y-px lg:hidden ${
+                isMenuOpen
+                  ? "bg-foreground text-background"
+                  : "bg-card text-foreground hover:bg-muted"
+              }`}
               data-hys-mobile-menu-toggle
               onClick={() => setIsMenuOpen((current) => !current)}
               type="button"
@@ -261,6 +265,12 @@ export function ProjectChrome({
           </div>
         </div>
       </header>
+
+      <div
+        aria-hidden="true"
+        className="h-[84px] lg:h-[80px]"
+        data-hongyishi-project-header-spacer
+      />
 
       <nav
         aria-label={bottomAriaLabel}

@@ -1124,6 +1124,23 @@ test("TCCC Next-owned airway flow keeps a complete 2026 Chinese decision graph",
   const flow = JSON.parse(await readFile(flowPath, "utf8"));
   const pageSource = await readFile(pagePath, "utf8");
   const componentSource = await readFile(componentPath, "utf8");
+  const projectChromeSource = await readFile(
+    path.join(
+      repoRoot,
+      "apps",
+      "portal",
+      "src",
+      "app",
+      "_components",
+      "project",
+      "ProjectChrome.tsx",
+    ),
+    "utf8",
+  );
+  const staticShellStyles = await readFile(
+    path.join(repoRoot, "packages", "config", "app-shell", "styles.css"),
+    "utf8",
+  );
 
   assert.equal(flow.version, "2026-05-01");
   assert.equal(flow.startNodeId, "intro");
@@ -1183,6 +1200,21 @@ test("TCCC Next-owned airway flow keeps a complete 2026 Chinese decision graph",
   assert.match(pageSource, /2026-05-01/);
   assert.match(componentSource, /export type TcccFlowDefinition/);
   assert.match(componentSource, /prefers-reduced-motion/);
+  assert.match(componentSource, /data-tccc-mobile-controls/);
+  assert.match(componentSource, /sticky top-\[84px\]/);
+  assert.match(componentSource, /overflow-x-clip/);
+  assert.equal(componentSource.match(/data-tccc-back/g)?.length, 1);
+  assert.equal(componentSource.match(/data-tccc-restart/g)?.length, 1);
+  assert.match(projectChromeSource, /brand-nav fixed inset-x-0 top-0 z-50/);
+  assert.match(projectChromeSource, /data-hongyishi-project-header-spacer/);
+  assert.doesNotMatch(
+    projectChromeSource,
+    /data-hys-mobile-menu-toggle[\s\S]{0,300}bg-accent text-accent-foreground/,
+  );
+  assert.match(
+    staticShellStyles,
+    /\.hys-mobile-top-menu__button\.hys-nav-link\s*\{[\s\S]*?background:\s*hsl\(var\(--card\)\)/,
+  );
 });
 
 test("heat-stroke source pages expose unified brand navigation", async () => {

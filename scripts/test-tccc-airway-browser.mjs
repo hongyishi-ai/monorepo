@@ -4,6 +4,10 @@ import { chromium } from "playwright";
 
 const baseUrl = process.env.HONGYISHI_AUDIT_BASE_URL ?? "http://127.0.0.1:3030";
 const route = new URL("/tccc/pages/tfc-airway", baseUrl).toString();
+const representativeSharedChromeRoute = new URL(
+  "/heat-stroke/pages/heat-index",
+  baseUrl,
+).toString();
 const screenshotDirectory = process.env.HONGYISHI_SCREENSHOT_DIR;
 
 async function waitForNode(page, nodeId) {
@@ -66,6 +70,12 @@ try {
     results.push({ check: "viewport", dimensions, width });
 
     if (width === 320) {
+      const projectHeader = page.locator(
+        "[data-hongyishi-project-theme-owner]",
+      );
+      const initialHeaderBox = await projectHeader.boundingBox();
+      assert.equal(initialHeaderBox?.y, 0);
+
       const mobileNav = page.locator("[data-hongyishi-mobile-nav]");
       assert.equal(
         (
@@ -75,6 +85,11 @@ try {
       );
 
       const menuButton = page.locator("[data-hys-mobile-menu-toggle]");
+      const closedMenuColors = await menuButton.evaluate((element) => ({
+        background: getComputedStyle(element).backgroundColor,
+        color: getComputedStyle(element).color,
+      }));
+      assert.notEqual(closedMenuColors.background, "rgb(120, 199, 231)");
       const menuPanelId = await menuButton.getAttribute("aria-controls");
       assert.ok(menuPanelId);
       await menuButton.click();
@@ -99,7 +114,29 @@ try {
         ).backgroundColor,
       }));
       assert.notDeepEqual(darkColors, lightColors);
-      results.push({ check: "project chrome", darkColors, lightColors });
+      await page.locator("[data-tccc-next]").click();
+      await waitForNode(page, "airway-assessment");
+      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+      const scrolledHeaderBox = await projectHeader.boundingBox();
+      const controlsBox = await page
+        .locator("[data-tccc-mobile-controls]")
+        .boundingBox();
+      assert.equal(scrolledHeaderBox?.y, 0);
+      assert.ok(controlsBox);
+      assert.ok(scrolledHeaderBox);
+      assert.ok(
+        controlsBox.y >= scrolledHeaderBox.y + scrolledHeaderBox.height - 4 &&
+          controlsBox.y <= scrolledHeaderBox.y + scrolledHeaderBox.height + 2,
+        `Persistent controls should sit below the fixed header: ${JSON.stringify({ controlsBox, scrolledHeaderBox })}`,
+      );
+      assert.ok(controlsBox.y + controlsBox.height <= 844);
+      results.push({
+        check: "fixed project chrome and persistent flow controls",
+        closedMenuColors,
+        controlsBox,
+        darkColors,
+        lightColors,
+      });
     }
 
     if (screenshotDirectory && (width === 390 || width === 1280)) {
@@ -108,6 +145,30 @@ try {
         path: `${screenshotDirectory}/tccc-airway-${width}.png`,
       });
     }
+    await context.close();
+  }
+
+  {
+    const context = await browser.newContext({
+      viewport: { width: 320, height: 844 },
+    });
+    const page = await context.newPage();
+    await page.goto(representativeSharedChromeRoute, {
+      waitUntil: "domcontentloaded",
+    });
+    const projectHeader = page.locator("[data-hongyishi-project-theme-owner]");
+    await projectHeader.waitFor();
+    const menuButton = page.locator("[data-hys-mobile-menu-toggle]");
+    const closedMenuBackground = await menuButton.evaluate(
+      (element) => getComputedStyle(element).backgroundColor,
+    );
+    assert.notEqual(closedMenuBackground, "rgb(120, 199, 231)");
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    assert.equal((await projectHeader.boundingBox())?.y, 0);
+    results.push({
+      check: "shared chrome on representative heat-stroke page",
+      closedMenuBackground,
+    });
     await context.close();
   }
 

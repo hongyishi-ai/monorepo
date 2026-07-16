@@ -323,8 +323,16 @@ body {
 }
 
 .hys-mobile-top-menu__button.hys-nav-link {
-  background: hsl(var(--accent));
-  color: hsl(var(--accent-foreground));
+  min-width: 56px;
+  min-height: 56px;
+  border: 2px solid hsl(var(--border));
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
+}
+
+.hys-mobile-top-menu.is-open .hys-mobile-top-menu__button.hys-nav-link {
+  background: hsl(var(--foreground));
+  color: hsl(var(--background));
 }
 
 .hys-mobile-top-menu__panel {

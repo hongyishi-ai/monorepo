@@ -24,7 +24,7 @@
 | 强警示、海报背景 | 战地暗红 | `#A51F18` | `hongyishi.field-red`, `--hys-color-field-red` |
 | 热风险、下一步动作 | 行动橙 | `#FF6B00` | `hongyishi.orange`, `--hys-color-signal-orange` |
 | 工具状态、诊断反馈 | 技术蓝 | `#007AFF` | `hongyishi.blue`, `--hys-color-technology-blue` |
-| 冷却、生命体征、菜单按钮 | 临床浅蓝 | `#78C7E7` | `hongyishi.cyan`, `--hys-color-clinical-cyan` |
+| 冷却、生命体征、辅助状态 | 临床浅蓝 | `#78C7E7` | `hongyishi.cyan`, `--hys-color-clinical-cyan` |
 | 深色信息面、导航激活态 | 战地深蓝 | `#12313C` | `hongyishi.navy`, `--hys-color-field-navy` |
 | 编号、结构高亮 | 结构黄 | `#FFD700` | `hongyishi.yellow`, `--hys-color-structure-yellow` |
 | 强文字、粗边框 | 墨黑 | `#000000` | `hongyishi.ink`, `--hys-color-ink` |
@@ -179,11 +179,12 @@ dark:shadow-[6px_6px_0_rgba(217,48,37,0.18)]
 
 项目顶部栏使用 `ProjectChrome`，不要重写：
 
-- header: `sticky top-0 z-50 border-b-2 border-border bg-background/95`
+- header: `fixed inset-x-0 top-0 z-50 border-b-2 border-border bg-background/95`
+- 固定顶栏由 `ProjectChrome` 自带响应式占位：移动端 `84px`，桌面端 `80px`；页面不得自行补 `padding-top`
 - 容器：`min-h-[78px] w-[min(1200px,calc(100%_-_32px))]`
 - 品牌字：`font-black leading-none`
 - 日夜切换按钮：`min-h-10 min-w-10`
-- 汉堡按钮：`min-h-14 min-w-14 bg-accent text-accent-foreground`
+- 汉堡按钮：`min-h-14 min-w-14 border-2 border-border bg-card text-foreground`；仅展开时反转为深色，不默认使用临床浅蓝底
 - 移动菜单项：`min-h-[58px] px-4 py-4 text-lg font-black`
 
 移动底栏使用 `ProjectChrome` 的 bottom nav：

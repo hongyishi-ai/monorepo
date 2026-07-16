@@ -122,13 +122,13 @@ export function TcccDecisionFlow({ definition }: TcccDecisionFlowProps) {
   return (
     <section
       aria-label={definition.title}
-      className="relative isolate overflow-hidden bg-background py-8 md:py-12"
+      className="relative isolate overflow-x-clip bg-background py-5 md:py-12"
       data-tccc-decision-flow
     >
       <div className="absolute inset-0 -z-10 bg-[linear-gradient(rgba(18,49,60,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(18,49,60,0.06)_1px,transparent_1px)] bg-[size:64px_64px] dark:bg-[linear-gradient(rgba(244,236,220,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(244,236,220,0.05)_1px,transparent_1px)]" />
 
-      <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] grid-cols-1 gap-5 lg:grid-cols-[0.32fr_0.68fr]">
-        <aside className="min-w-0 border-y-2 border-border py-5 lg:border-y-0 lg:border-r-2 lg:py-2 lg:pr-6">
+      <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] grid-cols-1 gap-4 lg:grid-cols-[0.32fr_0.68fr] lg:grid-rows-[auto_1fr] lg:gap-x-5 lg:gap-y-0">
+        <aside className="hidden min-w-0 border-r-2 border-border pr-6 pt-2 lg:col-start-1 lg:row-start-1 lg:block">
           <p className="font-mono text-xs font-black text-muted-foreground">
             MARCH / A · 气道
           </p>
@@ -142,48 +142,59 @@ export function TcccDecisionFlow({ definition }: TcccDecisionFlowProps) {
           <p className="mt-2 text-sm font-bold leading-6 text-muted-foreground">
             根据伤员当前表现作出选择，直至气道通畅或完成直接气道干预。
           </p>
-
-          <div
-            className="mt-6"
-            aria-label={`流程进度 ${currentNode.progress}%`}
-          >
-            <div className="flex items-center justify-between gap-3 text-xs font-black text-muted-foreground">
-              <span>流程进度</span>
-              <span className="font-mono">{currentNode.progress}%</span>
-            </div>
-            <div className="mt-2 h-3 overflow-hidden rounded border-2 border-border bg-muted">
-              <div
-                className="h-full bg-primary transition-[width] duration-300 motion-reduce:transition-none"
-                style={{ width: `${currentNode.progress}%` }}
-              />
-            </div>
-          </div>
-
-          <div className="mt-5 flex flex-wrap gap-2">
-            <button
-              className="min-h-11 rounded border-2 border-border bg-card px-3 text-sm font-black text-card-foreground disabled:cursor-not-allowed disabled:opacity-40"
-              data-tccc-back
-              disabled={history.length === 0 || isExiting}
-              onClick={goBack}
-              type="button"
-            >
-              返回上一步
-            </button>
-            <button
-              className="min-h-11 rounded border-2 border-border bg-background px-3 text-sm font-black text-muted-foreground disabled:cursor-not-allowed disabled:opacity-40"
-              data-tccc-restart
-              disabled={currentNodeId === definition.startNodeId || isExiting}
-              onClick={restart}
-              type="button"
-            >
-              重新开始
-            </button>
-          </div>
         </aside>
 
         <div
+          className="sticky top-[84px] z-30 self-start rounded border-2 border-border bg-background/95 p-2 shadow-[0_4px_0_hsl(var(--border)/0.08)] backdrop-blur lg:static lg:col-start-1 lg:row-start-2 lg:mt-0 lg:rounded-none lg:border-0 lg:border-r-2 lg:bg-transparent lg:p-0 lg:pr-6 lg:pt-6 lg:shadow-none lg:backdrop-blur-none"
+          data-tccc-mobile-controls
+        >
+          <div className="flex items-center gap-2 lg:block">
+            <div
+              className="min-w-0 flex-1"
+              aria-label={`流程进度 ${currentNode.progress}%`}
+            >
+              <div className="flex items-center justify-between gap-3 text-xs font-black text-muted-foreground">
+                <span>流程进度</span>
+                <span className="font-mono">{currentNode.progress}%</span>
+              </div>
+              <div className="mt-1.5 h-2 overflow-hidden rounded border border-border bg-muted lg:mt-2 lg:h-3 lg:border-2">
+                <div
+                  className="h-full bg-primary transition-[width] duration-300 motion-reduce:transition-none"
+                  style={{ width: `${currentNode.progress}%` }}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-none gap-2 lg:mt-5 lg:flex-wrap">
+              <button
+                aria-label="返回上一步"
+                className="min-h-11 rounded border-2 border-border bg-card px-2.5 text-xs font-black text-card-foreground disabled:cursor-not-allowed disabled:opacity-35 lg:px-3 lg:text-sm"
+                data-tccc-back
+                disabled={history.length === 0 || isExiting}
+                onClick={goBack}
+                type="button"
+              >
+                <span className="lg:hidden">上一步</span>
+                <span className="hidden lg:inline">返回上一步</span>
+              </button>
+              <button
+                aria-label="重新开始"
+                className="min-h-11 rounded border-2 border-border bg-background px-2.5 text-xs font-black text-muted-foreground disabled:cursor-not-allowed disabled:opacity-35 lg:px-3 lg:text-sm"
+                data-tccc-restart
+                disabled={currentNodeId === definition.startNodeId || isExiting}
+                onClick={restart}
+                type="button"
+              >
+                <span className="lg:hidden">重置</span>
+                <span className="hidden lg:inline">重新开始</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div
           aria-live="polite"
-          className={`min-w-0 rounded border-2 border-border bg-card p-5 text-card-foreground shadow-[6px_6px_0_rgba(18,49,60,0.14)] transition-[opacity,transform] duration-200 motion-reduce:transition-none md:p-8 dark:shadow-[6px_6px_0_rgba(217,48,37,0.18)] ${
+          className={`min-w-0 rounded border-2 border-border bg-card p-5 text-card-foreground shadow-[6px_6px_0_rgba(18,49,60,0.14)] transition-[opacity,transform] duration-200 motion-reduce:transition-none md:p-8 lg:col-start-2 lg:row-span-2 lg:row-start-1 dark:shadow-[6px_6px_0_rgba(217,48,37,0.18)] ${
             isExiting
               ? "translate-y-3 scale-[0.99] opacity-0"
               : "translate-y-0 scale-100 opacity-100"
