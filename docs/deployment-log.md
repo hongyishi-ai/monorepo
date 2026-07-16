@@ -27,6 +27,28 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-07-16 - 8aaf161 - TCCC 全部学习页 Next 接管
+
+- Commit: `8aaf1613932434a9faa38f21a9bae4b959eec0a4`
+- Branch: `main`
+- Production: https://hongyishi.cn/tccc/
+- Cloudflare deployment: https://ce581c7e.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.111.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - `pnpm test:cloudflare` passed: `67/67`
+  - `pnpm --filter @hongyishi/portal type-check` passed
+  - `pnpm build:cloudflare` passed and exported all `34` TCCC learning modules as Next static pages
+  - `pnpm test:tccc-all-pages-browser` passed locally, on the Cloudflare deployment, and on production: `34/34` modules at `320x844`, including forward, back, restart, uncontrolled reassessment loop, fixed header, persistent controls, and horizontal-width checks
+  - `pnpm test:tccc-airway-browser` passed locally: `320/375/390/1280px`, three airway decision paths, theme switching, neutral hamburger, reduced motion, and shared heat-stroke header regression check
+  - `pnpm audit:links` passed locally, on the Cloudflare deployment, and on production: internal `53/53`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+  - `pnpm audit:static-debt` passed: TCCC `1` compatibility HTML file, `1` style block, `0` style attributes, and `0` legacy home links
+  - `pnpm size:budget` passed: `456 files, 51.92 MiB total`
+- Notes:
+  - Replaced all remaining standalone TCCC deep HTML pages and their shared legacy data script with one reusable Next decision-flow system and a `34`-module registry.
+  - Added previously missing 2026 modules for direct-threat care, TBI, eye trauma, monitoring, antibiotics, burns, splints, CPR, documentation, and TACEVAC continuation topics.
+  - Rechecked visible teaching content against the JTS / CoTCCC guidelines dated `2026-05-01`; explanatory content is Chinese, standard abbreviations and medicine or device names are retained, and every page remains marked pending final medical expert review.
+  - All pages inherit the fixed project header, neutral closed hamburger, full-page day/night theme, mobile bottom navigation, and persistent progress/back/restart controls. Complete TACEVAC guidance remains explicitly scoped to CoERCCC ownership.
+
 ## 2026-07-16 - d8c1ac7 - 项目顶栏与 TCCC 移动流程控制修复
 
 - Commit: `d8c1ac71f99df21bb9e07e952637af3d07a0102b`

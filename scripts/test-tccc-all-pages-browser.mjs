@@ -28,13 +28,17 @@ const moduleSlugs = [
 const baseUrl = process.env.HONGYISHI_AUDIT_BASE_URL ?? "http://127.0.0.1:3030";
 
 async function waitForNode(page, nodeId) {
-  await page.waitForFunction(
-    (expected) =>
-      document
-        .querySelector("[data-tccc-current-node]")
-        ?.getAttribute("data-tccc-current-node") === expected,
-    nodeId,
-  );
+  const currentNode = page.locator("[data-tccc-current-node]");
+  const deadline = Date.now() + 10_000;
+
+  while (Date.now() < deadline) {
+    if ((await currentNode.getAttribute("data-tccc-current-node")) === nodeId) {
+      return;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 25));
+  }
+
+  assert.fail(`Timed out waiting for TCCC flow node: ${nodeId}`);
 }
 
 assert.equal(moduleSlugs.length, 34);
@@ -51,7 +55,7 @@ const results = [];
 try {
   for (const slug of moduleSlugs) {
     const route = new URL(`/tccc/pages/${slug}`, baseUrl).toString();
-    const response = await page.goto(route, { waitUntil: "domcontentloaded" });
+    const response = await page.goto(route, { waitUntil: "networkidle" });
 
     assert.equal(response?.status(), 200, `${slug} should return HTTP 200`);
     await page.locator(`[data-tccc-module="${slug}"]`).waitFor();
