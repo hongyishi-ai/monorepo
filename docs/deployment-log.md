@@ -27,6 +27,27 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-07-26 - 019e665 - 首页 Apple 风格交互优化
+
+- Commit: `019e665675ca0b8c9edee90cb873384fd49c386a`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://23749284.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.111.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - `pnpm --filter @hongyishi/portal type-check` passed
+  - `pnpm --filter @hongyishi/portal build` passed and exported `56` static pages
+  - `pnpm test:cloudflare` passed: `67/67`
+  - `pnpm build:cloudflare` passed
+  - `pnpm size:budget` passed: `456 files, 51.94 MiB total`
+  - `pnpm test:home-motion-browser` passed locally, on the Cloudflare deployment, and on production at `320/390/1280px`, including the `220ms` panel transition, theme-button geometry, status overlap, active tabs, desktop project links, and reduced-motion behavior
+  - `pnpm audit:links` passed on the Cloudflare deployment and production: internal `53/53`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - Removed the artificial mobile route delay and blocking loading overlay so project links respond immediately.
+  - Added restrained tab, panel, card, and desktop-entry feedback using transform, opacity, and shadow while honoring reduced-motion and reduced-transparency preferences.
+  - Enlarged the theme control to `44x44px`, added accessible state labels and focus treatment, and prevented overlap with the mobile status area.
+  - Preserved all business text, medical content, public routes, and project destinations.
+
 ## 2026-07-16 - 8aaf161 - TCCC 全部学习页 Next 接管
 
 - Commit: `8aaf1613932434a9faa38f21a9bae4b959eec0a4`
