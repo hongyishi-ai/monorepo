@@ -13,6 +13,7 @@ vi.mock('framer-motion', () => ({
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
   },
   AnimatePresence: ({ children }: any) => children,
+  useReducedMotion: () => false,
 }))
 
 describe('TestCard 组件测试', () => {
@@ -27,6 +28,9 @@ describe('TestCard 组件测试', () => {
     
     expect(screen.getByText(sampleTest.name)).toBeInTheDocument()
     expect(screen.getByText(sampleTest.description)).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /查看过顶深蹲的动作演示/ })
+    ).toBeInTheDocument()
   })
 
   it('应该显示测试指导步骤', () => {
@@ -356,5 +360,3 @@ describe('Accessibility 可访问性测试', () => {
     expect(screen.getByTestId('button3')).toHaveFocus()
   })
 })
-
- 

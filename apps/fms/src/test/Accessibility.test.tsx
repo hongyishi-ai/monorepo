@@ -27,6 +27,7 @@ vi.mock('framer-motion', () => ({
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
   },
   AnimatePresence: ({ children }: any) => children,
+  useReducedMotion: () => false,
 }))
 
 // Helper function to render components with router
@@ -147,4 +148,4 @@ describe('可访问性测试', () => {
     const errorContainers = document.querySelectorAll('[role="alert"]')
     expect(errorContainers).toBeDefined()
   })
-}) 
+})

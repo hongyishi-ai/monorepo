@@ -13,6 +13,7 @@ vi.mock('framer-motion', () => ({
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
   },
   AnimatePresence: ({ children }: any) => children,
+  useReducedMotion: () => false,
 }))
 
 // Mock useNavigate
@@ -286,4 +287,4 @@ describe('评估页面错误处理测试', () => {
     // 这个测试确保组件能够处理边界情况
     expect(() => renderAssessmentPage()).not.toThrow()
   })
-}) 
+})

@@ -424,7 +424,7 @@ const AssessmentPage = () => {
                   {/* 移动端与桌面端分别显示更贴切的提示文案，降低困惑 */}
                   <p className="hys-text text-xs text-muted-foreground flex items-center justify-center gap-1 md:hidden">
                     <Eye className="w-3 h-3" />
-                    请点击当前测试卡片下方的“演示指引”查看评分标准
+                    请点击当前动作卡片内的“动作演示”查看评分标准
                   </p>
                   <p className="hys-text text-xs text-muted-foreground hidden md:flex items-center justify-center gap-1">
                     <Eye className="w-3 h-3" />

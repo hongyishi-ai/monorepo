@@ -27,8 +27,7 @@ const TestCard = ({ test }: TestCardProps) => {
   const isClearanceTest = test.isClearanceTest;
 
   return (
-    <>
-      <Card className="hys-card" data-tour-id="assessment-test-card">
+    <Card className="hys-card" data-tour-id="assessment-test-card">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             {isClearanceTest ? (
@@ -47,6 +46,10 @@ const TestCard = ({ test }: TestCardProps) => {
             )}
           </CardDescription>
         </CardHeader>
+
+        <CardContent className="md:hidden">
+          <DemoFloatingButton test={test} />
+        </CardContent>
         
         {/* 桌面版：完整的演示区域和执行步骤 */}
         <CardContent className="hidden md:grid md:grid-cols-2 gap-4 md:gap-6">
@@ -114,10 +117,6 @@ const TestCard = ({ test }: TestCardProps) => {
 
 
       </Card>
-      
-      {/* 移动端悬浮演示按钮 */}
-      <DemoFloatingButton test={test} />
-    </>
   );
 };
 

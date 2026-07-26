@@ -1,13 +1,11 @@
 import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Card, CardContent } from "./card";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import {
   Eye,
   Play,
   List,
   Target,
-  ChevronRight,
   AlertTriangle,
   CheckCircle,
 } from "lucide-react";
@@ -50,61 +48,25 @@ export const DemoFloatingButton = React.forwardRef<
   const [activeTab, setActiveTab] = React.useState<
     "demo" | "steps" | "scoring"
   >("demo");
-  const [isScrollingDown, setIsScrollingDown] = React.useState(false);
-  const [lastScrollY, setLastScrollY] = React.useState(0);
   const [imageError, setImageError] = React.useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   const isClearanceTest = test.isClearanceTest;
 
-  // 滚动监听逻辑 - 与smart-status-indicator保持一致
-  React.useEffect(() => {
-    let ticking = false;
-
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY;
-
-          // 判断滚动方向
-          if (currentScrollY > lastScrollY && currentScrollY > 150) {
-            // 向下滚动且滚动距离大于150px时半透明显示
-            setIsScrollingDown(true);
-            if (isDrawerOpen) {
-              setIsDrawerOpen(false); // 滚动时自动关闭抽屉
-            }
-          } else if (currentScrollY < lastScrollY || currentScrollY <= 100) {
-            // 向上滚动或回到顶部时完全显示
-            setIsScrollingDown(false);
-          }
-
-          setLastScrollY(currentScrollY);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY, isDrawerOpen]);
-
-  // 键盘快捷键支持 - 与smart-status-indicator保持一致
   React.useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      // Alt + D 切换演示指引
       if (e.altKey && e.key === "d") {
         e.preventDefault();
-        setIsDrawerOpen(!isDrawerOpen);
+        setIsDrawerOpen((open) => !open);
       }
-      // Escape 关闭展开的面板
-      if (e.key === "Escape" && isDrawerOpen) {
+      if (e.key === "Escape") {
         setIsDrawerOpen(false);
       }
     };
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [isDrawerOpen]);
+  }, []);
 
   // 重置图片加载错误状态
   React.useEffect(() => {
@@ -121,90 +83,56 @@ export const DemoFloatingButton = React.forwardRef<
 
   return (
     <>
-      <div className="z-10 mb-4 md:hidden" data-hys-assist-control="demo">
-        <AnimatePresence mode="wait">
+      <div className="md:hidden" data-hys-assist-control="demo">
+        <AnimatePresence initial={false} mode="wait">
           <motion.div
+            key={test.id}
             ref={ref}
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{
-              opacity: isScrollingDown ? 0.82 : 1,
-              scale: isScrollingDown ? 0.98 : 1,
-              y: 0,
-            }}
-            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: -4 }}
             transition={{
-              type: "spring",
-              stiffness: 300,
-              damping: 25,
-              mass: 0.8,
+              duration: shouldReduceMotion ? 0 : 0.18,
+              ease: "easeOut",
             }}
-            className={cn("", className)}
+            className={className}
             {...props}
           >
-            <Card
-              className={cn(
-                "hys-mobile-assist-card hys-assist-card cursor-pointer overflow-hidden bg-card/95 backdrop-blur-md",
-                "active:scale-95 touch-manipulation smart-status-transition",
-                isScrollingDown && "indicator-dimmed",
-                !isScrollingDown && "indicator-focused",
-                isClearanceTest
-                  ? "hys-assist-card--warning"
-                  : "hys-assist-card--primary",
-              )}
+            <button
+              className="flex min-h-12 w-full touch-manipulation items-center gap-3 rounded border-2 border-border bg-background px-3 py-2.5 text-left font-bold text-foreground transition-[transform,background-color,color] duration-200 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:translate-y-px motion-reduce:transition-none"
               onClick={() => setIsDrawerOpen(true)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  setIsDrawerOpen(true);
-                }
-              }}
-              tabIndex={0}
-              role="button"
-              aria-label={`演示指引 - 点击查看详情`}
+              type="button"
+              aria-label={`查看${test.name.split(" (")[0]}的动作演示、执行步骤和评分标准`}
               aria-expanded={isDrawerOpen}
             >
-              <CardContent className="p-0">
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="hys-assist-card__inner"
-                >
-                  <div className="hys-assist-card__icon" aria-hidden="true">
-                    <Eye className="h-4 w-4" />
-                  </div>
-
-                  <div className="hys-assist-card__body">
-                    <div className="hys-assist-card__title-row">
-                      <span className="hys-assist-card__title">演示指引</span>
-                      {isClearanceTest && (
-                        <Badge
-                          variant="outline"
-                          className="hys-assist-card__badge"
-                        >
-                          安全
-                        </Badge>
-                      )}
-                    </div>
-                    <div className="hys-assist-card__meta">
-                      {isClearanceTest
-                        ? "排除测试 · GIF / 步骤 / 评分"
-                        : "当前动作 · GIF / 步骤 / 评分"}
-                    </div>
-                  </div>
-
-                  <ChevronRight
-                    className="hys-assist-card__chevron"
-                    aria-hidden="true"
-                  />
-                </motion.div>
-              </CardContent>
-            </Card>
+              <span
+                className="inline-grid h-9 w-9 shrink-0 place-items-center rounded bg-primary text-primary-foreground"
+                aria-hidden="true"
+              >
+                <Play className="h-4 w-4" />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-sm font-black">查看动作演示</span>
+                <span className="mt-0.5 block text-xs text-muted-foreground">
+                  GIF、执行步骤与评分标准
+                </span>
+              </span>
+              {isClearanceTest && (
+                <Badge variant="outline" className="shrink-0">
+                  安全
+                </Badge>
+              )}
+            </button>
           </motion.div>
         </AnimatePresence>
       </div>
 
       {/* 抽屉组件 */}
-      <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+      <Drawer
+        open={isDrawerOpen}
+        onOpenChange={setIsDrawerOpen}
+        shouldScaleBackground={false}
+      >
         <DrawerContent className="hys-drawer-content hys-card max-h-[min(85vh,calc(100vh-var(--hys-mobile-nav-height)-1rem))]">
           <DrawerHeader className="text-center pb-4">
             <div className="flex items-center justify-center gap-2 mb-2">
@@ -228,15 +156,22 @@ export const DemoFloatingButton = React.forwardRef<
 
           {/* 标签切换器 */}
           <div className="px-4 pb-4">
-            <div className="flex items-center gap-1 border-2 border-border bg-secondary/20 p-1">
+            <div
+              className="flex items-center gap-1 border-2 border-border bg-secondary/20 p-1"
+              role="tablist"
+              aria-label="动作指引内容"
+            >
               <button
                 onClick={() => setActiveTab("demo")}
                 className={cn(
-                  "flex-1 border-2 border-transparent px-3 py-2 text-xs font-bold transition-all",
+                  "min-h-11 flex-1 border-2 border-transparent px-2 py-2 text-xs font-bold transition-colors",
                   activeTab === "demo"
                     ? "bg-primary text-primary-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground",
                 )}
+                role="tab"
+                aria-selected={activeTab === "demo"}
+                type="button"
               >
                 <Play className="w-3 h-3 mr-1.5 inline" />
                 动作演示
@@ -244,11 +179,14 @@ export const DemoFloatingButton = React.forwardRef<
               <button
                 onClick={() => setActiveTab("steps")}
                 className={cn(
-                  "flex-1 border-2 border-transparent px-3 py-2 text-xs font-bold transition-all",
+                  "min-h-11 flex-1 border-2 border-transparent px-2 py-2 text-xs font-bold transition-colors",
                   activeTab === "steps"
                     ? "bg-primary text-primary-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground",
                 )}
+                role="tab"
+                aria-selected={activeTab === "steps"}
+                type="button"
               >
                 <List className="w-3 h-3 mr-1.5 inline" />
                 执行步骤
@@ -256,11 +194,14 @@ export const DemoFloatingButton = React.forwardRef<
               <button
                 onClick={() => setActiveTab("scoring")}
                 className={cn(
-                  "flex-1 border-2 border-transparent px-3 py-2 text-xs font-bold transition-all",
+                  "min-h-11 flex-1 border-2 border-transparent px-2 py-2 text-xs font-bold transition-colors",
                   activeTab === "scoring"
                     ? "bg-primary text-primary-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground",
                 )}
+                role="tab"
+                aria-selected={activeTab === "scoring"}
+                type="button"
               >
                 <Target className="w-3 h-3 mr-1.5 inline" />
                 评分标准
@@ -274,11 +215,17 @@ export const DemoFloatingButton = React.forwardRef<
               {activeTab === "demo" && (
                 <motion.div
                   key="demo"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 10 }}
-                  transition={{ duration: 0.2 }}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={
+                    shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: -4 }
+                  }
+                  transition={{
+                    duration: shouldReduceMotion ? 0 : 0.18,
+                    ease: "easeOut",
+                  }}
                   className="space-y-4"
+                  role="tabpanel"
                 >
                   {/* 动作演示区域 */}
                   <div
@@ -368,11 +315,17 @@ export const DemoFloatingButton = React.forwardRef<
               {activeTab === "steps" && (
                 <motion.div
                   key="steps"
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.2 }}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={
+                    shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: -4 }
+                  }
+                  transition={{
+                    duration: shouldReduceMotion ? 0 : 0.18,
+                    ease: "easeOut",
+                  }}
                   className="space-y-4"
+                  role="tabpanel"
                 >
                   {/* 执行步骤 */}
                   <div className="space-y-3">
@@ -422,11 +375,17 @@ export const DemoFloatingButton = React.forwardRef<
               {activeTab === "scoring" && (
                 <motion.div
                   key="scoring"
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.2 }}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={
+                    shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: -4 }
+                  }
+                  transition={{
+                    duration: shouldReduceMotion ? 0 : 0.18,
+                    ease: "easeOut",
+                  }}
                   className="space-y-4"
+                  role="tabpanel"
                 >
                   {/* 评分标准 */}
                   <div className="space-y-3">

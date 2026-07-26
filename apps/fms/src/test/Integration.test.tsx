@@ -24,6 +24,7 @@ vi.mock('framer-motion', () => ({
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
   },
   AnimatePresence: ({ children }: any) => children,
+  useReducedMotion: () => false,
 }))
 
 // Mock Zustand stores
@@ -222,4 +223,4 @@ describe('集成测试修复版', () => {
     // 验证按钮响应点击
     await user.click(firstScoreButton)
   })
-}) 
+})
