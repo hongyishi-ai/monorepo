@@ -166,6 +166,7 @@ test("buildHeaders adds security headers and long-lived hashed asset caching", (
   assert.match(headers, /X-Frame-Options: DENY/);
   assert.match(headers, /X-Content-Type-Options: nosniff/);
   assert.match(headers, /Referrer-Policy: strict-origin-when-cross-origin/);
+  assert.match(headers, /Permissions-Policy:.*geolocation=\(self\)/);
   assert.match(headers, /Content-Security-Policy: default-src 'self'/);
   assert.match(
     headers,

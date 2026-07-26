@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { calculateHeatIndexCelsius } from "@/lib/heat-index";
 
 type WeatherCondition = {
   description?: string;
@@ -111,7 +112,10 @@ function buildApiUrl(path: string, params: Record<string, string | number>) {
 
 async function fetchJson<T>(url: string, contextLabel: string): Promise<T> {
   const controller = new AbortController();
-  const timeoutId = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
+  const timeoutId = window.setTimeout(
+    () => controller.abort(),
+    REQUEST_TIMEOUT,
+  );
 
   try {
     const response = await fetch(url, { signal: controller.signal });
@@ -181,34 +185,12 @@ async function fetchJsonWithCache<T>(
   }
 }
 
-function calculateHeatIndex(temperature: number, humidity: number) {
-  const tempF = temperature * (9 / 5) + 32;
-  let heatIndexF =
-    -42.379 +
-    2.04901523 * tempF +
-    10.14333127 * humidity -
-    0.22475541 * tempF * humidity -
-    0.00683783 * tempF * tempF -
-    0.05481717 * humidity * humidity +
-    0.00122874 * tempF * tempF * humidity +
-    0.00085282 * tempF * humidity * humidity -
-    0.00000199 * tempF * tempF * humidity * humidity;
-
-  if (tempF < 80) {
-    heatIndexF =
-      0.5 * (tempF + 61.0 + (tempF - 68.0) * 1.2 + humidity * 0.094);
-  }
-
-  return (heatIndexF - 32) * (5 / 9);
-}
-
 function getHeatLevel(heatIndex: number) {
   if (heatIndex < 27) {
     return {
       label: "舒适",
       alert: "当前热指数处于舒适范围",
-      tone:
-        "border-slate-300 bg-slate-100 text-slate-900 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100",
+      tone: "border-slate-300 bg-slate-100 text-slate-900 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100",
       tips: [
         "当前热指数处于舒适范围，适合正常活动",
         "保持正常的水分摄入",
@@ -221,8 +203,7 @@ function getHeatLevel(heatIndex: number) {
     return {
       label: "注意",
       alert: "注意：可能感到轻微不适",
-      tone:
-        "border-yellow-400 bg-yellow-100 text-yellow-950 dark:border-yellow-500 dark:bg-yellow-950 dark:text-yellow-100",
+      tone: "border-yellow-400 bg-yellow-100 text-yellow-950 dark:border-yellow-500 dark:bg-yellow-950 dark:text-yellow-100",
       tips: [
         "对于敏感人群可能感到不适",
         "进行剧烈活动时注意休息",
@@ -236,8 +217,7 @@ function getHeatLevel(heatIndex: number) {
     return {
       label: "警惕",
       alert: "警惕：可能导致热痉挛和热疲劳",
-      tone:
-        "border-orange-500 bg-orange-100 text-orange-950 dark:border-orange-400 dark:bg-orange-950 dark:text-orange-100",
+      tone: "border-orange-500 bg-orange-100 text-orange-950 dark:border-orange-400 dark:bg-orange-950 dark:text-orange-100",
       tips: [
         "注意可能出现热痉挛和热疲劳",
         "减少户外活动时间，特别是在阳光直射时",
@@ -252,8 +232,7 @@ function getHeatLevel(heatIndex: number) {
     return {
       label: "危险",
       alert: "危险：可能导致热疲劳，长时间暴露可能导致中暑",
-      tone:
-        "border-red-500 bg-red-100 text-red-950 dark:border-red-400 dark:bg-red-950 dark:text-red-100",
+      tone: "border-red-500 bg-red-100 text-red-950 dark:border-red-400 dark:bg-red-950 dark:text-red-100",
       tips: [
         "危险！可能导致热疲劳",
         "避免户外活动，尤其是剧烈运动",
@@ -268,8 +247,7 @@ function getHeatLevel(heatIndex: number) {
   return {
     label: "极度危险",
     alert: "极度危险：可能导致热射病/中暑",
-    tone:
-      "border-red-700 bg-red-700 text-white dark:border-red-300 dark:bg-red-900 dark:text-red-100",
+    tone: "border-red-700 bg-red-700 text-white dark:border-red-300 dark:bg-red-900 dark:text-red-100",
     tips: [
       "极度危险！可能导致热射病",
       "取消所有户外活动",
@@ -305,7 +283,10 @@ function TrendChart({ forecast }: { forecast: ForecastItem[] }) {
           label: `${date.getHours()}:00`,
           temp: item.main.temp,
           humidity: item.main.humidity,
-          heatIndex: calculateHeatIndex(item.main.temp, item.main.humidity),
+          heatIndex: calculateHeatIndexCelsius(
+            item.main.temp,
+            item.main.humidity,
+          ),
         };
       }),
     [forecast],
@@ -331,8 +312,7 @@ function TrendChart({ forecast }: { forecast: ForecastItem[] }) {
     (width - padding.left - padding.right) / Math.max(chartData.length - 1, 1);
   const y = (value: number) =>
     padding.top +
-    ((yMax - value) / (yMax - yMin)) *
-      (height - padding.top - padding.bottom);
+    ((yMax - value) / (yMax - yMin)) * (height - padding.top - padding.bottom);
   const x = (index: number) => padding.left + index * xStep;
   const heatPoints = chartData
     .map((item, index) => `${x(index)},${y(item.heatIndex)}`)
@@ -460,9 +440,13 @@ export function HeatIndexTool() {
   }, [checkedItems]);
 
   const activeHeatIndex =
-    manualResult ?? (weatherState.status === "ready" ? weatherState.heatIndex : null);
-  const activeLevel = activeHeatIndex !== null ? getHeatLevel(activeHeatIndex) : null;
-  const checkedCount = checklistItems.filter((item) => checkedItems[item.id]).length;
+    manualResult ??
+    (weatherState.status === "ready" ? weatherState.heatIndex : null);
+  const activeLevel =
+    activeHeatIndex !== null ? getHeatLevel(activeHeatIndex) : null;
+  const checkedCount = checklistItems.filter(
+    (item) => checkedItems[item.id],
+  ).length;
   const allChecked = checkedCount === checklistItems.length;
 
   async function fetchWeatherByCity(cityName: string, isFallback = false) {
@@ -496,7 +480,9 @@ export function HeatIndexTool() {
       await fetchWeatherData(location.lat, location.lon);
     } catch (error) {
       console.error("搜索位置失败:", error);
-      showManualFallback(isFallback ? "默认城市天气数据暂不可用" : "搜索位置失败");
+      showManualFallback(
+        isFallback ? "默认城市天气数据暂不可用" : "搜索位置失败",
+      );
     }
   }
 
@@ -516,7 +502,10 @@ export function HeatIndexTool() {
           units: "metric",
           lang: "zh_cn",
         }),
-        buildCacheKey("current", `${latitude.toFixed(2)},${longitude.toFixed(2)}`),
+        buildCacheKey(
+          "current",
+          `${latitude.toFixed(2)},${longitude.toFixed(2)}`,
+        ),
         "获取当前天气数据",
       );
 
@@ -524,7 +513,10 @@ export function HeatIndexTool() {
         throw new Error("天气数据不完整");
       }
 
-      const heatIndex = calculateHeatIndex(data.main!.temp!, data.main!.humidity!);
+      const heatIndex = calculateHeatIndexCelsius(
+        data.main!.temp!,
+        data.main!.humidity!,
+      );
       setWeatherState({ status: "ready", data, heatIndex });
     } catch (error) {
       console.error("获取当前天气数据失败:", error);
@@ -541,7 +533,10 @@ export function HeatIndexTool() {
           units: "metric",
           lang: "zh_cn",
         }),
-        buildCacheKey("forecast", `${latitude.toFixed(2)},${longitude.toFixed(2)}`),
+        buildCacheKey(
+          "forecast",
+          `${latitude.toFixed(2)},${longitude.toFixed(2)}`,
+        ),
         "获取小时预报数据",
       );
       setForecast(Array.isArray(data.list) ? data.list.slice(0, 8) : []);
@@ -571,7 +566,10 @@ export function HeatIndexTool() {
   }
 
   function handleRefresh() {
-    void fetchWeatherByCity(cityInput.trim() || FALLBACK_CITY, !cityInput.trim());
+    void fetchWeatherByCity(
+      cityInput.trim() || FALLBACK_CITY,
+      !cityInput.trim(),
+    );
   }
 
   function handleManualCalculate() {
@@ -594,7 +592,7 @@ export function HeatIndexTool() {
     }
 
     setManualError("");
-    setManualResult(calculateHeatIndex(temperature, humidity));
+    setManualResult(calculateHeatIndexCelsius(temperature, humidity));
   }
 
   function resetChecklist() {
@@ -735,9 +733,9 @@ export function HeatIndexTool() {
                   </p>
                 </div>
                 <p
-                  className={`border-2 p-3 text-sm font-black ${getHeatLevel(
-                    weatherState.heatIndex,
-                  ).tone}`}
+                  className={`border-2 p-3 text-sm font-black ${
+                    getHeatLevel(weatherState.heatIndex).tone
+                  }`}
                   id="heat-index-alert"
                 >
                   {getHeatLevel(weatherState.heatIndex).alert}
@@ -827,9 +825,9 @@ export function HeatIndexTool() {
                     </span>
                   </div>
                   <div
-                    className={`border-2 px-4 py-1 text-sm font-black ${getHeatLevel(
-                      manualResult,
-                    ).tone}`}
+                    className={`border-2 px-4 py-1 text-sm font-black ${
+                      getHeatLevel(manualResult).tone
+                    }`}
                     id="manual-hi-level"
                   >
                     {getHeatLevel(manualResult).label}

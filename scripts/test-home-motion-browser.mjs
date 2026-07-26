@@ -36,9 +36,23 @@ const results = [];
 try {
   for (const width of [320, 390, 1280]) {
     const context = await browser.newContext({
+      geolocation:
+        width < 768 ? { latitude: 39.9042, longitude: 116.4074 } : undefined,
+      permissions: width < 768 ? ["geolocation"] : [],
       viewport: { width, height: width === 1280 ? 900 : 844 },
     });
     const page = await context.newPage();
+    await page.route("**/api/openweather**", async (route) => {
+      await route.fulfill({
+        body: JSON.stringify({
+          main: { humidity: 69, temp: 28.1 },
+          name: "北京",
+          weather: [{ description: "多云" }],
+        }),
+        contentType: "application/json",
+        status: 200,
+      });
+    });
     await page.goto(baseUrl, { waitUntil: "networkidle" });
 
     const dimensions = await page.evaluate(() => ({
@@ -64,6 +78,14 @@ try {
       assert.equal(themeBox.width, 44);
       assert.equal(themeBox.height, 44);
       assert.ok(statusBox.x + statusBox.width <= themeBox.x);
+      const weather = page.locator('[data-home-weather-state="ready"]');
+      await weather.waitFor();
+      assert.match((await weather.textContent()) ?? "", /28\.1°/);
+      assert.match((await weather.textContent()) ?? "", /热指数 30\.7°/);
+      assert.equal(
+        await page.locator('[data-home-action="local-records"]').count(),
+        0,
+      );
 
       await page.locator('[data-home-tab="tools"]').click();
       const panel = page.locator('[data-home-panel="tools"]');

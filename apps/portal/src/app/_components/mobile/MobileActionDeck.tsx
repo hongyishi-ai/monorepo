@@ -1,5 +1,6 @@
 import { getTaskUrgencyLabel } from "@/lib/task-entries";
 import type { MobileQuickAction } from "@/lib/mobile";
+import { HomeWeatherWidget } from "./HomeWeatherWidget";
 
 type MobileActionDeckProps = {
   actions: MobileQuickAction[];
@@ -14,22 +15,28 @@ export function MobileActionDeck({ actions }: MobileActionDeckProps) {
       className="px-4 pt-6"
       aria-labelledby="mobile-actions-title"
     >
-      <p className="font-mono text-[0.68rem] uppercase tracking-wide text-neutral-600 dark:text-neutral-400">
-        HONGYISHI.CN / 一线医疗工具
-      </p>
-      <h1
-        id="mobile-actions-title"
-        className="mt-2 text-5xl font-black leading-none text-constructivism-red"
-      >
-        红医师
-      </h1>
-      <p className="mt-3 text-base font-medium leading-7 text-[#12313c] dark:text-neutral-200">
-        以赤诚，护生命。
-      </p>
+      <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_8.75rem] gap-3">
+        <div className="min-w-0">
+          <p className="font-mono text-[0.68rem] uppercase tracking-wide text-neutral-600 dark:text-neutral-400">
+            HONGYISHI.CN / 一线医疗工具
+          </p>
+          <h1
+            id="mobile-actions-title"
+            className="mt-2 text-[2.75rem] font-black leading-none text-constructivism-red"
+          >
+            红医师
+          </h1>
+          <p className="mt-3 text-base font-medium leading-7 text-[#12313c] dark:text-neutral-200">
+            以赤诚，护生命。
+          </p>
+        </div>
+        <HomeWeatherWidget />
+      </div>
 
       {primaryAction ? (
         <a
           href={primaryAction.href}
+          data-home-action={primaryAction.id}
           className="mt-6 block border-3 border-black bg-constructivism-red p-5 text-white shadow-[7px_7px_0_rgba(0,0,0,0.28)] transition-[transform,box-shadow] duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 focus:ring-offset-[#f4ecdc] active:translate-x-1 active:translate-y-1 active:shadow-[3px_3px_0_rgba(0,0,0,0.45)] motion-reduce:transition-none dark:border-white/25 dark:focus:ring-white dark:focus:ring-offset-black"
         >
           <span className="inline-flex min-h-7 items-center bg-black px-2 font-mono text-xs font-bold text-white">
@@ -52,6 +59,7 @@ export function MobileActionDeck({ actions }: MobileActionDeckProps) {
           <a
             key={action.id}
             href={action.href}
+            data-home-action={action.id}
             className="group block border-2 border-black bg-[#fff8e8] p-4 shadow-[5px_5px_0_rgba(0,0,0,0.18)] transition-[transform,box-shadow] duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-constructivism-red focus:ring-offset-2 focus:ring-offset-[#f4ecdc] active:translate-x-1 active:translate-y-1 active:shadow-[2px_2px_0_rgba(0,0,0,0.35)] motion-reduce:transition-none dark:border-white/20 dark:bg-neutral-950 dark:focus:ring-offset-black"
           >
             <div className="flex items-start justify-between gap-4">

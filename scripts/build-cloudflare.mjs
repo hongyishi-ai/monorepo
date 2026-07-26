@@ -185,7 +185,7 @@ export function buildHeaders(options = {}) {
     "  X-Frame-Options: DENY",
     "  X-Content-Type-Options: nosniff",
     "  Referrer-Policy: strict-origin-when-cross-origin",
-    "  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=()",
+    "  Permissions-Policy: camera=(), microphone=(), geolocation=(self), payment=(), usb=(), bluetooth=()",
     `  Content-Security-Policy: ${contentSecurityPolicy}`,
     "",
     "/_next/static/*",
