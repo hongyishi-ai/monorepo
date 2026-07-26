@@ -48,7 +48,7 @@ export function ProjectPosterDeck({ projects }: ProjectPosterDeckProps) {
               />
             </span>
 
-            <span className="flex min-w-0 flex-col justify-between py-1">
+            <span className="flex min-w-0 flex-col py-1">
               <span>
                 <span className="inline-flex min-h-7 items-center bg-black px-2 font-mono text-[0.65rem] font-bold text-white">
                   站内入口
@@ -59,10 +59,6 @@ export function ProjectPosterDeck({ projects }: ProjectPosterDeckProps) {
                 <span className="mt-2 block text-sm leading-6 text-neutral-700 dark:text-neutral-300">
                   {project.content.entryLabel}
                 </span>
-              </span>
-              <span className="mt-5 block border-t border-black/15 pt-3 font-mono text-[0.68rem] leading-5 text-neutral-500 dark:border-white/15 dark:text-neutral-500">
-                {project.content.status === "current" ? "已复核" : "待复核"} ·{" "}
-                {project.content.reviewedAt}
               </span>
             </span>
           </a>

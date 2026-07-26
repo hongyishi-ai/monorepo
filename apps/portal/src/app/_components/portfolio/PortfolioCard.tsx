@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import styles from '@/app/_styles/constructivism.module.css';
 import {
-  getProjectContentStatusLabel,
   getProjectEntryKindLabel,
   getProjectStatusLabel,
   isExternalProject,
@@ -93,9 +92,6 @@ export function PortfolioCard({
           <div className="mt-5 max-w-md border-t border-white/25 pt-4 font-mono text-[0.68rem] leading-5 text-white/75">
             <p className="font-bold text-white">
               {content.entryLabel ?? content.sourceName}
-            </p>
-            <p>
-              {getProjectContentStatusLabel(content.status)} · {content.reviewedAt} · {content.version}
             </p>
           </div>
         ) : null}

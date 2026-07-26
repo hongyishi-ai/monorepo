@@ -59,11 +59,10 @@ try {
 
     assert.equal(response?.status(), 200, `${slug} should return HTTP 200`);
     await page.locator(`[data-tccc-module="${slug}"]`).waitFor();
-    const governanceText = await page
-      .locator("[data-hongyishi-content-governance]")
-      .innerText();
-    assert.match(governanceText, /2026-05-01/);
-    assert.match(governanceText, /待医学专家终审/);
+    assert.equal(
+      await page.locator("[data-hongyishi-content-governance]").count(),
+      0,
+    );
     assert.doesNotMatch(await page.locator("body").innerText(), /2017/);
 
     const dimensions = await page.evaluate(() => ({

@@ -172,37 +172,6 @@ export const metadata = {
     "热射病救治体系建设标准专家共识速读，覆盖预防、院前、院内、康复、慢病管理和救治中心建设。",
 };
 
-function GovernanceBanner() {
-  const content = project.content;
-
-  return (
-    <aside
-      aria-label="内容审核状态"
-      className="border-b-2 border-border bg-background"
-      data-hongyishi-content-governance
-    >
-      <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] grid-cols-1 gap-2 py-3 font-mono text-xs font-bold leading-5 text-muted-foreground md:grid-cols-[auto_1fr] md:items-center">
-        <span className="w-fit border-2 border-primary bg-primary px-2 py-1 font-black text-primary-foreground">
-          内容状态：待复核
-        </span>
-        <span className="text-foreground">
-          {project.shortTitle} · {content.disclaimer}
-        </span>
-        <span className="md:col-span-2">
-          来源：{content.sourceName} · 版本：{content.version} · 复核日期：
-          {content.reviewedAt}.{" "}
-          <a
-            className="font-black text-foreground underline underline-offset-4"
-            href={content.officialUpdateUrl}
-          >
-            官方更新源
-          </a>
-        </span>
-      </div>
-    </aside>
-  );
-}
-
 function Card({
   children,
   span = "default",
@@ -339,7 +308,6 @@ export default function HeatStrokeTreatmentSystemConsensusPage() {
           </div>
         </section>
 
-        <GovernanceBanner />
 
         <section className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] grid-cols-1 gap-5 py-12 md:grid-cols-3 lg:grid-cols-4">
           <Card span="wide">

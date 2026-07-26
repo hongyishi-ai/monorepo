@@ -28,8 +28,6 @@ export const metadata = {
 };
 
 export default function HeatStrokeAboutPage() {
-  const content = project.content;
-
   return (
     <div
       className="min-h-screen overflow-x-hidden bg-background pb-[calc(env(safe-area-inset-bottom)_+_5.75rem)] text-foreground md:pb-0"
@@ -77,31 +75,6 @@ export default function HeatStrokeAboutPage() {
             </div>
           </div>
         </section>
-
-        <aside
-          aria-label="内容审核状态"
-          className="border-b-2 border-border bg-background"
-          data-hongyishi-content-governance
-        >
-          <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] gap-2 py-3 font-mono text-xs font-bold leading-5 text-muted-foreground md:grid-cols-[auto_1fr] md:items-center">
-            <span className="w-fit border-2 border-primary bg-primary px-2 py-1 font-black text-primary-foreground">
-              内容状态：待复核
-            </span>
-            <span className="text-foreground">
-              {project.shortTitle} · {content.disclaimer}
-            </span>
-            <span className="md:col-span-2">
-              来源：{content.sourceName} · 版本：{content.version} · 复核日期：
-              {content.reviewedAt}.{" "}
-              <a
-                className="font-black text-foreground underline underline-offset-4"
-                href={content.officialUpdateUrl}
-              >
-                官方更新源
-              </a>
-            </span>
-          </div>
-        </aside>
 
         <section className="mx-auto grid w-[min(960px,calc(100%_-_32px))] gap-6 py-12 md:py-16">
           <article className="rounded border-2 border-border bg-card p-6 text-card-foreground shadow-[6px_6px_0_rgba(18,49,60,0.12)] md:p-10 dark:shadow-[6px_6px_0_rgba(217,48,37,0.2)]">

@@ -700,89 +700,9 @@ function escapeHtml(value) {
 }
 
 export function injectContentGovernanceBanner(content, config, options = {}) {
-  if (
-    !/<\/head>/i.test(content) ||
-    !/<body\b[^>]*>/i.test(content) ||
-    content.includes("data-hongyishi-content-governance")
-  ) {
-    return content;
-  }
-
-  const style = `
-    <style data-hongyishi-content-governance>
-      .hys-content-governance {
-        border-bottom: 2px solid hsl(var(--border, 195 33% 24%));
-        background: hsl(var(--muted, 38 26% 85%) / 0.4);
-        color: hsl(var(--foreground, 195 54% 15%));
-        font: 700 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      }
-      .hys-content-governance__inner {
-        max-width: 1120px;
-        margin: 0 auto;
-        padding: 0.75rem 1rem;
-        display: grid;
-        gap: 0.35rem;
-      }
-      .hys-content-governance__status {
-        display: inline-flex;
-        width: fit-content;
-        border: 2px solid hsl(var(--primary, 4 70% 50%));
-        background: hsl(var(--primary, 4 70% 50%));
-        color: hsl(var(--primary-foreground, 38 47% 91%));
-        padding: 0.1rem 0.45rem;
-        font-weight: 900;
-      }
-      .hys-content-governance__meta {
-        color: hsl(var(--muted-foreground, 195 18% 35%));
-      }
-      .hys-content-governance a {
-        color: hsl(var(--foreground, 195 54% 15%));
-        font-weight: 900;
-        text-decoration: underline;
-      }
-      @media (max-width: 640px) {
-        .hys-content-governance {
-          font-size: 11px;
-          line-height: 1.35;
-        }
-        .hys-content-governance__inner {
-          align-items: center;
-          gap: 0.25rem 0.5rem;
-          grid-template-columns: auto minmax(0, 1fr);
-          padding: 0.5rem 0.75rem;
-        }
-        .hys-content-governance__status {
-          font-size: 10px;
-          padding: 0.05rem 0.35rem;
-          white-space: nowrap;
-        }
-        .hys-content-governance__meta {
-          grid-column: 1 / -1;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-      }
-    </style>`;
-  const officialLink = config.officialUpdateUrl
-    ? ` <a href="${escapeHtml(config.officialUpdateUrl)}" rel="noopener noreferrer">官方更新源</a>`
-    : "";
-  const banner = `
-    <aside class="hys-content-governance" data-hongyishi-content-governance aria-label="内容审核状态">
-      <div class="hys-content-governance__inner">
-        <span class="hys-content-governance__status">内容状态：${escapeHtml(config.statusLabel)}</span>
-        <span>${escapeHtml(config.label)} · ${escapeHtml(config.disclaimer)}</span>
-        <span class="hys-content-governance__meta">来源：${escapeHtml(config.sourceName)} · 版本：${escapeHtml(config.version)} · 复核日期：${escapeHtml(config.reviewedAt)}.${officialLink}</span>
-      </div>
-    </aside>`;
-
-  const output = content.replace(/<\/head>/i, `${style}\n</head>`);
-
-  if (options.placement === "afterHeader" && /<\/header>/i.test(output)) {
-    return output.replace(/<\/header>/i, `</header>${banner}`);
-  }
-
-  return output.replace(/<body\b([^>]*)>/i, `<body$1>${banner}`);
+  void config;
+  void options;
+  return content;
 }
 
 export function injectTcccBrandShell(content, relativePath) {

@@ -150,31 +150,6 @@ export default function HeatStrokePage() {
           </div>
         </section>
 
-        <aside
-          aria-label="内容审核状态"
-          className="border-b-2 border-border bg-muted/45"
-          data-hongyishi-content-governance
-        >
-          <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] gap-2 py-3 font-mono text-xs font-bold leading-5 text-muted-foreground md:grid-cols-[auto_1fr] md:items-center">
-            <span className="w-fit border-2 border-primary bg-primary px-2 py-1 font-black text-primary-foreground">
-              内容状态：待复核
-            </span>
-            <span className="text-foreground">
-              {project.shortTitle} · {content.disclaimer}
-            </span>
-            <span className="md:col-span-2">
-              来源：{content.sourceName} · 版本：{content.version} · 复核日期：
-              {content.reviewedAt}.{" "}
-              <a
-                className="font-black text-foreground underline underline-offset-4"
-                href={content.officialUpdateUrl}
-              >
-                官方更新源
-              </a>
-            </span>
-          </div>
-        </aside>
-
         <section className="mx-auto w-[min(1200px,calc(100%_-_32px))] py-12 md:py-16">
           <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
@@ -249,7 +224,7 @@ export default function HeatStrokePage() {
               关于本项目
             </h2>
             <p className="mt-4 font-bold leading-8 text-muted-foreground">
-              {project.description}。{content.entryLabel}；{content.dataPolicy}
+              {project.description}。{content.entryLabel}
             </p>
             <a
               className="mt-6 inline-flex rounded border-2 border-foreground bg-foreground px-4 py-3 font-black text-background no-underline"

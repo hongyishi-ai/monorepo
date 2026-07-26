@@ -288,13 +288,12 @@ test("rewriteHeatStrokeText scopes root-relative static links and service worker
     /navigator\.serviceWorker\.register\('\/heat-stroke\/sw\.js', \{ scope: '\/heat-stroke\/' \}\)/,
   );
   assert.match(output, /data-hongyishi-mobile-nav/);
-  assert.match(output, /data-hongyishi-content-governance/);
+  assert.doesNotMatch(output, /data-hongyishi-content-governance/);
   assert.doesNotMatch(output, /data-hongyishi-guide-runtime/);
   assert.doesNotMatch(output, /data-hongyishi-guide-trigger/);
   assert.doesNotMatch(output, /data-hongyishi-guide-entry/);
   assert.doesNotMatch(output, /hys:heatStroke:guide/);
-  assert.match(output, /内容状态：待复核/);
-  assert.match(output, /不替代急救指挥、临床诊疗和当地规范/);
+  assert.doesNotMatch(output, /内容状态：待复核/);
   assert.match(output, /data-hys-mobile-nav-scope="heatStroke"/);
   assert.match(output, /class="hys-mobile-nav t-panel-reveal"/);
   assert.match(output, /hys-mobile-nav__item/);
@@ -872,12 +871,11 @@ test("rewriteTcccText scopes root-relative app links, manifest, and service work
     "/tccc/",
   );
   assert.match(flowOutput, /data-hongyishi-tccc-shell/);
-  assert.match(flowOutput, /data-hongyishi-content-governance/);
+  assert.doesNotMatch(flowOutput, /data-hongyishi-content-governance/);
   assert.doesNotMatch(flowOutput, /data-hongyishi-guide-runtime/);
   assert.doesNotMatch(flowOutput, /data-hongyishi-guide-trigger/);
   assert.doesNotMatch(flowOutput, /data-hongyishi-guide-entry/);
   assert.doesNotMatch(flowOutput, /hys:tccc:guide/);
-  assert.match(flowOutput, /不能替代现行作战医疗规范/);
   assert.match(flowOutput, /data-hongyishi-mobile-nav/);
   assert.match(
     flowOutput,
@@ -1023,7 +1021,7 @@ test("injectMobileHamburgerNav renders FMS-style heat-stroke header controls", (
   assert.equal(twice, output);
 });
 
-test("injectContentGovernanceBanner adds source and review state once", () => {
+test("injectContentGovernanceBanner keeps governance metadata out of public HTML", () => {
   const input =
     "<html><head><title>x</title></head><body><main>content</main></body></html>";
   const output = injectContentGovernanceBanner(input, {
@@ -1036,13 +1034,7 @@ test("injectContentGovernanceBanner adds source and review state once", () => {
     officialUpdateUrl: "https://example.com/source",
   });
 
-  assert.match(output, /data-hongyishi-content-governance/);
-  assert.match(output, /内容状态：待复核/);
-  assert.match(
-    output,
-    /来源：测试来源 · 版本：测试版本 · 复核日期：2026-06-23\./,
-  );
-  assert.match(output, /href="https:\/\/example\.com\/source"/);
+  assert.equal(output, input);
   assert.equal(
     injectContentGovernanceBanner(output, {
       label: "测试项目",
@@ -1071,15 +1063,15 @@ test("injectTcccBrandShell adds unified brand context to TCCC pages", () => {
   assert.match(output, /body[^>]+class="[^"]*\bhys-tccc-page\b[^"]*"/);
   assert.match(output, /红医师 \/ 战场救护/);
   assert.match(output, /href="\/tccc\/">项目首页/);
-  assert.match(output, /当前流程：战术战斗伤员救护/);
-  assert.match(output, /内容状态：待复核/);
+  assert.doesNotMatch(output, /当前流程：战术战斗伤员救护/);
+  assert.doesNotMatch(output, /内容状态：待复核/);
   assert.match(output, /id="hys-tccc-main"/);
   assert.doesNotMatch(output, /class="hys-tccc-shell\b/);
   assert.doesNotMatch(output, /hys-tccc-shell__/);
   assert.match(rootOutput, /data-hongyishi-tccc-shell/);
   assert.match(rootOutput, /data-hongyishi-app-shell/);
   assert.match(rootOutput, /红医师 \/ 战场救护/);
-  assert.match(rootOutput, /当前流程：战术战斗伤员救护/);
+  assert.doesNotMatch(rootOutput, /当前流程：战术战斗伤员救护/);
   assert.equal(injectTcccBrandShell(output, "pages/TCCC标准流程.html"), output);
 });
 
@@ -1328,7 +1320,7 @@ test("TCCC registry exposes every 2026 Chinese learning module through Next", as
   assert.match(dynamicPageSource, /generateStaticParams/);
   assert.match(dynamicPageSource, /export const dynamicParams = false/);
   assert.match(modulePageSource, /ProjectChrome/);
-  assert.match(modulePageSource, /待医学专家终审/);
+  assert.doesNotMatch(modulePageSource, /待医学专家终审/);
 
   for (const alias of tcccPageAliases.values()) {
     assert.equal(

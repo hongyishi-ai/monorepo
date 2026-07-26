@@ -184,7 +184,7 @@ export function renderStaticAppShellController({ menuId, scope }) {
 }
 
 export function renderTcccBrandShell({ flowTitle }) {
-  const title = escapeHtml(flowTitle);
+  void flowTitle;
 
   return `
     <a class="hys-tccc-skip" href="#hys-tccc-main">跳到流程</a>
@@ -197,16 +197,6 @@ export function renderTcccBrandShell({ flowTitle }) {
             <a class="hys-nav-link brand-nav-link" href="/tccc/">项目首页</a>
           </div>
         </nav>
-      </div>
-      <div class="hys-static-meta-strip border-t border-border bg-muted/40">
-        <div class="hys-container">
-          <div class="hys-static-meta-row">
-            <strong>当前流程：${title}</strong>
-            <span>教育训练用途</span>
-            <span>内容状态：待复核</span>
-            <span>全部交互学习页已按 2026-05-01 指南复核，待医学专家终审</span>
-          </div>
-        </div>
       </div>
     </header>
     <div id="hys-tccc-main" tabindex="-1"></div>`;

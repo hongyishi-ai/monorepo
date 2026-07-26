@@ -269,37 +269,6 @@ export const metadata = {
     "基于中国热射病诊断与治疗指南 2025 版的分型、诊断、监测、救治、康复与预防速览。",
 };
 
-function GovernanceBanner() {
-  const content = project.content;
-
-  return (
-    <aside
-      aria-label="内容审核状态"
-      className="border-b-2 border-border bg-background"
-      data-hongyishi-content-governance
-    >
-      <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] gap-2 py-3 font-mono text-xs font-bold leading-5 text-muted-foreground md:grid-cols-[auto_1fr] md:items-center">
-        <span className="w-fit border-2 border-primary bg-primary px-2 py-1 font-black text-primary-foreground">
-          内容状态：待复核
-        </span>
-        <span className="text-foreground">
-          {project.shortTitle} · {content.disclaimer}
-        </span>
-        <span className="md:col-span-2">
-          来源：{content.sourceName} · 版本：{content.version} · 复核日期：
-          {content.reviewedAt}.{" "}
-          <a
-            className="font-black text-foreground underline underline-offset-4"
-            href={content.officialUpdateUrl}
-          >
-            官方更新源
-          </a>
-        </span>
-      </div>
-    </aside>
-  );
-}
-
 function SectionLabel({ children }: { children: string }) {
   return (
     <p className="font-mono text-sm font-black uppercase tracking-normal text-muted-foreground">
@@ -440,7 +409,6 @@ export default function HeatStrokeDiagnosisTreatmentGuidelinePage() {
           </div>
         </section>
 
-        <GovernanceBanner />
 
         <section className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] gap-4 py-10 md:grid-cols-3 lg:grid-cols-4 md:py-14">
           <Card span="wide">

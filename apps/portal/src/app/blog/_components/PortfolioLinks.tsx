@@ -2,7 +2,6 @@ import Image from "next/image";
 import styles from "@/app/_styles/constructivism.module.css";
 import {
   auxiliaryEntries,
-  getProjectContentStatusLabel,
   getProjectEntryKindLabel,
   isExternalProject,
   platformProjects,
@@ -30,9 +29,6 @@ export function PortfolioLinks() {
             当前站内项目
           </h2>
         </div>
-        <p className="font-mono text-xs font-bold text-neutral-500 dark:text-neutral-400">
-          统一 Next 入口 · 内容持续复核
-        </p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
@@ -56,10 +52,6 @@ export function PortfolioLinks() {
             </div>
             <p className="text-sm font-medium leading-6 text-neutral-700 dark:text-neutral-300">
               {project.content.entryLabel ?? project.description}
-            </p>
-            <p className="mt-4 border-t border-neutral-200 pt-3 font-mono text-xs font-bold text-neutral-500 dark:border-white/15 dark:text-neutral-400">
-              {getProjectContentStatusLabel(project.content.status)} ·{" "}
-              {project.content.reviewedAt}
             </p>
           </a>
         ))}

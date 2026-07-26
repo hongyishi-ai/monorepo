@@ -42,8 +42,6 @@ export const metadata = {
 };
 
 export default function TcccPage() {
-  const content = project.content;
-
   return (
     <div
       className="min-h-screen overflow-x-hidden bg-background pb-[calc(env(safe-area-inset-bottom)_+_5.75rem)] text-foreground md:pb-0"
@@ -92,7 +90,7 @@ export default function TcccPage() {
               战术战伤救护流程
             </h1>
             <p className="mt-6 max-w-2xl text-lg font-bold leading-8 text-background/85 dark:text-foreground/85 md:text-xl">
-              分阶段对照 JTS / CoTCCC 指南复核的交互式决策流程
+              按救治阶段组织的交互式决策训练流程
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a
@@ -111,31 +109,6 @@ export default function TcccPage() {
           </div>
         </section>
 
-        <aside
-          aria-label="内容审核状态"
-          className="border-b-2 border-border bg-muted/45"
-          data-hongyishi-content-governance
-        >
-          <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] gap-2 py-3 font-mono text-xs font-bold leading-5 text-muted-foreground md:grid-cols-[auto_1fr] md:items-center">
-            <span className="w-fit border-2 border-primary bg-primary px-2 py-1 font-black text-primary-foreground">
-              内容状态：待复核
-            </span>
-            <span className="text-foreground">
-              {project.shortTitle} · {content.disclaimer}
-            </span>
-            <span className="md:col-span-2">
-              来源：{content.sourceName} · 版本：{content.version} · 复核日期：
-              {content.reviewedAt}.{" "}
-              <a
-                className="font-black text-foreground underline underline-offset-4"
-                href={content.officialUpdateUrl}
-              >
-                官方更新源
-              </a>
-            </span>
-          </div>
-        </aside>
-
         <section className="mx-auto w-[min(1200px,calc(100%_-_32px))] py-12 md:py-16">
           <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
@@ -147,8 +120,7 @@ export default function TcccPage() {
               </h2>
             </div>
             <p className="max-w-xl font-bold leading-7 text-muted-foreground">
-              全部 34 个交互学习入口已按 2026-05-01
-              指南复核，当前统一标记为待医学专家终审。
+              通过连续选择与即时反馈，练习从伤情判断到下一步处置的完整路径。
             </p>
           </div>
 
@@ -233,14 +205,13 @@ export default function TcccPage() {
               仅供教育训练和流程学习，不能替代现行作战医疗规范、医疗指挥链或正式认证课程。
             </p>
             <p className="mt-4 font-bold leading-8 text-muted-foreground">
-              {project.description}。{content.entryLabel}；{content.dataPolicy}
+              {project.description}。页面按伤情判断逐步展开，帮助学习者建立连续处置思路。
             </p>
           </div>
           <div className="rounded border-2 border-border bg-muted/50 p-6">
-            <h2 className="text-2xl font-black">统一 Next 学习流程</h2>
+            <h2 className="text-2xl font-black">学习方式</h2>
             <p className="mt-4 font-bold leading-8 text-muted-foreground">
-              旧版深层 HTML
-              已停止发布。所有学习页共享同一决策引擎、主题、导航、移动控制条和内容治理状态。
+              每次只处理当前问题。根据伤员状态选择下一步，必要时返回复盘，直到完成该阶段处置。
             </p>
             <a
               className="mt-6 inline-flex rounded border-2 border-foreground bg-foreground px-4 py-3 font-black text-background no-underline"
