@@ -27,6 +27,28 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-07-26 - 292a8ad - 前台元信息清理、FMS 指引重构与热射病预警插画
+
+- Commits: `d76885829970a856e31082d3ffd787b00516b6f3`, `1ebc905dc429b2294db0838a61665deb8d1a3a92`, `292a8adbaad822c2d66c3b4bb04f455ab71511ab`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://f21342d6.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.111.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - Portal and FMS TypeScript checks passed
+  - FMS component tests passed: `19/19`; full FMS suite passed: `157/157`
+  - `pnpm test:cloudflare` passed: `67/67`
+  - `pnpm build:cloudflare` passed and exported `56` Next static pages
+  - `pnpm size:budget` passed: `460 files, 52.16 MiB total`
+  - `pnpm audit:static-debt` passed: heat stroke and TCCC each retain only `1` compatibility HTML file
+  - Preview and production link audits passed: internal `52/52`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+  - Playwright mobile-width smoke passed at `320/360/375/390/414px` for FMS assessment, the 8-4-6 page, and three wide heat-stroke pages
+  - Playwright verified the FMS mobile action-guide trigger, drawer, GIF, steps, scoring tabs, and the four illustrated warning-sign cards
+- Notes:
+  - Removed visible project review state, storage implementation, migration status, and similar internal metadata while retaining governance data in registries and build checks.
+  - Moved the FMS mobile action guide into the current action card and replaced scroll-driven spring motion with restrained reduced-motion-aware transitions.
+  - Added four text-free, palette-matched warning-sign illustrations and documented the generated medical illustration contract in `DESIGN.md`.
+
 ## 2026-07-26 - 44bcc23 - 浏览器批注修正与首页当地天气
 
 - Commits: `82bd57558d489444d936432d3c32c20d5dcf6466`, `44bcc2301b3fbadd41eb574f46074eab827d7c6b`
