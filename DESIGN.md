@@ -18,19 +18,19 @@
 
 ### 2.1 品牌色值
 
-| 用途 | 名称 | HEX | Tailwind / CSS token |
-| --- | --- | --- | --- |
-| 主色、品牌、危险、重点入口 | 主信号红 | `#D93025` | `hongyishi.red`, `--hys-color-constructivism-red` |
-| 强警示、海报背景 | 战地暗红 | `#A51F18` | `hongyishi.field-red`, `--hys-color-field-red` |
-| 热风险、下一步动作 | 行动橙 | `#FF6B00` | `hongyishi.orange`, `--hys-color-signal-orange` |
-| 工具状态、诊断反馈 | 技术蓝 | `#007AFF` | `hongyishi.blue`, `--hys-color-technology-blue` |
-| 冷却、生命体征、辅助状态 | 临床浅蓝 | `#78C7E7` | `hongyishi.cyan`, `--hys-color-clinical-cyan` |
-| 深色信息面、导航激活态 | 战地深蓝 | `#12313C` | `hongyishi.navy`, `--hys-color-field-navy` |
-| 编号、结构高亮 | 结构黄 | `#FFD700` | `hongyishi.yellow`, `--hys-color-structure-yellow` |
-| 强文字、粗边框 | 墨黑 | `#000000` | `hongyishi.ink`, `--hys-color-ink` |
-| 阅读底色 | 纸白 | `#FFFFFF` | `hongyishi.paper`, `--hys-color-paper` |
-| 平台背景、海报纸底 | 米白纸底 | `#F4ECDC` | `hongyishi.aged-paper`, `--hys-color-aged-paper` |
-| 次级说明 | 中性灰 | `#737373` | `hongyishi.muted`, `--hys-color-muted` |
+| 用途                       | 名称     | HEX       | Tailwind / CSS token                               |
+| -------------------------- | -------- | --------- | -------------------------------------------------- |
+| 主色、品牌、危险、重点入口 | 主信号红 | `#D93025` | `hongyishi.red`, `--hys-color-constructivism-red`  |
+| 强警示、海报背景           | 战地暗红 | `#A51F18` | `hongyishi.field-red`, `--hys-color-field-red`     |
+| 热风险、下一步动作         | 行动橙   | `#FF6B00` | `hongyishi.orange`, `--hys-color-signal-orange`    |
+| 工具状态、诊断反馈         | 技术蓝   | `#007AFF` | `hongyishi.blue`, `--hys-color-technology-blue`    |
+| 冷却、生命体征、辅助状态   | 临床浅蓝 | `#78C7E7` | `hongyishi.cyan`, `--hys-color-clinical-cyan`      |
+| 深色信息面、导航激活态     | 战地深蓝 | `#12313C` | `hongyishi.navy`, `--hys-color-field-navy`         |
+| 编号、结构高亮             | 结构黄   | `#FFD700` | `hongyishi.yellow`, `--hys-color-structure-yellow` |
+| 强文字、粗边框             | 墨黑     | `#000000` | `hongyishi.ink`, `--hys-color-ink`                 |
+| 阅读底色                   | 纸白     | `#FFFFFF` | `hongyishi.paper`, `--hys-color-paper`             |
+| 平台背景、海报纸底         | 米白纸底 | `#F4ECDC` | `hongyishi.aged-paper`, `--hys-color-aged-paper`   |
+| 次级说明                   | 中性灰   | `#737373` | `hongyishi.muted`, `--hys-color-muted`             |
 
 ### 2.2 Portal 语义色
 
@@ -74,16 +74,16 @@ Portal 和 Next 接管页使用 `hsl(var(--token))`，不要直接复制 HSL 数
 
 ### 3.2 字号、字重、行高
 
-| 场景 | 移动端 | 桌面端 | 字重 | 行高 |
-| --- | --- | --- | --- | --- |
-| 项目顶部品牌 | `clamp(1rem, 5.2vw, 1.8rem)` | 同移动端上限 | `900` | `1` |
-| 子项目首屏巨标题 | `clamp(2.35rem, 12vw, 4rem)` | `clamp(4rem, 8vw, 6.8rem)` | `900` | `0.9` |
-| 普通页面 H1 | `3rem` / `text-5xl` | `4.5rem` / `md:text-7xl` | `900` | `1` |
-| 区块标题 H2 | `1.5rem`-`1.875rem` | `1.875rem`-`3rem` | `900` | `1.1`-`1.2` |
-| 卡片标题 H3 | `1.25rem`-`1.5rem` | `1.5rem` | `900` | `1.2` |
-| 正文 | `1rem` | `1rem`-`1.125rem` | `700` 为主 | `1.75`-`2` |
-| 说明、标签 | `0.75rem`-`0.875rem` | 同移动端 | `700`-`900` | `1.4`-`1.6` |
-| 移动底栏文字 | `13px` | 不显示 | `900` | `1.15` |
+| 场景             | 移动端                       | 桌面端                     | 字重        | 行高        |
+| ---------------- | ---------------------------- | -------------------------- | ----------- | ----------- |
+| 项目顶部品牌     | `clamp(1rem, 5.2vw, 1.8rem)` | 同移动端上限               | `900`       | `1`         |
+| 子项目首屏巨标题 | `clamp(2.35rem, 12vw, 4rem)` | `clamp(4rem, 8vw, 6.8rem)` | `900`       | `0.9`       |
+| 普通页面 H1      | `3rem` / `text-5xl`          | `4.5rem` / `md:text-7xl`   | `900`       | `1`         |
+| 区块标题 H2      | `1.5rem`-`1.875rem`          | `1.875rem`-`3rem`          | `900`       | `1.1`-`1.2` |
+| 卡片标题 H3      | `1.25rem`-`1.5rem`           | `1.5rem`                   | `900`       | `1.2`       |
+| 正文             | `1rem`                       | `1rem`-`1.125rem`          | `700` 为主  | `1.75`-`2`  |
+| 说明、标签       | `0.75rem`-`0.875rem`         | 同移动端                   | `700`-`900` | `1.4`-`1.6` |
+| 移动底栏文字     | `13px`                       | 不显示                     | `900`       | `1.15`      |
 
 规则：
 
@@ -99,7 +99,7 @@ Portal 和 Next 接管页使用 `hsl(var(--token))`，不要直接复制 HSL 数
 标准内容容器：
 
 ```tsx
-className="mx-auto w-[min(1200px,calc(100%_-_32px))]"
+className = "mx-auto w-[min(1200px,calc(100%_-_32px))]";
 ```
 
 含义：
@@ -111,17 +111,17 @@ className="mx-auto w-[min(1200px,calc(100%_-_32px))]"
 
 ### 4.2 常用间距
 
-| 用途 | Tailwind | 像素 |
-| --- | --- | --- |
-| 控件内部横向 padding | `px-3` / `px-4` / `px-5` | `12 / 16 / 20px` |
-| 卡片 padding | `p-5` | `20px` |
-| 大卡片 / 复杂工具 padding | `p-6` / `md:p-10` | `24 / 40px` |
-| 组件内小间距 | `gap-2` / `gap-3` | `8 / 12px` |
-| 卡片组间距 | `gap-4` / `gap-5` / `gap-6` | `16 / 20 / 24px` |
-| 区块上下间距 | `py-10` / `py-12` / `py-14` / `py-16` | `40 / 48 / 56 / 64px` |
-| 首屏桌面上下间距 | `md:py-20` | `80px` |
-| 移动底栏安全底距 | `pb-[calc(env(safe-area-inset-bottom)_+_0.5rem)]` | 安全区 + `8px` |
-| 页面为移动底栏留白 | `pb-[calc(env(safe-area-inset-bottom)_+_5.75rem)]` | 安全区 + `92px` |
+| 用途                      | Tailwind                                           | 像素                  |
+| ------------------------- | -------------------------------------------------- | --------------------- |
+| 控件内部横向 padding      | `px-3` / `px-4` / `px-5`                           | `12 / 16 / 20px`      |
+| 卡片 padding              | `p-5`                                              | `20px`                |
+| 大卡片 / 复杂工具 padding | `p-6` / `md:p-10`                                  | `24 / 40px`           |
+| 组件内小间距              | `gap-2` / `gap-3`                                  | `8 / 12px`            |
+| 卡片组间距                | `gap-4` / `gap-5` / `gap-6`                        | `16 / 20 / 24px`      |
+| 区块上下间距              | `py-10` / `py-12` / `py-14` / `py-16`              | `40 / 48 / 56 / 64px` |
+| 首屏桌面上下间距          | `md:py-20`                                         | `80px`                |
+| 移动底栏安全底距          | `pb-[calc(env(safe-area-inset-bottom)_+_0.5rem)]`  | 安全区 + `8px`        |
+| 页面为移动底栏留白        | `pb-[calc(env(safe-area-inset-bottom)_+_5.75rem)]` | 安全区 + `92px`       |
 
 ### 4.3 响应式规则
 
@@ -159,7 +159,8 @@ className="mx-auto w-[min(1200px,calc(100%_-_32px))]"
 标准卡片：
 
 ```tsx
-className="min-w-0 rounded border-2 border-border bg-card p-5 text-card-foreground shadow-[6px_6px_0_rgba(18,49,60,0.14)]"
+className =
+  "min-w-0 rounded border-2 border-border bg-card p-5 text-card-foreground shadow-[6px_6px_0_rgba(18,49,60,0.14)]";
 ```
 
 夜间阴影：
@@ -183,8 +184,8 @@ dark:shadow-[6px_6px_0_rgba(217,48,37,0.18)]
 - 固定顶栏由 `ProjectChrome` 自带响应式占位：移动端 `84px`，桌面端 `80px`；页面不得自行补 `padding-top`
 - 容器：`min-h-[78px] w-[min(1200px,calc(100%_-_32px))]`
 - 品牌字：`font-black leading-none`
-- 日夜切换按钮：`min-h-10 min-w-10`
-- 汉堡按钮：`min-h-14 min-w-14 border-2 border-border bg-card text-foreground`；仅展开时反转为深色，不默认使用临床浅蓝底
+- 日夜切换按钮：`min-h-11 min-w-11`，默认无可见边框
+- 汉堡按钮：`min-h-11 min-w-11 border-2 border-transparent bg-transparent text-foreground`；关闭时不显示方框，仅展开时反转为深色
 - 移动菜单项：`min-h-[58px] px-4 py-4 text-lg font-black`
 
 移动底栏使用 `ProjectChrome` 的 bottom nav：

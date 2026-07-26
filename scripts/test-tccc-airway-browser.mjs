@@ -87,9 +87,18 @@ try {
       const menuButton = page.locator("[data-hys-mobile-menu-toggle]");
       const closedMenuColors = await menuButton.evaluate((element) => ({
         background: getComputedStyle(element).backgroundColor,
+        border: getComputedStyle(element).borderTopColor,
         color: getComputedStyle(element).color,
       }));
       assert.notEqual(closedMenuColors.background, "rgb(120, 199, 231)");
+      assert.equal(closedMenuColors.border, "rgba(0, 0, 0, 0)");
+      assert.deepEqual(
+        await menuButton.evaluate((element) => ({
+          height: element.getBoundingClientRect().height,
+          width: element.getBoundingClientRect().width,
+        })),
+        { height: 44, width: 44 },
+      );
       const menuPanelId = await menuButton.getAttribute("aria-controls");
       assert.ok(menuPanelId);
       await menuButton.click();

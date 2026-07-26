@@ -1,5 +1,5 @@
 import { getProjectById } from "@/lib/projects";
-import { getTaskUrgencyLabel, taskEntries } from "@/lib/task-entries";
+import { getTaskUrgencyLabel, homepageTaskEntries } from "@/lib/task-entries";
 import styles from "@/app/_styles/constructivism.module.css";
 
 export function PortfolioHero() {
@@ -49,7 +49,7 @@ export function PortfolioHero() {
           </p>
 
           <div className={`${styles.taskGrid} mt-10 grid gap-3 sm:grid-cols-2`}>
-            {taskEntries.map((entry) => {
+            {homepageTaskEntries.map((entry) => {
               const project = getProjectById(entry.projectId);
 
               return (

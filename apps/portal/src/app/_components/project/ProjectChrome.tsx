@@ -216,7 +216,7 @@ export function ProjectChrome({
           >
             <button
               aria-label="切换深浅色主题"
-              className="inline-grid min-h-10 min-w-10 place-items-center rounded text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+              className="inline-grid min-h-11 min-w-11 place-items-center rounded text-foreground transition-[color,background-color,transform] duration-200 hover:bg-card active:scale-95 motion-reduce:transition-none"
               data-hys-theme-toggle
               onClick={toggleTheme}
               type="button"
@@ -227,10 +227,10 @@ export function ProjectChrome({
               aria-controls={menuPanelId}
               aria-expanded={isMenuOpen}
               aria-label={isMenuOpen ? "关闭菜单" : menuButtonLabel}
-              className={`inline-grid min-h-14 min-w-14 place-items-center rounded border-2 border-border transition-colors active:translate-y-px lg:hidden ${
+              className={`inline-grid min-h-11 min-w-11 place-items-center rounded border-2 border-transparent transition-[color,background-color,transform] duration-200 active:scale-95 motion-reduce:transition-none lg:hidden ${
                 isMenuOpen
                   ? "bg-foreground text-background"
-                  : "bg-card text-foreground hover:bg-muted"
+                  : "bg-transparent text-foreground hover:bg-card"
               }`}
               data-hys-mobile-menu-toggle
               onClick={() => setIsMenuOpen((current) => !current)}

@@ -1,8 +1,8 @@
-import { getProjectById, platformProjects } from './projects';
-import { taskEntries, type HongyishiTaskUrgency } from './task-entries';
+import { getProjectById, platformProjects } from "./projects";
+import { homepageTaskEntries, type HongyishiTaskUrgency } from "./task-entries";
 
-export type MobileTabIcon = 'bolt' | 'grid' | 'record' | 'book';
-export type MobileTabId = 'action' | 'tools' | 'records' | 'library';
+export type MobileTabIcon = "bolt" | "grid" | "record" | "book";
+export type MobileTabId = "action" | "tools" | "records" | "library";
 
 export type MobileTab = {
   id: MobileTabId;
@@ -22,25 +22,29 @@ export type MobileQuickAction = {
   sourceNote: string;
 };
 
-const fallbackPosterImage = '/assets/brand-posters/hongyishi-brand.jpg';
+const fallbackPosterImage = "/assets/brand-posters/hongyishi-brand.jpg";
 
 export const mobileTabs: MobileTab[] = [
-  { id: 'action', label: '处置', href: '/?tab=action', icon: 'bolt' },
-  { id: 'tools', label: '工具', href: '/?tab=tools', icon: 'grid' },
-  { id: 'records', label: '记录', href: '/?tab=records', icon: 'record' },
-  { id: 'library', label: '资料', href: '/?tab=library', icon: 'book' },
+  { id: "action", label: "处置", href: "/?tab=action", icon: "bolt" },
+  { id: "tools", label: "工具", href: "/?tab=tools", icon: "grid" },
+  { id: "records", label: "记录", href: "/?tab=records", icon: "record" },
+  { id: "library", label: "资料", href: "/?tab=library", icon: "book" },
 ];
 
-export const mobileQuickActions: MobileQuickAction[] = taskEntries.map((entry) => {
-  const project = platformProjects.find((item) => item.id === entry.projectId);
-  const entryProject = getProjectById(entry.projectId);
+export const mobileQuickActions: MobileQuickAction[] = homepageTaskEntries.map(
+  (entry) => {
+    const project = platformProjects.find(
+      (item) => item.id === entry.projectId,
+    );
+    const entryProject = getProjectById(entry.projectId);
 
-  return {
-    ...entry,
-    urgency: entry.urgency,
-    projectTitle: entryProject?.shortTitle ?? '红医师',
-    posterImage: project?.coverImage ?? fallbackPosterImage,
-  };
-});
+    return {
+      ...entry,
+      urgency: entry.urgency,
+      projectTitle: entryProject?.shortTitle ?? "红医师",
+      posterImage: project?.coverImage ?? fallbackPosterImage,
+    };
+  },
+);
 
 export const mobilePosterProjects = platformProjects;

@@ -15,36 +15,30 @@ const OpeningPage: FC = () => {
 
   const { scrollYProgress } = useScroll({
     target: targetRef,
-    offset: ["start start", "end start"]
+    offset: ["start start", "end start"],
   });
 
   // 文字内容 - 分行显示，便于左对齐
-  const lines = [
-    "察至微，",
-    "而识其著；",
-    "正其动，",
-    "而无其伤。",
-    " ",
-  ];
+  const lines = ["察至微，", "而识其著；", "正其动，", "而无其伤。", " "];
 
   // 导航到主页的函数
   const navigateToHome = () => {
     // 设置已访问标记，防止重复触发开场动画
-    safeLocalStorage.setItem('fms_has_visited', 'true');
-    
+    safeLocalStorage.setItem("fms_has_visited", "true");
+
     // 先滚动到顶部，然后导航
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
     // 延迟导航，确保滚动动画完成并提供视觉连贯性
     setTimeout(() => {
-      navigate('/', { replace: true });
+      navigate("/", { replace: true });
     }, 800);
   };
 
   // 监听滚动进度，当动画完成时自动路由到主页
   useEffect(() => {
     let hasNavigated = false;
-    
+
     const unsubscribe = scrollYProgress.on("change", (latest) => {
       // 当滚动到80%时，认为动画完成，开始路由到主页（提高灵敏度）
       if (latest >= 0.75 && !hasNavigated) {
@@ -62,14 +56,14 @@ const OpeningPage: FC = () => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // 按空格键或回车键跳过动画
-      if (event.code === 'Space' || event.code === 'Enter') {
+      if (event.code === "Space" || event.code === "Enter") {
         event.preventDefault();
         navigateToHome();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   if (!isClient) {
@@ -82,13 +76,13 @@ const OpeningPage: FC = () => {
       <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-background">
         <div className="pointer-events-none absolute inset-0 opacity-80">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_12%,rgba(217,48,37,0.18),transparent_24rem),linear-gradient(rgba(18,49,60,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(18,49,60,0.06)_1px,transparent_1px)] bg-[length:auto,72px_72px,72px_72px]" />
-          <div className="absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 bg-primary/70 shadow-[0_0_18px_rgba(217,48,37,0.38)]" />
-          <div className="absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-primary bg-background" />
         </div>
 
         <div className="absolute left-5 top-5 z-10 flex items-end gap-3 md:left-8 md:top-8">
           <div className="font-black leading-none text-primary">红医师</div>
-          <div className="font-mono text-xs font-bold uppercase tracking-[0.24em] text-secondary">FMS</div>
+          <div className="font-mono text-xs font-bold uppercase tracking-[0.24em] text-secondary">
+            FMS
+          </div>
         </div>
 
         <div className="absolute bottom-5 right-5 z-10 hidden font-mono text-xs font-bold uppercase tracking-[0.28em] text-secondary/70 md:block">
@@ -101,15 +95,22 @@ const OpeningPage: FC = () => {
             {lines.map((line, lineIndex) => (
               <div key={lineIndex} className="flex flex-wrap">
                 {line.split(" ").map((word, wordIndex) => {
-                  const totalWords = lines.reduce((acc, l) => acc + l.split(" ").length, 0);
-                  const currentWordIndex = lines.slice(0, lineIndex).reduce((acc, l) => acc + l.split(" ").length, 0) + wordIndex;
+                  const totalWords = lines.reduce(
+                    (acc, l) => acc + l.split(" ").length,
+                    0,
+                  );
+                  const currentWordIndex =
+                    lines
+                      .slice(0, lineIndex)
+                      .reduce((acc, l) => acc + l.split(" ").length, 0) +
+                    wordIndex;
                   const start = currentWordIndex / totalWords;
                   const end = start + 1 / totalWords;
-                  
+
                   return (
-                    <OpeningWord 
-                      key={`${lineIndex}-${wordIndex}`} 
-                      progress={scrollYProgress} 
+                    <OpeningWord
+                      key={`${lineIndex}-${wordIndex}`}
+                      progress={scrollYProgress}
                       range={[start, end]}
                       isFirstWord={lineIndex === 0 && wordIndex === 0}
                     >
@@ -158,15 +159,20 @@ interface OpeningWordProps {
   isFirstWord?: boolean;
 }
 
-const OpeningWord: FC<OpeningWordProps> = ({ children, progress, range, isFirstWord = false }) => {
+const OpeningWord: FC<OpeningWordProps> = ({
+  children,
+  progress,
+  range,
+  isFirstWord = false,
+}) => {
   // 首行文字初始有轻微可见性，其他文字完全隐藏
   const initialOpacity = isFirstWord ? 0.72 : 0;
   const opacity = useTransform(progress, range, [initialOpacity, 1]);
   const scale = useTransform(progress, range, [0.9, 1]);
   const y = useTransform(progress, range, [20, 0]);
-  
+
   return (
-    <motion.span 
+    <motion.span
       style={{ opacity, scale, y }}
       className="relative mr-3 mb-2 inline-block text-5xl font-black tracking-normal text-primary/20 md:mr-5 md:mb-3 md:text-7xl lg:mr-7 lg:mb-4 lg:text-8xl"
     >
@@ -178,4 +184,4 @@ const OpeningWord: FC<OpeningWordProps> = ({ children, progress, range, isFirstW
   );
 };
 
-export default OpeningPage; 
+export default OpeningPage;
