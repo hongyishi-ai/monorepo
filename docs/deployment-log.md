@@ -27,6 +27,29 @@
   - <what changed and why this deployment matters>
 ```
 
+## 2026-07-26 - 44bcc23 - 浏览器批注修正与首页当地天气
+
+- Commits: `82bd57558d489444d936432d3c32c20d5dcf6466`, `44bcc2301b3fbadd41eb574f46074eab827d7c6b`
+- Branch: `main`
+- Production: https://hongyishi.cn/
+- Cloudflare deployment: https://58aa6ba7.hongyishi-monorepo.pages.dev
+- Deploy method: `npx wrangler@4.111.0 pages deploy .cloudflare/site --project-name=hongyishi-monorepo --branch=main`
+- Verification:
+  - Portal and FMS TypeScript checks passed
+  - `pnpm test:cloudflare` passed: `67/67`
+  - `pnpm build:cloudflare` passed and exported `56` Next static pages
+  - `pnpm size:budget` passed: `456 files, 51.95 MiB total`
+  - `pnpm test:home-motion-browser` passed locally, on the Cloudflare deployment, and on production at `320/390/1280px`; local weather, heat-index output, removed local-record action, theme geometry, panel motion, and reduced-motion behavior were verified
+  - `pnpm test:tccc-airway-browser` passed locally, on the Cloudflare deployment, and on production: shared `44x44px` transparent closed menu, fixed project chrome, day/night theme, reduced motion, and all three airway paths
+  - Production OpenWeather proxy returned current coordinate-based weather without exposing the API key
+  - `pnpm audit:links` passed on the Cloudflare deployment and production: internal `52/52`, representative `24/24`, mobile nav `6/6`, guide surfaces `15/15`
+- Notes:
+  - Removed the visible closed-state frame from the shared heat-stroke and TCCC hamburger control.
+  - Replaced the blog footer's generic project cards with registry-driven project status, review date, and current entry purpose.
+  - Removed the ambiguous center line and circle from the FMS opening scene.
+  - Removed the duplicate local-record action from the homepage while preserving the dedicated Records tab and FMS history route.
+  - Added a compact mobile-home local weather and heat-index readout using browser geolocation, the existing free OpenWeather proxy, a shared heat-index calculation, cached fallback data, and explicit permission/error states.
+
 ## 2026-07-26 - 019e665 - 首页 Apple 风格交互优化
 
 - Commit: `019e665675ca0b8c9edee90cb873384fd49c386a`
