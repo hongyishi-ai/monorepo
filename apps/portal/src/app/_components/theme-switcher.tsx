@@ -11,6 +11,17 @@ type ColorSchemePreference = "system" | "dark" | "light";
 
 const STORAGE_KEY = "hongyishi-blog-theme";
 const modes: ColorSchemePreference[] = ["system", "dark", "light"];
+const modeLabels: Record<ColorSchemePreference, string> = {
+  system: "跟随系统",
+  dark: "深色",
+  light: "浅色",
+};
+
+function normalizeMode(value: string | null): ColorSchemePreference {
+  return modes.includes(value as ColorSchemePreference)
+    ? (value as ColorSchemePreference)
+    : "system";
+}
 
 /** to reuse updateDOM function defined inside injected script */
 
@@ -38,7 +49,11 @@ export const NoFOUCScript = (storageKey: string) => {
   /** function to add remove dark class */
   window.updateDOM = () => {
     const restoreTransitions = modifyTransition();
-    const mode = localStorage.getItem(storageKey) ?? SYSTEM;
+    const storedMode = localStorage.getItem(storageKey);
+    const mode =
+      storedMode === SYSTEM || storedMode === DARK || storedMode === LIGHT
+        ? storedMode
+        : SYSTEM;
     const systemMode = media.matches ? DARK : LIGHT;
     const resolvedMode = mode === SYSTEM ? systemMode : mode;
     const classList = document.documentElement.classList;
@@ -63,8 +78,7 @@ const fallbackUpdateDOM = (storageKey: string) => {
       ? matchMedia(`(prefers-color-scheme: ${DARK})`)
       : (null as any);
   const apply = () => {
-    const mode = (localStorage.getItem(storageKey) ??
-      SYSTEM) as ColorSchemePreference;
+    const mode = normalizeMode(localStorage.getItem(storageKey));
     const systemMode = media && media.matches ? DARK : LIGHT;
     const resolvedMode =
       mode === SYSTEM ? (systemMode as ColorSchemePreference) : mode;
@@ -82,11 +96,12 @@ const fallbackUpdateDOM = (storageKey: string) => {
  * Switch button to quickly toggle user preference.
  */
 const Switch = () => {
-  const [mode, setMode] = useState<ColorSchemePreference>(
-    () =>
-      ((typeof localStorage !== "undefined" &&
-        localStorage.getItem(STORAGE_KEY)) ??
-        "system") as ColorSchemePreference,
+  const [mode, setMode] = useState<ColorSchemePreference>(() =>
+    normalizeMode(
+      typeof localStorage !== "undefined"
+        ? localStorage.getItem(STORAGE_KEY)
+        : null,
+    ),
   );
 
   useEffect(() => {
@@ -94,7 +109,7 @@ const Switch = () => {
     updateDOM = window.updateDOM ?? fallbackUpdateDOM(STORAGE_KEY);
     /** Sync the tabs */
     addEventListener("storage", (e: StorageEvent): void => {
-      e.key === STORAGE_KEY && setMode(e.newValue as ColorSchemePreference);
+      e.key === STORAGE_KEY && setMode(normalizeMode(e.newValue));
     });
   }, []);
 
@@ -106,14 +121,17 @@ const Switch = () => {
   /** toggle mode */
   const handleModeSwitch = () => {
     const index = modes.indexOf(mode);
-    setMode(modes[(index + 1) % modes.length]);
+    setMode(modes[(Math.max(index, 0) + 1) % modes.length]);
   };
   return (
     <button
       suppressHydrationWarning
       className={styles.switch}
       onClick={handleModeSwitch}
+      aria-label={`切换外观，当前为${modeLabels[mode]}`}
+      title={`切换外观，当前为${modeLabels[mode]}`}
       data-hongyishi-global-theme-toggle
+      type="button"
     />
   );
 };

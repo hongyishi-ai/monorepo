@@ -1,10 +1,14 @@
-import { PortfolioCard } from './PortfolioCard';
-import { platformProjects } from '@/lib/projects';
+import { PortfolioCard } from "./PortfolioCard";
+import { platformProjects } from "@/lib/projects";
+import styles from "@/app/_styles/constructivism.module.css";
 
 export function PortfolioGrid() {
   return (
-    <section className="max-w-7xl mx-auto px-6 md:px-8 mb-24" aria-labelledby="portfolio-title">
-      <h2 
+    <section
+      className={`${styles.portfolioGridReveal} max-w-7xl mx-auto px-6 md:px-8 mb-24`}
+      aria-labelledby="portfolio-title"
+    >
+      <h2
         id="portfolio-title"
         className="font-mono text-base md:text-lg text-neutral-500 dark:text-neutral-500 uppercase tracking-wide mb-8 pl-6 relative before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-full before:bg-constructivism-red transition-colors duration-300"
       >
@@ -13,7 +17,7 @@ export function PortfolioGrid() {
       <p className="mb-8 max-w-2xl text-base leading-7 text-neutral-700 dark:text-neutral-300">
         选择现场需要的工具，快速进入评估、处置流程或训练资料。
       </p>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
         {platformProjects.map((project) => (
           <PortfolioCard key={project.href} {...project} />

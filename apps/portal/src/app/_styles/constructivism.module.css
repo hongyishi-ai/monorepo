@@ -5,9 +5,21 @@
   background-image:
     linear-gradient(rgba(18, 49, 60, 0.08) 1px, transparent 1px),
     linear-gradient(90deg, rgba(18, 49, 60, 0.06) 1px, transparent 1px),
-    radial-gradient(circle at 20% 10%, rgba(217, 48, 37, 0.10) 0 1px, transparent 1px),
-    radial-gradient(circle at 80% 30%, rgba(18, 49, 60, 0.10) 0 1px, transparent 1px);
-  background-size: 72px 72px, 72px 72px, 9px 9px, 13px 13px;
+    radial-gradient(
+      circle at 20% 10%,
+      rgba(217, 48, 37, 0.1) 0 1px,
+      transparent 1px
+    ),
+    radial-gradient(
+      circle at 80% 30%,
+      rgba(18, 49, 60, 0.1) 0 1px,
+      transparent 1px
+    );
+  background-size:
+    72px 72px,
+    72px 72px,
+    9px 9px,
+    13px 13px;
 }
 
 :global(.dark) .posterSurface {
@@ -15,16 +27,40 @@
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    radial-gradient(circle at 20% 10%, rgba(217, 48, 37, 0.22) 0 1px, transparent 1px),
-    radial-gradient(circle at 80% 30%, rgba(0, 122, 255, 0.16) 0 1px, transparent 1px);
+    radial-gradient(
+      circle at 20% 10%,
+      rgba(217, 48, 37, 0.22) 0 1px,
+      transparent 1px
+    ),
+    radial-gradient(
+      circle at 80% 30%,
+      rgba(0, 122, 255, 0.16) 0 1px,
+      transparent 1px
+    );
 }
 
 .ecgLine {
   height: 42px;
   transform: translateY(-50%);
   background:
-    linear-gradient(90deg, transparent 0 28%, #d93025 28% 29%, transparent 29% 31%, #d93025 31% 32%, transparent 32% 34%, #d93025 34% 35%, transparent 35% 100%),
-    linear-gradient(90deg, transparent 0 63%, #007aff 63% 64%, transparent 64% 66%, #007aff 66% 67%, transparent 67% 100%);
+    linear-gradient(
+      90deg,
+      transparent 0 28%,
+      #d93025 28% 29%,
+      transparent 29% 31%,
+      #d93025 31% 32%,
+      transparent 32% 34%,
+      #d93025 34% 35%,
+      transparent 35% 100%
+    ),
+    linear-gradient(
+      90deg,
+      transparent 0 63%,
+      #007aff 63% 64%,
+      transparent 64% 66%,
+      #007aff 66% 67%,
+      transparent 67% 100%
+    );
   clip-path: polygon(
     0 52%,
     26% 52%,
@@ -44,13 +80,51 @@
   opacity: 0.95;
 }
 
+.heroContent {
+  animation: contentReveal 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.taskGrid {
+  perspective: 900px;
+}
+
+.taskCard {
+  box-shadow: 5px 5px 0 rgba(18, 49, 60, 0.16);
+  transition:
+    transform 180ms ease-out,
+    box-shadow 180ms ease-out,
+    border-color 180ms ease-out,
+    background-color 200ms ease-out;
+}
+
+.taskCard:focus-visible {
+  outline: 3px solid #d93025;
+  outline-offset: 4px;
+}
+
+.taskCard:active {
+  transform: translate(4px, 4px) scale(0.995);
+  box-shadow: 1px 1px 0 rgba(18, 49, 60, 0.35);
+}
+
+:global(.dark) .taskCard {
+  box-shadow: 5px 5px 0 rgba(255, 255, 255, 0.08);
+}
+
+.portfolioGridReveal {
+  animation: contentReveal 420ms 80ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
 /* 作品集卡片基础样式 */
 .portfolioCard {
   position: relative;
   overflow: hidden;
   aspect-ratio: 906 / 1280;
   border: 3px solid #000;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition:
+    transform 200ms ease-out,
+    box-shadow 200ms ease-out,
+    border-color 200ms ease-out;
   box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.25);
 }
 
@@ -59,13 +133,18 @@
   box-shadow: 8px 8px 0 rgba(255, 255, 255, 0.08);
 }
 
-.portfolioCard:hover {
-  transform: translate(4px, 4px);
-  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.6);
+.portfolioCard:focus-visible {
+  outline: 3px solid #d93025;
+  outline-offset: 5px;
 }
 
-:global(.dark) .portfolioCard:hover {
-  box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.25);
+.portfolioCard:active {
+  transform: translate(6px, 6px) scale(0.995);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
+}
+
+:global(.dark) .portfolioCard:active {
+  box-shadow: 2px 2px 0 rgba(255, 255, 255, 0.25);
 }
 
 /* 封面图片 */
@@ -76,12 +155,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: transform 280ms ease-out;
   z-index: 0;
-}
-
-.portfolioCard:hover .portfolioCardCover {
-  transform: scale(1.05);
 }
 
 /* 叠加层 */
@@ -93,11 +168,11 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
   z-index: 1;
-  transition: background 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: background 220ms ease-out;
 }
 
-.portfolioCard:hover .portfolioCardOverlay {
-  background: rgba(0, 0, 0, 0.5);
+.portfolioCard:active .portfolioCardCover {
+  transform: scale(1.025);
 }
 
 /* 内容区 */
@@ -111,6 +186,46 @@
   height: 100%;
   padding: 2rem;
   color: white;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .taskCard:hover {
+    transform: translateY(-3px);
+    border-color: #d93025;
+    box-shadow: 7px 7px 0 rgba(18, 49, 60, 0.18);
+  }
+
+  :global(.dark) .taskCard:hover {
+    box-shadow: 7px 7px 0 rgba(217, 48, 37, 0.18);
+  }
+
+  .portfolioCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.28);
+  }
+
+  :global(.dark) .portfolioCard:hover {
+    box-shadow: 10px 10px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .portfolioCard:hover .portfolioCardCover {
+    transform: scale(1.04);
+  }
+
+  .portfolioCard:hover .portfolioCardOverlay {
+    background: rgba(0, 0, 0, 0.52);
+  }
+}
+
+@keyframes contentReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /*
@@ -138,17 +253,33 @@
 }
 
 /* 颜色修饰类：复用作品集卡片的主题色阴影逻辑 */
-.neoButton--red { border-color: #D93025; }
-:global(.dark) .neoButton--red { border-color: rgba(217, 48, 37, 0.7); }
+.neoButton--red {
+  border-color: #d93025;
+}
+:global(.dark) .neoButton--red {
+  border-color: rgba(217, 48, 37, 0.7);
+}
 
-.neoButton--blue { border-color: #007AFF; }
-:global(.dark) .neoButton--blue { border-color: rgba(0, 122, 255, 0.7); }
+.neoButton--blue {
+  border-color: #007aff;
+}
+:global(.dark) .neoButton--blue {
+  border-color: rgba(0, 122, 255, 0.7);
+}
 
-.neoButton--yellow { border-color: #FFD700; }
-:global(.dark) .neoButton--yellow { border-color: rgba(255, 215, 0, 0.7); }
+.neoButton--yellow {
+  border-color: #ffd700;
+}
+:global(.dark) .neoButton--yellow {
+  border-color: rgba(255, 215, 0, 0.7);
+}
 
-.neoButton--gray { border-color: #333333; }
-:global(.dark) .neoButton--gray { border-color: rgba(255, 255, 255, 0.4); }
+.neoButton--gray {
+  border-color: #333333;
+}
+:global(.dark) .neoButton--gray {
+  border-color: rgba(255, 255, 255, 0.4);
+}
 
 /* 响应式缩放：与作品集卡片一致 */
 @media (max-width: 768px) {
@@ -169,7 +300,7 @@
 
 /* 不同颜色边框 */
 .portfolioCardRed {
-  border-color: #D93025;
+  border-color: #d93025;
 }
 
 :global(.dark) .portfolioCardRed {
@@ -177,7 +308,7 @@
 }
 
 .portfolioCardBlue {
-  border-color: #007AFF;
+  border-color: #007aff;
 }
 
 :global(.dark) .portfolioCardBlue {
@@ -185,7 +316,7 @@
 }
 
 .portfolioCardYellow {
-  border-color: #FFD700;
+  border-color: #ffd700;
 }
 
 :global(.dark) .portfolioCardYellow {
@@ -205,28 +336,28 @@
   position: relative;
   padding: 2rem;
   background: #f5f5f5;
-  border: 2px solid #D93025;
+  border: 2px solid #d93025;
   transition: all 0.3s ease;
 }
 
 :global(.dark) .statCard {
   background: #1a1a1a;
-  border-color: #D93025;
+  border-color: #d93025;
 }
 
 .statCard::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -8px;
   left: -8px;
   width: 16px;
   height: 16px;
-  background: #D93025;
+  background: #d93025;
   transition: background 0.3s ease;
 }
 
 :global(.dark) .statCard::before {
-  background: #D93025;
+  background: #d93025;
 }
 
 /* 响应式调整 */
@@ -236,12 +367,30 @@
     box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.25);
   }
 
-  .portfolioCard:hover {
-    transform: translate(3px, 3px);
-    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.6);
-  }
-
   .portfolioCardContent {
     padding: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroContent,
+  .portfolioGridReveal {
+    animation: none;
+  }
+
+  .taskCard,
+  .portfolioCard,
+  .portfolioCardCover,
+  .portfolioCardOverlay {
+    transition: none;
+  }
+
+  .taskCard:hover,
+  .taskCard:active,
+  .portfolioCard:hover,
+  .portfolioCard:active,
+  .portfolioCard:hover .portfolioCardCover,
+  .portfolioCard:active .portfolioCardCover {
+    transform: none;
   }
 }

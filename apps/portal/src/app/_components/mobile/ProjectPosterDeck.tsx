@@ -1,26 +1,28 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import type { MouseEvent } from 'react';
-import type { HongyishiPlatformProject } from '@/lib/projects';
+import Image from "next/image";
+import type { HongyishiPlatformProject } from "@/lib/projects";
 
 type ProjectPosterDeckProps = {
   projects: HongyishiPlatformProject[];
-  onNavigate: (
-    event: MouseEvent<HTMLAnchorElement>,
-    destination: { href: string; title: string; posterImage?: string },
-  ) => void;
 };
 
-export function ProjectPosterDeck({ projects, onNavigate }: ProjectPosterDeckProps) {
+export function ProjectPosterDeck({ projects }: ProjectPosterDeckProps) {
   return (
-    <section id="mobile-tools" className="px-4 pb-28 pt-9" aria-labelledby="mobile-tools-title">
+    <section
+      id="mobile-tools"
+      className="px-4 pb-28 pt-9"
+      aria-labelledby="mobile-tools-title"
+    >
       <div className="flex items-end justify-between gap-4">
         <div>
           <p className="font-mono text-[0.68rem] uppercase tracking-wide text-neutral-600 dark:text-neutral-400">
             TOOL DECK
           </p>
-          <h2 id="mobile-tools-title" className="mt-2 text-2xl font-black text-black dark:text-white">
+          <h2
+            id="mobile-tools-title"
+            className="mt-2 text-2xl font-black text-black dark:text-white"
+          >
             工具舱
           </h2>
         </div>
@@ -34,21 +36,14 @@ export function ProjectPosterDeck({ projects, onNavigate }: ProjectPosterDeckPro
           <a
             key={project.id}
             href={project.href}
-            onClick={(event) =>
-              onNavigate(event, {
-                href: project.href,
-                title: project.shortTitle,
-                posterImage: project.coverImage,
-              })
-            }
-            className="group grid grid-cols-[7.5rem_1fr] gap-4 border-2 border-black bg-[#fff8e8] p-3 shadow-[6px_6px_0_rgba(0,0,0,0.2)] transition-transform focus:outline-none focus:ring-2 focus:ring-constructivism-red focus:ring-offset-2 focus:ring-offset-[#f4ecdc] active:translate-x-1 active:translate-y-1 active:shadow-[3px_3px_0_rgba(0,0,0,0.35)] dark:border-white/20 dark:bg-neutral-950 dark:focus:ring-offset-black"
+            className="group grid grid-cols-[7.5rem_1fr] gap-4 border-2 border-black bg-[#fff8e8] p-3 shadow-[6px_6px_0_rgba(0,0,0,0.2)] transition-[transform,box-shadow] duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-constructivism-red focus:ring-offset-2 focus:ring-offset-[#f4ecdc] active:translate-x-1 active:translate-y-1 active:shadow-[3px_3px_0_rgba(0,0,0,0.35)] motion-reduce:transition-none dark:border-white/20 dark:bg-neutral-950 dark:focus:ring-offset-black"
           >
             <span className="relative block aspect-[906/1280] overflow-hidden border-2 border-black dark:border-white/20">
               <Image
                 src={project.coverImage}
                 alt={`${project.shortTitle}海报`}
                 fill
-                className="object-cover transition-transform duration-300 group-active:scale-105"
+                className="object-cover transition-transform duration-200 ease-out group-active:scale-[1.03] motion-reduce:transition-none"
                 sizes="120px"
               />
             </span>
@@ -66,7 +61,8 @@ export function ProjectPosterDeck({ projects, onNavigate }: ProjectPosterDeckPro
                 </span>
               </span>
               <span className="mt-5 block border-t border-black/15 pt-3 font-mono text-[0.68rem] leading-5 text-neutral-500 dark:border-white/15 dark:text-neutral-500">
-                {project.content.status === 'current' ? '已复核' : '待复核'} · {project.content.reviewedAt}
+                {project.content.status === "current" ? "已复核" : "待复核"} ·{" "}
+                {project.content.reviewedAt}
               </span>
             </span>
           </a>
