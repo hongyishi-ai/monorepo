@@ -3,6 +3,8 @@ import { chromium } from "playwright";
 
 const baseUrl = process.env.HONGYISHI_AUDIT_BASE_URL ?? "http://127.0.0.1:3028";
 const routes = [
+  "/fms/assessment",
+  "/heat-stroke/pages/8-4-6-rule",
   "/heat-stroke/pages/core-temperature-cooling",
   "/heat-stroke/pages/treatment-system-consensus",
   "/heat-stroke/pages/heat-index",

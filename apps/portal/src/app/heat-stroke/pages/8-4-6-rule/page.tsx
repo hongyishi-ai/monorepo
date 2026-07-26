@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { platformProjects } from "@/lib/projects";
 import { ProjectChrome } from "../../../_components/project/ProjectChrome";
 import { buildProjectChromeNav } from "../../../_components/project/projectNav";
@@ -79,10 +80,34 @@ const preventionMeasures = [
 ];
 
 const warningSigns = [
-  { word: "烫", title: "自觉发烫", body: "从里向外" },
-  { word: "晃", title: "行走不稳", body: "异常疲倦" },
-  { word: "晕", title: "头晕抽搐", body: "意识模糊" },
-  { word: "乱", title: "生理紊乱", body: "恶心呕吐等" },
+  {
+    word: "烫",
+    title: "自觉发烫",
+    body: "从里向外",
+    image: "/assets/heat-stroke/warning-signs/overheating.webp",
+    imageAlt: "高温下身体发烫并大量出汗的人",
+  },
+  {
+    word: "晃",
+    title: "行走不稳",
+    body: "异常疲倦",
+    image: "/assets/heat-stroke/warning-signs/unstable-gait.webp",
+    imageAlt: "高温下步态不稳并由同伴扶持的人",
+  },
+  {
+    word: "晕",
+    title: "头晕抽搐",
+    body: "意识模糊",
+    image: "/assets/heat-stroke/warning-signs/dizziness.webp",
+    imageAlt: "高温下头晕并以手支撑身体的人",
+  },
+  {
+    word: "乱",
+    title: "生理紊乱",
+    body: "恶心呕吐等",
+    image: "/assets/heat-stroke/warning-signs/systemic-distress.webp",
+    imageAlt: "高温下意识混乱并出现全身不适的人",
+  },
 ];
 
 const treatmentSteps = [
@@ -207,8 +232,8 @@ export default function HeatStrokeRulePage() {
         </section>
 
         <section className="border-y-2 border-border bg-muted/45">
-          <div className="mx-auto grid w-[min(1200px,calc(100%_-_32px))] gap-4 py-12 md:grid-cols-[0.7fr_1.3fr] md:items-center md:py-16">
-            <div>
+          <div className="mx-auto w-[min(1200px,calc(100%_-_32px))] py-12 md:py-16">
+            <div className="mb-6">
               <p className="font-mono text-sm font-black text-muted-foreground">
                 WARNING SIGNS
               </p>
@@ -219,16 +244,34 @@ export default function HeatStrokeRulePage() {
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {warningSigns.map((item) => (
                 <article
-                  className="rounded border-2 border-border bg-card p-5 text-center"
+                  className="min-w-0 overflow-hidden rounded border-2 border-border bg-card text-card-foreground shadow-[6px_6px_0_rgba(18,49,60,0.14)] dark:shadow-[6px_6px_0_rgba(217,48,37,0.18)]"
                   key={item.word}
                 >
-                  <div className="text-7xl font-black leading-none text-primary">
-                    {item.word}
+                  <div className="relative aspect-[3/2] overflow-hidden border-b-2 border-border bg-muted">
+                    <Image
+                      alt={item.imageAlt}
+                      className="object-cover"
+                      fill
+                      sizes="(max-width: 639px) calc(100vw - 32px), (max-width: 1023px) calc(50vw - 24px), 280px"
+                      src={item.image}
+                    />
                   </div>
-                  <h3 className="mt-3 text-xl font-black">{item.title}</h3>
-                  <p className="mt-2 font-bold text-muted-foreground">
-                    {item.body}
-                  </p>
+                  <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4 p-4 text-left">
+                    <div
+                      aria-hidden="true"
+                      className="text-5xl font-black leading-none text-primary"
+                    >
+                      {item.word}
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-xl font-black leading-tight">
+                        {item.title}
+                      </h3>
+                      <p className="mt-1 font-bold text-muted-foreground">
+                        {item.body}
+                      </p>
+                    </div>
+                  </div>
                 </article>
               ))}
             </div>
